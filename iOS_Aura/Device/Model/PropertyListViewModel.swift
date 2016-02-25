@@ -32,6 +32,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, AylaDeviceListener
         
         super.init()
         
+        // Add self as device listener
         device.addListener(self)
         
         tableView.dataSource = self

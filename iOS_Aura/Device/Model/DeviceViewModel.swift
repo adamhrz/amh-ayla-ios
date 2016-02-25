@@ -33,12 +33,17 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
         
         super.init()
         
+        // Add self as device listener
         device.addListener(self)
         self.update()
     }
     
+    /**
+     Use this method to update UI which are managed by this view model.
+     */
     func update() {
         devicePanel?.configure(device)
+        // We don't update property list here since PropertyListViewModel will take care of it.
     }
     
     // MARK - device manager listener
