@@ -160,12 +160,12 @@
                                 </connections>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ap0-u1-kSG">
-                                <rect key="frame" x="0.0" y="235" width="600" height="316"/>
+                                <rect key="frame" x="0.0" y="227" width="600" height="324"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" placeholder="property name" showsCancelButton="YES" id="TEz-TC-NIy">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES"/>
                                     <connections>
                                         <outlet property="delegate" destination="crI-FA-vre" id="4op-eN-Ip5"/>
                                     </connections>
@@ -219,7 +219,7 @@
                             <constraint firstItem="ubm-gd-mCl" firstAttribute="centerX" secondItem="iOe-jp-J4O" secondAttribute="centerX" id="0vb-la-7Og"/>
                             <constraint firstItem="12P-gg-0nP" firstAttribute="top" secondItem="Ap0-u1-kSG" secondAttribute="bottom" id="4Ap-ld-QKm"/>
                             <constraint firstItem="Ap0-u1-kSG" firstAttribute="centerX" secondItem="iOe-jp-J4O" secondAttribute="centerX" id="KY8-sH-4gT"/>
-                            <constraint firstItem="Ap0-u1-kSG" firstAttribute="top" secondItem="ubm-gd-mCl" secondAttribute="bottom" constant="8" id="QWY-On-Xn5"/>
+                            <constraint firstItem="Ap0-u1-kSG" firstAttribute="top" secondItem="ubm-gd-mCl" secondAttribute="bottom" id="QWY-On-Xn5"/>
                             <constraint firstItem="ubm-gd-mCl" firstAttribute="width" secondItem="iOe-jp-J4O" secondAttribute="width" id="XYh-r8-vlt"/>
                             <constraint firstItem="Ap0-u1-kSG" firstAttribute="width" secondItem="iOe-jp-J4O" secondAttribute="width" id="fOe-md-nDd"/>
                             <constraint firstItem="ubm-gd-mCl" firstAttribute="top" secondItem="Ou6-Nx-vXq" secondAttribute="bottom" id="s9b-E7-Rz7"/>

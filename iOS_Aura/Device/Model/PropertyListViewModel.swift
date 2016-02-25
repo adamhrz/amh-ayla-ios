@@ -46,6 +46,10 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UISearchResultsUpd
         self.searchController?.searchBar.sizeToFit()
         self.tableView.tableHeaderView = self.searchController?.searchBar
         
+        // Set a content offset to hide search bar.
+        let barHeight = self.searchController?.searchBar.frame.size.height ?? 0
+        self.tableView.contentOffset = CGPointMake(0, barHeight)
+        
         tableView.dataSource = self
         self.updatePropertyListFromDevice(userSearchText: nil)
     }
