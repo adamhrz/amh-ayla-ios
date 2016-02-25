@@ -14,12 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-        // Set up core manager
+        // Setup core manager
         let settings = AylaSystemSettings.defaultSystemSettings()
-        // Set up app id/secret
+        // Setup app id/secret
         settings.serviceType = .Development
         settings.appId = "iMCA-Dev-0dfc7900-id"
         settings.appSecret = "iMCA-Dev-0dfc7900-5804184"
@@ -27,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Init device manager
         AylaCoreManager.initializeManagerWithSettings(settings)
         
-        AylaLogManager.sharedManager().loggingLevel = .All
+        AylaLogManager.sharedManager().loggingLevel = .Info
         
         return true
     }
