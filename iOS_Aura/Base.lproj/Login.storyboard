@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2v2-67-fCY">
     <dependencies>
-        <deployment version="2096" identifier="iOS"/>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <scenes>
@@ -28,7 +28,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="light" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Ee7-Ms-yed">
-                                <rect key="frame" x="181" y="245" width="239" height="35"/>
+                                <rect key="frame" x="181" y="241" width="239" height="35"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="go" secureTextEntry="YES"/>
                             </textField>
@@ -41,6 +41,9 @@
                                 <state key="normal" title="Login">
                                     <color key="titleColor" red="0.42352944609999998" green="0.82352948189999997" blue="0.62745100259999997" alpha="1" colorSpace="deviceRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="login:" destination="2v2-67-fCY" eventType="touchUpInside" id="GN6-mi-pf4"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbz-ap-m1d" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
                                 <rect key="frame" x="234" y="407" width="133" height="54"/>
@@ -64,16 +67,29 @@
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="OtJ-7z-QpX"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="width" secondItem="8Hr-PK-flC" secondAttribute="width" id="TTd-cv-BU2"/>
                             <constraint firstItem="hbz-ap-m1d" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="gHv-b7-ihd"/>
-                            <constraint firstItem="Ee7-Ms-yed" firstAttribute="top" secondItem="8Hr-PK-flC" secondAttribute="bottom" constant="27" id="gbX-9h-ZmJ"/>
+                            <constraint firstItem="Ee7-Ms-yed" firstAttribute="top" secondItem="8Hr-PK-flC" secondAttribute="bottom" constant="23" id="gbX-9h-ZmJ"/>
                             <constraint firstItem="hbz-ap-m1d" firstAttribute="top" secondItem="jhu-7q-oXF" secondAttribute="bottom" constant="28" id="o4n-NF-U6U"/>
-                            <constraint firstItem="jhu-7q-oXF" firstAttribute="top" secondItem="Ee7-Ms-yed" secondAttribute="bottom" constant="39" id="sCc-Ra-e4B"/>
+                            <constraint firstItem="jhu-7q-oXF" firstAttribute="top" secondItem="Ee7-Ms-yed" secondAttribute="bottom" constant="43" id="sCc-Ra-e4B"/>
                             <constraint firstItem="8Hr-PK-flC" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="sHx-fD-vSY"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="passwordTextField" destination="Ee7-Ms-yed" id="dIc-P8-TWp"/>
+                        <outlet property="usernameTextField" destination="8Hr-PK-flC" id="YmN-eN-iey"/>
+                        <segue destination="eeS-Ad-Xed" kind="show" identifier="toMain" id="1q7-pd-Ynf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LUc-9z-l8F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="526" y="260"/>
+        </scene>
+        <!--Main-->
+        <scene sceneID="oen-6v-MWB">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" id="eeS-Ad-Xed" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bvp-VD-E8X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="973" y="116"/>
         </scene>
         <!--Setup-->
         <scene sceneID="jwL-g6-Lav">
