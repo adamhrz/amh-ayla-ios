@@ -9,7 +9,7 @@
 import UIKit
 import iOS_AylaSDK
 
-class PropertyListViewModel: NSObject, UITableViewDataSource, AylaDeviceListener {
+class PropertyListViewModel: NSObject, UITableViewDataSource, UISearchResultsUpdating, AylaDeviceListener {
     
     /// Defaule property cell id
     static let PropertyCellId: String = "PropertyCellId"
@@ -20,6 +20,9 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, AylaDeviceListener
     /// Table view of properties
     var tableView: UITableView
     
+    /// Table view search bar
+    let searchController:UISearchController?
+    
     /// Properties which are being represented in table view.
     var properties : [ AylaProperty ]
     
@@ -29,28 +32,43 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, AylaDeviceListener
         self.properties = []
         
         self.tableView = tableView
+        self.searchController = UISearchController(searchResultsController: nil)
         
         super.init()
         
         // Add self as device listener
         device.addListener(self)
         
+        // Set search controller
+        self.searchController?.searchResultsUpdater = self
+        
+        // Add search bar to table view
+        self.searchController?.searchBar.sizeToFit()
+        self.tableView.tableHeaderView = self.searchController?.searchBar
+        
         tableView.dataSource = self
-        self.updatePropertyListFromDevice()
+        self.updatePropertyListFromDevice(userSearchText: nil)
     }
     
-    /**
+     /**
      Use this method to reload property list from device.
+     
+     - parameter searchText: User input search text, when set as nil, this api will only call tableview.reloadData()
      */
-    func updatePropertyListFromDevice() {
+    func updatePropertyListFromDevice(userSearchText searchText:String?) {
         
         if let knownProperties = self.device.properties {
-            self.properties = knownProperties.values.map({ (property) -> AylaProperty in
-                return property as! AylaProperty
-            }).sort({ (prop1, prop2) -> Bool in
-                // Do a sort to the property list based on property names.
-                return prop1.name < prop2.name
-            })
+            // Only refresh properties list when there is a user search or property list is still empty.
+            if searchText != nil || self.properties.count == 0{
+                self.properties = knownProperties.values.map({ (property) -> AylaProperty in
+                    return property as! AylaProperty
+                }).filter({ (property) -> Bool in
+                    return searchText ?? "" != "" ? property.name.lowercaseString.containsString(searchText!.lowercaseString) : true
+                }).sort({ (prop1, prop2) -> Bool in
+                    // Do a sort to the property list based on property names.
+                    return prop1.name < prop2.name
+                })
+            }
         }
         else {
             // No properties list found in device
@@ -83,6 +101,14 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, AylaDeviceListener
         return cell!
     }
     
+    // MARK - search controller
+
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        if let search = searchController.searchBar.text {
+           self.updatePropertyListFromDevice(userSearchText: search)
+        }
+    }
+    
     // MARK - device listener
     
     func device(device: AylaDevice, didFail error: NSError) {
@@ -93,7 +119,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, AylaDeviceListener
         // Not a smart way to update.
         if(change.isKindOfClass(AylaPropertyChange)) {
             log("Obverse changes: \(change)", isWarning: false)
-            self.updatePropertyListFromDevice()
+            self.updatePropertyListFromDevice(userSearchText: nil)
         }
     }
 }
