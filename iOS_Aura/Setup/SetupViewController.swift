@@ -1,8 +1,6 @@
 //
-//  SetupViewController.swift
-//  iOS_Aura
+//  Aura
 //
-//  Created by Yipei Wang on 2/17/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
@@ -11,22 +9,38 @@ import iOS_AylaSDK
 
 class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    /// Setup cell id
     static let CellId: String = "SetupCellId"
     
+    /// Description view to display status
     @IBOutlet weak var descriptionTextView: UITextView!
+    
+    /// Table view of scan results
     @IBOutlet weak var tableView: UITableView!
+    
+    /// A reserved view for future use.
     @IBOutlet weak var controlPanel: UIView!
     
+    /// AylaSetup instance used by this setup view controller
     var setup: AylaSetup
+    
+    /// Current presenting alert controller
     var alert: UIAlertController? {
         willSet(newAlert) {
             if let oldAlert = alert {
-                oldAlert .dismissViewControllerAnimated(false, completion: nil)
+                // If there is an alert presenting to user. dimiss it first.
+                oldAlert.dismissViewControllerAnimated(false, completion: nil)
             }
         }
     }
+    
+    /// Current running connect task
     var currentTask: AylaConnectTask?
+    
+    /// Scan results which are presented in table view
     var scanResults :AylaWifiScanResults?
+    
+    /// Last used token.
     var token: String?
     
     required init?(coder aDecoder: NSCoder)
@@ -42,6 +56,8 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Assign self as delegate and data source of tableview.
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -60,11 +76,17 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController?.navigationBar.topItem?.prompt = prompt
     }
     
+    /**
+     Monitor device connectivity by adding KVO to property `connected` of setup device.
+     */
     func monitorDeviceConnectivity() {
         // Add observer to setup device connection status.
         setup.addObserver(self, forKeyPath: "setupDevice.connected", options: .New, context: nil)
     }
     
+    /**
+     Use this method to connect to device again.
+     */
     func refresh() {
         
         // Clean scan results
@@ -74,12 +96,16 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         attemptToConnect()
     }
     
+    /**
+     Must use this method to start setup for a device.
+     */
     func attemptToConnect() {
 
         updatePrompt("loading...")
         
         currentTask = setup.connectToNewDevice({ (setupDevice) -> Void in
             self.addDescription("Find device: \(setupDevice.dsn)")
+            // Start fetching ap list.
             self.fetchApList()
             }) { (error) -> Void in
             self.updatePrompt("No device found")
@@ -87,6 +113,9 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
+    /**
+     Use this method to fetch ap list from setup.
+     */
     func fetchApList() {
         updatePrompt("loading...")
         currentTask = setup.fetchDeviceAccessPoints({ (scanResults) -> Void in
@@ -100,12 +129,18 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
     }
     
+    /**
+     Use this method to connect device to the input SSID
+     
+     - parameter ssid:     The ssid which device would connect to.
+     - parameter password: Password of the ssid.
+     */
     func connectToSSID(ssid: String, password: String?) {
     
-        // Create a random token.
+        // TODO: Should create a random token.
         token = "AToken"
         
-        self.updatePrompt("Connecting device to SSID...")
+        self.updatePrompt("Connecting device to '\(ssid)'...")
         self.setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longtitude: 0.0, success: { () -> Void in
             
             // Succeeded, go confirming.
@@ -120,10 +155,19 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    /**
+     Use this method to confirm device connnection status with cloud service.
+     */
     func confirmConnectionToService() {
         self.updatePrompt("Confirming device status ...")
-        self.setup.confirmDeviceConnectedWithTimeout(30.0, dsn:(self.setup.setupDevice?.dsn)!, setupToken:token!, success: { () -> Void in
-            self.updatePrompt("Succeeded")
+        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(self.setup.setupDevice?.dsn)!, setupToken:token!, success: { () -> Void in
+            self.updatePrompt("- Succeeded -")
+            self.addDescription("Confirmed device connection to servce.\n- Succeeded -");
+            
+            // Clean scan results
+            self.scanResults = nil
+            self.tableView.reloadData()
+            
             }) { (error) -> Void in
             self.displayError(error)
         }
@@ -136,13 +180,18 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         descriptionTextView.text = "\(descriptionTextView.text) \n\(description)"
     }
     
+    /**
+     Display an error with UIAlertController
+     
+     - parameter error: The error which is going to be displayed.
+     */
     func displayError(error:NSError) {
     
         if let currentAlert = alert {
             currentAlert.dismissViewControllerAnimated(false, completion: nil)
         }
         
-        let alertController = UIAlertController(title: "Error", message: "\(error.userInfo[AylaRequestErrorResponseJsonKey])", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Error", message: "\(error.userInfo[AylaRequestErrorResponseJsonKey]!)", preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Got it", style: .Cancel, handler: nil))
         
         alert = alertController
@@ -157,7 +206,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     deinit {
-        self.setup.removeObserver(self, forKeyPath: "connected")
+        self.setup.removeObserver(self, forKeyPath: "setupDevice.connected")
     }
     
     // MARK: - Table view delegate
@@ -166,6 +215,8 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
         if let result = scanResults?.results[indexPath.row] {
             
+            // Compose an alert controller to let user input password.
+            // TODO: If password is not required, the password text field should be removed from alert.
             let alertController = UIAlertController(title: "Password Required", message: "Please input password for \"\(result.ssid)\".", preferredStyle: .Alert)
             
             let connect = UIAlertAction(title: "Connect", style: .Default) { (_) in
@@ -199,7 +250,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if let result = scanResults?.results[indexPath.row] {
             let connectAction = UITableViewRowAction(style: .Normal, title:"\(result.signal)" ) { (rowAction:UITableViewRowAction, indexPath:NSIndexPath) -> Void in
-                //TODO: edit the row at indexPath here
+                // Edit actions, empty for now.
             }
             connectAction.backgroundColor = UIColor.darkGrayColor()
             
