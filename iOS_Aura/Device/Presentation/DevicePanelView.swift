@@ -21,5 +21,7 @@ class DevicePanelView: UIView {
         dsnLabel.text = device.dsn
         connectivityLabel.text = device.connectionStatus
         
+        self.layer.borderWidth = 0.5
+        self.layer.borderColor = UIColor.darkGrayColor().CGColor
     }
 }
