@@ -60,7 +60,7 @@
 		A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceTVCell.swift; path = Device/Presentation/DeviceTVCell.swift; sourceTree = "<group>"; };
 		A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListTVController.swift; path = Device/Presentation/DeviceListTVController.swift; sourceTree = "<group>"; };
 		A7104ADD1C7AD04A007B1AB3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceListViewModel.swift; sourceTree = "<group>"; };
+		A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListViewModel.swift; path = Device/Model/DeviceListViewModel.swift; sourceTree = "<group>"; };
 		A7351C8A1C753C360073C73A /* iOS_Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351C8D1C753C370073C73A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7351C921C753C370073C73A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
