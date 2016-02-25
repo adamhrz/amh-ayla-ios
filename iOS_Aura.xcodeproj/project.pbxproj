@@ -18,7 +18,6 @@
 		A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ADD1C7AD04A007B1AB3 /* Constants.swift */; };
 		A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */; };
 		A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351C8D1C753C370073C73A /* AppDelegate.swift */; };
-		A7351C901C753C370073C73A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351C8F1C753C370073C73A /* ViewController.swift */; };
 		A7351C931C753C370073C73A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7351C911C753C370073C73A /* Main.storyboard */; };
 		A7351C951C753C370073C73A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7351C941C753C370073C73A /* Assets.xcassets */; };
 		A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7351C961C753C370073C73A /* LaunchScreen.storyboard */; };
@@ -64,7 +63,6 @@
 		A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceListViewModel.swift; sourceTree = "<group>"; };
 		A7351C8A1C753C360073C73A /* iOS_Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351C8D1C753C370073C73A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A7351C8F1C753C370073C73A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A7351C921C753C370073C73A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A7351C941C753C370073C73A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A7351C971C753C370073C73A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -212,7 +210,6 @@
 				A7104ACB1C757FA7007B1AB3 /* Login */,
 				A7104AD11C759917007B1AB3 /* Setup */,
 				A7351C8D1C753C370073C73A /* AppDelegate.swift */,
-				A7351C8F1C753C370073C73A /* ViewController.swift */,
 				A7351C911C753C370073C73A /* Main.storyboard */,
 				A7104AD41C7599BF007B1AB3 /* Setup.storyboard */,
 				A7351C941C753C370073C73A /* Assets.xcassets */,
@@ -438,7 +435,6 @@
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
-				A7351C901C753C370073C73A /* ViewController.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
