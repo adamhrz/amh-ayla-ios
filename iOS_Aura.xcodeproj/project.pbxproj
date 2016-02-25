@@ -13,6 +13,10 @@
 		A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */; };
 		A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104AD21C759992007B1AB3 /* SetupViewController.swift */; };
 		A7104AD61C7599BF007B1AB3 /* Setup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AD41C7599BF007B1AB3 /* Setup.storyboard */; };
+		A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */; };
+		A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */; };
+		A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ADD1C7AD04A007B1AB3 /* Constants.swift */; };
+		A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */; };
 		A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351C8D1C753C370073C73A /* AppDelegate.swift */; };
 		A7351C901C753C370073C73A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351C8F1C753C370073C73A /* ViewController.swift */; };
 		A7351C931C753C370073C73A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7351C911C753C370073C73A /* Main.storyboard */; };
@@ -20,6 +24,12 @@
 		A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7351C961C753C370073C73A /* LaunchScreen.storyboard */; };
 		A7351CA31C753C370073C73A /* iOS_AuraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351CA21C753C370073C73A /* iOS_AuraTests.swift */; };
 		A7351CAE1C753C370073C73A /* iOS_AuraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351CAD1C753C370073C73A /* iOS_AuraUITests.swift */; };
+		A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */; };
+		A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */; };
+		A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */; };
+		A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */; };
+		A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */; };
+		A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +58,10 @@
 		A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A7104AD21C759992007B1AB3 /* SetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetupViewController.swift; path = Setup/SetupViewController.swift; sourceTree = "<group>"; };
 		A7104AD51C7599BF007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Setup.storyboard; sourceTree = "<group>"; };
+		A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceTVCell.swift; path = Device/Presentation/DeviceTVCell.swift; sourceTree = "<group>"; };
+		A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListTVController.swift; path = Device/Presentation/DeviceListTVController.swift; sourceTree = "<group>"; };
+		A7104ADD1C7AD04A007B1AB3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceListViewModel.swift; sourceTree = "<group>"; };
 		A7351C8A1C753C360073C73A /* iOS_Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351C8D1C753C370073C73A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7351C8F1C753C370073C73A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +75,12 @@
 		A7351CA91C753C370073C73A /* iOS_AuraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOS_AuraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351CAD1C753C370073C73A /* iOS_AuraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_AuraUITests.swift; sourceTree = "<group>"; };
 		A7351CAF1C753C370073C73A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceViewModel.swift; path = Device/Model/DeviceViewModel.swift; sourceTree = "<group>"; };
+		A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DevicePanelView.swift; path = Device/Presentation/DevicePanelView.swift; sourceTree = "<group>"; };
+		A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyListViewModel.swift; path = Device/Model/PropertyListViewModel.swift; sourceTree = "<group>"; };
+		A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyTVCell.swift; path = Device/Presentation/PropertyTVCell.swift; sourceTree = "<group>"; };
+		A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceViewController.swift; path = Device/Presentation/DeviceViewController.swift; sourceTree = "<group>"; };
+		A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogHandler.swift; path = Log/LogHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,8 +153,32 @@
 		A7104AD71C7ABBDC007B1AB3 /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				A7104ADF1C7AD263007B1AB3 /* Model */,
+				A7104AD81C7AC290007B1AB3 /* Presentation */,
 			);
 			name = Device;
+			sourceTree = "<group>";
+		};
+		A7104AD81C7AC290007B1AB3 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */,
+				A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */,
+				A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */,
+				A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */,
+				A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */,
+			);
+			name = Presentation;
+			sourceTree = "<group>";
+		};
+		A7104ADF1C7AD263007B1AB3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */,
+				A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */,
+				A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		A7351C811C753C360073C73A = {
@@ -162,6 +206,7 @@
 		A7351C8C1C753C370073C73A /* iOS_Aura */ = {
 			isa = PBXGroup;
 			children = (
+				A7A8C90D1C7BC7A700612C39 /* Log */,
 				A7104AD71C7ABBDC007B1AB3 /* Device */,
 				A7104ACC1C7580A5007B1AB3 /* UX */,
 				A7104ACB1C757FA7007B1AB3 /* Login */,
@@ -174,6 +219,7 @@
 				A7351C961C753C370073C73A /* LaunchScreen.storyboard */,
 				A7351C991C753C370073C73A /* Info.plist */,
 				A7104AC81C757F32007B1AB3 /* Login.storyboard */,
+				A7104ADD1C7AD04A007B1AB3 /* Constants.swift */,
 			);
 			path = iOS_Aura;
 			sourceTree = "<group>";
@@ -194,6 +240,14 @@
 				A7351CAF1C753C370073C73A /* Info.plist */,
 			);
 			path = iOS_AuraUITests;
+			sourceTree = "<group>";
+		};
+		A7A8C90D1C7BC7A700612C39 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */,
+			);
+			name = Log;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -380,11 +434,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */,
+				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
+				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				A7351C901C753C370073C73A /* ViewController.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
+				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
+				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
+				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
+				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
 				A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */,
+				A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */,
+				A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */,
+				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
