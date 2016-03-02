@@ -38,11 +38,12 @@ PODS:
     - CocoaHTTPServer (~> 2.3)
 
 DEPENDENCIES:
-  - iOS_AylaSDK (from `/Users/yipei/ayla/lib/iOS_AylaSDK`)
+  - iOS_AylaSDK (from `../iOS_AylaSDK`)
 
 EXTERNAL SOURCES:
   iOS_AylaSDK:
-    :path: "/Users/yipei/ayla/lib/iOS_AylaSDK"
+    :branch: auraOAuth
+    :path: ../iOS_AylaSDK
 
 SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
