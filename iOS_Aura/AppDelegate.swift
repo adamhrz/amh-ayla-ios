@@ -7,15 +7,27 @@
 //
 
 import UIKit
+import iOS_AylaSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+
+        // Setup core manager
+        let settings = AylaSystemSettings.defaultSystemSettings()
+        // Setup app id/secret
+        settings.serviceType = .Development
+        settings.appId = "iMCA-Dev-0dfc7900-id"
+        settings.appSecret = "iMCA-Dev-0dfc7900-5804184"
+
+        // Init device manager
+        AylaCoreManager.initializeManagerWithSettings(settings)
+        
+        AylaLogManager.sharedManager().loggingLevel = .Info
+        
         return true
     }
 

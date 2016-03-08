@@ -7,13 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */; };
+		A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AC81C757F32007B1AB3 /* Login.storyboard */; };
+		A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ACD1C758140007B1AB3 /* AuraButton.swift */; };
+		A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */; };
+		A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104AD21C759992007B1AB3 /* SetupViewController.swift */; };
+		A7104AD61C7599BF007B1AB3 /* Setup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AD41C7599BF007B1AB3 /* Setup.storyboard */; };
+		A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */; };
+		A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */; };
+		A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ADD1C7AD04A007B1AB3 /* Constants.swift */; };
+		A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */; };
 		A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351C8D1C753C370073C73A /* AppDelegate.swift */; };
-		A7351C901C753C370073C73A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351C8F1C753C370073C73A /* ViewController.swift */; };
 		A7351C931C753C370073C73A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7351C911C753C370073C73A /* Main.storyboard */; };
 		A7351C951C753C370073C73A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7351C941C753C370073C73A /* Assets.xcassets */; };
 		A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7351C961C753C370073C73A /* LaunchScreen.storyboard */; };
 		A7351CA31C753C370073C73A /* iOS_AuraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351CA21C753C370073C73A /* iOS_AuraTests.swift */; };
 		A7351CAE1C753C370073C73A /* iOS_AuraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351CAD1C753C370073C73A /* iOS_AuraUITests.swift */; };
+		A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */; };
+		A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */; };
+		A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */; };
+		A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */; };
+		A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */; };
+		A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +49,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
+		434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7104AC91C757F32007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
+		A7104ACD1C758140007B1AB3 /* AuraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraButton.swift; path = UX/AuraButton.swift; sourceTree = "<group>"; };
+		A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		A7104AD21C759992007B1AB3 /* SetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SetupViewController.swift; path = Setup/SetupViewController.swift; sourceTree = "<group>"; };
+		A7104AD51C7599BF007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Setup.storyboard; sourceTree = "<group>"; };
+		A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceTVCell.swift; path = Device/Presentation/DeviceTVCell.swift; sourceTree = "<group>"; };
+		A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListTVController.swift; path = Device/Presentation/DeviceListTVController.swift; sourceTree = "<group>"; };
+		A7104ADD1C7AD04A007B1AB3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListViewModel.swift; path = Device/Model/DeviceListViewModel.swift; sourceTree = "<group>"; };
 		A7351C8A1C753C360073C73A /* iOS_Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351C8D1C753C370073C73A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A7351C8F1C753C370073C73A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A7351C921C753C370073C73A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A7351C941C753C370073C73A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A7351C971C753C370073C73A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +73,12 @@
 		A7351CA91C753C370073C73A /* iOS_AuraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOS_AuraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351CAD1C753C370073C73A /* iOS_AuraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_AuraUITests.swift; sourceTree = "<group>"; };
 		A7351CAF1C753C370073C73A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceViewModel.swift; path = Device/Model/DeviceViewModel.swift; sourceTree = "<group>"; };
+		A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DevicePanelView.swift; path = Device/Presentation/DevicePanelView.swift; sourceTree = "<group>"; };
+		A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyListViewModel.swift; path = Device/Model/PropertyListViewModel.swift; sourceTree = "<group>"; };
+		A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyTVCell.swift; path = Device/Presentation/PropertyTVCell.swift; sourceTree = "<group>"; };
+		A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceViewController.swift; path = Device/Presentation/DeviceViewController.swift; sourceTree = "<group>"; };
+		A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogHandler.swift; path = Log/LogHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +107,78 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4325B9D8EA845909AC409ADE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		99687F7A875709CF60B6A4BE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */,
+				146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A7104ACB1C757FA7007B1AB3 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		A7104ACC1C7580A5007B1AB3 /* UX */ = {
+			isa = PBXGroup;
+			children = (
+				A7104ACD1C758140007B1AB3 /* AuraButton.swift */,
+			);
+			name = UX;
+			sourceTree = "<group>";
+		};
+		A7104AD11C759917007B1AB3 /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				A7104AD21C759992007B1AB3 /* SetupViewController.swift */,
+			);
+			name = Setup;
+			sourceTree = "<group>";
+		};
+		A7104AD71C7ABBDC007B1AB3 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				A7104ADF1C7AD263007B1AB3 /* Model */,
+				A7104AD81C7AC290007B1AB3 /* Presentation */,
+			);
+			name = Device;
+			sourceTree = "<group>";
+		};
+		A7104AD81C7AC290007B1AB3 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */,
+				A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */,
+				A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */,
+				A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */,
+				A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */,
+			);
+			name = Presentation;
+			sourceTree = "<group>";
+		};
+		A7104ADF1C7AD263007B1AB3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */,
+				A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */,
+				A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		A7351C811C753C360073C73A = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +186,8 @@
 				A7351CA11C753C370073C73A /* iOS_AuraTests */,
 				A7351CAC1C753C370073C73A /* iOS_AuraUITests */,
 				A7351C8B1C753C360073C73A /* Products */,
+				99687F7A875709CF60B6A4BE /* Pods */,
+				4325B9D8EA845909AC409ADE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,12 +204,19 @@
 		A7351C8C1C753C370073C73A /* iOS_Aura */ = {
 			isa = PBXGroup;
 			children = (
+				A7A8C90D1C7BC7A700612C39 /* Log */,
+				A7104AD71C7ABBDC007B1AB3 /* Device */,
+				A7104ACC1C7580A5007B1AB3 /* UX */,
+				A7104ACB1C757FA7007B1AB3 /* Login */,
+				A7104AD11C759917007B1AB3 /* Setup */,
 				A7351C8D1C753C370073C73A /* AppDelegate.swift */,
-				A7351C8F1C753C370073C73A /* ViewController.swift */,
 				A7351C911C753C370073C73A /* Main.storyboard */,
+				A7104AD41C7599BF007B1AB3 /* Setup.storyboard */,
 				A7351C941C753C370073C73A /* Assets.xcassets */,
 				A7351C961C753C370073C73A /* LaunchScreen.storyboard */,
 				A7351C991C753C370073C73A /* Info.plist */,
+				A7104AC81C757F32007B1AB3 /* Login.storyboard */,
+				A7104ADD1C7AD04A007B1AB3 /* Constants.swift */,
 			);
 			path = iOS_Aura;
 			sourceTree = "<group>";
@@ -125,6 +239,14 @@
 			path = iOS_AuraUITests;
 			sourceTree = "<group>";
 		};
+		A7A8C90D1C7BC7A700612C39 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */,
+			);
+			name = Log;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,9 +254,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7351CB21C753C370073C73A /* Build configuration list for PBXNativeTarget "iOS_Aura" */;
 			buildPhases = (
+				25F6372F996D988D3A776A9B /* Check Pods Manifest.lock */,
 				A7351C861C753C360073C73A /* Sources */,
 				A7351C871C753C360073C73A /* Frameworks */,
 				A7351C881C753C360073C73A /* Resources */,
+				B4394C1FDEF22B2AD113851E /* Embed Pods Frameworks */,
+				FEADDAEA304A7BA8812C6A37 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,6 +354,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7104AD61C7599BF007B1AB3 /* Setup.storyboard in Resources */,
+				A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */,
 				A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */,
 				A7351C951C753C370073C73A /* Assets.xcassets in Resources */,
 				A7351C931C753C370073C73A /* Main.storyboard in Resources */,
@@ -251,13 +378,73 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		25F6372F996D988D3A776A9B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B4394C1FDEF22B2AD113851E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FEADDAEA304A7BA8812C6A37 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A7351C861C753C360073C73A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7351C901C753C370073C73A /* ViewController.swift in Sources */,
+				A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */,
+				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
+				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
+				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
+				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
+				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
+				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
+				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
+				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
+				A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */,
+				A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */,
+				A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */,
+				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +480,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		A7104AC81C757F32007B1AB3 /* Login.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7104AC91C757F32007B1AB3 /* Base */,
+			);
+			name = Login.storyboard;
+			sourceTree = "<group>";
+		};
+		A7104AD41C7599BF007B1AB3 /* Setup.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7104AD51C7599BF007B1AB3 /* Base */,
+			);
+			name = Setup.storyboard;
+			sourceTree = "<group>";
+		};
 		A7351C911C753C370073C73A /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -397,6 +600,7 @@
 		};
 		A7351CB31C753C370073C73A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
@@ -408,6 +612,7 @@
 		};
 		A7351CB41C753C370073C73A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
@@ -484,6 +689,7 @@
 				A7351CB41C753C370073C73A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A7351CB51C753C370073C73A /* Build configuration list for PBXNativeTarget "iOS_AuraTests" */ = {
 			isa = XCConfigurationList;
@@ -492,6 +698,7 @@
 				A7351CB71C753C370073C73A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A7351CB81C753C370073C73A /* Build configuration list for PBXNativeTarget "iOS_AuraUITests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +707,7 @@
 				A7351CBA1C753C370073C73A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
