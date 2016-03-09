@@ -67,7 +67,7 @@
                                 </constraints>
                                 <state key="normal" title="OAuth"/>
                                 <connections>
-                                    <segue destination="lJ6-5K-62U" kind="presentation" identifier="OAuthLoginSegue" id="pNs-za-eua"/>
+                                    <segue destination="g1w-pT-LP7" kind="presentation" identifier="OAuthLoginSegue" id="Wpi-Mt-IS9"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -122,13 +122,14 @@
                             <constraint firstAttribute="bottomMargin" secondItem="2US-YP-ZSQ" secondAttribute="bottom" id="ylg-V0-u4s"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="zXA-Ky-1do"/>
                     <connections>
                         <outlet property="webView" destination="2US-YP-ZSQ" id="hYz-z4-3Of"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m3e-Aq-pqd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="526" y="1034"/>
+            <point key="canvasLocation" x="1275" y="975"/>
         </scene>
         <!--Main-->
         <scene sceneID="oen-6v-MWB">
@@ -145,6 +146,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EnF-di-mCc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="976" y="398"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="tIG-qO-PuN">
+            <objects>
+                <navigationController id="g1w-pT-LP7" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wBi-nM-h5p">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="lJ6-5K-62U" kind="relationship" relationship="rootViewController" id="tgZ-kQ-vHb"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SQE-Cd-b5g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="526" y="975"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.42352944609999998" green="0.82352948189999997" blue="0.62745100259999997" alpha="1" colorSpace="deviceRGB"/>

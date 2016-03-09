@@ -115,7 +115,7 @@ class LoginViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "OAuthLoginSegue" {
-            (segue.destinationViewController as! OAuthLoginViewController).mainLoginViewController = self
+            ((segue.destinationViewController as! UINavigationController).viewControllers.first! as! OAuthLoginViewController).mainLoginViewController = self
         }
     }
 }

@@ -16,8 +16,13 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
     var authType : AylaOAuthType!
     
     weak var mainLoginViewController : LoginViewController!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("cancelAuth"))
+    }
     
     override func viewDidAppear(animated: Bool) {
+        super.viewDidDisappear(animated)
         if authType == nil {
             askForAuthType()
         }
@@ -33,8 +38,16 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
             self.authType = AylaOAuthType.Google
             self.startOAuth()
         }))
-        self.showViewController(menuSheet, sender: self)
+        menuSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+            self.cancelAuth()
+        }))
+        self.presentViewController(menuSheet, animated: true, completion: nil)
     }
+    
+    func cancelAuth() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func startOAuth() {
         // Create auth provider with user input.
         let auth = AylaOAuthProvider(webView: self.webView, type: self.authType)
