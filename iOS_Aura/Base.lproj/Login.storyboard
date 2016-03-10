@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
@@ -108,24 +107,9 @@
                     <view key="view" contentMode="scaleToFill" id="JNp-Gb-Dy0">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2US-YP-ZSQ">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
-                            </webView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="2US-YP-ZSQ" firstAttribute="leading" secondItem="JNp-Gb-Dy0" secondAttribute="leading" id="ADI-9B-NFT"/>
-                            <constraint firstAttribute="topMargin" secondItem="2US-YP-ZSQ" secondAttribute="top" id="aHg-Yd-aw5"/>
-                            <constraint firstAttribute="trailing" secondItem="2US-YP-ZSQ" secondAttribute="trailing" id="dNi-ft-ZXd"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="2US-YP-ZSQ" secondAttribute="bottom" id="ylg-V0-u4s"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="zXA-Ky-1do"/>
-                    <connections>
-                        <outlet property="webView" destination="2US-YP-ZSQ" id="hYz-z4-3Of"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m3e-Aq-pqd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

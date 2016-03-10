@@ -8,10 +8,11 @@
 
 import UIKit
 import iOS_AylaSDK
+import WebKit
 
 class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
 
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var webView: WKWebView!
     
     var authType : AylaOAuthType!
     
@@ -19,6 +20,13 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("cancelAuth"))
+        
+        let webView = WKWebView()
+        self.webView = webView
+        self.view.addSubview(self.webView)
+        self.webView.translatesAutoresizingMaskIntoConstraints = false;
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[webView]-0-|", options: NSLayoutFormatOptions.DirectionLeadingToTrailing, metrics: nil, views: ["webView" : self.webView]))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[webView]-0-|", options: NSLayoutFormatOptions.DirectionLeadingToTrailing, metrics: nil, views: ["webView" : self.webView]))
     }
     
     override func viewDidAppear(animated: Bool) {
