@@ -1,8 +1,6 @@
 //
-//  MeTVController.swift
-//  iOS_Aura
+//  Aura
 //
-//  Created by Yipei Wang on 2/25/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
