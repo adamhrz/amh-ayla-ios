@@ -9,13 +9,20 @@
 import UIKit
 import iOS_AylaSDK
 
-class PropertyListViewModel: NSObject, UITableViewDataSource, UISearchResultsUpdating, AylaDeviceListener {
+protocol PropertyListViewModelDelegate: class {
+    func propertyListViewModel(viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
+}
+
+class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, AylaDeviceListener {
     
     /// Defaule property cell id
     static let PropertyCellId: String = "PropertyCellId"
     
     /// Device
     let device: AylaDevice
+    
+    /// Delegate of property list view model
+    weak var delegate: PropertyListViewModelDelegate?
     
     /// Table view of properties
     var tableView: UITableView
@@ -50,6 +57,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UISearchResultsUpd
         let barHeight = self.searchController?.searchBar.frame.size.height ?? 0
         self.tableView.contentOffset = CGPointMake(0, barHeight)
         
+        tableView.delegate = self
         tableView.dataSource = self
         self.updatePropertyListFromDevice(userSearchText: nil)
     }
@@ -103,6 +111,13 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UISearchResultsUpd
         }
         
         return cell!
+    }
+    
+    // MARK: Table View Delegate
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let item = self.properties[indexPath.row] as AylaProperty
+        self.delegate?.propertyListViewModel(self, didSelectProperty: item, assignedPropertyModel: PropertyModel(property: item, presentingViewController: nil))
     }
     
     // MARK - search controller
