@@ -21,6 +21,7 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("cancelAuth"))
         
+        // WKWebView cannot be added through storyboards as of today. If possible in the future, this view could be added in the storyboard
         let webView = WKWebView()
         self.webView = webView
         self.view.addSubview(self.webView)
@@ -57,7 +58,7 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
     }
     
     func startOAuth() {
-        // Create auth provider with user input.
+        // Create auth provider with the webView and selected provider
         let auth = AylaOAuthProvider(webView: self.webView, type: self.authType)
         
         let loginManager = AylaCoreManager.sharedManager().loginManager

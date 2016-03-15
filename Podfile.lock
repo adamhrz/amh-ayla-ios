@@ -38,16 +38,16 @@ PODS:
     - CocoaHTTPServer (~> 2.3)
 
 DEPENDENCIES:
-  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `emanuel/AylaUser`)
+  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `develop`)
 
 EXTERNAL SOURCES:
   iOS_AylaSDK:
-    :branch: emanuel/AylaUser
+    :branch: develop
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 CHECKOUT OPTIONS:
   iOS_AylaSDK:
-    :commit: 0e45c0c9916fc18025ce40eee9f54960cd6c76a7
+    :commit: 2b13273caddea1410b1a9144cd6340277af24f1d
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 SPEC CHECKSUMS:

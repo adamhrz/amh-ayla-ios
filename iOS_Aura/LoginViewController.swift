@@ -115,7 +115,10 @@ class LoginViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "OAuthLoginSegue" {
-            ((segue.destinationViewController as! UINavigationController).viewControllers.first! as! OAuthLoginViewController).mainLoginViewController = self
+            let navigationViewController = segue.destinationViewController as! UINavigationController
+            let oAuthController = navigationViewController.viewControllers.first! as! OAuthLoginViewController
+            // pass a reference to self to continue login after a sucessful OAuthentication
+            oAuthController.mainLoginViewController = self
         }
     }
 }
