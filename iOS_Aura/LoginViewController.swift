@@ -112,4 +112,13 @@ class LoginViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "OAuthLoginSegue" {
+            let navigationViewController = segue.destinationViewController as! UINavigationController
+            let oAuthController = navigationViewController.viewControllers.first! as! OAuthLoginViewController
+            // pass a reference to self to continue login after a sucessful OAuthentication
+            oAuthController.mainLoginViewController = self
+        }
+    }
 }
