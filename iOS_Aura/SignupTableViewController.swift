@@ -1,0 +1,150 @@
+//
+//  SignupTableViewController.swift
+//  iOS_Aura
+//
+//  Created by Emanuel Peña Aguilar on 3/24/16.
+//  Copyright © 2016 Ayla Networks. All rights reserved.
+//
+
+import UIKit
+import iOS_AylaSDK
+
+class SignupTableViewController: UITableViewController {
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var confirmPasswordTextField: UITextField!
+    @IBOutlet weak var firstNameTextField: UITextField!
+    @IBOutlet weak var lastNameTextField: UITextField!
+    @IBOutlet weak var phoneCountryCodeTextField: UITextField!
+    @IBOutlet weak var phoneTextField: UITextField!
+    @IBOutlet weak var companyTextField: UITextField!
+    @IBOutlet weak var streetTextField: UITextField!
+    @IBOutlet weak var cityTextField: UITextField!
+    @IBOutlet weak var stateTextField: UITextField!
+    @IBOutlet weak var zipTextField: UITextField!
+    @IBOutlet weak var countryTextField: UITextField!
+    @IBOutlet weak var devKitNumTextField: UITextField!
+
+    var tokenTextField: UITextField?
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    @IBAction func cancelAction(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func signUpAction(sender: AnyObject) {
+        self.view.endEditing(true)
+        var errorMessage: String?
+        if emailTextField.text == nil || emailTextField.text!.characters.count < 1 {
+            errorMessage = "Email field is required"
+        } else if passwordTextField.text == nil || passwordTextField.text!.characters.count < 1 {
+            errorMessage = "Password field is required"
+        } else if confirmPasswordTextField.text == nil || confirmPasswordTextField.text!.characters.count < 1 {
+            errorMessage = "Password confirmation field is required"
+        } else if firstNameTextField.text == nil || firstNameTextField.text!.characters.count < 1 {
+            errorMessage = "First name field is required"
+        } else if lastNameTextField.text == nil || lastNameTextField.text!.characters.count < 1 {
+            errorMessage = "Last Name field is required"
+        }  else if passwordTextField.text != confirmPasswordTextField.text {
+            errorMessage = "Password and confirmation don't match!"
+        }  else {
+            let phoneCountryCodeProvided = phoneCountryCodeTextField.text != nil && phoneCountryCodeTextField.text!.characters.count > 0
+            let phoneProvided = phoneTextField.text != nil && phoneTextField.text!.characters.count > 0
+            if phoneProvided != phoneCountryCodeProvided {
+                errorMessage = "Either none or both Country Code and Phone must be provided"
+            }
+        }
+        
+        if let message = errorMessage {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+            alert.addAction(okAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+            return;
+        }
+        
+        let user = AylaUser(email: emailTextField.text!, password: passwordTextField.text!, firstName: firstNameTextField.text!, lastName: lastNameTextField.text!)
+        user.phoneCountryCode = phoneCountryCodeTextField.text
+        user.phone = phoneTextField.text
+        user.company = companyTextField.text
+        user.street = streetTextField.text
+        user.city = cityTextField.text
+        user.state = stateTextField.text
+        user.zip = zipTextField.text
+        user.country = countryTextField.text
+        if devKitNumTextField.text != nil {
+            let devKitNumber = Int(devKitNumTextField.text!)
+            user.devKitNum = devKitNumber
+        }
+        
+        let emailTemplate = AylaEmailTemplate(id: "ayla_confirmation_template_01", subject: "Aura Signup", bodyHTML: nil)
+        
+        let loginManager = AylaCoreManager.sharedManager().loginManager
+        loginManager.signUpWithUser(user, emailTemplate: emailTemplate, success: { () -> Void in
+            let alert = UIAlertController(title: "Account created", message: "Please check your email for a confirmation", preferredStyle: UIAlertControllerStyle.Alert)
+            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+            }) { (error) -> Void in
+                let alert = UIAlertController(title: "Error", message: "An error occurred", preferredStyle: UIAlertControllerStyle.Alert)
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
+                self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func enterTokenAction(sender: AnyObject) {
+        let alert = UIAlertController(title: "Enter your confirmation token", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.placeholder = "Confirmation Token"
+            textField.tintColor = UIColor(red: 93.0/255.0, green: 203/255.0, blue: 152/255.0, alpha: 1.0)
+            self.tokenTextField = textField
+        }
+        let okAction = UIAlertAction (title: "Confirm", style: UIAlertActionStyle.Default) { (action) -> Void in
+            let token = self.tokenTextField!.text
+            if token == nil || token!.characters.count < 1 {
+                
+                let alert = UIAlertController(title: "Error", message: "No token was provided", preferredStyle: UIAlertControllerStyle.Alert)
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
+                self.presentViewController(alert, animated: true, completion: nil)
+                return;
+            }
+            let loginManager = AylaCoreManager.sharedManager().loginManager
+            loginManager.confirmAccountWithToken(token!, success: { () -> Void in
+                let parentController = self.presentingViewController
+                self.dismissViewControllerAnimated(true, completion: { () -> Void in
+                    let alert = UIAlertController(title: "Account confirmed", message: "Enter your credentials to log in", preferredStyle: UIAlertControllerStyle.Alert)
+                    let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                    alert.addAction(okAction)
+                    if parentController != nil {
+                        parentController!.presentViewController(alert, animated: true, completion: nil)
+                    }
+                })
+                }, failure: { (error) -> Void in
+                    let alert = UIAlertController(title: "Error", message: "An error occurred", preferredStyle: UIAlertControllerStyle.Alert)
+                    let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                    alert.addAction(okAction)
+                    self.presentViewController(alert, animated: true, completion: nil)
+            })
+        }
+        
+        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+}
