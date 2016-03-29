@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2v2-67-fCY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2v2-67-fCY">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
@@ -18,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Hr-PK-flC">
-                                <rect key="frame" x="181" y="183" width="239" height="35"/>
+                                <rect key="frame" x="181" y="178" width="239" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="DNS-h0-N90"/>
                                     <constraint firstAttribute="width" constant="239" id="FXO-fS-OGt"/>
@@ -28,12 +29,12 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="light" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Ee7-Ms-yed">
-                                <rect key="frame" x="181" y="241" width="239" height="35"/>
+                                <rect key="frame" x="181" y="236" width="239" height="35"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="go" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhu-7q-oXF" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
-                                <rect key="frame" x="234" y="319" width="133" height="60"/>
+                                <rect key="frame" x="234" y="314" width="133" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="133" id="AEQ-kj-947"/>
                                     <constraint firstAttribute="height" constant="60" id="xp1-xc-O83"/>
@@ -46,7 +47,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbz-ap-m1d" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
-                                <rect key="frame" x="234" y="407" width="133" height="54"/>
+                                <rect key="frame" x="234" y="402" width="133" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="7aY-i8-Fmo"/>
                                     <constraint firstAttribute="width" constant="133" id="CjL-ou-gvA"/>
@@ -59,7 +60,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Xb-VM-qQf" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
-                                <rect key="frame" x="234" y="469" width="133" height="54"/>
+                                <rect key="frame" x="234" y="464" width="133" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="bah-p6-kSi"/>
                                     <constraint firstAttribute="width" constant="133" id="jYY-1o-lpv"/>
@@ -69,22 +70,45 @@
                                     <segue destination="g1w-pT-LP7" kind="presentation" identifier="OAuthLoginSegue" id="Wpi-Mt-IS9"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sUN-Wo-Mbs" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
+                                <rect key="frame" x="234" y="526" width="133" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="133" id="16i-3j-1p7"/>
+                                    <constraint firstAttribute="height" constant="54" id="Xty-58-1MH"/>
+                                </constraints>
+                                <state key="normal" title="Signup"/>
+                                <connections>
+                                    <segue destination="LaX-Wg-WIN" kind="popoverPresentation" popoverAnchorView="sUN-Wo-Mbs" id="zGz-uu-wMC">
+                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                    </segue>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="jhu-7q-oXF" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="1vo-nF-NXS"/>
-                            <constraint firstItem="A13-B2-IIq" firstAttribute="top" secondItem="8Xb-VM-qQf" secondAttribute="bottom" constant="77" id="3MF-er-0ks"/>
                             <constraint firstItem="8Xb-VM-qQf" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="7Uo-kj-rfN"/>
+                            <constraint firstItem="A13-B2-IIq" firstAttribute="top" secondItem="sUN-Wo-Mbs" secondAttribute="bottom" constant="20" id="9aM-gb-9mE"/>
                             <constraint firstItem="8Xb-VM-qQf" firstAttribute="top" secondItem="hbz-ap-m1d" secondAttribute="bottom" constant="8" id="AKB-Qx-GSt"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="height" secondItem="8Hr-PK-flC" secondAttribute="height" id="JXp-J3-fab"/>
+                            <constraint firstItem="sUN-Wo-Mbs" firstAttribute="top" secondItem="8Xb-VM-qQf" secondAttribute="bottom" constant="8" id="LtB-GJ-P1H"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sUN-Wo-Mbs" secondAttribute="trailing" id="OEy-AF-2Vm"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="OtJ-7z-QpX"/>
+                            <constraint firstItem="A13-B2-IIq" firstAttribute="top" secondItem="sUN-Wo-Mbs" secondAttribute="bottom" constant="20" id="Ppd-Hv-xzf"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="width" secondItem="8Hr-PK-flC" secondAttribute="width" id="TTd-cv-BU2"/>
+                            <constraint firstItem="sUN-Wo-Mbs" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="UDL-qQ-kHL"/>
                             <constraint firstItem="hbz-ap-m1d" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="gHv-b7-ihd"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="top" secondItem="8Hr-PK-flC" secondAttribute="bottom" constant="23" id="gbX-9h-ZmJ"/>
                             <constraint firstItem="hbz-ap-m1d" firstAttribute="top" secondItem="jhu-7q-oXF" secondAttribute="bottom" constant="28" id="o4n-NF-U6U"/>
                             <constraint firstItem="jhu-7q-oXF" firstAttribute="top" secondItem="Ee7-Ms-yed" secondAttribute="bottom" constant="43" id="sCc-Ra-e4B"/>
                             <constraint firstItem="8Hr-PK-flC" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="sHx-fD-vSY"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="OEy-AF-2Vm"/>
+                                <exclude reference="Ppd-Hv-xzf"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="passwordTextField" destination="Ee7-Ms-yed" id="dIc-P8-TWp"/>
@@ -130,6 +154,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EnF-di-mCc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="976" y="398"/>
+        </scene>
+        <!--Signup-->
+        <scene sceneID="n2S-dj-5oW">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Signup" id="LaX-Wg-WIN" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WTU-Yu-B0r" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1024.5" y="260"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="tIG-qO-PuN">
