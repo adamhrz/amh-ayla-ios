@@ -19,10 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Setup core manager
         let settings = AylaSystemSettings.defaultSystemSettings()
         // Setup app id/secret
-        settings.serviceType = .Development
+        settings.serviceType = .Staging
         settings.appId = "iMCA-Dev-0dfc7900-id"
-        settings.appSecret = "iMCA-Dev-0dfc7900-5804184"
+        settings.appSecret = "iMCA-Dev-0dfc7900-2962689"
 
+        // Set device detail provider
+        settings.deviceDetailProvider = DeviceDetailProvider()
+        
         // Init device manager
         AylaCoreManager.initializeManagerWithSettings(settings)
         
