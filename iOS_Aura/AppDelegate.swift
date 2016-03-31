@@ -26,6 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set device detail provider
         settings.deviceDetailProvider = DeviceDetailProvider()
         
+        // Set DSS as allowed
+        settings.allowDSS = true;
+        
         // Init device manager
         AylaCoreManager.initializeManagerWithSettings(settings)
         
