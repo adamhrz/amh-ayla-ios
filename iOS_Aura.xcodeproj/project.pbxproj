@@ -27,6 +27,8 @@
 		A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */; };
 		A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E234E1C935A5E00696566 /* PropertyModel.swift */; };
 		A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */; };
+		A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */; };
+		A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */; };
 		A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */; };
 		A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */; };
 		A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */; };
@@ -82,6 +84,8 @@
 		A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyViewController.swift; path = Device/Presentation/PropertyViewController.swift; sourceTree = "<group>"; };
 		A77E234E1C935A5E00696566 /* PropertyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyModel.swift; path = Device/Model/PropertyModel.swift; sourceTree = "<group>"; };
 		A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceDetailProvider.swift; path = Device/DeviceDetailProvider.swift; sourceTree = "<group>"; };
+		A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationViewController.swift; path = Device/Presentation/RegistrationViewController.swift; sourceTree = "<group>"; };
+		A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationTVCell.swift; path = Device/Presentation/RegistrationTVCell.swift; sourceTree = "<group>"; };
 		A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeTVController.swift; path = Me/MeTVController.swift; sourceTree = "<group>"; };
 		A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceViewModel.swift; path = Device/Model/DeviceViewModel.swift; sourceTree = "<group>"; };
 		A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DevicePanelView.swift; path = Device/Presentation/DevicePanelView.swift; sourceTree = "<group>"; };
@@ -178,6 +182,8 @@
 				A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */,
 				A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */,
 				A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */,
+				A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */,
+				A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */,
 			);
 			name = Presentation;
 			sourceTree = "<group>";
@@ -341,6 +347,7 @@
 				TargetAttributes = {
 					A7351C891C753C360073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 4K93KVU666;
 					};
 					A7351C9D1C753C370073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -463,11 +470,13 @@
 				A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */,
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */,
+				A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
 				A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */,
 				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
 				A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
+				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
 				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
 				A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */,
 				A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */,
@@ -631,10 +640,13 @@
 			baseConfigurationReference = 434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -643,10 +655,13 @@
 			baseConfigurationReference = 146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
