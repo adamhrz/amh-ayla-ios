@@ -28,6 +28,7 @@
 		A7351CAE1C753C370073C73A /* iOS_AuraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7351CAD1C753C370073C73A /* iOS_AuraUITests.swift */; };
 		A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */; };
 		A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E234E1C935A5E00696566 /* PropertyModel.swift */; };
+		A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */; };
 		A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */; };
 		A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */; };
 		A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */; };
@@ -84,6 +85,7 @@
 		A7351CAF1C753C370073C73A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyViewController.swift; path = Device/Presentation/PropertyViewController.swift; sourceTree = "<group>"; };
 		A77E234E1C935A5E00696566 /* PropertyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyModel.swift; path = Device/Model/PropertyModel.swift; sourceTree = "<group>"; };
+		A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceDetailProvider.swift; path = Device/DeviceDetailProvider.swift; sourceTree = "<group>"; };
 		A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeTVController.swift; path = Me/MeTVController.swift; sourceTree = "<group>"; };
 		A7A8C9031C7B889D00612C39 /* DeviceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceViewModel.swift; path = Device/Model/DeviceViewModel.swift; sourceTree = "<group>"; };
 		A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DevicePanelView.swift; path = Device/Presentation/DevicePanelView.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			children = (
 				A7104ADF1C7AD263007B1AB3 /* Model */,
 				A7104AD81C7AC290007B1AB3 /* Presentation */,
+				A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */,
 			);
 			name = Device;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
+				A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */,
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */,
 				A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */,
