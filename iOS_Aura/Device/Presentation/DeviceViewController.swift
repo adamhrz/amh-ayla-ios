@@ -30,6 +30,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             // Allocate a device view model to handle UX of panel view and table view.
             deviceViewModel = DeviceViewModel(device: device, panel: panelView, propertyListTableView: tableView)
             deviceViewModel?.propertyListViewModel?.delegate = self
+            
+            let options = UIBarButtonItem(barButtonSystemItem:.Organize, target: self, action: #selector(DeviceViewController.showOptions))
+            self.navigationItem.rightBarButtonItem = options
         }
         else {
             print("- WARNING - a device view with no device")
@@ -40,6 +43,29 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    func unregister() {
+        device?.unregisterWithSuccess({ 
+            self.navigationController?.popViewControllerAnimated(true)
+            }, failure: { (error) in
+                let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
+                let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
+                alert.addAction(gotIt)
+                self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+    
+    // MARK - Options
+    func showOptions() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let unregister = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
+            self.unregister()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
+        alert.addAction(cancel)
+        alert.addAction(unregister)
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     // MARK - Property list view model delegate
