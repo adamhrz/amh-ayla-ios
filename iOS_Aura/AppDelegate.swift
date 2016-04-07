@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         settings.serviceType = .Development
         settings.appId = "iMCA-Dev-0dfc7900-id"
         settings.appSecret = "iMCA-Dev-0dfc7900-5804184"
-//        settings.appSecret = "iMCA-Dev-0dfc7900-2962689"
 
         // Set device detail provider
         settings.deviceDetailProvider = DeviceDetailProvider()
