@@ -12,7 +12,10 @@ import iOS_AylaSDK
 class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate {
 
     /// Id of a segue which is linked to device page.
-    let segueIdToDevice = "toDevicePage"
+    let segueIdToDevice :String = "toDevicePage"
+    
+    /// Segue id to property view
+    let segueIdToRegisterView :String = "toRegisterPage"
     
     /// The session manager which retains device manager of device list showing on this table view.
     var sessionManager :AylaSessionManager?
@@ -41,6 +44,18 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    @IBAction func rightBarButtonTapped(sender: AnyObject) {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Register", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            
+            self.performSegueWithIdentifier(self.segueIdToRegisterView, sender: nil)
+            
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+        self.presentViewController(actionSheet, animated: true, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
