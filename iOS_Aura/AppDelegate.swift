@@ -36,6 +36,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+        let queryitems = components?.queryItems
+        if url.host == "wifi_setup" {
+            let dsnParam = queryitems?.filter({$0.name == "dsn"}).first
+            let dsn = dsnParam?.value
+            print("Will Setup Wi-Fi for DSN: \(dsn)")
+            let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
+            let setupVC2 = setupStoryboard.instantiateInitialViewController()
+            self.window?.rootViewController?.presentViewController(setupVC2!, animated: true, completion:nil)
+        }
+        else if url.host == "user_sign_up_token" {
+            let tokenParam = queryitems?.filter({$0.name == "token"}).first;
+            let token = tokenParam?.value;
+            print("Will Confirm Sign Up with Token: \(token)")
+            let loginManager = AylaCoreManager.sharedManager().loginManager
+            loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
+                let alert = UIAlertController(title: "Account confirmed", message: "Enter your credentials to log in", preferredStyle: UIAlertControllerStyle.Alert)
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                    alert.addAction(okAction)
+                self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+
+                }, failure: { (error) -> Void in
+                    let alert = UIAlertController(title: "Account confirmation failed", message: "Something went wrong.  Account may already be confirmed.", preferredStyle: UIAlertControllerStyle.Alert)
+                    let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                    alert.addAction(okAction)
+                    self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            })
+
+        }
+        return true;
+    }
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
