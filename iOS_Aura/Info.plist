@@ -48,7 +48,8 @@
 			<array>
 				<string>aylacontrol</string>
 				<string>AgileLink</string>
-                <string>AylaSmartPlug</string>
+				<string>AylaSmartPlug</string>
+				<string>aura</string>
 			</array>
 		</dict>
 	</array>
