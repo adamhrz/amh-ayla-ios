@@ -29,6 +29,7 @@
 		A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */; };
 		A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E234E1C935A5E00696566 /* PropertyModel.swift */; };
 		A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */; };
+		A78080181CBC271A00C779B5 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A78080161CBC271A00C779B5 /* Me.storyboard */; };
 		A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */; };
 		A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */; };
 		A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */; };
@@ -88,6 +89,7 @@
 		A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyViewController.swift; path = Device/Presentation/PropertyViewController.swift; sourceTree = "<group>"; };
 		A77E234E1C935A5E00696566 /* PropertyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyModel.swift; path = Device/Model/PropertyModel.swift; sourceTree = "<group>"; };
 		A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceDetailProvider.swift; path = Device/DeviceDetailProvider.swift; sourceTree = "<group>"; };
+		A78080171CBC271A00C779B5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Me.storyboard; sourceTree = "<group>"; };
 		A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationViewController.swift; path = Device/Presentation/RegistrationViewController.swift; sourceTree = "<group>"; };
 		A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationTVCell.swift; path = Device/Presentation/RegistrationTVCell.swift; sourceTree = "<group>"; };
 		A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeTVController.swift; path = Me/MeTVController.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				A7351C8D1C753C370073C73A /* AppDelegate.swift */,
 				A7351C911C753C370073C73A /* Main.storyboard */,
 				A7104AD41C7599BF007B1AB3 /* Setup.storyboard */,
+				A78080161CBC271A00C779B5 /* Me.storyboard */,
 				A7351C941C753C370073C73A /* Assets.xcassets */,
 				A7351C961C753C370073C73A /* LaunchScreen.storyboard */,
 				A7351C991C753C370073C73A /* Info.plist */,
@@ -395,6 +398,7 @@
 				A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */,
 				A7351C951C753C370073C73A /* Assets.xcassets in Resources */,
 				A54CE2C61CA434DF0011D20A /* Signup.storyboard in Resources */,
+				A78080181CBC271A00C779B5 /* Me.storyboard in Resources */,
 				A7351C931C753C370073C73A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -555,6 +559,14 @@
 				A7351C971C753C370073C73A /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		A78080161CBC271A00C779B5 /* Me.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A78080171CBC271A00C779B5 /* Base */,
+			);
+			name = Me.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
