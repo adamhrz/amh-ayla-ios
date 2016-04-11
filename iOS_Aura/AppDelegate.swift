@@ -38,20 +38,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        // Parse URL app was launched with
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
         let queryitems = components?.queryItems
+        
+        // If URL is sent from WI-Fi Setup Screen
         if url.host == "wifi_setup" {
+            
+            // Pull DSN from URL
             let dsnParam = queryitems?.filter({$0.name == "dsn"}).first
             let dsn = dsnParam?.value
             print("Will Setup Wi-Fi for DSN: \(dsn)")
+            
+            // Instantiate and Push SetupViewController
             let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
             let setupVC2 = setupStoryboard.instantiateInitialViewController()
             self.window?.rootViewController?.presentViewController(setupVC2!, animated: true, completion:nil)
         }
+        // If URL is from an Account Confirmation Email
         else if url.host == "user_sign_up_token" {
+            
+            // Pull Token from URL
             let tokenParam = queryitems?.filter({$0.name == "token"}).first;
             let token = tokenParam?.value;
             print("Will Confirm Sign Up with Token: \(token)")
+            
+            // Get LoginManager and send account confirmation token
             let loginManager = AylaCoreManager.sharedManager().loginManager
             loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
                 let alert = UIAlertController(title: "Account confirmed", message: "Enter your credentials to log in", preferredStyle: UIAlertControllerStyle.Alert)
