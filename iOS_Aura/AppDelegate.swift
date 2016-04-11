@@ -38,6 +38,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        
+        // Instantiate and display a UIAlertViewController as needed
+        func presentAlertController(title: String?, message: String?, withOkayButton: Bool) {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            if withOkayButton {
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
+            }
+            self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+        }
+        
         // Parse URL app was launched with
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
         let queryitems = components?.queryItems
@@ -66,37 +77,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Get LoginManager and send account confirmation token
             let loginManager = AylaCoreManager.sharedManager().loginManager
             loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
-                self.presentAlertController("Account Confirmed",
+                presentAlertController("Account Confirmed",
                     message: "Enter your credentials to log in",
                     withOkayButton: true)
                 }, failure: { (error) -> Void in
-                    self.presentAlertController("Account Confirmation Failed.",
+                    presentAlertController("Account Confirmation Failed.",
                         message: "Account may already be confirmed. Try logging in.",
                         withOkayButton: true)
             })
 
         }
         else if url.host == "user_reset_password_token" {
-            self.presentAlertController("Not Yet Implemented.",
+            presentAlertController("Not Yet Implemented.",
                                         message: "Password Reset Feature coming soon.",
                                         withOkayButton: true)
         }
         else {
-            self.presentAlertController("Not Yet Implemented.",
+            presentAlertController("Not Yet Implemented.",
                                         message: String.localizedStringWithFormat("Cannot currently parse url with %@ parameter", url.host!),
                                         withOkayButton: true)
         }
         return true;
     }
     
-    func presentAlertController(title: String?, message: String?, withOkayButton: Bool) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        if withOkayButton {
-            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
-            alert.addAction(okAction)
-        }
-        self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
-    }
+
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
