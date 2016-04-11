@@ -66,20 +66,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Get LoginManager and send account confirmation token
             let loginManager = AylaCoreManager.sharedManager().loginManager
             loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
-                let alert = UIAlertController(title: "Account confirmed", message: "Enter your credentials to log in", preferredStyle: UIAlertControllerStyle.Alert)
-                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
-                    alert.addAction(okAction)
-                self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
-
+                self.presentAlertController("Account Confirmed",
+                    message: "Enter your credentials to log in",
+                    withOkayButton: true)
                 }, failure: { (error) -> Void in
-                    let alert = UIAlertController(title: "Account confirmation failed", message: "Something went wrong.  Account may already be confirmed.", preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
-                    alert.addAction(okAction)
-                    self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+                    self.presentAlertController("Account Confirmation Failed.",
+                        message: "Account may already be confirmed. Try logging in.",
+                        withOkayButton: true)
             })
 
         }
+        else if url.host == "user_reset_password_token" {
+            self.presentAlertController("Not Yet Implemented.",
+                                        message: "Password Reset Feature coming soon.",
+                                        withOkayButton: true)
+        }
+        else {
+            self.presentAlertController("Not Yet Implemented.",
+                                        message: String.localizedStringWithFormat("Cannot currently parse url with %@ parameter", url.host!),
+                                        withOkayButton: true)
+        }
         return true;
+    }
+    
+    func presentAlertController(title: String?, message: String?, withOkayButton: Bool) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        if withOkayButton {
+            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+            alert.addAction(okAction)
+        }
+        self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
     }
 
     func applicationWillResignActive(application: UIApplication) {
