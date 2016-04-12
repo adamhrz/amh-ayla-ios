@@ -11,6 +11,7 @@ import iOS_AylaSDK
 
 protocol PropertyListViewModelDelegate: class {
     func propertyListViewModel(viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
+    func displayPropertyDetails(viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
 }
 
 class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, AylaDeviceListener {
@@ -92,6 +93,26 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
         tableView.reloadData()
     }
     
+    /**
+     A tap gesture recognizer uses this method to show an alert for modifying property values/creating datapoints.
+     
+     - parameter sender: UITapGestureRecognizer
+     - parameter property: the AylaProperty to create datapoints for
+     */
+    func showValueAlertForProperty(sender: UITapGestureRecognizer, property: AylaProperty){
+        self.delegate?.propertyListViewModel(self, didSelectProperty: property, assignedPropertyModel: PropertyModel(property: property, presentingViewController: nil))
+    }
+    
+    /**
+     A tap gesture recognizer uses this method to segue to a Property Details page.
+     
+     - parameter sender: UITapGestureRecognizer
+     - parameter property: the AylaProperty to create datapoints for
+     */
+    func showDetailsForProperty(sender: UITapGestureRecognizer, property: AylaProperty){
+        self.delegate?.displayPropertyDetails(self, didSelectProperty: property, assignedPropertyModel: PropertyModel(property: property, presentingViewController: nil))
+    }
+    
     // MARK: Table View Data Source
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -111,15 +132,12 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
         else {
             assert(false, "\(cellId) - reusable cell can't be dequeued'")
         }
-        
+        cell?.parentPropertyListViewModel = self
         return cell!
     }
     
     // MARK: Table View Delegate
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let item = self.properties[indexPath.row] as AylaProperty
-        self.delegate?.propertyListViewModel(self, didSelectProperty: item, assignedPropertyModel: PropertyModel(property: item, presentingViewController: nil))
     }
     
     // MARK - search controller
