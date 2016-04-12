@@ -11,7 +11,7 @@ import iOS_AylaSDK
 
 protocol PropertyListViewModelDelegate: class {
     func propertyListViewModel(viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
-    func displayPropertyDetails(viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
+    func propertyListViewModel(viewModel:PropertyListViewModel, displayPropertyDetails property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
 }
 
 class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, AylaDeviceListener {
@@ -110,7 +110,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
      - parameter property: the AylaProperty to create datapoints for
      */
     func showDetailsForProperty(sender: UITapGestureRecognizer, property: AylaProperty){
-        self.delegate?.displayPropertyDetails(self, didSelectProperty: property, assignedPropertyModel: PropertyModel(property: property, presentingViewController: nil))
+        self.delegate?.propertyListViewModel(self, displayPropertyDetails: property, assignedPropertyModel: PropertyModel(property: property, presentingViewController: nil))
     }
     
     // MARK: Table View Data Source

@@ -74,7 +74,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         propertyModel.presentActions(presentingViewController: self);
     }
     
-    func displayPropertyDetails(viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel){
+    func propertyListViewModel(viewModel:PropertyListViewModel, displayPropertyDetails property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel){
         propertyModel.delegate = self
         propertyModel.chosenAction(PropertyModelAction.Details)
     }
