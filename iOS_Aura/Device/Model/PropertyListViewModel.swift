@@ -15,8 +15,10 @@ protocol PropertyListViewModelDelegate: class {
 
 class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, AylaDeviceListener {
     
-    /// Defaule property cell id
+    /// Default property cell id
     static let PropertyCellId: String = "PropertyCellId"
+    /// Expanded property cell id
+    static let ExpandedPropertyCellId: String = "ExpandedPropertyCellId"
     
     /// Device
     let device: AylaDevice
@@ -98,7 +100,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
-        let cellId = PropertyListViewModel.PropertyCellId
+        let cellId = PropertyListViewModel.ExpandedPropertyCellId
         let item = self.properties[indexPath.row] as AylaProperty
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellId) as? PropertyTVCell
