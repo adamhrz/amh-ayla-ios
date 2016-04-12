@@ -17,6 +17,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     /// Segue id to property view
     let segueIdToPropertyView: String = "toPropertyView"
     
+    /// Segue id to test view
+    let segueIdToLanTestView: String = "toLanModeTest"
+    
     /// Device which is represented on this device view.
     var device :AylaDevice?
     
@@ -88,6 +91,11 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         if segue.identifier == segueIdToPropertyView {
             let vc = segue.destinationViewController as! PropertyViewController
             vc.propertyModel = sender as? PropertyModel
+        }
+        if segue.identifier == segueIdToLanTestView {
+            let nvc = segue.destinationViewController as! UINavigationController
+            let vc = nvc.viewControllers[0] as! TestPanelViewController
+            vc.testModel = LanModeTestModel(testPanelVC: vc, deviceManager: device?.deviceManager, device: device)
         }
     }
     
