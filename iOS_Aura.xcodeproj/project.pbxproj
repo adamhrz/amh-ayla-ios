@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
+		A54B96191CBD9A30009115AE /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54B96181CBD9A30009115AE /* Profile.storyboard */; };
+		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
+		A54B961D1CBECAE5009115AE /* UIAlertView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961C1CBECAE5009115AE /* UIAlertView_Extensions.swift */; };
 		A54CE2C61CA434DF0011D20A /* Signup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54CE2C51CA434DF0011D20A /* Signup.storyboard */; };
 		A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */; };
 		A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AC81C757F32007B1AB3 /* Login.storyboard */; };
@@ -63,6 +66,9 @@
 		434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.debug.xcconfig"; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
+		A54B96181CBD9A30009115AE /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
+		A54B961C1CBECAE5009115AE /* UIAlertView_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertView_Extensions.swift; path = UX/UIAlertView_Extensions.swift; sourceTree = "<group>"; };
 		A54CE2C51CA434DF0011D20A /* Signup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Signup.storyboard; sourceTree = "<group>"; };
 		A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLoginViewController.swift; sourceTree = "<group>"; };
 		A7104AC91C757F32007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
@@ -158,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				A7104ACD1C758140007B1AB3 /* AuraButton.swift */,
+				A54B961C1CBECAE5009115AE /* UIAlertView_Extensions.swift */,
 			);
 			name = UX;
 			sourceTree = "<group>";
@@ -246,6 +253,7 @@
 				A7351C991C753C370073C73A /* Info.plist */,
 				A7104AC81C757F32007B1AB3 /* Login.storyboard */,
 				A7104ADD1C7AD04A007B1AB3 /* Constants.swift */,
+				A54B96181CBD9A30009115AE /* Profile.storyboard */,
 				A54CE2C51CA434DF0011D20A /* Signup.storyboard */,
 			);
 			path = iOS_Aura;
@@ -273,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */,
+				A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */,
 			);
 			name = Me;
 			sourceTree = "<group>";
@@ -395,6 +404,7 @@
 			files = (
 				A7104AD61C7599BF007B1AB3 /* Setup.storyboard in Resources */,
 				A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */,
+				A54B96191CBD9A30009115AE /* Profile.storyboard in Resources */,
 				A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */,
 				A7351C951C753C370073C73A /* Assets.xcassets in Resources */,
 				A54CE2C61CA434DF0011D20A /* Signup.storyboard in Resources */,
@@ -475,6 +485,7 @@
 				A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */,
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
+				A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
@@ -486,6 +497,7 @@
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
 				A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */,
 				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
+				A54B961D1CBECAE5009115AE /* UIAlertView_Extensions.swift in Sources */,
 				A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
 				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
