@@ -17,7 +17,7 @@ class DevicePanelView: UIView {
     @IBOutlet weak var oemModelLabel: UILabel!
     @IBOutlet weak var modelLabel: UILabel!
     @IBOutlet weak var macAddressLabel: UILabel!
-    @IBOutlet weak var ipAddressLabel: UILabel!
+    @IBOutlet weak var lanIPAddressLabel: UILabel!
     
     
     func configure(device:AylaDevice) {
@@ -43,7 +43,7 @@ class DevicePanelView: UIView {
         else {
             ipAddress = "(null)"
         }
-        ipAddressLabel.text = String(format: "%@ %@", "LAN IP: ", ipAddress)
+        lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", ipAddress)
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGrayColor().CGColor
 
