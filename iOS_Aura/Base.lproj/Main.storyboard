@@ -199,6 +199,14 @@
             </objects>
             <point key="canvasLocation" x="861" y="-376"/>
         </scene>
+        <!--Test-->
+        <scene sceneID="jDy-PM-ktL">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Test" id="ncm-l0-4MD" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Cl-kc-135" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2157.5" y="-580"/>
+        </scene>
         <!--Property View Controller-->
         <scene sceneID="3QD-rl-W4S">
             <objects>
@@ -344,8 +352,17 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y1O-DF-GFi">
+                                        <rect key="frame" x="532" y="125" width="60" height="30"/>
+                                        <state key="normal" title="AutoTest"/>
+                                        <connections>
+                                            <segue destination="ncm-l0-4MD" kind="presentation" identifier="toLanModeTest" id="JqG-dh-EAY"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Y1O-DF-GFi" secondAttribute="bottom" constant="8" id="Jbi-NR-Sm0"/>
+                                    <constraint firstAttribute="trailing" secondItem="Y1O-DF-GFi" secondAttribute="trailing" constant="8" id="hvb-ff-w6g"/>
                                     <constraint firstAttribute="height" constant="163" id="wbA-4W-0o5"/>
                                 </constraints>
                                 <connections>
