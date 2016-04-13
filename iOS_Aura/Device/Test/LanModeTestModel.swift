@@ -96,12 +96,23 @@ class LanModeTestModel: TestModel {
     
     override func testPanelIsReady() {
         testPanelVC?.title = "LAN Test"
+        testPanelVC?.tf1Label.text = "Iters"
+        testPanelVC?.tf1.keyboardType = .NumberPad
     }
     
     override func start() -> Bool {
         if (super.start()) {
             setupTestSequencer()
-            testSequencer?.start()
+            
+            var iters = 1
+            if let text = self.testPanelVC?.tf1.text {
+                if let input = Int(text) {
+                    iters = input > 0 ? input : 1
+                }
+            }
+
+            self.testPanelVC?.iterCountLabel.text = "1/\(iters)"
+            testSequencer?.start(UInt(iters))
             return true
         }
         
