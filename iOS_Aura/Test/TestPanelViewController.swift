@@ -51,6 +51,7 @@ class TestPanelViewController: UIViewController {
     @IBOutlet weak var statusTF: UITextField!
     
     @IBOutlet weak var errCountLabel: UILabel!
+    @IBOutlet weak var iterCountLabel: UILabel!
     
     var testModel :TestModel?
     
