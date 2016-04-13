@@ -32,8 +32,7 @@ class PropertyModel: NSObject, UITextFieldDelegate {
     /**
      Use this method to present an UIAlertController with defined options:
      1) Update with input value
-     2) Switch to detail page
-     3) Cancel
+     2) Cancel
      
      - parameter viewController: The view controller which presents this action controller.
      */
@@ -55,10 +54,6 @@ class PropertyModel: NSObject, UITextFieldDelegate {
         }
         updateAction.enabled = false
         
-        let detailAction = UIAlertAction(title: "Details", style: .Default) { (_) in
-            self.delegate?.propertyModel(self, didSelectAction: .Details)
-        }
-        
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (alertAction) -> Void in
             NSNotificationCenter.defaultCenter().removeObserver(alertController.textFields![0])
             alertController.textFields![0].resignFirstResponder()
@@ -76,14 +71,21 @@ class PropertyModel: NSObject, UITextFieldDelegate {
                 }
             }
         }
-        
         alertController.addAction(updateAction)
-        alertController.addAction(detailAction)
         alertController.addAction(cancelAction)
         
         viewController.presentViewController(alertController, animated: true, completion: { () -> Void in
             
         })
+    }
+    
+    /**
+     A method that forwards a PropertyModelAction to the PropertyModel delegate
+     
+     - parameter action: A PropertyModelAction sent to the delegate
+    */
+    func chosenAction(action: PropertyModelAction){
+        self.delegate?.propertyModel(self, didSelectAction: action)
     }
     
     /**
