@@ -20,6 +20,11 @@ class DevicePanelView: UIView {
         nameLabel.text = device.productName
         dsnLabel.text = device.dsn
         connectivityLabel.text = device.connectionStatus
+        if device.connectionStatus == "Online" {
+            connectivityLabel.textColor = UIColor.greenColor()
+        } else {
+            connectivityLabel.textColor = UIColor.redColor()
+        }
         
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGrayColor().CGColor

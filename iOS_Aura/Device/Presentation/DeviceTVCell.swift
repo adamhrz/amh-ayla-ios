@@ -36,8 +36,13 @@ class DeviceTVCell : UITableViewCell {
         dsnLabel.text = device.dsn
         oemModelLabel.text = device.oemModel
         connectivityLabel.text = device.connectionStatus
+        if device.connectionStatus == "Online" {
+          connectivityLabel.textColor = UIColor.greenColor()
+        } else {
+          connectivityLabel.textColor = UIColor.redColor()
+        }
     }
-    
+  
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
