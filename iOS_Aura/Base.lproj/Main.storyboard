@@ -199,6 +199,14 @@
             </objects>
             <point key="canvasLocation" x="861" y="-376"/>
         </scene>
+        <!--Test-->
+        <scene sceneID="jDy-PM-ktL">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Test" id="ncm-l0-4MD" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Cl-kc-135" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2157.5" y="-580"/>
+        </scene>
         <!--Property View Controller-->
         <scene sceneID="3QD-rl-W4S">
             <objects>
@@ -387,6 +395,13 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y1O-DF-GFi">
+                                        <rect key="frame" x="532" y="125" width="60" height="30"/>
+                                        <state key="normal" title="AutoTest"/>
+                                        <connections>
+                                            <segue destination="ncm-l0-4MD" kind="presentation" identifier="toLanModeTest" id="JqG-dh-EAY"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="Ws5-uR-nUu" firstAttribute="top" secondItem="Odc-pR-3lK" secondAttribute="bottom" constant="4" id="10x-ga-KgB"/>

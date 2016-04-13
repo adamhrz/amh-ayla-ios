@@ -48,7 +48,17 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Init setup
         setup = AylaSetup(coreManager: AylaCoreManager.sharedManager())
         
-        super.init(coder: aDecoder);
+        super.init(coder: aDecoder)
+        
+        // Monitor connectivity
+        self.monitorDeviceConnectivity()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        // Init setup
+        setup = AylaSetup(coreManager: AylaCoreManager.sharedManager())
+    
+        super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
         
         // Monitor connectivity
         self.monitorDeviceConnectivity()

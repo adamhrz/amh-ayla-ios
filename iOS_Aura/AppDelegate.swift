@@ -40,6 +40,71 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        
+        // Instantiate and display a UIAlertViewController as needed
+        func presentAlertController(title: String?, message: String?, withOkayButton: Bool) {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            if withOkayButton {
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
+            }
+            self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+        }
+        
+        // Parse URL app was launched with
+        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+        let queryitems = components?.queryItems
+        
+        // If URL is sent from WI-Fi Setup Screen
+        if url.host == "wifi_setup" {
+            
+            // Pull DSN from URL
+            let dsnParam = queryitems?.filter({$0.name == "dsn"}).first
+            let dsn = dsnParam?.value
+            print("Will Setup Wi-Fi for DSN: \(dsn)")
+            
+            // Instantiate and Push SetupViewController
+            let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
+            let setupVC2 = setupStoryboard.instantiateInitialViewController()
+            self.window?.rootViewController?.presentViewController(setupVC2!, animated: true, completion:nil)
+        }
+        // If URL is from an Account Confirmation Email
+        else if url.host == "user_sign_up_token" {
+            
+            // Pull Token from URL
+            let tokenParam = queryitems?.filter({$0.name == "token"}).first;
+            let token = tokenParam?.value;
+            print("Will Confirm Sign Up with Token: \(token)")
+            
+            // Get LoginManager and send account confirmation token
+            let loginManager = AylaCoreManager.sharedManager().loginManager
+            loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
+                presentAlertController("Account Confirmed",
+                    message: "Enter your credentials to log in",
+                    withOkayButton: true)
+                }, failure: { (error) -> Void in
+                    presentAlertController("Account Confirmation Failed.",
+                        message: "Account may already be confirmed. Try logging in.",
+                        withOkayButton: true)
+            })
+
+        }
+        else if url.host == "user_reset_password_token" {
+            presentAlertController("Not Yet Implemented.",
+                                        message: "Password Reset Feature coming soon.",
+                                        withOkayButton: true)
+        }
+        else {
+            presentAlertController("Not Yet Implemented.",
+                                        message: String.localizedStringWithFormat("Cannot currently parse url with %@ parameter", url.host!),
+                                        withOkayButton: true)
+        }
+        return true;
+    }
+    
+
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
