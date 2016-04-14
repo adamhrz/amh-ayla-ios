@@ -52,7 +52,7 @@ class LoginViewController: UIViewController {
             
             // Login with login manager
             self.presentLoading("Login...")
-            let loginManager = AylaCoreManager.sharedManager().loginManager
+            let loginManager = AylaNetworks.shared().loginManager
             loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
                 
                 self.dismissLoading(false, completion: { () -> Void in
@@ -80,7 +80,7 @@ class LoginViewController: UIViewController {
             
             // Login with login manager
             self.presentLoading("Resending confirmation...")
-            let loginManager = AylaCoreManager.sharedManager().loginManager
+            let loginManager = AylaNetworks.shared().loginManager
             let template = AylaEmailTemplate(id: "ayla_confirmation_template_01", subject: "Confirm your email", bodyHTML: nil)
             loginManager.resendConfirmationEmail(usernameTextField.text!, emailTemplate: template, success: {
                 self.dismissLoading(false, completion: { () -> Void in
@@ -104,7 +104,7 @@ class LoginViewController: UIViewController {
             
             // Login with login manager
             self.presentLoading("Resetting password...")
-            let loginManager = AylaCoreManager.sharedManager().loginManager
+            let loginManager = AylaNetworks.shared().loginManager
             let template = AylaEmailTemplate(id: "ayla_passwd_reset_template_01", subject: "Confirm your email", bodyHTML: nil)
             loginManager.requestPasswordReset(usernameTextField.text!, emailTemplate: template, success: {
                 self.dismissLoading(false, completion: { () -> Void in

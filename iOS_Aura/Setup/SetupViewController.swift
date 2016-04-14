@@ -46,7 +46,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     required init?(coder aDecoder: NSCoder)
     {
         // Init setup
-        setup = AylaSetup(coreManager: AylaCoreManager.sharedManager())
+        setup = AylaSetup(SDKRoot: AylaNetworks.shared())
         
         super.init(coder: aDecoder)
         
@@ -56,7 +56,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         // Init setup
-        setup = AylaSetup(coreManager: AylaCoreManager.sharedManager())
+        setup = AylaSetup(SDKRoot: AylaNetworks.shared())
     
         super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
         

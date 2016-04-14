@@ -26,7 +26,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        sessionManager = AylaCoreManager.sharedManager().getSessionManagerWithName(AuraSessionOneName)
+        sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
         
         if (sessionManager != nil) {
             viewModel = DeviceListViewModel(deviceManager: sessionManager!.deviceManager, tableView: tableView)

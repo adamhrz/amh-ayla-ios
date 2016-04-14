@@ -39,7 +39,7 @@ class PasswordResetTableViewController: UITableViewController {
             UIAlertController.alert("Error", message: "Password and confirmation don't match", buttonTitle: "OK", fromController: self)
             return
         }
-        let loginManager = AylaCoreManager.sharedManager().loginManager
+        let loginManager = AylaNetworks.shared().loginManager
         loginManager.resetPasswordTo(passwordTextField.text!, token: passwordResetToken, success: {
             let presentingController = self.presentingViewController
             self.dismissViewControllerAnimated(true, completion: {
