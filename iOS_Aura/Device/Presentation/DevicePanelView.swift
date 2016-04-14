@@ -23,7 +23,9 @@ class DevicePanelView: UIView {
     func configure(device:AylaDevice) {
         nameLabel.text = String(format: "%@", device.productName!)
         dsnLabel.text = String(format: "%@ %@", "DSN: ", device.dsn!)
-        connectivityLabel.text = device.connectionStatus
+        let connStatus = device.connectionStatus
+        connectivityLabel.text = connStatus
+        connectivityLabel.textColor = connStatus == "Online" ? UIColor(red: 93/255.0, green: 164/255.0, blue: 21/255.0, alpha: 1.0) : UIColor.redColor()
         oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", device.oemModel!)
         modelLabel.text = String(format: "%@ %@", "Model: ", device.model!)
         
