@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2v2-67-fCY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2v2-67-fCY">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Hr-PK-flC">
-                                <rect key="frame" x="181" y="178" width="239" height="35"/>
+                                <rect key="frame" x="181" y="64" width="239" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="DNS-h0-N90"/>
                                     <constraint firstAttribute="width" constant="239" id="FXO-fS-OGt"/>
@@ -29,12 +29,12 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="light" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Ee7-Ms-yed">
-                                <rect key="frame" x="181" y="236" width="239" height="35"/>
+                                <rect key="frame" x="181" y="122" width="239" height="35"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="go" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhu-7q-oXF" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
-                                <rect key="frame" x="234" y="314" width="133" height="60"/>
+                                <rect key="frame" x="234" y="200" width="133" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="133" id="AEQ-kj-947"/>
                                     <constraint firstAttribute="height" constant="60" id="xp1-xc-O83"/>
@@ -47,7 +47,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbz-ap-m1d" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
-                                <rect key="frame" x="234" y="402" width="133" height="54"/>
+                                <rect key="frame" x="234" y="288" width="133" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="7aY-i8-Fmo"/>
                                     <constraint firstAttribute="width" constant="133" id="CjL-ou-gvA"/>
@@ -60,7 +60,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Xb-VM-qQf" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
-                                <rect key="frame" x="234" y="464" width="133" height="54"/>
+                                <rect key="frame" x="234" y="350" width="133" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="bah-p6-kSi"/>
                                     <constraint firstAttribute="width" constant="133" id="jYY-1o-lpv"/>
@@ -71,7 +71,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sUN-Wo-Mbs" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
-                                <rect key="frame" x="234" y="526" width="133" height="54"/>
+                                <rect key="frame" x="234" y="412" width="133" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="133" id="16i-3j-1p7"/>
                                     <constraint firstAttribute="height" constant="54" id="Xty-58-1MH"/>
@@ -83,23 +83,49 @@
                                     </segue>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dM9-1i-Up8" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
+                                <rect key="frame" x="234" y="536" width="133" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="nhG-Vy-Dtu"/>
+                                    <constraint firstAttribute="width" constant="133" id="tyB-X4-lUA"/>
+                                </constraints>
+                                <state key="normal" title="Reset Password"/>
+                                <connections>
+                                    <action selector="resetPassword:" destination="2v2-67-fCY" eventType="touchUpInside" id="Nuq-Np-w4h"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9WH-rr-PC8" customClass="AuraButton" customModule="iOS_Aura" customModuleProvider="target">
+                                <rect key="frame" x="225" y="474" width="150" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="AHX-t0-1z0"/>
+                                    <constraint firstAttribute="height" constant="54" id="FPy-ga-CeO"/>
+                                </constraints>
+                                <state key="normal" title="Resend Confirmation"/>
+                                <connections>
+                                    <action selector="resendConfirmation:" destination="2v2-67-fCY" eventType="touchUpInside" id="S0k-ZY-nOg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="jhu-7q-oXF" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="1vo-nF-NXS"/>
                             <constraint firstItem="8Xb-VM-qQf" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="7Uo-kj-rfN"/>
-                            <constraint firstItem="A13-B2-IIq" firstAttribute="top" secondItem="sUN-Wo-Mbs" secondAttribute="bottom" constant="20" id="9aM-gb-9mE"/>
                             <constraint firstItem="8Xb-VM-qQf" firstAttribute="top" secondItem="hbz-ap-m1d" secondAttribute="bottom" constant="8" id="AKB-Qx-GSt"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="height" secondItem="8Hr-PK-flC" secondAttribute="height" id="JXp-J3-fab"/>
+                            <constraint firstItem="A13-B2-IIq" firstAttribute="top" secondItem="dM9-1i-Up8" secondAttribute="bottom" constant="10" id="JeJ-2c-PEn"/>
                             <constraint firstItem="sUN-Wo-Mbs" firstAttribute="top" secondItem="8Xb-VM-qQf" secondAttribute="bottom" constant="8" id="LtB-GJ-P1H"/>
                             <constraint firstAttribute="trailingMargin" secondItem="sUN-Wo-Mbs" secondAttribute="trailing" id="OEy-AF-2Vm"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="OtJ-7z-QpX"/>
                             <constraint firstItem="A13-B2-IIq" firstAttribute="top" secondItem="sUN-Wo-Mbs" secondAttribute="bottom" constant="20" id="Ppd-Hv-xzf"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="width" secondItem="8Hr-PK-flC" secondAttribute="width" id="TTd-cv-BU2"/>
                             <constraint firstItem="sUN-Wo-Mbs" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="UDL-qQ-kHL"/>
+                            <constraint firstItem="9WH-rr-PC8" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="fAs-6t-3MC"/>
+                            <constraint firstItem="dM9-1i-Up8" firstAttribute="top" secondItem="9WH-rr-PC8" secondAttribute="bottom" constant="8" id="fb8-kI-O0N"/>
                             <constraint firstItem="hbz-ap-m1d" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="gHv-b7-ihd"/>
                             <constraint firstItem="Ee7-Ms-yed" firstAttribute="top" secondItem="8Hr-PK-flC" secondAttribute="bottom" constant="23" id="gbX-9h-ZmJ"/>
                             <constraint firstItem="hbz-ap-m1d" firstAttribute="top" secondItem="jhu-7q-oXF" secondAttribute="bottom" constant="28" id="o4n-NF-U6U"/>
+                            <constraint firstItem="dM9-1i-Up8" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="p17-Jt-lhe"/>
+                            <constraint firstItem="9WH-rr-PC8" firstAttribute="top" secondItem="sUN-Wo-Mbs" secondAttribute="bottom" constant="8" id="pJW-ia-mW9"/>
                             <constraint firstItem="jhu-7q-oXF" firstAttribute="top" secondItem="Ee7-Ms-yed" secondAttribute="bottom" constant="43" id="sCc-Ra-e4B"/>
                             <constraint firstItem="8Hr-PK-flC" firstAttribute="centerX" secondItem="gj5-gi-OxS" secondAttribute="centerX" id="sHx-fD-vSY"/>
                         </constraints>
@@ -114,6 +140,7 @@
                         <outlet property="passwordTextField" destination="Ee7-Ms-yed" id="dIc-P8-TWp"/>
                         <outlet property="usernameTextField" destination="8Hr-PK-flC" id="YmN-eN-iey"/>
                         <segue destination="eeS-Ad-Xed" kind="show" identifier="toMain" id="1q7-pd-Ynf"/>
+                        <segue destination="oVe-cw-Eut" kind="presentation" identifier="PasswordReset" id="omg-Hk-TU5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LUc-9z-l8F" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -154,6 +181,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EnF-di-mCc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="976" y="398"/>
+        </scene>
+        <!--PasswordReset-->
+        <scene sceneID="M2P-fu-DN3">
+            <objects>
+                <viewControllerPlaceholder storyboardName="PasswordReset" id="oVe-cw-Eut" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="32g-3f-pux" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1037.5" y="213"/>
         </scene>
         <!--Signup-->
         <scene sceneID="n2S-dj-5oW">

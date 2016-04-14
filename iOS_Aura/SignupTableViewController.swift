@@ -40,13 +40,6 @@ class SignupTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    func alert(title: String?, message: String?, buttonTitle: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler:nil)
-        alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
 
     @IBAction func cancelAction(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -76,7 +69,7 @@ class SignupTableViewController: UITableViewController {
         }
         
         if let message = errorMessage {
-            alert("Error", message: message, buttonTitle: "OK")
+            UIAlertController.alert("Error", message: message, buttonTitle: "OK",fromController: self)
             return;
         }
         
@@ -98,9 +91,12 @@ class SignupTableViewController: UITableViewController {
         
         let loginManager = AylaCoreManager.sharedManager().loginManager
         loginManager.signUpWithUser(user, emailTemplate: emailTemplate, success: { () -> Void in
-            self.alert( "Account created", message: "Please check your email for a confirmation",buttonTitle: "OK")
+            let presentingController = self.presentingViewController
+            self.dismissViewControllerAnimated(true, completion: {
+                UIAlertController.alert( "Account created", message: "Please check your email for a confirmation",buttonTitle: "OK",fromController: presentingController!)
+            })
             }) { (error) -> Void in
-                self.alert("Error", message: "An error occurred", buttonTitle: "OK")
+                UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
         }
     }
     
@@ -115,7 +111,7 @@ class SignupTableViewController: UITableViewController {
             let token = self.tokenTextField!.text
             if token == nil || token!.characters.count < 1 {
                 
-                self.alert("Error", message: "No token was provided", buttonTitle: "OK")
+                UIAlertController.alert("Error", message: "No token was provided", buttonTitle: "OK",fromController: self)
                 return;
             }
             let loginManager = AylaCoreManager.sharedManager().loginManager
@@ -130,7 +126,7 @@ class SignupTableViewController: UITableViewController {
                     }
                 })
                 }, failure: { (error) -> Void in
-                    self.alert("Error", message: "An error occurred", buttonTitle: "OK")
+                    UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
             })
         }
         

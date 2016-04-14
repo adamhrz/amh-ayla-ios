@@ -34,8 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AylaLogManager.sharedManager().loggingLevel = .Info
         
-        UITabBar.appearance().tintColor = UIColor(red: 93/255.0, green: 164/255.0, blue: 21/255.0, alpha: 1.0)
-        UINavigationBar.appearance().tintColor = UIColor(red: 93/255.0, green: 164/255.0, blue: 21/255.0, alpha: 1.0)
+        UITabBar.appearance().tintColor = UIColor.auraLeafGreenColor()
+        UINavigationBar.appearance().tintColor = UIColor.auraLeafGreenColor()
 
         
         return true
@@ -92,9 +92,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         }
         else if url.host == "user_reset_password_token" {
-            presentAlertController("Not Yet Implemented.",
-                                        message: "Password Reset Feature coming soon.",
-                                        withOkayButton: true)
+            
+            let tokenParam = queryitems?.filter({$0.name == "token"}).first;
+            NSNotificationCenter.defaultCenter().postNotificationName("PasswordReset", object: tokenParam?.value)
         }
         else {
             presentAlertController("Not Yet Implemented.",
