@@ -91,7 +91,10 @@ class SignupTableViewController: UITableViewController {
         
         let loginManager = AylaCoreManager.sharedManager().loginManager
         loginManager.signUpWithUser(user, emailTemplate: emailTemplate, success: { () -> Void in
-            UIAlertController.alert( "Account created", message: "Please check your email for a confirmation",buttonTitle: "OK",fromController: self)
+            let presentingController = self.presentingViewController
+            self.dismissViewControllerAnimated(true, completion: {
+                UIAlertController.alert( "Account created", message: "Please check your email for a confirmation",buttonTitle: "OK",fromController: presentingController!)
+            })
             }) { (error) -> Void in
                 UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
         }

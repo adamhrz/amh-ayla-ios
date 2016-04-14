@@ -13,6 +13,8 @@
 		A54B96191CBD9A30009115AE /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54B96181CBD9A30009115AE /* Profile.storyboard */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B961D1CBECAE5009115AE /* UIAlertView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961C1CBECAE5009115AE /* UIAlertView_Extensions.swift */; };
+		A54B96211CBF0F05009115AE /* PasswordReset.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54B96201CBF0F05009115AE /* PasswordReset.storyboard */; };
+		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
 		A54CE2C61CA434DF0011D20A /* Signup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54CE2C51CA434DF0011D20A /* Signup.storyboard */; };
 		A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */; };
 		A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AC81C757F32007B1AB3 /* Login.storyboard */; };
@@ -77,6 +79,8 @@
 		A54B96181CBD9A30009115AE /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B961C1CBECAE5009115AE /* UIAlertView_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertView_Extensions.swift; path = UX/UIAlertView_Extensions.swift; sourceTree = "<group>"; };
+		A54B96201CBF0F05009115AE /* PasswordReset.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PasswordReset.storyboard; sourceTree = "<group>"; };
+		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
 		A54CE2C51CA434DF0011D20A /* Signup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Signup.storyboard; sourceTree = "<group>"; };
 		A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLoginViewController.swift; sourceTree = "<group>"; };
 		A7104AC91C757F32007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 				A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */,
 				A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */,
 				A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */,
+				A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -273,6 +278,7 @@
 				A7104ADD1C7AD04A007B1AB3 /* Constants.swift */,
 				A54B96181CBD9A30009115AE /* Profile.storyboard */,
 				A54CE2C51CA434DF0011D20A /* Signup.storyboard */,
+				A54B96201CBF0F05009115AE /* PasswordReset.storyboard */,
 			);
 			path = iOS_Aura;
 			sourceTree = "<group>";
@@ -443,6 +449,7 @@
 				A7104AD61C7599BF007B1AB3 /* Setup.storyboard in Resources */,
 				A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */,
 				A54B96191CBD9A30009115AE /* Profile.storyboard in Resources */,
+				A54B96211CBF0F05009115AE /* PasswordReset.storyboard in Resources */,
 				A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */,
 				A7351C951C753C370073C73A /* Assets.xcassets in Resources */,
 				A54CE2C61CA434DF0011D20A /* Signup.storyboard in Resources */,
@@ -528,6 +535,7 @@
 				0F7EF14B1CC01B15004C238D /* UIColor+AuraColors.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
 				A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */,
+				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
