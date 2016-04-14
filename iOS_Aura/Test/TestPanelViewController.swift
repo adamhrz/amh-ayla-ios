@@ -51,6 +51,7 @@ class TestPanelViewController: UIViewController {
     @IBOutlet weak var statusTF: UITextField!
     
     @IBOutlet weak var errCountLabel: UILabel!
+    @IBOutlet weak var iterCountLabel: UILabel!
     
     var testModel :TestModel?
     
@@ -65,6 +66,10 @@ class TestPanelViewController: UIViewController {
         startButton.addTarget(self, action: #selector(startButtonTapped), forControlEvents: .TouchUpInside)
         
         assert(testModel != nil, "Test model can't be nil");
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
         testModel?.testPanelIsReady()
     }
 
@@ -103,6 +108,12 @@ class TestPanelViewController: UIViewController {
     */
     func outputLogText(text :String) {
         outputAttributedLogText(NSAttributedString(string: text))
+    }
+    
+    func dismissKeyboard() {
+        tf1.resignFirstResponder()
+        tf2.resignFirstResponder()
+        tf3.resignFirstResponder()
     }
     
     /**
