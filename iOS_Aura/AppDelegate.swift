@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settings = AylaSystemSettings.defaultSystemSettings()
         // Setup app id/secret
         settings.serviceType = .Development
-        settings.appId = "iMCA-Dev-0dfc7900-id"
-        settings.appSecret = "iMCA-Dev-0dfc7900-5804184"
+        settings.appId = "aura_0dfc7900-id"
+        settings.appSecret = "aura_0dfc7900-eUo-3Se7R25Z_QLeEiXqYkQDUNA"
 
         // Set device detail provider
         settings.deviceDetailProvider = DeviceDetailProvider()
