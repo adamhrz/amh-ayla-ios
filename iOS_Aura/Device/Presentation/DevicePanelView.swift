@@ -29,22 +29,10 @@ class DevicePanelView: UIView {
         oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", device.oemModel!)
         modelLabel.text = String(format: "%@ %@", "Model: ", device.model!)
         
-        var macAddress = String()
-        if let mac = device.mac {
-            macAddress = mac
-        }
-        else {
-            macAddress = "(null)"
-        }
+        let macAddress: String = (device.mac as String?) ?? "(null)"
         macAddressLabel.text = String(format: "%@ %@", "MAC: ", macAddress)
         
-        var ipAddress = String()
-        if let mac = device.lanIp {
-            ipAddress = mac
-        }
-        else {
-            ipAddress = "(null)"
-        }
+        let ipAddress: String = (device.lanIp as String?) ?? "(null)"
         lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", ipAddress)
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGrayColor().CGColor
