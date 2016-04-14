@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */; };
+		0F7EF14B1CC01B15004C238D /* UIColor+AuraColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EF14A1CC01B15004C238D /* UIColor+AuraColors.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B96191CBD9A30009115AE /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54B96181CBD9A30009115AE /* Profile.storyboard */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F7EF14A1CC01B15004C238D /* UIColor+AuraColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+AuraColors.swift"; path = "UX/UIColor+AuraColors.swift"; sourceTree = "<group>"; };
 		146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
 		434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.debug.xcconfig"; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				A7104ACD1C758140007B1AB3 /* AuraButton.swift */,
+				0F7EF14A1CC01B15004C238D /* UIColor+AuraColors.swift */,
 				A54B961C1CBECAE5009115AE /* UIAlertView_Extensions.swift */,
 			);
 			name = UX;
@@ -522,6 +525,7 @@
 				A78DC8F01CB8547F002EE6B0 /* TestPanelViewController.swift in Sources */,
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A78DC8F21CB85702002EE6B0 /* TestModel.swift in Sources */,
+				0F7EF14B1CC01B15004C238D /* UIColor+AuraColors.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
 				A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
@@ -614,20 +618,20 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		A78DC8EB1CB8538F002EE6B0 /* Test.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A78DC8EC1CB8538F002EE6B0 /* Base */,
-			);
-			name = Test.storyboard;
-			sourceTree = "<group>";
-		};
 		A78080161CBC271A00C779B5 /* Me.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A78080171CBC271A00C779B5 /* Base */,
 			);
 			name = Me.storyboard;
+			sourceTree = "<group>";
+		};
+		A78DC8EB1CB8538F002EE6B0 /* Test.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A78DC8EC1CB8538F002EE6B0 /* Base */,
+			);
+			name = Test.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
