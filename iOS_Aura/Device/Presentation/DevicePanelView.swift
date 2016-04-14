@@ -24,14 +24,14 @@ class DevicePanelView: UIView {
         nameLabel.text = String(format: "%@", device.productName!)
         dsnLabel.text = String(format: "%@ %@", "DSN: ", device.dsn!)
         
-        let connStatus = String.stringOrNull(device.connectionStatus)
+        let connStatus = String.stringFromStringNumberOrNil(device.connectionStatus)
         connectivityLabel.text = connStatus
         connectivityLabel.textColor = connStatus == "Online" ? UIColor.auraLeafGreenColor() : UIColor.auraRedColor()
         
-        oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", String.stringOrNull(device.oemModel))
-        modelLabel.text = String(format: "%@ %@", "Model: ", String.stringOrNull(device.model))
-        macAddressLabel.text = String(format: "%@ %@", "MAC: ", String.stringOrNull(device.mac))
-        lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", String.stringOrNull(device.lanIp))
+        oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", String.stringFromStringNumberOrNil(device.oemModel))
+        modelLabel.text = String(format: "%@ %@", "Model: ", String.stringFromStringNumberOrNil(device.model))
+        macAddressLabel.text = String(format: "%@ %@", "MAC: ", String.stringFromStringNumberOrNil(device.mac))
+        lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", String.stringFromStringNumberOrNil(device.lanIp))
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGrayColor().CGColor
 

@@ -71,7 +71,7 @@ class PropertyTVCell: UITableViewCell {
         nameLabel.text = self.property?.name
         infoLabel?.text = String.localizedStringWithFormat("%@ - %@", (self.property?.direction)!, (self.property?.baseType)!)
         
-        let value = String.stringOrNull(self.property?.datapoint.value)
+        let value = String.stringFromStringNumberOrNil(self.property?.datapoint.value)
         valueLabel.text = value
     }
     
