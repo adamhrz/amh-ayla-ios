@@ -24,6 +24,12 @@ class LoginViewController: UIViewController {
         // Add tap recognizer to dismiss keyboard.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         view.addGestureRecognizer(tap)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(presentPasswordReset), name: "PasswordReset", object: nil)
+    }
+    
+    func presentPasswordReset(notification:NSNotification) {
+        self.performSegueWithIdentifier("PasswordReset", sender: notification.object)
     }
   
     /**
@@ -56,6 +62,55 @@ class LoginViewController: UIViewController {
                 
                 }, failure: { (error) -> Void in
 
+                    self.dismissLoading(false, completion: { () -> Void in
+                        self.presentError(error)
+                    })
+            })
+        }
+    }
+    
+    @IBAction func resendConfirmation(sender: AnyObject) {
+        
+        if (usernameTextField.text ?? "") == "" {
+            usernameTextField.text = "CAN NOT BE BLANK"
+        }
+        else {
+            
+            self.dismissKeyboard()
+            
+            // Login with login manager
+            self.presentLoading("Resending confirmation...")
+            let loginManager = AylaCoreManager.sharedManager().loginManager
+            let template = AylaEmailTemplate(id: "ayla_confirmation_template_01", subject: "Confirm your email", bodyHTML: nil)
+            loginManager.resendConfirmationEmail(usernameTextField.text!, emailTemplate: template, success: {
+                self.dismissLoading(false, completion: { () -> Void in
+                    UIAlertController.alert("Confirmation resent", message: "Please check your inbox", buttonTitle: "OK", fromController: self)
+                })
+                }, failure: { (error) in
+                    self.dismissLoading(false, completion: { () -> Void in
+                        self.presentError(error)
+                    })
+            })
+        }
+    }
+    
+    @IBAction func resetPassword(sender: AnyObject) {
+        if (usernameTextField.text ?? "") == "" {
+            usernameTextField.text = "CAN NOT BE BLANK"
+        }
+        else {
+            
+            self.dismissKeyboard()
+            
+            // Login with login manager
+            self.presentLoading("Resetting password...")
+            let loginManager = AylaCoreManager.sharedManager().loginManager
+            let template = AylaEmailTemplate(id: "ayla_passwd_reset_template_01", subject: "Confirm your email", bodyHTML: nil)
+            loginManager.requestPasswordReset(usernameTextField.text!, emailTemplate: template, success: {
+                self.dismissLoading(false, completion: { () -> Void in
+                    UIAlertController.alert("Password reset", message: "Please check your inbox", buttonTitle: "OK", fromController: self)
+                })
+                }, failure: { (error) in
                     self.dismissLoading(false, completion: { () -> Void in
                         self.presentError(error)
                     })
@@ -114,11 +169,20 @@ class LoginViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "OAuthLoginSegue" {
-            let navigationViewController = segue.destinationViewController as! UINavigationController
-            let oAuthController = navigationViewController.viewControllers.first! as! OAuthLoginViewController
-            // pass a reference to self to continue login after a sucessful OAuthentication
-            oAuthController.mainLoginViewController = self
+        if let segueIdentifier = segue.identifier {
+            switch segueIdentifier {
+            case "OAuthLoginSegue":
+                let navigationViewController = segue.destinationViewController as! UINavigationController
+                let oAuthController = navigationViewController.viewControllers.first! as! OAuthLoginViewController
+                // pass a reference to self to continue login after a sucessful OAuthentication
+                oAuthController.mainLoginViewController = self
+            case "PasswordReset" :
+                let navigationViewController = segue.destinationViewController as! UINavigationController
+                let passwordResetController = navigationViewController.viewControllers.first! as! PasswordResetTableViewController
+                passwordResetController.passwordResetToken = sender as! String
+                
+            default: break
+            }
         }
     }
 }
