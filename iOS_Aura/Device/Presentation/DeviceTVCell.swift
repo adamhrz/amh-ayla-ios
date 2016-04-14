@@ -37,7 +37,7 @@ class DeviceTVCell : UITableViewCell {
         oemModelLabel.text = device.oemModel
         let connStatus = device.connectionStatus
         connectivityLabel.text = connStatus
-        connectivityLabel.textColor = connStatus == "Online" ? UIColor(red: 93/255.0, green: 164/255.0, blue: 21/255.0, alpha: 1.0) : UIColor.redColor()
+        connectivityLabel.textColor = connStatus == "Online" ? UIColor.auraLeafGreenColor() : UIColor.auraRedColor()
 
     }
     
