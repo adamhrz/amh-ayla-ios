@@ -31,7 +31,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let sessionManager = AylaCoreManager.sharedManager().getSessionManagerWithName(AuraSessionOneName) {
+        if let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
             self.sessionManager = sessionManager
         }
         else {

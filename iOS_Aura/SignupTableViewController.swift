@@ -89,7 +89,7 @@ class SignupTableViewController: UITableViewController {
         
         let emailTemplate = AylaEmailTemplate(id: "ayla_confirmation_template_01", subject: "Aura Signup", bodyHTML: nil)
         
-        let loginManager = AylaCoreManager.sharedManager().loginManager
+        let loginManager = AylaNetworks.shared().loginManager
         loginManager.signUpWithUser(user, emailTemplate: emailTemplate, success: { () -> Void in
             let presentingController = self.presentingViewController
             self.dismissViewControllerAnimated(true, completion: {
@@ -114,7 +114,7 @@ class SignupTableViewController: UITableViewController {
                 UIAlertController.alert("Error", message: "No token was provided", buttonTitle: "OK",fromController: self)
                 return;
             }
-            let loginManager = AylaCoreManager.sharedManager().loginManager
+            let loginManager = AylaNetworks.shared().loginManager
             loginManager.confirmAccountWithToken(token!, success: { () -> Void in
                 let parentController = self.presentingViewController
                 self.dismissViewControllerAnimated(true, completion: { () -> Void in

@@ -61,7 +61,7 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
         // Create auth provider with the webView and selected provider
         let auth = AylaOAuthProvider(webView: self.webView, type: self.authType)
         
-        let loginManager = AylaCoreManager.sharedManager().loginManager
+        let loginManager = AylaNetworks.shared().loginManager
         loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
             self.dismissViewControllerAnimated(true, completion: { () -> Void in
                 
