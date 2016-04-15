@@ -43,6 +43,9 @@ class TestModel : NSObject, TestPanelVCDelegate {
                 old.stop()
             }
             newSequencer?.completeBlock = { [weak self] (sequencer) in self?.finishedOnTestSequencer(sequencer)}
+            newSequencer?.progressBlock = { [weak self] (sequencer, _, total, completed) in
+                return (self?.trackIterationProgress(sequencer, total: total, completed: completed)) ?? true
+            }
         }
     
     }
@@ -60,6 +63,7 @@ class TestModel : NSObject, TestPanelVCDelegate {
     
     func start() -> Bool {
         self.testPanelVC?.errCountLabel.text = "0"
+        self.testPanelVC?.iterCountLabel.text = "0/0"
         return true
     }
     
@@ -72,6 +76,14 @@ class TestModel : NSObject, TestPanelVCDelegate {
             self.testPanelVC?.statusTF.text = testSequencer.errCount == 0 ? TestModelTestState.Success.rawValue : TestModelTestState.Failure.rawValue
             self.testPanelVC?.resetStartButton()
         }
+    }
+    
+    func trackIterationProgress(testSequencer : TestSequencer, total: UInt, completed: UInt) -> Bool{
+        if self.testSequencer == testSequencer {
+            let showComplete = completed == total ? total : completed+1
+            self.testPanelVC?.iterCountLabel.text = "\(showComplete)/\(total)"
+        }
+        return true
     }
     
     func setupTestSequencer() {
@@ -94,8 +106,10 @@ class TestModel : NSObject, TestPanelVCDelegate {
      - parameter error: Generated error.
      */
     func failTestCase(tc: TestCase, error: NSError?) {
-        let errCount = Int((self.testPanelVC?.errCountLabel.text)!) ?? 0
-        self.testPanelVC?.errCountLabel.text = "\(errCount+1)"
+        if let errText = self.testPanelVC?.errCountLabel.text {
+            let errCount = Int(errText) ?? 0
+            self.testPanelVC?.errCountLabel.text = "\(errCount+1)"
+        }
         
         addLog(.Fail, log: "\(tc.description) err: \(error?.description)")
         tc.fail()

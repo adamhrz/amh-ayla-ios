@@ -11,7 +11,7 @@ import iOS_AylaSDK
 
 class ProfileTableViewController: UITableViewController {
     var user: AylaUser!
-    let sessionManager = AylaCoreManager.sharedManager().getSessionManagerWithName(AuraSessionOneName)
+    let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
     
     @IBOutlet weak var emailTextField: UITextField!
     

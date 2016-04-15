@@ -9,6 +9,7 @@
 import Foundation
 
 typealias CompleteBlock = TestSequencer -> Void
+typealias ProgressBlock = (testSequencer :TestSequencer, completedTestCaseInCurretnIteration:[TestCase], totalInterations:UInt, completedIterations: UInt) -> Bool
 
 /*
  A TestSequencer manages a list of TestCases, it counts error when going through all error cases and call completeBlock when all test cases have been finished.
@@ -19,7 +20,10 @@ class TestSequencer : NSObject {
     
     /// If test should continue when one of test case was failed.
     var continueAfterFailure :Bool = true
-
+    
+    var totalIterations :UInt = 1
+    var completedIterations :UInt = 0
+    
     // MARK - Attributes
     
     private(set) var nextTestIndex :Int = 0
@@ -32,6 +36,7 @@ class TestSequencer : NSObject {
     private(set) var STOPPED :Bool = false
 
     var completeBlock :CompleteBlock?
+    var progressBlock :ProgressBlock?
     
     func addTest(description :String, testBlock :TestBlock) -> TestSequencer {
         let test = TestCase(description: description, testBlock: testBlock)
@@ -46,8 +51,9 @@ class TestSequencer : NSObject {
         return self
     }
     
-    func start() {
+    func start(iterations: UInt) {
         STARTED = true
+        self.totalIterations = iterations
         if testSuite.count > 0 {
             // Reset index
             nextTestIndex = 0
@@ -88,13 +94,44 @@ class TestSequencer : NSObject {
                     testCase.start()
                 }
                 else {
-                    finish()
+                    completedIterations += 1;
+                    if let progressBlock = progressBlock {
+                        progressBlock(testSequencer: self, completedTestCaseInCurretnIteration: self.testSuite,
+                                      totalInterations: totalIterations,
+                                      completedIterations: completedIterations)
+                    }
+                    
+                    if totalIterations == completedIterations {
+                        // Completed all iterations
+                        finish()
+                    }
+                    else {
+                        resetTestSuiteWithKnownTestCases()
+                        
+                        // Reset index1
+                        nextTestIndex = 0
+                        
+                        let testCase = testSuite[0]
+                        testCase.start()
+                    }
                 }
             }
         }
         else {
             finish()
         }
+    }
+    
+    func resetTestSuiteWithKnownTestCases() {
+    
+        var newTestSuite :[TestCase] = []
+        for curTest in testSuite {
+            let testCase = TestCase(description: curTest.description, testBlock: curTest.testBlock)
+            testCase.sequencer = self
+            newTestSuite.append(testCase)
+        }
+        
+        testSuite = newTestSuite
     }
     
 }

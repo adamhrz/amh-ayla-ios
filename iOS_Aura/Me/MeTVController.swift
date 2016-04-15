@@ -18,7 +18,7 @@ class MeTVController: UITableViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        sessionManager = AylaCoreManager.sharedManager().getSessionManagerWithName(AuraSessionOneName)
+        sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
         super.init(coder: aDecoder)
     }
 
