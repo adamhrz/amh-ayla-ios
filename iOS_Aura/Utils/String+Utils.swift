@@ -1,5 +1,5 @@
 //
-//  String+null.swift
+//  String+Utils.swift
 //  iOS_Aura
 //
 //  Created by Kevin Bella on 4/14/16.
