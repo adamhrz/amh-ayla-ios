@@ -42,15 +42,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        
         // Instantiate and display a UIAlertViewController as needed
-        func presentAlertController(title: String?, message: String?, withOkayButton: Bool) {
+        func presentAlertController(title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?) {
             let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
             if withOkayButton {
-                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+                    if let okayHandler = okayHandler{
+                        okayHandler()
+                    }
+                })
                 alert.addAction(okAction)
+                if withCancelButton {
+                    let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{(action) -> Void in
+                        if let cancelHandler = cancelHandler{
+                            cancelHandler()
+                        }
+                    })
+                    alert.addAction(cancelAction)
+                }
+                self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
             }
-            self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
         }
         
         // Parse URL app was launched with
@@ -78,18 +89,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let token = tokenParam?.value;
             print("Will Confirm Sign Up with Token: \(token)")
             
-            // Get LoginManager and send account confirmation token
-            let loginManager = AylaNetworks.shared().loginManager
-            loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
-                presentAlertController("Account Confirmed",
-                    message: "Enter your credentials to log in",
-                    withOkayButton: true)
-                }, failure: { (error) -> Void in
-                    presentAlertController("Account Confirmation Failed.",
-                        message: "Account may already be confirmed. Try logging in.",
-                        withOkayButton: true)
-            })
-
+            presentAlertController("Account Confirmation",
+                                   message: "Would you like to confirm to this account?",
+                                   withOkayButton: true,
+                                   withCancelButton: true,
+                                   okayHandler:{(action) -> Void in
+                                    
+                                    // Get LoginManager and send account confirmation token
+                                    let loginManager = AylaNetworks.shared().loginManager
+                                    loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
+                                        presentAlertController("Account Confirmed",
+                                            message: "Enter your credentials to log in",
+                                            withOkayButton: true,
+                                            withCancelButton: false,
+                                            okayHandler:nil,
+                                            cancelHandler:nil)
+                                        }, failure: { (error) -> Void in
+                                            presentAlertController("Account Confirmation Failed.",
+                                                message: "Account may already be confirmed. Try logging in.",
+                                                withOkayButton: true,
+                                                withCancelButton: false,
+                                                okayHandler:nil,
+                                                cancelHandler:nil)
+                                    })
+ 
+            },cancelHandler:nil)
+           
         }
         else if url.host == "user_reset_password_token" {
             
@@ -99,7 +124,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else {
             presentAlertController("Not Yet Implemented.",
                                         message: String.localizedStringWithFormat("Cannot currently parse url with %@ parameter", url.host!),
-                                        withOkayButton: true)
+                                        withOkayButton: true,
+                                        withCancelButton: false,
+                                        okayHandler:nil,
+                                        cancelHandler:nil)
         }
         return true;
     }
