@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         func displayViewController(controller: UIViewController){
             //  VC hierarchy is different if we are logged in than if we are not. 
             //  This will ensure the VC is displayed.
-            if AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) != nil {
+            if self.window?.rootViewController?.presentedViewController != nil {
                 UIApplication.sharedApplication().keyWindow?.rootViewController?.presentedViewController?.presentViewController(controller,animated:true,completion:nil)
             }
             else {
