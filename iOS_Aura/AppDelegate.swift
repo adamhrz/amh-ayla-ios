@@ -43,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         func displayViewController(controller: UIViewController){
+            //  VC hierarchy is different if we are logged in than if we are not. 
+            //  This will ensure the VC is displayed.
             if AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) != nil {
                 UIApplication.sharedApplication().keyWindow?.rootViewController?.presentedViewController?.presentViewController(controller,animated:true,completion:nil)
             }
@@ -88,13 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Instantiate and Push SetupViewController
             let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
             let setupVC = setupStoryboard.instantiateInitialViewController()
-            //  VC hierarchy is different if we are logged in than if we are not.
-            if AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) != nil {
-                UIApplication.sharedApplication().keyWindow?.rootViewController?.presentedViewController?.presentViewController(setupVC!,animated:true,completion:nil)
-            }
-            else {
-                self.window?.rootViewController?.presentViewController(setupVC!, animated: true, completion: nil)
-            }
+            displayViewController(setupVC!)
         }
         // If URL is from an Account Confirmation Email
         else if url.host == "user_sign_up_token" {
@@ -134,7 +130,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else if url.host == "user_reset_password_token" {
             
             let tokenParam = queryitems?.filter({$0.name == "token"}).first;
-            NSNotificationCenter.defaultCenter().postNotificationName("PasswordReset", object: tokenParam?.value)
+            
+            // Instantiate and Push PasswordResetViewController
+            let setupStoryboard: UIStoryboard = UIStoryboard(name: "PasswordReset", bundle: nil)
+            let passwordResetNavController = setupStoryboard.instantiateInitialViewController() as! UINavigationController
+            let passwordResetController = passwordResetNavController.viewControllers.first! as! PasswordResetTableViewController
+            passwordResetController.passwordResetToken = tokenParam!.value! as String
+            displayViewController(passwordResetNavController)
+            //NSNotificationCenter.defaultCenter().postNotificationName("PasswordReset", object: tokenParam?.value)
         }
         else {
             presentAlertController("Not Yet Implemented.",
