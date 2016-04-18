@@ -32,43 +32,7 @@ class MeTVController: UITableViewController {
                     
             })
         }
-    
     }
-   /*
- 
-    @IBAction func deleteAccountAction(sender:AnyObject){
-        let alert = UIAlertController(title: "Delete Account?", message: "Deleting your account is permanent and cannot be undone.  All devices registered to you must also be unregistered.  The process may take some time to complete. Are you sure you want to continue?", preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
-            self.deleteAccount({ 
-                self.logout()
-            }, failure: {
-                    <#code#>
-            })
-        })
-        alert.addAction(okAction)
-        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{(action) -> Void in })
-        alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
-        
-    }
-
-    
-    func deleteAccount(success: (() -> Void)?, failure: (() -> Void)?){
-        if let manager = sessionManager {
-            manager.deleteAccountWithSuccess({ 
-                if let success = success{
-                    success()
-                }
-            }, failure: {(NSError) -> Void in
-                if let failure = failure {
-                    failure()
-                }
-                    
-            })
-        }
-
-    }
- */
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let selection = Selection()
