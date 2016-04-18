@@ -94,22 +94,24 @@ class PropertyTVCell: UITableViewCell {
             valueTapRecognizer.enabled = true
         }
         
-        // Check for previous value of property
-        if let boolValue = self.property?.datapoint?.value {
-            
-            // Set up datapoint for new value
-            let newVal = boolValue as! NSNumber == 1 ? NSNumber(int:0) : NSNumber(int:1)
-            let dpParams = AylaDatapointParams()
-            dpParams.value = newVal
-            
-            // Create Datapoint
-            self.property!.createDatapoint(dpParams, success: { (datapoint) -> Void in
-                print("Created datapoint.")
-                reenableCell()
-                }, failure: { (error) -> Void in
-                    reenableCell()
-                    print("Create Datapoint Failed.")
-            })
+        // Check for previous value of property. If there is no previous value, create datapoint with value (1).
+        var boolValue = NSNumber(int: 0)
+        if let curVal = self.property?.datapoint?.value {
+            boolValue = curVal as! NSNumber
         }
+            
+        // Set up datapoint for new value
+        let newVal = boolValue == 1 ? NSNumber(int:0) : NSNumber(int:1)
+        let dpParams = AylaDatapointParams()
+        dpParams.value = newVal
+        
+        // Create Datapoint
+        self.property!.createDatapoint(dpParams, success: { (datapoint) -> Void in
+            print("Created datapoint.")
+            reenableCell()
+            }, failure: { (error) -> Void in
+                reenableCell()
+                print("Create Datapoint Failed.")
+        })
     }
 }
