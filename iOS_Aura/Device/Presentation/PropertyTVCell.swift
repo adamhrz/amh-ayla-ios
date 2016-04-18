@@ -70,12 +70,9 @@ class PropertyTVCell: UITableViewCell {
         }
         nameLabel.text = self.property?.name
         infoLabel?.text = String.localizedStringWithFormat("%@ - %@", (self.property?.direction)!, (self.property?.baseType)!)
-        if let value = self.property?.datapoint.value {
-            valueLabel.text = "\(value)"
-        }
-        else {
-            valueLabel.text = "(null)"
-        }
+        
+        let value = String.stringFromStringNumberOrNil(self.property?.datapoint.value)
+        valueLabel.text = value
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
