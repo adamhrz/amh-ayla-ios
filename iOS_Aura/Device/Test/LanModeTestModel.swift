@@ -210,7 +210,13 @@ class LanModeTestModel: TestModel {
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        dp.value = NSNumber(int: 1 - property!.datapoint.value.intValue)
+        if let curVal = property!.datapoint?.value.intValue {
+            dp.value = NSNumber(int: 1 - curVal)
+        }
+        else {
+            dp.value = NSNumber(int: 1)
+        }
+
         addLog(.Info, log: "Using property \(property?.name), dp.value \(dp.value)")
         
         let confirm = device?.lanTest_getConfirmingPropertyAndDatapointParamsFor(property!, dpParams: dp)
@@ -260,7 +266,13 @@ class LanModeTestModel: TestModel {
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        dp.value = NSNumber(int: 1 - property!.datapoint.value.intValue)
+        if let curVal = property!.datapoint?.value.intValue {
+            dp.value = NSNumber(int: 1 - curVal)
+        }
+        else {
+            dp.value = NSNumber(int: 1)
+        }
+        
         addLog(.Info, log: "Using property \(property?.name), dp.value \(dp.value)")
         
         property?.createDatapointLAN(dp, success: { (datapoint) in
