@@ -22,7 +22,6 @@ class MeTVController: UITableViewController {
         super.init(coder: aDecoder)
     }
 
-    
     func logout() {
     
         if let manager = sessionManager {
@@ -50,7 +49,6 @@ class MeTVController: UITableViewController {
                     }
             })
         }
-    
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

@@ -52,6 +52,58 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
+    func backOutToLoginScreen() {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+        UIApplication.sharedApplication().keyWindow?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+
+    }
+    
+    @IBAction func deleteAccountAction(sender:AnyObject){
+        let alert = UIAlertController(title: "Permanently Delete Account?", message: "This operation cannot be undone and all devices registered to you must also be unregistered.  The process may take some time to complete.\n\nAre you sure you want to continue?", preferredStyle: UIAlertControllerStyle.Alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+            
+            self.deleteAccount({
+                let successAlert = UIAlertController(title: "Success",
+                    message: "Your account has been deleted.  A new account will be required to log in again.",
+                    preferredStyle: UIAlertControllerStyle.Alert)
+                let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+
+                    self.backOutToLoginScreen()
+                })
+                successAlert.addAction(successOkAction)
+                self.presentViewController(successAlert, animated: true, completion: nil)
+                
+                
+                }, failure: {(NSError) -> Void in
+                    let message = String(format:"Something went wrong while deleting your account. %@ Please try again.", NSError.code)
+                    UIAlertController.alert("Error", message:message , buttonTitle: "Okay", fromController: self)
+ 
+            })
+        })
+        alert.addAction(okAction)
+        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{(action) -> Void in })
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
+    
+    func deleteAccount(success: (() -> Void)?, failure: ((NSError) -> Void)?){
+        if let manager = sessionManager {
+            manager.deleteAccountWithSuccess({
+                if let success = success{
+                    success()
+                }
+                }, failure: {(NSError) -> Void in
+                    if let failure = failure {
+                        failure(NSError)
+                    }
+                    
+            })
+        }
+        
+    }
+    
     @IBAction func updateProfileAction(sender: AnyObject) {
         //Validate required fields
         if self.emailTextField.text!.characters.count == 0 {
