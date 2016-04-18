@@ -30,7 +30,24 @@ class MeTVController: UITableViewController {
                 self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
                 });
                 }, failure: { (error) -> Void in
-                    
+                    print("Log out operation failed: %@", error)
+                    func alertWithLogout (message: String!, buttonTitle: String!){
+                        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                        let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                            
+                            self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                            });
+                        })
+                        alert.addAction(okAction)
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    }
+                    switch error.code {
+                    case AylaHTTPError.CodeLostConnectivity.rawValue:
+                        alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
+                    default:
+                        alertWithLogout("An error has occurred", buttonTitle: "Continue")
+
+                    }
             })
         }
     
