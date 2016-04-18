@@ -92,9 +92,6 @@ class ProfileTableViewController: UITableViewController {
         if let manager = sessionManager {
             manager.deleteAccountWithSuccess({
                 if let success = success{
-                    if self.sessionManager != nil{
-                        print("SESSION MANAGER STILL AROUND AFTER DELETION")
-                    }
                     success()
                 }
                 }, failure: {(NSError) -> Void in
