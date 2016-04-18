@@ -41,11 +41,12 @@ class MeTVController: UITableViewController {
                         alert.addAction(okAction)
                         self.presentViewController(alert, animated: true, completion: nil)
                     }
-                    if error.code == 1002 {
+                    switch error.code {
+                    case AylaHTTPError.CodeLostConnectivity.rawValue:
                         alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
-                    }
-                    else {
-                        alertWithLogout("An unknown error has occurred", buttonTitle: "Continue")
+                    default:
+                        alertWithLogout("An error has occurred", buttonTitle: "Continue")
+
                     }
             })
         }
