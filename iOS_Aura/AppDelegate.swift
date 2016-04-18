@@ -87,8 +87,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             // Instantiate and Push SetupViewController
             let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
-            let setupVC2 = setupStoryboard.instantiateInitialViewController()
-            self.window?.rootViewController?.presentViewController(setupVC2!, animated: true, completion:nil)
+            let setupVC = setupStoryboard.instantiateInitialViewController()
+            //  VC hierarchy is different if we are logged in than if we are not.
+            if AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) != nil {
+                UIApplication.sharedApplication().keyWindow?.rootViewController?.presentedViewController?.presentViewController(setupVC!,animated:true,completion:nil)
+            }
+            else {
+                self.window?.rootViewController?.presentViewController(setupVC!, animated: true, completion: nil)
+            }
         }
         // If URL is from an Account Confirmation Email
         else if url.host == "user_sign_up_token" {
@@ -138,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                         okayHandler:nil,
                                         cancelHandler:nil)
         }
-        return true;
+        return true
     }
     
 
