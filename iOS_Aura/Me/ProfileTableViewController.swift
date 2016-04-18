@@ -52,16 +52,10 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    func logout() {
+    func backOutToLoginScreen() {
         self.navigationController?.popToRootViewControllerAnimated(true)
-        if let manager = sessionManager {
-            manager.logoutWithSuccess({ () -> Void in
-                UIApplication.sharedApplication().keyWindow?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
-                }, failure: { (error) -> Void in
-                UIApplication.sharedApplication().keyWindow?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
-            })
-        }
-        
+        UIApplication.sharedApplication().keyWindow?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+
     }
     
     @IBAction func deleteAccountAction(sender:AnyObject){
@@ -74,7 +68,7 @@ class ProfileTableViewController: UITableViewController {
                     preferredStyle: UIAlertControllerStyle.Alert)
                 let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
 
-                    self.logout()
+                    self.backOutToLoginScreen()
                 })
                 successAlert.addAction(successOkAction)
                 self.presentViewController(successAlert, animated: true, completion: nil)
