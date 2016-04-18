@@ -42,8 +42,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        func displayViewController(controller: UIViewController){
+            if AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) != nil {
+                UIApplication.sharedApplication().keyWindow?.rootViewController?.presentedViewController?.presentViewController(controller,animated:true,completion:nil)
+            }
+            else {
+                self.window?.rootViewController?.presentViewController(controller, animated: true, completion: nil)
+            }
+        }
+        
         // Instantiate and display a UIAlertViewController as needed
-        func presentAlertController(title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?) {
+        func presentAlertController(title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?){
             let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
             if withOkayButton {
                 let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
@@ -60,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     })
                     alert.addAction(cancelAction)
                 }
-                self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+                displayViewController(alert)
             }
         }
         
