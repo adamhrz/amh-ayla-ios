@@ -22,7 +22,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         // Add tap recognizer to dismiss keyboard.
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(presentPasswordReset), name: "PasswordReset", object: nil)
