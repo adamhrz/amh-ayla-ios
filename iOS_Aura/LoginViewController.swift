@@ -24,12 +24,6 @@ class LoginViewController: UIViewController {
         // Add tap recognizer to dismiss keyboard.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(presentPasswordReset), name: "PasswordReset", object: nil)
-    }
-    
-    func presentPasswordReset(notification:NSNotification) {
-        self.performSegueWithIdentifier("PasswordReset", sender: notification.object)
     }
   
     /**
@@ -176,11 +170,6 @@ class LoginViewController: UIViewController {
                 let oAuthController = navigationViewController.viewControllers.first! as! OAuthLoginViewController
                 // pass a reference to self to continue login after a sucessful OAuthentication
                 oAuthController.mainLoginViewController = self
-            case "PasswordReset" :
-                let navigationViewController = segue.destinationViewController as! UINavigationController
-                let passwordResetController = navigationViewController.viewControllers.first! as! PasswordResetTableViewController
-                passwordResetController.passwordResetToken = sender as! String
-                
             default: break
             }
         }

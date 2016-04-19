@@ -4,16 +4,17 @@
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
+import MessageUI
 import UIKit
 import iOS_AylaSDK
 
-class MeTVController: UITableViewController {
+class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate {
     
     let sessionManager: AylaSessionManager?
     
     struct Selection {
         let myProfile = NSIndexPath(forRow: 0, inSection: 0)
-        let settings = NSIndexPath(forRow: 0, inSection: 1)
+        let emaiLogs = NSIndexPath(forRow: 0, inSection: 1)
         let logout = NSIndexPath(forRow: 0, inSection: 2)
     }
     
@@ -51,12 +52,36 @@ class MeTVController: UITableViewController {
         }
     }
     
+    func emailLogs() {
+        let mailVC = MFMailComposeViewController()
+        if MFMailComposeViewController.canSendMail() {
+            if let filePath = AylaLogManager.sharedManager().getLogFilePath() {
+                let data = NSData(contentsOfFile: filePath)
+                mailVC.setToRecipients([AylaNetworks.getSupportEmailAddress()])
+                mailVC.setSubject("iOS SDK Log (\(AylaNetworks.getVersion()))")
+                mailVC.setMessageBody("Add your feedback:", isHTML: false)
+                if data != nil {
+                    mailVC.addAttachmentData(data!, mimeType: "application/plain", fileName: "sdk_log")
+                }
+                mailVC.mailComposeDelegate = self
+                
+                presentViewController(mailVC, animated: true, completion: nil)
+            }
+            else  {
+                UIAlertController.alert(nil, message: "No log file found.", buttonTitle: "Got it", fromController: self)
+            }
+        }
+        else  {
+            UIAlertController.alert(nil, message: "Unable to send an email.", buttonTitle: "Got it", fromController: self)
+        }
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let selection = Selection()
         if(indexPath == selection.myProfile) {
             
-        } else if (indexPath == selection.settings) {
-        
+        } else if (indexPath == selection.emaiLogs) {
+            emailLogs()
         } else if (indexPath == selection.logout) {
             logout()
         }
@@ -65,4 +90,8 @@ class MeTVController: UITableViewController {
         }
     }
     
+    // MARK - MFMailComposeViewControllerDelegate
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 }
