@@ -19,7 +19,7 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
     weak var mainLoginViewController : LoginViewController!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: Selector("cancelAuth"))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(cancelAuth))
         
         // WKWebView cannot be added through storyboards as of today. If possible in the future, this view could be added in the storyboard
         let webView = WKWebView()
