@@ -26,6 +26,8 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     /// Device model used by view controller to present this device.
     var deviceViewModel :DeviceViewModel?
     
+    var nameTextField :UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,6 +50,36 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    func rename() {
+        let alert = UIAlertController(title: "Rename " + (device?.productName)!, message: "Enter the new name", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.placeholder = "New name"
+            textField.tintColor = UIColor(red: 93.0/255.0, green: 203/255.0, blue: 152/255.0, alpha: 1.0)
+            self.nameTextField = textField
+        }
+        let okAction = UIAlertAction (title: "Confirm", style: UIAlertActionStyle.Default) { (action) -> Void in
+            let newName = self.nameTextField!.text
+            if newName == nil || newName!.characters.count < 1 {
+                
+                UIAlertController.alert("Error", message: "No name was provided", buttonTitle: "OK",fromController: self)
+                return;
+            }
+            self.device?.updateProductNameTo(newName!, success: { () -> Void in
+                let alert = UIAlertController(title: "Device renamed", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
+                self.presentViewController(alert, animated: true, completion: nil)
+                }, failure: { (error) -> Void in
+                    UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
+            })
+        }
+        
+        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     func unregister() {
         device?.unregisterWithSuccess({ 
             self.navigationController?.popViewControllerAnimated(true)
@@ -62,10 +94,14 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     // MARK - Options
     func showOptions() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let rename = UIAlertAction(title: "Rename", style: .Default) { (action) in
+            self.rename()
+        }
         let unregister = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
             self.unregister()
         }
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
+        alert.addAction(rename)
         alert.addAction(cancel)
         alert.addAction(unregister)
         presentViewController(alert, animated: true, completion: nil)
