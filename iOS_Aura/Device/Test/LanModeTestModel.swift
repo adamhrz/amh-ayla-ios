@@ -24,7 +24,7 @@ extension AylaDevice {
             return [ "01:0006_S:0000" ]
         }
     
-        // Get managed properties form device detail provider
+        // Get managed properties from device detail provider
         let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNamesForDevice(self) as? [ String]
         return array
     }
