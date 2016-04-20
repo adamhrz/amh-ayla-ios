@@ -131,7 +131,11 @@ extension UIColor {
     }
 
     // MARK: -  Aura Colors
-    
+
+    class func auraTintColor() -> UIColor {
+        return UIColor.aylaHippieGreenColor()
+    }
+
     class func auraLeafGreenColor() -> UIColor{
         return UIColor(hue: 90/360.0,
                        saturation: 87/100.0,

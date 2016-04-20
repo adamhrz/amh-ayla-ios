@@ -34,9 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AylaLogManager.sharedManager().loggingLevel = .Info
         
-        UITabBar.appearance().tintColor = UIColor.auraLeafGreenColor()
-        UINavigationBar.appearance().tintColor = UIColor.auraLeafGreenColor()
-
+        UITabBar.appearance().tintColor = UIColor.auraTintColor()
+        UINavigationBar.appearance().tintColor = UIColor.auraTintColor()
         
         return true
     }
