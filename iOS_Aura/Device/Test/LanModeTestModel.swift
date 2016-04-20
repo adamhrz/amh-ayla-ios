@@ -25,7 +25,7 @@ extension AylaDevice {
         }
     
         // Get managed properties from device detail provider
-        let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNamesForDevice(self) as? [ String]
+        let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNamesForDevice(self) as? [String]
         return array
     }
     
