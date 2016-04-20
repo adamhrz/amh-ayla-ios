@@ -99,7 +99,7 @@ class LoginViewController: UIViewController {
             // Login with login manager
             self.presentLoading("Resetting password...")
             let loginManager = AylaNetworks.shared().loginManager
-            let template = AylaEmailTemplate(id: "ayla_passwd_reset_template_01", subject: "Confirm your email", bodyHTML: nil)
+            let template = AylaEmailTemplate(id: "ayla_passwd_reset_template_01", subject: "Password Reset Request", bodyHTML: nil)
             loginManager.requestPasswordReset(usernameTextField.text!, emailTemplate: template, success: {
                 self.dismissLoading(false, completion: { () -> Void in
                     UIAlertController.alert("Password reset", message: "Please check your inbox", buttonTitle: "OK", fromController: self)
