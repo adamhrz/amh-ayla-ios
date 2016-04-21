@@ -42,7 +42,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                         self.presentViewController(alert, animated: true, completion: nil)
                     }
                     switch error.code {
-                    case AylaHTTPError.CodeLostConnectivity.rawValue:
+                    case AylaHTTPErrorCode.LostConnectivity.rawValue:
                         alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
                     default:
                         alertWithLogout("An error has occurred", buttonTitle: "Continue")
