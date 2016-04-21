@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		220D147E1CBD6C77001BC00B /* Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 220D14811CBD6C77001BC00B /* Build configuration list for PBXAggregateTarget "Documentation" */;
+			buildPhases = (
+				220D14821CBD6CDC001BC00B /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Documentation;
+			productName = Documentation;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */; };
 		0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */; };
@@ -424,6 +438,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Ayla Networks";
 				TargetAttributes = {
+					220D147E1CBD6C77001BC00B = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
 					A7351C891C753C360073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = 4K93KVU666;
@@ -454,6 +471,7 @@
 				A7351C891C753C360073C73A /* iOS_Aura */,
 				A7351C9D1C753C370073C73A /* iOS_AuraTests */,
 				A7351CA81C753C370073C73A /* iOS_AuraUITests */,
+				220D147E1CBD6C77001BC00B /* Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -493,6 +511,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		220D14821CBD6CDC001BC00B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# please install ruby gem \"jazzy\" first by #sudo gem install jazzy\ncommand -v jazzy >/dev/null 2>&1 || {\n    echo \"Please install jazzy by: $ sudo gem install jazzy\"\n    exit 1\n}\njazzy --swift-version 2.1.1\nopen \"${PROJECT_DIR}/docs/index.html\"";
+		};
 		25F6372F996D988D3A776A9B /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -665,6 +696,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		220D147F1CBD6C77001BC00B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		220D14801CBD6C77001BC00B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		A7351CB01C753C370073C73A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -829,6 +874,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		220D14811CBD6C77001BC00B /* Build configuration list for PBXAggregateTarget "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				220D147F1CBD6C77001BC00B /* Debug */,
+				220D14801CBD6C77001BC00B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A7351C851C753C360073C73A /* Build configuration list for PBXProject "iOS_Aura" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
