@@ -11,6 +11,8 @@
 		0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */; };
 		0FBEB0A31CC07AE600E8EE6F /* UIAlertView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB0A01CC07AE600E8EE6F /* UIAlertView_Extensions.swift */; };
 		0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */; };
+		5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA31CC84CF100233D99 /* AuraLabel.swift */; };
+		5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA41CC84CF100233D99 /* AuraTextField.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B96191CBD9A30009115AE /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A54B96181CBD9A30009115AE /* Profile.storyboard */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
@@ -77,6 +79,8 @@
 		0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+AuraColors.swift"; path = "Utils/UIColor+AuraColors.swift"; sourceTree = "<group>"; };
 		146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
 		434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		5FDCECA31CC84CF100233D99 /* AuraLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraLabel.swift; path = UX/AuraLabel.swift; sourceTree = "<group>"; };
+		5FDCECA41CC84CF100233D99 /* AuraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraTextField.swift; path = UX/AuraTextField.swift; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
 		A54B96181CBD9A30009115AE /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 			isa = PBXGroup;
 			children = (
 				A7104ACD1C758140007B1AB3 /* AuraButton.swift */,
+				5FDCECA31CC84CF100233D99 /* AuraLabel.swift */,
+				5FDCECA41CC84CF100233D99 /* AuraTextField.swift */,
 			);
 			name = UX;
 			sourceTree = "<group>";
@@ -549,6 +555,7 @@
 				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
+				5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
 				0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
@@ -566,6 +573,7 @@
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
 				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
 				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
+				5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */,
 				A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */,
 				A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */,
 				A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */,

@@ -34,6 +34,8 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
         super.viewDidDisappear(animated)
         if authType == nil {
             askForAuthType()
+        } else {
+            self.startOAuth()
         }
     }
     

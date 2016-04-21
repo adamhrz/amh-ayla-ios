@@ -18,17 +18,18 @@ class AuraButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        self.layer.borderWidth = 1.5
-        self.layer.borderColor = UIColor.lightGrayColor().CGColor
-        self.layer.cornerRadius = 10.0
+        self.layer.backgroundColor = UIColor.aylaHippieGreenColor().CGColor
+        self.layer.cornerRadius = 5.0
+        
+        self.setTitleColor(UIColor.aylaPearlBushColor(), forState: UIControlState.Normal)
     }
-    
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
-    }
-    */
+}
 
+class AuraTextButton : UIButton {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        self.setTitleColor(UIColor.aylaBahamaBlueColor(), forState: UIControlState.Normal)
+        titleLabel?.font = UIFont.systemFontOfSize(12.0)
+    }
 }

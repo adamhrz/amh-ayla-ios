@@ -165,9 +165,10 @@ class LoginViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let segueIdentifier = segue.identifier {
             switch segueIdentifier {
-            case "OAuthLoginSegue":
+            case "OAuthLoginSegueFacebook", "OAuthLoginSegueGoogle":
                 let navigationViewController = segue.destinationViewController as! UINavigationController
                 let oAuthController = navigationViewController.viewControllers.first! as! OAuthLoginViewController
+                oAuthController.authType = (segueIdentifier == "OAuthLoginSegueFacebook") ? AylaOAuthType.Facebook : AylaOAuthType.Google
                 // pass a reference to self to continue login after a sucessful OAuthentication
                 oAuthController.mainLoginViewController = self
             default: break
