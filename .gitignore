@@ -19,6 +19,7 @@ DerivedData
 /fastlane
 /release/fastlane/README.md
 /release/fastlane/report.xml
+/docs
 
 # CocoaPods
 #

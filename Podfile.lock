@@ -49,6 +49,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   iOS_AylaSDK:
+    :commit: 0f9940f54e046edbb57cf39b41653576433d29ba
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 SPEC CHECKSUMS:
