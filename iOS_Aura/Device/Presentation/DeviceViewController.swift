@@ -50,6 +50,14 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    @IBAction func fetchAllPropertiesAction(sender: AnyObject) {
+        self.device?.fetchPropertiesCloud(nil, success: { (properties) in
+            print("Fetched properties")
+            }, failure: { (error) in
+                UIAlertController.alert("Error", message: "Failed to fetch all properties", buttonTitle: "OK", fromController: self)
+        })
+    }
+    
     func rename() {
         let alert = UIAlertController(title: "Rename " + (device?.productName)!, message: "Enter the new name", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
