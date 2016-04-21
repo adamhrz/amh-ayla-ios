@@ -16,6 +16,9 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+/fastlane
+/release/fastlane/README.md
+/release/fastlane/report.xml
 
 # CocoaPods
 #
