@@ -23,9 +23,10 @@ extension AylaDevice {
         if self.isKindOfClass(AylaDeviceNode) && model == "GenericNode" {
             return [ "01:0006_S:0000" ]
         }
-        
-        // Return a nil to use all known properties
-        return nil
+    
+        // Get managed properties from device detail provider
+        let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNamesForDevice(self) as? [String]
+        return array
     }
     
     func lanTest_getProperty(name: String) -> AylaProperty? {
@@ -164,7 +165,7 @@ class LanModeTestModel: TestModel {
     
     override func setupTestSequencer() {
         let sequencer = TestSequencer()
-            .addTest(NSStringFromSelector(#selector(testFetchPropertiesLAN)), testBlock: { [weak self] (testCase) in self?.testFetchProperties(testCase) })
+            .addTest(NSStringFromSelector(#selector(testFetchPropertiesLAN)), testBlock: { [weak self] (testCase) in self?.testFetchPropertiesLAN(testCase) })
             .addTest(NSStringFromSelector(#selector(testFetchProperties)), testBlock: { [weak self] (testCase) in self?.testFetchProperties(testCase) })
             .addTest(NSStringFromSelector(#selector(testCreateBooleanDatapointLAN)), testBlock: { [weak self] (testCase) in self?.testCreateBooleanDatapointLAN(testCase) })
             .addTest(NSStringFromSelector(#selector(testCreateStringDatapointLAN)), testBlock: { [weak self] (testCase) in self?.testCreateStringDatapointLAN(testCase) })
@@ -190,7 +191,7 @@ class LanModeTestModel: TestModel {
     
     func testFetchPropertiesLAN(tc: TestCase)  {
         addLog(.Info, log: "Start \(#function)")
-        device?.fetchPropertiesLAN(device?.lanTest_getPropertyNamesForFetchRequest(), success: { (properties) in
+        device?.fetchPropertiesLAN(device?.lanTest_getPropertyNamesForFetchRequest() ?? [], success: { (properties) in
             self.passTestCase(tc)
             }, failure: { (error) in
                 self.failTestCase(tc, error: error)
