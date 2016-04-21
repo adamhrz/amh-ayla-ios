@@ -58,8 +58,11 @@ class PropertyTVCell: UITableViewCell {
             if baseType == "boolean"{
                 if let direction = self.property?.direction {
                     propertySwitch?.enabled = direction == "input" ? true : false
-                    if let value = self.property?.datapoint.value {
+                    if let value = self.property?.datapoint?.value {
                         propertySwitch?.on = value as! Bool
+                    }
+                    else {
+                        propertySwitch?.on = false
                     }
                 }
                 propertySwitch?.hidden = false
@@ -70,12 +73,9 @@ class PropertyTVCell: UITableViewCell {
         }
         nameLabel.text = self.property?.name
         infoLabel?.text = String.localizedStringWithFormat("%@ - %@", (self.property?.direction)!, (self.property?.baseType)!)
-        if let value = self.property?.datapoint.value {
-            valueLabel.text = "\(value)"
-        }
-        else {
-            valueLabel.text = "(null)"
-        }
+        
+        let value = String.stringFromStringNumberOrNil(self.property?.datapoint?.value)
+        valueLabel.text = value
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
@@ -94,22 +94,24 @@ class PropertyTVCell: UITableViewCell {
             valueTapRecognizer.enabled = true
         }
         
-        // Check for previous value of property
-        if let boolValue = self.property?.datapoint.value {
-            
-            // Set up datapoint for new value
-            let newVal = boolValue as! NSNumber == 1 ? NSNumber(int:0) : NSNumber(int:1)
-            let dpParams = AylaDatapointParams()
-            dpParams.value = newVal
-            
-            // Create Datapoint
-            self.property!.createDatapoint(dpParams, success: { (datapoint) -> Void in
-                print("Created datapoint.")
-                reenableCell()
-                }, failure: { (error) -> Void in
-                    reenableCell()
-                    print("Create Datapoint Failed.")
-            })
+        // Check for previous value of property. If there is no previous value, create datapoint with value (1).
+        var boolValue = NSNumber(int: 0)
+        if let curVal = self.property?.datapoint?.value {
+            boolValue = curVal as! NSNumber
         }
+            
+        // Set up datapoint for new value
+        let newVal = boolValue == 1 ? NSNumber(int:0) : NSNumber(int:1)
+        let dpParams = AylaDatapointParams()
+        dpParams.value = newVal
+        
+        // Create Datapoint
+        self.property!.createDatapoint(dpParams, success: { (datapoint) -> Void in
+            print("Created datapoint.")
+            reenableCell()
+            }, failure: { (error) -> Void in
+                reenableCell()
+                print("Create Datapoint Failed.")
+        })
     }
 }

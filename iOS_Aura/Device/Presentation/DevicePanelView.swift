@@ -23,17 +23,15 @@ class DevicePanelView: UIView {
     func configure(device:AylaDevice) {
         nameLabel.text = String(format: "%@", device.productName!)
         dsnLabel.text = String(format: "%@ %@", "DSN: ", device.dsn!)
-        let connStatus = device.connectionStatus
+        
+        let connStatus = String.stringFromStringNumberOrNil(device.connectionStatus)
         connectivityLabel.text = connStatus
         connectivityLabel.textColor = connStatus == "Online" ? UIColor.auraLeafGreenColor() : UIColor.auraRedColor()
-        oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", device.oemModel!)
-        modelLabel.text = String(format: "%@ %@", "Model: ", device.model!)
         
-        let macAddress: String = (device.mac as String?) ?? "(null)"
-        macAddressLabel.text = String(format: "%@ %@", "MAC: ", macAddress)
-        
-        let ipAddress: String = (device.lanIp as String?) ?? "(null)"
-        lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", ipAddress)
+        oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", String.stringFromStringNumberOrNil(device.oemModel))
+        modelLabel.text = String(format: "%@ %@", "Model: ", String.stringFromStringNumberOrNil(device.model))
+        macAddressLabel.text = String(format: "%@ %@", "MAC: ", String.stringFromStringNumberOrNil(device.mac))
+        lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", String.stringFromStringNumberOrNil(device.lanIp))
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGrayColor().CGColor
 

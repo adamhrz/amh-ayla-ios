@@ -71,8 +71,8 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.delegate = self
         tableView.dataSource = self
         
-        let refresh = UIBarButtonItem(barButtonSystemItem:.Refresh, target: self, action: Selector("refresh"))
-        self.navigationItem.rightBarButtonItem = refresh
+        let refreshButton = UIBarButtonItem(barButtonSystemItem:.Refresh, target: self, action: #selector(refresh))
+        self.navigationItem.rightBarButtonItem = refreshButton
         
         attemptToConnect()
     }
