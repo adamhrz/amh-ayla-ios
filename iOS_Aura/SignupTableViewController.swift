@@ -87,7 +87,7 @@ class SignupTableViewController: UITableViewController {
             user.devKitNum = devKitNumber
         }
         
-        let emailTemplate = AylaEmailTemplate(id: "ayla_confirmation_template_01", subject: "Aura Signup", bodyHTML: nil)
+        let emailTemplate = AylaEmailTemplate(id: "aura_confirmation_template_01", subject: "Aura Signup", bodyHTML: nil)
         
         let loginManager = AylaNetworks.shared().loginManager
         loginManager.signUpWithUser(user, emailTemplate: emailTemplate, success: { () -> Void in
