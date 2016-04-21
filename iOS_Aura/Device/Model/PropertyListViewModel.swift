@@ -74,7 +74,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
         
         if let knownProperties = self.device.properties {
             // Only refresh properties list when there is a user search or property list is still empty.
-            if searchText != nil || self.properties.count == 0{
+            if searchText != nil || self.properties.count == 0 || self.properties.count != knownProperties.count {
                 self.properties = knownProperties.values.map({ (property) -> AylaProperty in
                     return property as! AylaProperty
                 }).filter({ (property) -> Bool in
