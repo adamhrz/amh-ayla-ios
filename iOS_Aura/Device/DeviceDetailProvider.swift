@@ -14,7 +14,7 @@ class DeviceDetailProvider: NSObject, AylaDeviceDetailProvider {
     let oemModel_ledevb = "ledevb"
     let oemModel_generic = "generic"
     
-    let ledevb_managedProperties = ["Blue_LED", "Green_LED", "Blue_button", "cmd", "log", "decimal_in", "decimal_out"]
+    let ledevb_managedProperties = ["Blue_LED", "Green_LED", "Blue_button"]
     let genericGateway_managedProperties = ["join_enable", "join_status", "cmd", "log"]
 
     func monitoredPropertyNamesForDevice(device: AylaDevice) -> [AnyObject]? {
