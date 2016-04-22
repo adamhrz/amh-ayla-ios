@@ -8,6 +8,8 @@
 
 import UIKit
 import iOS_AylaSDK
+import PDKeychainBindingsController
+import SSKeychain
 
 class ProfileTableViewController: UITableViewController {
     var user: AylaUser!
@@ -63,6 +65,11 @@ class ProfileTableViewController: UITableViewController {
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
             
             self.deleteAccount({
+                let settings = AylaNetworks.shared().systemSettings
+                let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
+                PDKeychainBindings.sharedKeychainBindings().removeObjectForKey(AuraUsernameKeychainKey)
+                SSKeychain.deletePasswordForService(settings.appId, account: username)
+                
                 let successAlert = UIAlertController(title: "Success",
                     message: "Your account has been deleted.  A new account will be required to log in again.",
                     preferredStyle: UIAlertControllerStyle.Alert)
