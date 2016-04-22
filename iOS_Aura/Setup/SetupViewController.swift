@@ -151,7 +151,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         token = "AToken"
         
         self.updatePrompt("Connecting device to '\(ssid)'...")
-        self.setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longtitude: 0.0, success: { () -> Void in
+        self.setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { () -> Void in
             
             // Succeeded, go confirming.
             self.addDescription("Connected to \(ssid)")
