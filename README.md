@@ -34,7 +34,7 @@ When opening Aura in Xcode, be sure to _only open the .xcworkspace_ file.
 
 Supported iOS version: 8 and higher;  
 AppleDoc for the libraries is available. After the Pods are installed, follow the instructions located at:  
-  <repo directory>/Pods/iOS_AylaSDK/README.md
+  \<repo directory\>/Pods/iOS_AylaSDK/README.md
 
 ##Dependencies
 
