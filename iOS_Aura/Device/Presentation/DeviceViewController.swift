@@ -36,7 +36,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             deviceViewModel = DeviceViewModel(device: device, panel: panelView, propertyListTableView: tableView)
             deviceViewModel?.propertyListViewModel?.delegate = self
             
-            let options = UIBarButtonItem(barButtonSystemItem:.Organize, target: self, action: #selector(DeviceViewController.showOptions))
+            let options = UIBarButtonItem(barButtonSystemItem:.Action, target: self, action: #selector(DeviceViewController.showOptions))
             self.navigationItem.rightBarButtonItem = options
         }
         else {
@@ -102,6 +102,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     // MARK - Options
     func showOptions() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let autoTest = UIAlertAction(title: "AutoTest", style: .Default) { (action) in
+            self.performSegueWithIdentifier(self.segueIdToLanTestView, sender: nil)
+        }
         let rename = UIAlertAction(title: "Rename", style: .Default) { (action) in
             self.rename()
         }
@@ -109,6 +112,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             self.unregister()
         }
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
+        alert.addAction(autoTest)
         alert.addAction(rename)
         alert.addAction(cancel)
         alert.addAction(unregister)
