@@ -54,4 +54,8 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
     func device(device: AylaDevice, didObserveChange change: AylaChange) {
         self.update()
     }
+    
+    func device(device: AylaDevice, didUpdateLanState isActive: Bool) {
+        self.update()
+    }
 }
