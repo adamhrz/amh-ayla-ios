@@ -522,7 +522,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# please install ruby gem \"jazzy\" first by #sudo gem install jazzy\ncommand -v jazzy >/dev/null 2>&1 || {\n    echo \"Please install jazzy by: $ sudo gem install jazzy\"\n    exit 1\n}\njazzy --swift-version 2.1.1\nopen \"${PROJECT_DIR}/docs/index.html\"";
+			shellScript = "# please install ruby gem \"jazzy\" first by #sudo gem install jazzy\ncommand -v jazzy >/dev/null 2>&1 || {\n    echo \"Please install jazzy by: $ sudo gem install jazzy\"\n    exit 1\n}\njazzy\nopen \"${PROJECT_DIR}/docs/index.html\"";
 		};
 		25F6372F996D988D3A776A9B /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
