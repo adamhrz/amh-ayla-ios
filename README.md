@@ -1,5 +1,5 @@
 #Aura
-##Ayla Networks iOS Demo Application
+####Ayla Networks' iOS Demo Application
 
 #Getting Started
 The following steps should be run in Terminal.
@@ -45,6 +45,6 @@ AppleDoc for the libraries is available. After the Pods are installed, follow th
 
 #Release Notes
 
-5.0.00    04/21/16
+v5.0.00    2016-04-22
 ------
-initial release
+-initial release
