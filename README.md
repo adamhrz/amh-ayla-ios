@@ -38,10 +38,10 @@ AppleDoc for the libraries is available. After the Pods are installed, follow th
 
 ##Dependencies
 
-- AFNetworking
-- CocoaAsyncSocket
-- CocoaHTTPServer
-- SocketRocket
+- AFNetworking ([License](https://github.com/AFNetworking/AFNetworking/blob/master/LICENSE))
+- CocoaAsyncSocket ([License](https://github.com/robbiehanson/CocoaAsyncSocket/wiki/License))
+- CocoaHTTPServer ([License](https://github.com/robbiehanson/CocoaHTTPServer/blob/master/LICENSE.txt))
+- SocketRocket ([License](https://github.com/square/SocketRocket/blob/master/LICENSE))
 
 #Release Notes
 
