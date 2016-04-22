@@ -37,7 +37,7 @@ class LoginViewController: UIViewController {
      Login
      */
     func autoLogin() {
-        let settings = AylaSystemSettings.defaultSystemSettings()
+        let settings = AylaNetworks.shared().systemSettings
         let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
         let password = SSKeychain.passwordForService(settings.appId, account: username)
         self.usernameTextField.text = username
@@ -60,7 +60,7 @@ class LoginViewController: UIViewController {
             
             self.dismissKeyboard()
             
-            let settings = AylaSystemSettings.defaultSystemSettings()
+            let settings = AylaNetworks.shared().systemSettings
             let username = usernameTextField.text!
             let password = passwordTextField.text!
             // Create auth provider with user input.

@@ -27,7 +27,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     }
 
     func logout() {
-        let settings = AylaSystemSettings.defaultSystemSettings()
+        let settings = AylaNetworks.shared().systemSettings
         let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
         SSKeychain.deletePasswordForService(settings.appId, account: username)
         if let manager = sessionManager {
