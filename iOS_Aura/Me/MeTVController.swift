@@ -7,6 +7,7 @@
 import MessageUI
 import UIKit
 import iOS_AylaSDK
+import CoreTelephony
 
 class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate {
     
@@ -52,6 +53,18 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
+    func getDeviceModel () -> String? {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let modelCode = withUnsafeMutablePointer(&systemInfo.machine) {
+            ptr in String.fromCString(UnsafePointer<CChar>(ptr))
+        }
+        return modelCode
+    }
+    func removeOptionalStrings(inputText :String) -> String {
+        return inputText.stringByReplacingOccurrencesOfString("Optional(\"", withString: "").stringByReplacingOccurrencesOfString("\")", withString: "")
+    }
+    
     func emailLogs() {
         let mailVC = MFMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
@@ -59,7 +72,17 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                 let data = NSData(contentsOfFile: filePath)
                 mailVC.setToRecipients([AylaNetworks.getSupportEmailAddress()])
                 mailVC.setSubject("iOS SDK Log (\(AylaNetworks.getVersion()))")
-                mailVC.setMessageBody("Add your feedback:", isHTML: false)
+                
+                let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+                let carrier = CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName
+                let deviceModel = self.getDeviceModel()
+                let osVersion = UIDevice.currentDevice().systemVersion
+                let country = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as! String
+                let language = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
+                
+                var emailMessageBody = "Latest logs from Aura app attached\n\nDevice Model: \(deviceModel)\nOS Version: \(osVersion)\nCountry: \(country)\nLanguage: \(language)\nNetwork Operator: \(carrier)\nAyla SDK version: \(AYLA_SDK_VERSION)\nAura app version: \(appVersion)"
+                emailMessageBody = self.removeOptionalStrings(emailMessageBody)
+                mailVC.setMessageBody(emailMessageBody, isHTML: false)
                 if data != nil {
                     mailVC.addAttachmentData(data!, mimeType: "application/plain", fileName: "sdk_log")
                 }
