@@ -61,6 +61,9 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
         return modelCode
     }
+    func removeOptionalStrings(inputText :String) -> String {
+        return inputText.stringByReplacingOccurrencesOfString("Optional(\"", withString: "").stringByReplacingOccurrencesOfString("\")", withString: "")
+    }
     
     func emailLogs() {
         let mailVC = MFMailComposeViewController()
@@ -77,7 +80,8 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                 let country = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as! String
                 let language = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
                 
-                let emailMessageBody = "Latest logs from Aura app attached\n\nDevice Model: \(deviceModel)\nOS Version: \(osVersion)\nCountry: \(country)\nLanguage: \(language)\nNetwork Operator: \(carrier)\nAyla SDK version: \(AYLA_SDK_VERSION)\nAura app version: \(appVersion)"
+                var emailMessageBody = "Latest logs from Aura app attached\n\nDevice Model: \(deviceModel)\nOS Version: \(osVersion)\nCountry: \(country)\nLanguage: \(language)\nNetwork Operator: \(carrier)\nAyla SDK version: \(AYLA_SDK_VERSION)\nAura app version: \(appVersion)"
+                emailMessageBody = self.removeOptionalStrings(emailMessageBody)
                 mailVC.setMessageBody(emailMessageBody, isHTML: false)
                 if data != nil {
                     mailVC.addAttachmentData(data!, mimeType: "application/plain", fileName: "sdk_log")
