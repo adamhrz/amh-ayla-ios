@@ -6,6 +6,8 @@
 
 import UIKit
 import iOS_AylaSDK
+import PDKeychainBindingsController
+import SSKeychain
 
 class LoginViewController: UIViewController {
 
@@ -25,10 +27,27 @@ class LoginViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.autoLogin()
+    }
   
     /**
      Login
      */
+    func autoLogin() {
+        let settings = AylaNetworks.shared().systemSettings
+        let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
+        let password = SSKeychain.passwordForService(settings.appId, account: username)
+        self.usernameTextField.text = username
+        self.passwordTextField.text = password
+        
+        if username?.characters.count > 0 && password?.characters.count > 0 {
+            login(self)
+        }
+    }
+    
     @IBAction func login(sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
@@ -41,14 +60,18 @@ class LoginViewController: UIViewController {
             
             self.dismissKeyboard()
             
+            let settings = AylaNetworks.shared().systemSettings
+            let username = usernameTextField.text!
+            let password = passwordTextField.text!
             // Create auth provider with user input.
-            let auth = AylaUsernameAuthProvider(username: usernameTextField.text!, password: passwordTextField.text!)
+            let auth = AylaUsernameAuthProvider(username: username, password: password)
             
             // Login with login manager
             self.presentLoading("Login...")
             let loginManager = AylaNetworks.shared().loginManager
             loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
-                
+                PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
+                SSKeychain.setPassword(password, forService: settings.appId, account: username)
                 self.dismissLoading(false, completion: { () -> Void in
                     // Once succeeded, present view controller in `Main` storyboard.
                     self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)

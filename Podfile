@@ -63,4 +63,6 @@ use_frameworks!
 target :iOS_Aura do
     pod 'iOS_AylaSDK',
     :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
+    pod 'SSKeychain'
+    pod 'PDKeychainBindingsController'
 end

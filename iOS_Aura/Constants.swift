@@ -9,3 +9,4 @@
 import Foundation
 
 let AuraSessionOneName = "SessionOne"
+let AuraUsernameKeychainKey = "AuraUsername"
