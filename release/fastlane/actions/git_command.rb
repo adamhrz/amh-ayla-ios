@@ -20,7 +20,7 @@ module Fastlane
       end
 
       def self.authors
-        ["AylaGene"]
+        ["AylaMobileRelease"]
       end
 
       def self.is_supported?(platform)
