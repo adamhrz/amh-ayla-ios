@@ -112,7 +112,7 @@
 		A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListTVController.swift; path = Device/Presentation/DeviceListTVController.swift; sourceTree = "<group>"; };
 		A7104ADD1C7AD04A007B1AB3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListViewModel.swift; path = Device/Model/DeviceListViewModel.swift; sourceTree = "<group>"; };
-		A7351C8A1C753C360073C73A /* iOS_Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7351C8A1C753C360073C73A /* Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351C8D1C753C370073C73A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7351C921C753C370073C73A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A7351C941C753C370073C73A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -295,7 +295,7 @@
 		A7351C8B1C753C360073C73A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A7351C8A1C753C360073C73A /* iOS_Aura.app */,
+				A7351C8A1C753C360073C73A /* Aura.app */,
 				A7351C9E1C753C370073C73A /* iOS_AuraTests.xctest */,
 				A7351CA91C753C370073C73A /* iOS_AuraUITests.xctest */,
 			);
@@ -397,7 +397,7 @@
 			);
 			name = iOS_Aura;
 			productName = iOS_Aura;
-			productReference = A7351C8A1C753C360073C73A /* iOS_Aura.app */;
+			productReference = A7351C8A1C753C360073C73A /* Aura.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A7351C9D1C753C370073C73A /* iOS_AuraTests */ = {
@@ -836,7 +836,7 @@
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -852,7 +852,7 @@
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
