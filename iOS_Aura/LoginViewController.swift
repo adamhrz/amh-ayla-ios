@@ -115,7 +115,7 @@ class LoginViewController: UIViewController {
         if (usernameTextField.text ?? "") == "" {
             usernameTextField.text = "CAN NOT BE BLANK"
         }
-        else if usernameTextField.text == AuraOptions.Backdoor {
+        else if usernameTextField.text == AuraOptions.EasterEgg {
             self.dismissKeyboard()
             self.performSegueWithIdentifier("RegionOptions", sender: nil)
         }
