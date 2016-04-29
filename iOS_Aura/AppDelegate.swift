@@ -55,6 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             settings.appId = AuraOptions.AppIdCN
             settings.appSecret = AuraOptions.AppSecretCN
         }
+        else if settings.serviceLocation == .EU {
+            settings.appId = AuraOptions.AppIdEU
+            settings.appSecret = AuraOptions.AppSecretEU
+        }
         else {
             settings.appId = AuraOptions.AppIdUS
             settings.appSecret = AuraOptions.AppSecretUS

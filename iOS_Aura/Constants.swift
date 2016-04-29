@@ -20,6 +20,9 @@ struct AuraOptions {
     static let AppIdCN     = "aura_0dfc7900-cn-id"
     static let AppSecretCN = "aura_0dfc7900-cn-he7ncN42HIKZwugpftx-Y_qeWqw"
     
+    static let AppIdEU     = "aura_0dfc7900-eu-id"
+    static let AppSecretEU = "aura_0dfc7900-eu-KfOrfhadpSZcjr_dgmpQlC5MoU0"
+    
     static let KeyServiceLocation = "service_location"
     static let KeyServiceType     = "service_type"
 }

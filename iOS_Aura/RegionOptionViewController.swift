@@ -70,7 +70,11 @@ class RegionOptionViewController: UITableViewController {
             self.settings.appId = AuraOptions.AppIdCN
             self.settings.appSecret = AuraOptions.AppSecretCN
         }
-        else { // TODO: No EU app id yet
+        else if self.settings.serviceLocation == .EU {
+            self.settings.appId = AuraOptions.AppIdEU
+            self.settings.appSecret = AuraOptions.AppSecretEU
+        }
+        else {
             self.settings.appId = AuraOptions.AppIdUS
             self.settings.appSecret = AuraOptions.AppSecretUS
         }
