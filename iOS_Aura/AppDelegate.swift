@@ -19,9 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Setup core manager
         let settings = AylaSystemSettings.defaultSystemSettings()
         // Setup app id/secret
-        settings.serviceType = .Development
-        settings.appId = "aura_0dfc7900-id"
-        settings.appSecret = "aura_0dfc7900-eUo-3Se7R25Z_QLeEiXqYkQDUNA"
+        setupAuraOptions(settings)
 
         // Set device detail provider
         settings.deviceDetailProvider = DeviceDetailProvider()
@@ -38,6 +36,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().tintColor = UIColor.auraTintColor()
         
         return true
+    }
+    
+    func setupAuraOptions(settings: AylaSystemSettings) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let type = defaults.integerForKey(AuraOptions.KeyServiceType)
+        if type == 0 { // 0 == AylaServiceType.Dynamic
+            settings.serviceType = .Development
+        }
+        else {
+            settings.serviceType = AylaServiceType(rawValue: UInt16(type)) ?? .Development
+        }
+        
+        let location = defaults.integerForKey(AuraOptions.KeyServiceLocation)
+        settings.serviceLocation = AylaServiceLocation(rawValue: UInt16(location)) ?? .US
+        
+        if settings.serviceLocation == .CN {
+            settings.appId = AuraOptions.AppIdCN
+            settings.appSecret = AuraOptions.AppSecretCN
+        }
+        else if settings.serviceLocation == .EU {
+            settings.appId = AuraOptions.AppIdEU
+            settings.appSecret = AuraOptions.AppSecretEU
+        }
+        else {
+            settings.appId = AuraOptions.AppIdUS
+            settings.appSecret = AuraOptions.AppSecretUS
+        }
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {

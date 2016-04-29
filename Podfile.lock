@@ -42,18 +42,18 @@ PODS:
   - SSKeychain (1.4.0)
 
 DEPENDENCIES:
-  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `release/5.0.00`)
+  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `develop`)
   - PDKeychainBindingsController
   - SSKeychain
 
 EXTERNAL SOURCES:
   iOS_AylaSDK:
-    :branch: release/5.0.00
+    :branch: develop
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 CHECKOUT OPTIONS:
   iOS_AylaSDK:
-    :commit: 14771f9126dee7bdb2c82fe2baf7250e66469ee9
+    :commit: d3fe59995d440a242e52bbaa657e0ede27180cb5
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 SPEC CHECKSUMS:
