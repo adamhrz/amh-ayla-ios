@@ -12,7 +12,7 @@ let AuraSessionOneName = "SessionOne"
 let AuraUsernameKeychainKey = "AuraUsername"
 
 struct AuraOptions {
-    static let Backdoor    = "aylarocks"
+    static let EasterEgg    = "aylarocks"
 
     static let AppIdUS     = "aura_0dfc7900-id"
     static let AppSecretUS = "aura_0dfc7900-eUo-3Se7R25Z_QLeEiXqYkQDUNA"
