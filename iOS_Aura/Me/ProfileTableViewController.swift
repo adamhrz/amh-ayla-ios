@@ -40,7 +40,7 @@ class ProfileTableViewController: UITableViewController {
                 sessionManager?.updateUserEmailAddress(newEmail,
                 success: {
                     let successAlert = UIAlertController(title: "Success",
-                        message: "Your Email has been updated.  A new Email will be required to log in again.",
+                        message: "Your Email has been updated.  A new email address will be required to log in again.",
                         preferredStyle: UIAlertControllerStyle.Alert)
                     let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
                         
@@ -59,7 +59,7 @@ class ProfileTableViewController: UITableViewController {
         }
         
         // show error
-        UIAlertController.alert("Error", message: "Please input a valid Email address", buttonTitle: "OK", fromController: self)
+        UIAlertController.alert("Error", message: "Please input a valid email address", buttonTitle: "OK", fromController: self)
     }
     
     @IBAction func updatePasswordAction(sender: AnyObject) {
