@@ -40,7 +40,7 @@ class ProfileTableViewController: UITableViewController {
                 sessionManager?.updateUserEmailAddress(newEmail,
                 success: {
                     let successAlert = UIAlertController(title: "Success",
-                        message: "Your Email has been updated.  A new email address will be required to log in again.",
+                        message: "Your email address has been changed.  The new email address will be required to log in.",
                         preferredStyle: UIAlertControllerStyle.Alert)
                     let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
                         
