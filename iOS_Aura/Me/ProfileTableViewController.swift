@@ -16,6 +16,7 @@ class ProfileTableViewController: UITableViewController {
     let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
     
     @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var newEmailTextField: UITextField!
     
     @IBOutlet weak var currentPasswordTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -32,6 +33,34 @@ class ProfileTableViewController: UITableViewController {
     @IBOutlet weak var zipTextField: UITextField!
     @IBOutlet weak var countryTextField: UITextField!
     @IBOutlet weak var devKitNumTextField: UITextField!
+    
+    @IBAction func updateEmailAction(sender: AnyObject) {
+        if let newEmail = newEmailTextField.text {
+            if newEmail.isEmail {
+                sessionManager?.updateUserEmailAddress(newEmail,
+                success: {
+                    let successAlert = UIAlertController(title: "Success",
+                        message: "Your email address has been changed.  The new email address will be required to log in.",
+                        preferredStyle: UIAlertControllerStyle.Alert)
+                    let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+                        
+                        PDKeychainBindings.sharedKeychainBindings().setString(newEmail, forKey: AuraUsernameKeychainKey)
+                        
+                        self.backOutToLoginScreen()
+                    })
+                    successAlert.addAction(successOkAction)
+                    self.presentViewController(successAlert, animated: true, completion: nil)
+                },
+                failure: { error in
+                    UIAlertController.alert("Error", message: error.localizedDescription, buttonTitle: "OK", fromController: self)
+                })
+                return
+            }
+        }
+        
+        // show error
+        UIAlertController.alert("Error", message: "Please input a valid email address", buttonTitle: "OK", fromController: self)
+    }
     
     @IBAction func updatePasswordAction(sender: AnyObject) {
         if self.currentPasswordTextField.text?.characters.count == 0 || self.passwordTextField.text?.characters.count == 0 || self.confirmPasswordTextField.text?.characters.count == 0 {
