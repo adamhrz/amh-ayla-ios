@@ -20,6 +20,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     /// Segue id to test view
     let segueIdToLanTestView: String = "toLanModeTest"
     
+    /// Segue id to schedules view
+    let segueIdToSchedules: String = "toSchedules"
+    
     /// Device which is represented on this device view.
     var device :AylaDevice?
     
@@ -102,6 +105,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     // MARK - Options
     func showOptions() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let schedules = UIAlertAction(title: "Schedules", style: .Default) { (action) in
+            self.performSegueWithIdentifier(self.segueIdToSchedules, sender: nil)
+        }
         let autoTest = UIAlertAction(title: "AutoTest", style: .Default) { (action) in
             self.performSegueWithIdentifier(self.segueIdToLanTestView, sender: nil)
         }
@@ -112,6 +118,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             self.unregister()
         }
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
+        alert.addAction(schedules)
         alert.addAction(autoTest)
         alert.addAction(rename)
         alert.addAction(cancel)
@@ -149,6 +156,10 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             let nvc = segue.destinationViewController as! UINavigationController
             let vc = nvc.viewControllers[0] as! TestPanelViewController
             vc.testModel = LanModeTestModel(testPanelVC: vc, deviceManager: device?.deviceManager, device: device)
+        }
+        if segue.identifier == segueIdToSchedules {
+            let vc = segue.destinationViewController as! ScheduleTableViewController
+            vc.device = device
         }
     }
     
