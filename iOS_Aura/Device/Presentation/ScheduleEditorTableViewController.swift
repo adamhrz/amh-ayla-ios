@@ -60,8 +60,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     }
     
     func updateUI() {
-        let onDate = dateFormatter.dateFromString(schedule.startDate ?? "")
-        onDatePicker.date = onDate ?? NSDate()
+        onDatePicker.date = dateFormatter.dateFromString(schedule.startDate ?? "") ?? NSDate()
         onTimeDatePicker.date = timeFormatter.dateFromString(schedule.startTimeEachDay ?? "") ?? NSDate()
         offDatePicker.date = dateFormatter.dateFromString(schedule.endDate ?? "") ?? NSDate()
         offTimeDatePicker.date = timeFormatter.dateFromString(schedule.endTimeEachDay ?? "") ?? NSDate()
@@ -96,22 +95,32 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     }
     
     @IBAction func saveAction(sender: UIButton) {
+        let calendar = NSCalendar.currentCalendar()
+        
         let startDate = dateFormatter.stringFromDate(onDatePicker.date)
-        let startTime = timeFormatter.stringFromDate(onTimeDatePicker.date)
+        var startTimeDate : NSDate?
+        // remove seconds
+        calendar.rangeOfUnit(.Minute, startDate: &startTimeDate, interval: nil, forDate: onTimeDatePicker.date)
+        let startTime = timeFormatter.stringFromDate(startTimeDate!)
+        
         let endDate = dateFormatter.stringFromDate(offDatePicker.date)
-        let endTime = timeFormatter.stringFromDate(offTimeDatePicker.date)
+        var endTimeDate : NSDate?
+        // remove seconds
+        calendar.rangeOfUnit(.Minute, startDate: &endTimeDate, interval: nil, forDate: offTimeDatePicker.date)
+        let endTime = timeFormatter.stringFromDate(endTimeDate!)
+        
         
         schedule.displayName = displayNameTextField.text
         schedule.startDate = startDate
         schedule.startTimeEachDay = startTime
-        schedule.endDate =  repeatType == .Daily ? nil : endDate
+        schedule.endDate =  repeatType == .Daily ? "" : endDate //use "" temporarily since lib currently doesn't pass nil info to cloud
         schedule.endTimeEachDay = endTime
         
         switch repeatType {
         case .None:
-            schedule.dayOccurOfMonth = nil
-            schedule.daysOfMonth = nil
-            schedule.daysOfWeek = nil
+            schedule.dayOccurOfMonth = []
+            schedule.daysOfMonth = []
+            schedule.daysOfWeek = []
         case .Weekdays:
             schedule.daysOfWeek = Array(2...6) // monday through friday
         case .Weekends:
