@@ -42,18 +42,17 @@ PODS:
   - SSKeychain (1.4.0)
 
 DEPENDENCIES:
-  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `feature/IAML-114_lat_long`)
+  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `develop`)
   - PDKeychainBindingsController
   - SSKeychain
 
 EXTERNAL SOURCES:
   iOS_AylaSDK:
-    :branch: feature/IAML-114_lat_long
+    :branch: develop
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 CHECKOUT OPTIONS:
   iOS_AylaSDK:
-    :commit: ec3c983cdcee713fc69022fdaedb86c07cb0e3c1
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 SPEC CHECKSUMS:
