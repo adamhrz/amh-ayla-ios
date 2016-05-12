@@ -84,6 +84,7 @@ class ScheduleTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == segueToScheduleEditorId) {
             let scheduleEditorController = segue.destinationViewController as! ScheduleEditorTableViewController
+            scheduleEditorController.device = device
             scheduleEditorController.schedule = sender as! AylaSchedule
         }
     }
