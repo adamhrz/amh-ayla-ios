@@ -24,13 +24,13 @@ PODS:
   - CocoaHTTPServer (2.3):
     - CocoaAsyncSocket
     - CocoaLumberjack
-  - CocoaLumberjack (2.2.0):
-    - CocoaLumberjack/Default (= 2.2.0)
-    - CocoaLumberjack/Extensions (= 2.2.0)
-  - CocoaLumberjack/Core (2.2.0)
-  - CocoaLumberjack/Default (2.2.0):
+  - CocoaLumberjack (2.3.0):
+    - CocoaLumberjack/Default (= 2.3.0)
+    - CocoaLumberjack/Extensions (= 2.3.0)
+  - CocoaLumberjack/Core (2.3.0)
+  - CocoaLumberjack/Default (2.3.0):
     - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.2.0):
+  - CocoaLumberjack/Extensions (2.3.0):
     - CocoaLumberjack/Default
   - iOS_AylaSDK (5.0.00):
     - AFNetworking (~> 3.0)
@@ -38,32 +38,32 @@ PODS:
     - CocoaHTTPServer (~> 2.3)
     - SocketRocket (~> 0.4)
   - PDKeychainBindingsController (0.0.1)
-  - SocketRocket (0.5.0)
+  - SocketRocket (0.5.1)
   - SSKeychain (1.4.0)
 
 DEPENDENCIES:
-  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `develop`)
+  - iOS_AylaSDK (from `https://github.com/AylaNetworks/iOS_AylaSDK.git`, branch `feature/IAML-114_lat_long`)
   - PDKeychainBindingsController
   - SSKeychain
 
 EXTERNAL SOURCES:
   iOS_AylaSDK:
-    :branch: develop
+    :branch: feature/IAML-114_lat_long
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 CHECKOUT OPTIONS:
   iOS_AylaSDK:
-    :commit: d3fe59995d440a242e52bbaa657e0ede27180cb5
+    :commit: ec3c983cdcee713fc69022fdaedb86c07cb0e3c1
     :git: https://github.com/AylaNetworks/iOS_AylaSDK.git
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   CocoaAsyncSocket: a18c75dca4b08723628a0bacca6e94803d90be91
   CocoaHTTPServer: 5624681fc3473d43b18202f635f9b3abb013b530
-  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  iOS_AylaSDK: 650a267d8aacbbf475829ec55538fbb20b0de917
+  CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
+  iOS_AylaSDK: 4ba5370311d2f5855f00b79b83b623961b7f4878
   PDKeychainBindingsController: fa8cb3cf99f2ea9240d61066ed0549f34e2cec3c
-  SocketRocket: 2c51efccd2d73c99a923407ca4b06e7e9da95dbf
+  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   SSKeychain: c71293fa57216a40ab06c23f4085387583293de4
 
 COCOAPODS: 0.39.0
