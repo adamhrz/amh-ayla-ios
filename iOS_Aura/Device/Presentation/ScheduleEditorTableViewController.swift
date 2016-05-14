@@ -141,7 +141,8 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             self.saveScheduleButton.enabled = true
         }) { (error) -> Void in
             self.saveScheduleButton.enabled = true
-            UIAlertController.alert("Error", message: "Could not save schedule", buttonTitle: "OK", fromController: self)
+            UIAlertController.alert("Error", message: "Could not save schedule(\(error.code))", buttonTitle: "OK", fromController: self)
+            print("Failed to create schedule \(error)")
         }
     }
 }
