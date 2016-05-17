@@ -17,6 +17,9 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     /// Segue id to property view
     let segueIdToRegisterView :String = "toRegisterPage"
     
+    /// Segue id to Shares List view
+    let segueIdToSharesView :String = "toSharesPage"
+    
     /// The session manager which retains device manager of device list showing on this table view.
     var sessionManager :AylaSessionManager?
     
@@ -28,8 +31,8 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
 
         sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
         
-        if (sessionManager != nil) {
-            viewModel = DeviceListViewModel(deviceManager: sessionManager!.deviceManager, tableView: tableView)
+        if let sessionManager = sessionManager {
+            viewModel = DeviceListViewModel(deviceManager: sessionManager.deviceManager, tableView: tableView)
             viewModel?.delegate = self
         }
         else {
@@ -46,13 +49,13 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
 
     @IBAction func rightBarButtonTapped(sender: AnyObject) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Register", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            
+        actionSheet.addAction(UIAlertAction(title: "Register a Device", style: .Default, handler: { (action) -> Void in
             self.performSegueWithIdentifier(self.segueIdToRegisterView, sender: nil)
-            
         }))
-        
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "View Device Shares", style: .Default, handler: { (action) -> Void in
+            self.performSegueWithIdentifier(self.segueIdToSharesView, sender: nil)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
@@ -74,6 +77,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
             if let device = sender as? AylaDevice {
                 let vc = segue.destinationViewController as! DeviceViewController
                 vc.device = device
+                vc.sharesModel = self.viewModel?.sharesModel
             }
         }
     }

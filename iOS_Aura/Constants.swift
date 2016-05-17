@@ -11,6 +11,10 @@ import Foundation
 let AuraSessionOneName = "SessionOne"
 let AuraUsernameKeychainKey = "AuraUsername"
 
+struct AuraNotifications {
+    static let SharesChanged = "DeviceSharesChangedNotification"
+}
+
 struct AuraOptions {
     static let EasterEgg    = "aylarocks"
 

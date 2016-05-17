@@ -23,6 +23,8 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     
     /// Devices which are being represented in table view.
     var devices : [ AylaDevice ]
+    
+    var sharesModel : DeviceSharesModel?
 
     weak var delegate: DeviceListViewModelDelegate?
     
@@ -38,6 +40,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         self.tableView = tableView
 
         super.init()
+        self.sharesModel = DeviceSharesModel(deviceManager: deviceManager)
         
         // Add self as device manager listener
         deviceManager.addListener(self)
