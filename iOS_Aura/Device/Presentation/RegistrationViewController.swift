@@ -17,6 +17,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     enum Section :Int {
         case SameLan
         case ButtonPush
+        case Display
         case SectionCount
     }
     
@@ -24,6 +25,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     var sessionManager :AylaSessionManager?
     var candidateSameLan :AylaRegistrationCandidate?
     var candidateButtonPush :AylaRegistrationCandidate?
+    var candidateDisplay :AylaRegistrationCandidate?
     
     
     let RegistrationCellId :String = "CandidateCellId"
@@ -67,6 +69,9 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         case Section.ButtonPush.rawValue:
             candidate = candidateButtonPush;
             break
+        case Section.Display.rawValue:
+            candidate = candidateDisplay;
+            break
         default:
             break
         }
@@ -93,6 +98,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         
             let aGroup = dispatch_group_create()
             
+            dispatch_group_enter(aGroup)
             dispatch_group_enter(aGroup)
             dispatch_group_enter(aGroup)
             
@@ -144,6 +150,30 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     dispatch_group_leave(aGroup)
             })
             
+            reg.fetchCandidateWithDSN(nil, registrationType: .Display, success: { (candidate) in
+                self.candidateDisplay = candidate
+                self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.Display.rawValue, 1)), withRowAnimation: .Automatic)
+                dispatch_group_leave(aGroup)
+                }, failure: { (error) in
+                    self.candidateDisplay = nil;
+                    self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.Display.rawValue, 1)), withRowAnimation: .Automatic)
+                    
+                    //Skip 404 for now
+                    if let httpResp = error.userInfo[AylaHTTPErrorHTTPResponseKey] as? NSHTTPURLResponse {
+                        if(httpResp.statusCode != 404) {
+                            self.addLog("Display - " + error.description)
+                        }
+                        else  {
+                            self.addLog("No Display Mode candidate")
+                        }
+                    }
+                    else {
+                        self.addLog("Display - " + error.description)
+                    }
+                    
+                    dispatch_group_leave(aGroup)
+            })
+
             dispatch_group_notify(aGroup, dispatch_get_main_queue(), {
                 self.updatePrompt(nil)
             })
@@ -157,6 +187,24 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     func updatePrompt(prompt: String?) {
         self.navigationController?.navigationBar.topItem?.prompt = prompt
         addLog(prompt ?? "done")
+    }
+    
+    
+    func coordinatesFromStrings(latString: String?, lngString: String?) -> (latitude: NSNumber?, longitude: NSNumber)? {
+        if latString == nil || lngString == nil || latString?.characters.count < 1 || lngString?.characters.count < 1 {
+            return nil
+        }
+        var latitude :NSNumber
+        var longitude :NSNumber
+        
+        if let latDouble = Double(latString!), lngDouble = Double(lngString!) {
+            if case (-180...180, -180...180) = (latDouble, lngDouble) {
+                longitude = NSNumber(double:lngDouble)
+                latitude = NSNumber(double:latDouble)
+                return (latitude, longitude)
+            }
+        }
+        return nil
     }
     
     // MARK - Table view delegate / data source
@@ -174,6 +222,8 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             case Section.ButtonPush.rawValue:
                 cell?.configure(candidateButtonPush)
                 break
+            case Section.Display.rawValue:
+                cell?.configure(candidateDisplay)
             default:
                 cell?.configure(nil)
             }
@@ -191,6 +241,8 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             return Int(candidateSameLan != nil);
         case Section.ButtonPush.rawValue:
             return Int(candidateButtonPush != nil);
+        case Section.Display.rawValue:
+            return Int(candidateDisplay != nil);
         default:
             return 0;
         }
@@ -202,28 +254,71 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             return "Same LAN Candidate"
         case Section.ButtonPush.rawValue:
             return "Button Push Candidate"
+        case Section.Display.rawValue:
+            return "Display Mode Candidate"
         default:
             return "";
         }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        var tokenTextField = UITextField()
+        var latitudeTextField = UITextField()
+        var longitudeTextField = UITextField()
         
-        let alert = UIAlertController(title: nil, message: "Register this device?", preferredStyle: .Alert)
-        let register = UIAlertAction(title: "Register", style: .Default) { (action) in
+        let message = indexPath.section == Section.Display.rawValue ? "Please find the registration token and enter it below to continue\n\n You may also set the coordinates for the device's location if you wish." : "You may set the coordinates for the device's location here if you wish."
+        let alert = UIAlertController(title: "Register this device?", message: message, preferredStyle: .Alert)
+        let registerAction = UIAlertAction(title: "Register", style: .Default) { (action) in
             
             if let candidate = self.getCandidate(indexPath) {
+                if indexPath.section == Section.Display.rawValue {
+                    let token = tokenTextField.text
+                    
+                    if token == nil || token!.characters.count < 1 {
+                        UIAlertController.alert("Error", message: "You must provide a registration token to register a Display Mode device.", buttonTitle: "OK",fromController: self)
+                        return
+                    }
+                    
+                    candidate.registrationToken = token
+                }
+                if let (lat, long) = self.coordinatesFromStrings(latitudeTextField.text, lngString: longitudeTextField.text){
+                    candidate.lat = lat!.doubleValue
+                    candidate.lng = long.doubleValue
+                    let message = String(format:"Adding Latitude: %f and longitude: %f to registration candidate", lat!.doubleValue, long.doubleValue)
+                    print(message)
+                    self.addLog(message)
+                }
                 self.register(candidate)
             }
             else {
                 self.updatePrompt("Internal error")
             }
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-            
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
         }
-        alert.addAction(cancel)
-        alert.addAction(register)
+        if indexPath.section == Section.Display.rawValue {
+            alert.addTextFieldWithConfigurationHandler({ (textField) in
+                textField.placeholder = "Registration Token"
+                textField.tintColor = UIColor.auraLeafGreenColor()
+                tokenTextField = textField
+            })
+        }
+        alert.addTextFieldWithConfigurationHandler({ (textField) in
+            textField.placeholder = "Latitude (optional)"
+            textField.tintColor = UIColor.auraLeafGreenColor()
+            textField.keyboardType = UIKeyboardType.DecimalPad
+            latitudeTextField = textField
+        })
+        alert.addTextFieldWithConfigurationHandler({ (textField) in
+            textField.placeholder = "Longitude (optional)"
+            textField.tintColor = UIColor.auraLeafGreenColor()
+            textField.keyboardType = UIKeyboardType.DecimalPad
+            longitudeTextField = textField
+        })
+        
+        alert.addAction(cancelAction)
+        alert.addAction(registerAction)
         presentViewController(alert, animated: true, completion: nil)
     }
     
