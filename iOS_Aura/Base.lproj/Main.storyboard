@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m9m-D0-krJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m9m-D0-krJ">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -10,17 +10,17 @@
         <!--DeviceListTVController-->
         <scene sceneID="MFN-t8-7h1">
             <objects>
-                <tableViewController title="DeviceListTVController" id="MIH-kN-Jtd" customClass="DeviceListTVController" customModule="iOS_Aura" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="DeviceListTVController" id="MIH-kN-Jtd" customClass="DeviceListTVController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="76" sectionHeaderHeight="28" sectionFooterHeight="28" id="T7E-vf-2Jj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DeviceCell2Id" rowHeight="76" id="jqz-lj-Iqz" customClass="DeviceTVCell" customModule="iOS_Aura" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DeviceCell2Id" rowHeight="76" id="jqz-lj-Iqz" customClass="DeviceTVCell" customModule="Aura" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="600" height="76"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jqz-lj-Iqz" id="uUZ-St-QUP">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="75.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lAa-L9-ZgB">
@@ -102,11 +102,11 @@
                                     <outlet property="oemModelLabel" destination="pEy-xa-F80" id="5f9-v0-qCQ"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DeviceCellId" rowHeight="76" id="EVK-ve-aM3" customClass="DeviceTVCell" customModule="iOS_Aura" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DeviceCellId" rowHeight="76" id="EVK-ve-aM3" customClass="DeviceTVCell" customModule="Aura" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="168" width="600" height="76"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EVK-ve-aM3" id="sJA-F3-d9v">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="75"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="75.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.90000000000000002" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gvb-gw-Bcl">
@@ -199,6 +199,14 @@
             </objects>
             <point key="canvasLocation" x="861" y="-376"/>
         </scene>
+        <!--Schedules-->
+        <scene sceneID="bRj-xL-nuM">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Schedules" id="uzZ-yf-R44" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mbp-66-LDy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2170.5" y="-817"/>
+        </scene>
         <!--Test-->
         <scene sceneID="jDy-PM-ktL">
             <objects>
@@ -210,7 +218,7 @@
         <!--Property View Controller-->
         <scene sceneID="3QD-rl-W4S">
             <objects>
-                <viewController storyboardIdentifier="toPropertyView" id="aPG-sC-KdD" customClass="PropertyViewController" customModule="iOS_Aura" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="toPropertyView" id="aPG-sC-KdD" customClass="PropertyViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PKN-05-aLS"/>
                         <viewControllerLayoutGuide type="bottom" id="1ck-vM-3Bh"/>
@@ -322,7 +330,7 @@
         <!--Device View Controller-->
         <scene sceneID="1Vj-Kv-fec">
             <objects>
-                <viewController id="crI-FA-vre" customClass="DeviceViewController" customModule="iOS_Aura" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="crI-FA-vre" customClass="DeviceViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ou6-Nx-vXq"/>
                         <viewControllerLayoutGuide type="bottom" id="12P-gg-0nP"/>
@@ -331,7 +339,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ubm-gd-mCl" customClass="DevicePanelView" customModule="iOS_Aura" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ubm-gd-mCl" customClass="DevicePanelView" customModule="Aura" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="600" height="190"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ebP-an-ueG">
@@ -539,7 +547,7 @@
                                                 <constraint firstAttribute="height" constant="1" id="GSG-bi-KHW"/>
                                             </constraints>
                                         </view>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Are-3P-WiR" customClass="AuraTextButton" customModule="iOS_Aura" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Are-3P-WiR" customClass="AuraTextButton" customModule="Aura" customModuleProvider="target">
                                             <rect key="frame" x="233" y="7" width="135" height="30"/>
                                             <state key="normal" title="Fetch All Properties"/>
                                             <connections>
@@ -557,11 +565,11 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ExpandedPropertyCellId" rowHeight="75" id="u5t-DO-Ws2" customClass="PropertyTVCell" customModule="iOS_Aura" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ExpandedPropertyCellId" rowHeight="75" id="u5t-DO-Ws2" customClass="PropertyTVCell" customModule="Aura" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="72" width="600" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="u5t-DO-Ws2" id="T65-Yx-hcu">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="74"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="74.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BoS-1U-8eW" userLabel="Name View">
@@ -713,11 +721,11 @@
                                             <outlet property="valueView" destination="uIC-TH-awz" id="7wJ-iS-2gL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PropertyCellId" rowHeight="52" id="goL-au-AVU" customClass="PropertyTVCell" customModule="iOS_Aura" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PropertyCellId" rowHeight="52" id="goL-au-AVU" customClass="PropertyTVCell" customModule="Aura" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="147" width="600" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="goL-au-AVU" id="jIP-rc-vIc">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="51"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="51.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W0U-rH-BBw">
@@ -773,6 +781,7 @@
                         <outlet property="tableView" destination="Ap0-u1-kSG" id="ptA-gD-Aqn"/>
                         <segue destination="aPG-sC-KdD" kind="show" identifier="toPropertyView" id="RqI-EY-fwQ"/>
                         <segue destination="ncm-l0-4MD" kind="presentation" identifier="toLanModeTest" id="9Es-1s-UOl"/>
+                        <segue destination="uzZ-yf-R44" kind="show" identifier="toSchedules" id="uCB-Kf-9XP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6cj-Vr-Kay" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -843,7 +852,7 @@
         <!--Registration-->
         <scene sceneID="cyn-lX-ksc">
             <objects>
-                <viewController id="ifq-c2-Pds" customClass="RegistrationViewController" customModule="iOS_Aura" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ifq-c2-Pds" customClass="RegistrationViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="udp-om-jjw"/>
                         <viewControllerLayoutGuide type="bottom" id="E8l-Hg-KBT"/>
@@ -865,11 +874,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="388"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CandidateCellId" rowHeight="96" id="vXM-iR-NUq" customClass="RegistrationTVCell" customModule="iOS_Aura" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="600" height="96"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CandidateCellId" rowHeight="96" id="vXM-iR-NUq" customClass="RegistrationTVCell" customModule="Aura" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="49.5" width="600" height="96"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vXM-iR-NUq" id="Yd1-eT-soN">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="95"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="95.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zZn-GR-gGg">
