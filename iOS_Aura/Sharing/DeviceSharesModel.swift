@@ -89,27 +89,18 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
     
     func updateSharesList(successHandler: ((shares :[AylaShare]) -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
         deviceManager.sessionManager?.fetchReceivedSharesWithResourceName(AylaShareResourceNameDevice, resourceId: nil, expired: false, accepted: true, success: { (shares: [AylaShare]) in
-                /*if self.receivedShares == shares {
-                    print("Received Shares Update contains no changes.")
-                } else { */
-                    self.receivedShares = shares
-                    self.delegate?.deviceSharesModel(self, receivedSharesListDidUpdate: { (shares) in })
-                    if let successHandler = successHandler { successHandler(shares: shares) }
-            // }
-            
+                self.receivedShares = shares
+                self.delegate?.deviceSharesModel(self, receivedSharesListDidUpdate: { (shares) in })
+                if let successHandler = successHandler { successHandler(shares: shares) }
             }, failure: { (error :NSError) in
                 print("Failure to receive shares: $@", error.description)
                 if let failureHandler = failureHandler { failureHandler(error: error) }
             }
         )
         deviceManager.sessionManager?.fetchOwnedSharesWithResourceName(AylaShareResourceNameDevice, resourceId: nil, expired: false, accepted: true, success: { (shares: [AylaShare]) in
-            // if self.ownedShares == shares {
-            //       print("Owned Shares Update contains no changes.")
-            // } else {
-                    self.ownedShares = shares
-                    self.delegate?.deviceSharesModel(self, ownedSharesListDidUpdate: { (shares) in })
-                    if let successHandler = successHandler { successHandler(shares: shares) }
-            //   }
+                self.ownedShares = shares
+                self.delegate?.deviceSharesModel(self, ownedSharesListDidUpdate: { (shares) in })
+                if let successHandler = successHandler { successHandler(shares: shares) }
             }, failure: { (error :NSError) in
                 print("Failure to receive shares: $@", error.description)
                 if let failureHandler = failureHandler { failureHandler(error: error) }
@@ -138,7 +129,6 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
         else {
             // We don't remove self as listener from device manager removed devices.
         }
-        //self.updateSharesList(nil, failureHandler: nil)
         self.refreshDeviceList()
     }
     
