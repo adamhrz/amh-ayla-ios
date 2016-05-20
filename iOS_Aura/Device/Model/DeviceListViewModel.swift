@@ -113,6 +113,10 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         self.updateDeviceListFromDeviceManager()
     }
     
+    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
+        print("Change in deviceManager state: new state \(newState), was \(oldState)")
+    }
+    
     func device(device: AylaDevice, didObserveChange change: AylaChange) {
         if change.isKindOfClass(AylaDeviceChange) {
             // Not a good udpate strategy
