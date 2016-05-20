@@ -25,6 +25,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     enum SelectorMode :Int {
         case Display
         case DSN
+        case APMode
         case Manual
         case SectionCount
     }
@@ -41,7 +42,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     let RegistrationCellId :String = "CandidateCellId"
     let RegistrationDSNCellId :String = "CandidateDSNCellId"
     let RegistrationDisplayCellId :String = "CandidateDisplayCellId"
-    
+    let RegistrationAPModeCellId :String = "CandidateAPModeCellId"
     let RegistrationManualCellId :String = "CandidateManualCellId"
 
     let RegistrationModeSelectorCellId :String = "ModeSelectorCellId"
@@ -221,6 +222,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 }
                 return cell!;
             case 1:
+                
                 switch self.selectorIndex!{
                 case SelectorMode.Display.rawValue:
                     let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationDisplayCellId) as? RegistrationManualTVCell
@@ -229,6 +231,17 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 case SelectorMode.DSN.rawValue:
                     let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationDSNCellId) as? RegistrationManualTVCell
                     cell?.buttonDelegate = self
+                    return cell!;
+                case SelectorMode.APMode.rawValue:
+                    let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationAPModeCellId) as? RegistrationManualTVCell
+                    cell?.buttonDelegate = self
+                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    if let setupToken = appDelegate.setupToken {
+                        cell?.regTokenField!.text = setupToken
+                    }
+                    if let dsn = appDelegate.setupDSN {
+                        cell?.dsnField!.text = dsn
+                    }
                     return cell!;
                 case SelectorMode.Manual.rawValue:
                     let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationManualCellId) as? RegistrationManualTVCell
@@ -386,6 +399,24 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             let newCandidate = AylaRegistrationCandidate(dictionary: deviceDict)
             print("Candidate DSN: %@", newCandidate.dsn)
             newCandidate.registrationType = AylaRegistrationType.Dsn
+            candidateManual = newCandidate
+        case SelectorMode.APMode.rawValue:
+            let regCell = cell as! RegistrationManualTVCell
+            let setupToken = regCell.regTokenField!.text
+            if setupToken == nil || setupToken!.characters.count < 1 {
+                UIAlertController.alert("Error", message: "You must provide the setup token generated during Wi-Fi Setup in order to register an AP Mode device.", buttonTitle: "OK",fromController: self)
+                return
+            }
+            let dsn = regCell.dsnField!.text
+            if dsn == nil || dsn!.characters.count < 1 {
+                UIAlertController.alert("Error", message: "You must provide a DSN in order to register a DSN device.", buttonTitle: "OK",fromController: self)
+                return
+            }
+            let deviceDict = ["device":["dsn":dsn!]]
+            let newCandidate = AylaRegistrationCandidate(dictionary: deviceDict)
+            newCandidate.setupToken = setupToken
+            print("Candidate setupToken: %@", newCandidate.setupToken)
+            newCandidate.registrationType = AylaRegistrationType.APMode
             candidateManual = newCandidate
 
         case SelectorMode.Manual.rawValue:
