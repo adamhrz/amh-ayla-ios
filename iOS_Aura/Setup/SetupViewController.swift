@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import PDKeychainBindingsController
 import iOS_AylaSDK
 
 class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -184,9 +185,8 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             })
             alert.addAction(copyAction)
             alert.addAction(cancelAction)
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            appDelegate.setupToken = self.token
-            appDelegate.setupDSN = self.setup.setupDevice?.dsn
+            PDKeychainBindings.sharedKeychainBindings().setString(self.token, forKey: AuraDeviceSetupTokenKeychainKey)
+            PDKeychainBindings.sharedKeychainBindings().setString(self.setup.setupDevice?.dsn, forKey: AuraDeviceSetupDSNKeychainKey)
 
             self.presentViewController(alert, animated: true, completion: nil)
 

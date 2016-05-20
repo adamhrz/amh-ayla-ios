@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import PDKeychainBindingsController
 import iOS_AylaSDK
 import UIKit
 
@@ -105,6 +106,11 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         if let reg = sessionManager?.deviceManager.registration {
             updatePrompt("Registering...")
             reg.registerCandidate(candidate, success: { (AylaDevice) in
+                if candidate.registrationType == AylaRegistrationType.APMode {
+                    PDKeychainBindings.sharedKeychainBindings().removeObjectForKey(AuraDeviceSetupTokenKeychainKey)
+                    PDKeychainBindings.sharedKeychainBindings().removeObjectForKey(AuraDeviceSetupDSNKeychainKey)
+                    print("Removing AP Mode Device details from storage")
+                }
                     self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
                 }, failure: { (error) in
                     self.updatePrompt("Failed")
@@ -235,13 +241,14 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 case SelectorMode.APMode.rawValue:
                     let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationAPModeCellId) as? RegistrationManualTVCell
                     cell?.buttonDelegate = self
-                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                    if let setupToken = appDelegate.setupToken {
-                        cell?.regTokenField!.text = setupToken
-                    }
-                    if let dsn = appDelegate.setupDSN {
+                    
+                    if let dsn = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraDeviceSetupDSNKeychainKey) {
                         cell?.dsnField!.text = dsn
                     }
+                    if let token = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraDeviceSetupTokenKeychainKey) {
+                        cell?.regTokenField!.text = token
+                    }
+ 
                     return cell!;
                 case SelectorMode.Manual.rawValue:
                     let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationManualCellId) as? RegistrationManualTVCell
