@@ -11,6 +11,9 @@ import Foundation
 let AuraSessionOneName = "SessionOne"
 let AuraUsernameKeychainKey = "AuraUsername"
 
+let AuraDeviceSetupDSNKeychainKey = "AuraSetupDSN"
+let AuraDeviceSetupTokenKeychainKey = "AuraSetupToken"
+
 struct AuraNotifications {
     static let SharesChanged = "DeviceSharesChangedNotification"
 }
