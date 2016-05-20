@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import PDKeychainBindingsController
 import iOS_AylaSDK
 
 class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -147,10 +148,11 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     func connectToSSID(ssid: String, password: String?) {
     
-        // TODO: Should create a random token.
-        token = "AToken"
+        token = generateRandomToken(7)
         
         self.updatePrompt("Connecting device to '\(ssid)'...")
+        let tokenString = String(format:"Using Setup Token %@", self.token!)
+        self.addDescription(tokenString)
         self.setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { () -> Void in
             
             // Succeeded, go confirming.
@@ -172,11 +174,26 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.updatePrompt("Confirming device status ...")
         self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(self.setup.setupDevice?.dsn)!, setupToken:token!, success: { () -> Void in
             self.updatePrompt("- Succeeded -")
-            self.addDescription("Confirmed device connection to servce.\n- Succeeded -");
-            
+            self.addDescription("Confirmed device connection to service.\n- Succeeded -");
+
+            let alertString = String(format:"Setup for device %@ completed successfully, using the setup token %@.\n\n You may wish to store this token if the device uses AP Mode registration.", (self.setup.setupDevice?.dsn)!, self.token!)
+            let alert = UIAlertController(title: "Setup Successful", message: alertString, preferredStyle: .Alert)
+            let copyAction = UIAlertAction(title: "Copy Token to Clipboard", style: .Default, handler: { (action) -> Void in
+                UIPasteboard.generalPasteboard().string = self.token!
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Default, handler: { (action) -> Void in
+            })
+            alert.addAction(copyAction)
+            alert.addAction(cancelAction)
+            PDKeychainBindings.sharedKeychainBindings().setString(self.token, forKey: AuraDeviceSetupTokenKeychainKey)
+            PDKeychainBindings.sharedKeychainBindings().setString(self.setup.setupDevice?.dsn, forKey: AuraDeviceSetupDSNKeychainKey)
+
+            self.presentViewController(alert, animated: true, completion: nil)
+
             // Clean scan results
             self.scanResults = nil
             self.tableView.reloadData()
+            
             
             }) { (error) -> Void in
             self.displayError(error)
@@ -299,8 +316,23 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-
     
+    func generateRandomToken(length:Int) -> String {
+        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let allowedCharsCount = UInt32(allowedChars.characters.count)
+        var token = ""
+        
+        for _ in (0..<length) {
+            let randomNum = Int(arc4random_uniform(allowedCharsCount))
+            let newCharacter = allowedChars[allowedChars.startIndex.advancedBy(randomNum)]
+            token += String(newCharacter)
+        }
+        return token
+    }
+    
+
+
+
     /*
     // MARK: - Navigation
 
