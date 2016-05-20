@@ -119,6 +119,10 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
         }
     }
     
+    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
+        
+    }
+    
     func device(device: AylaDevice, didObserveChange change: AylaChange) {
         if change.isKindOfClass(AylaDeviceChange) {
             // Not a good udpate strategy

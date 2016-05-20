@@ -142,6 +142,10 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
         self.refreshDeviceList()
     }
     
+    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
+        
+    }
+    
     func device(device: AylaDevice, didObserveChange change: AylaChange) {
         if change.isKindOfClass(AylaDeviceChange) || change.isKindOfClass(AylaDeviceListChange) {
             // Not a good udpate strategy
