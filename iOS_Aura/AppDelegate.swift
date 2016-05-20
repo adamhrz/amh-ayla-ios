@@ -69,12 +69,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         func displayViewController(controller: UIViewController){
             //  VC hierarchy is different if we are logged in than if we are not. 
             //  This will ensure the VC is displayed.
-            if self.window?.rootViewController?.presentedViewController != nil {
-                UIApplication.sharedApplication().keyWindow?.rootViewController?.presentedViewController?.presentViewController(controller,animated:true,completion:nil)
+            let topController = topViewController()
+            topController.presentViewController(controller, animated: true, completion: nil)
+        }
+        
+        func topViewControllerFromRoot(rootVC:UIViewController) ->UIViewController{
+            if rootVC.isKindOfClass(UITabBarController) {
+                let tabVC = rootVC as! UITabBarController
+                return topViewControllerFromRoot(tabVC.selectedViewController!)
+            } else if rootVC.isKindOfClass(UINavigationController) {
+                let navC = rootVC as! UINavigationController
+                return topViewControllerFromRoot(navC.visibleViewController!)
+            } else if let presentedVC = rootVC.presentedViewController {
+                return topViewControllerFromRoot(presentedVC)
+            } else {
+                return rootVC
             }
-            else {
-                self.window?.rootViewController?.presentViewController(controller, animated: true, completion: nil)
-            }
+        }
+        
+        func topViewController() -> UIViewController {
+            let rootController = UIApplication.sharedApplication().keyWindow?.rootViewController
+             return topViewControllerFromRoot(rootController!)
         }
         
         // Instantiate and display a UIAlertViewController as needed
