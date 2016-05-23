@@ -22,6 +22,13 @@
 
 /* Begin PBXBuildFile section */
 		0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */; };
+		0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */; };
+		0F47221B1CDD39800055D6C3 /* DeviceSharesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */; };
+		0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */; };
+		0F4722221CDD4F300055D6C3 /* CreateDeviceShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4722211CDD4F300055D6C3 /* CreateDeviceShareViewController.swift */; };
+		0F4742E71CDC055700B27992 /* DeviceSharesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4742E61CDC055700B27992 /* DeviceSharesListViewModel.swift */; };
+		0F4742E91CDC074400B27992 /* DeviceShareViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4742E81CDC074400B27992 /* DeviceShareViewModel.swift */; };
+		0F6B73581CD9581100560563 /* DeviceSharesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */; };
 		0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */; };
 		0FBEB0A31CC07AE600E8EE6F /* UIAlertView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB0A01CC07AE600E8EE6F /* UIAlertView_Extensions.swift */; };
 		0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */; };
@@ -94,6 +101,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceShareTVCell.swift; path = Sharing/DeviceShareTVCell.swift; sourceTree = "<group>"; };
+		0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesModel.swift; path = Sharing/DeviceSharesModel.swift; sourceTree = "<group>"; };
+		0F47221F1CDD4D600055D6C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateShare.storyboard; sourceTree = "<group>"; };
+		0F4722211CDD4F300055D6C3 /* CreateDeviceShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateDeviceShareViewController.swift; path = Sharing/CreateDeviceShareViewController.swift; sourceTree = "<group>"; };
+		0F4742E61CDC055700B27992 /* DeviceSharesListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesListViewModel.swift; path = Sharing/DeviceSharesListViewModel.swift; sourceTree = "<group>"; };
+		0F4742E81CDC074400B27992 /* DeviceShareViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceShareViewModel.swift; path = Sharing/DeviceShareViewModel.swift; sourceTree = "<group>"; };
+		0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesTableViewController.swift; path = Sharing/DeviceSharesTableViewController.swift; sourceTree = "<group>"; };
 		0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Utils.swift"; path = "Utils/String+Utils.swift"; sourceTree = "<group>"; };
 		0FBEB0A01CC07AE600E8EE6F /* UIAlertView_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertView_Extensions.swift; path = Utils/UIAlertView_Extensions.swift; sourceTree = "<group>"; };
 		0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+AuraColors.swift"; path = "Utils/UIColor+AuraColors.swift"; sourceTree = "<group>"; };
@@ -183,6 +197,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F6B73591CD9581800560563 /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */,
+				0F4742E61CDC055700B27992 /* DeviceSharesListViewModel.swift */,
+				0F4722211CDD4F300055D6C3 /* CreateDeviceShareViewController.swift */,
+				0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */,
+				0F4742E81CDC074400B27992 /* DeviceShareViewModel.swift */,
+				0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */,
+			);
+			name = Sharing;
+			sourceTree = "<group>";
+		};
 		0FBEB09E1CC07AD100E8EE6F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +237,7 @@
 				A78080161CBC271A00C779B5 /* Me.storyboard */,
 				5F4632961CCAE921005580EC /* PasswordReset.storyboard */,
 				5F4632901CCAE911005580EC /* Profile.storyboard */,
+				0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */,
 				A7104AD41C7599BF007B1AB3 /* Setup.storyboard */,
 				5F4632931CCAE919005580EC /* Signup.storyboard */,
 				A78DC8EB1CB8538F002EE6B0 /* Test.storyboard */,
@@ -326,6 +354,7 @@
 				A78FEAD01C7FC66400B7EA72 /* Me */,
 				A7A8C90D1C7BC7A700612C39 /* Log */,
 				A7104AD71C7ABBDC007B1AB3 /* Device */,
+				0F6B73591CD9581800560563 /* Sharing */,
 				A7104ACB1C757FA7007B1AB3 /* Login */,
 				A7104AD11C759917007B1AB3 /* Setup */,
 				0FBEB09E1CC07AD100E8EE6F /* Utils */,
@@ -514,6 +543,7 @@
 				A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */,
 				A7351C951C753C370073C73A /* Assets.xcassets in Resources */,
 				A78DC8ED1CB8538F002EE6B0 /* Test.storyboard in Resources */,
+				0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */,
 				A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */,
 				A78080181CBC271A00C779B5 /* Me.storyboard in Resources */,
 				5F4632951CCAE919005580EC /* Signup.storyboard in Resources */,
@@ -605,10 +635,12 @@
 			files = (
 				A5E0DF3F1CE257E800D0E87F /* ScheduleTableViewController.swift in Sources */,
 				A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */,
+				0F47221B1CDD39800055D6C3 /* DeviceSharesModel.swift in Sources */,
 				A78DC8F01CB8547F002EE6B0 /* TestPanelViewController.swift in Sources */,
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A78DC8F21CB85702002EE6B0 /* TestModel.swift in Sources */,
 				0FBEB0A31CC07AE600E8EE6F /* UIAlertView_Extensions.swift in Sources */,
+				0F6B73581CD9581100560563 /* DeviceSharesTableViewController.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
 				A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */,
 				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
@@ -616,8 +648,10 @@
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */,
 				A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */,
+				0F4742E71CDC055700B27992 /* DeviceSharesListViewModel.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
 				0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */,
+				0F4722221CDD4F300055D6C3 /* CreateDeviceShareViewController.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
 				A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */,
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
@@ -629,8 +663,10 @@
 				A78DC8F71CBAC42D002EE6B0 /* TestSequencer.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
 				A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */,
+				0F4742E91CDC074400B27992 /* DeviceShareViewModel.swift in Sources */,
 				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
 				A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */,
+				0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
 				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
 				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
@@ -677,6 +713,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0F47221F1CDD4D600055D6C3 /* Base */,
+			);
+			name = CreateShare.storyboard;
+			sourceTree = "<group>";
+		};
 		5F4632901CCAE911005580EC /* Profile.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

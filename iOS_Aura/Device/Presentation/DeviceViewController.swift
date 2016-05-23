@@ -9,7 +9,7 @@
 import UIKit
 import iOS_AylaSDK
 
-class DeviceViewController: UIViewController, PropertyListViewModelDelegate, PropertyModelDelegate {
+class DeviceViewController: UIViewController, PropertyListViewModelDelegate, PropertyModelDelegate, DeviceSharesModelDelegate {
 
     @IBOutlet weak var panelView: DevicePanelView!
     @IBOutlet weak var tableView: UITableView!
@@ -29,6 +29,8 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     /// Device model used by view controller to present this device.
     var deviceViewModel :DeviceViewModel?
     
+    var sharesModel: DeviceSharesModel?
+    
     var nameTextField :UITextField!
     
     override func viewDidLoad() {
@@ -36,10 +38,12 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         
         if let device = self.device {
             // Allocate a device view model to handle UX of panel view and table view.
-            deviceViewModel = DeviceViewModel(device: device, panel: panelView, propertyListTableView: tableView)
+            deviceViewModel = DeviceViewModel(device: device, panel: panelView, propertyListTableView: tableView, sharesModel:sharesModel)
             deviceViewModel?.propertyListViewModel?.delegate = self
             
             let options = UIBarButtonItem(barButtonSystemItem:.Action, target: self, action: #selector(DeviceViewController.showOptions))
+            sharesModel?.delegate = self
+            
             self.navigationItem.rightBarButtonItem = options
         }
         else {
@@ -53,6 +57,10 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        self.deviceViewModel!.update()
+    }
+    
     @IBAction func fetchAllPropertiesAction(sender: AnyObject) {
         self.device?.fetchPropertiesCloud(nil, success: { (properties) in
             print("Fetched properties")
@@ -62,43 +70,21 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     }
     
     func rename() {
-        let alert = UIAlertController(title: "Rename " + (device?.productName)!, message: "Enter the new name", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            textField.placeholder = "New name"
-            textField.tintColor = UIColor(red: 93.0/255.0, green: 203/255.0, blue: 152/255.0, alpha: 1.0)
-            self.nameTextField = textField
-        }
-        let okAction = UIAlertAction (title: "Confirm", style: UIAlertActionStyle.Default) { (action) -> Void in
-            let newName = self.nameTextField!.text
-            if newName == nil || newName!.characters.count < 1 {
-                
-                UIAlertController.alert("Error", message: "No name was provided", buttonTitle: "OK",fromController: self)
-                return;
-            }
-            self.device?.updateProductNameTo(newName!, success: { () -> Void in
-                let alert = UIAlertController(title: "Device renamed", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
-                alert.addAction(okAction)
-                self.presentViewController(alert, animated: true, completion: nil)
-                }, failure: { (error) -> Void in
-                    UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
-            })
-        }
-        
-        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-        alert.addAction(cancelAction)
-        alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        deviceViewModel?.renameDevice(self, successHandler: nil, failureHandler: nil)
     }
     
     func unregister() {
-        device?.unregisterWithSuccess({ 
+        deviceViewModel?.unregisterDevice(self, successHandler: { Void in
             self.navigationController?.popViewControllerAnimated(true)
-            }, failure: { (error) in
-                let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
-                let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
-                alert.addAction(gotIt)
-                self.presentViewController(alert, animated: true, completion: nil)
+            }, failureHandler: { (error) in
+
+        })
+    }
+    
+    func shareDevice() {
+        deviceViewModel?.shareDevice(self, successHandler: { (share) in
+            }, failureHandler: { (error) in
+                
         })
     }
     
@@ -114,17 +100,32 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         let rename = UIAlertAction(title: "Rename", style: .Default) { (action) in
             self.rename()
         }
+        let share = UIAlertAction(title: "Share", style: .Default) { (action) in
+            self.shareDevice()
+        }
         let unregister = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
             self.unregister()
         }
+
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
         alert.addAction(schedules)
         alert.addAction(autoTest)
         alert.addAction(rename)
+        alert.addAction(share)
         alert.addAction(cancel)
         alert.addAction(unregister)
         presentViewController(alert, animated: true, completion: nil)
     }
+    
+    // MARK - Device Shares Model Delegate
+    func deviceSharesModel(model: DeviceSharesModel, ownedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
+        self.deviceViewModel!.update()
+    }
+    
+    func deviceSharesModel(model: DeviceSharesModel, receivedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
+        self.deviceViewModel!.update()
+    }
+    
     
     // MARK - Property list view model delegate
     func propertyListViewModel(viewModel: PropertyListViewModel, didSelectProperty property: AylaProperty, assignedPropertyModel propertyModel: PropertyModel) {

@@ -14,6 +14,9 @@ let AuraUsernameKeychainKey = "AuraUsername"
 let AuraDeviceSetupDSNKeychainKey = "AuraSetupDSN"
 let AuraDeviceSetupTokenKeychainKey = "AuraSetupToken"
 
+struct AuraNotifications {
+    static let SharesChanged = "DeviceSharesChangedNotification"
+}
 
 struct AuraOptions {
     static let EasterEgg    = "aylarocks"
