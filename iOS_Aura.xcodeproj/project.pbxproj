@@ -37,6 +37,8 @@
 		5F4632921CCAE911005580EC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632901CCAE911005580EC /* Profile.storyboard */; };
 		5F4632951CCAE919005580EC /* Signup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632931CCAE919005580EC /* Signup.storyboard */; };
 		5F4632981CCAE921005580EC /* PasswordReset.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632961CCAE921005580EC /* PasswordReset.storyboard */; };
+		5F7277F41CF4EBEB009D153F /* TimeZonePicker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */; };
+		5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */; };
 		5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA31CC84CF100233D99 /* AuraLabel.swift */; };
 		5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA41CC84CF100233D99 /* AuraTextField.swift */; };
 		A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */; };
@@ -118,6 +120,8 @@
 		5F4632911CCAE911005580EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Profile.storyboard; sourceTree = "<group>"; };
 		5F4632941CCAE919005580EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Signup.storyboard; sourceTree = "<group>"; };
 		5F4632971CCAE921005580EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PasswordReset.storyboard; sourceTree = "<group>"; };
+		5F7277F31CF4EBEB009D153F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TimeZonePicker.storyboard; sourceTree = "<group>"; };
+		5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeZonePickerViewController.swift; path = Device/Presentation/TimeZonePickerViewController.swift; sourceTree = "<group>"; };
 		5FDCECA31CC84CF100233D99 /* AuraLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraLabel.swift; path = UX/AuraLabel.swift; sourceTree = "<group>"; };
 		5FDCECA41CC84CF100233D99 /* AuraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraTextField.swift; path = UX/AuraTextField.swift; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -231,17 +235,18 @@
 		5F46328F1CCAE8D1005580EC /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */,
 				A7351C961C753C370073C73A /* LaunchScreen.storyboard */,
 				A7104AC81C757F32007B1AB3 /* Login.storyboard */,
 				A7351C911C753C370073C73A /* Main.storyboard */,
 				A78080161CBC271A00C779B5 /* Me.storyboard */,
 				5F4632961CCAE921005580EC /* PasswordReset.storyboard */,
 				5F4632901CCAE911005580EC /* Profile.storyboard */,
-				0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */,
+				A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */,
 				A7104AD41C7599BF007B1AB3 /* Setup.storyboard */,
 				5F4632931CCAE919005580EC /* Signup.storyboard */,
 				A78DC8EB1CB8538F002EE6B0 /* Test.storyboard */,
-				A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */,
+				5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -311,6 +316,7 @@
 				0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */,
 				A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */,
 				A5E0DF401CE2623000D0E87F /* ScheduleEditorTableViewController.swift */,
+				5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */,
 			);
 			name = Presentation;
 			sourceTree = "<group>";
@@ -539,6 +545,7 @@
 				A7104AD61C7599BF007B1AB3 /* Setup.storyboard in Resources */,
 				5F4632921CCAE911005580EC /* Profile.storyboard in Resources */,
 				5F4632981CCAE921005580EC /* PasswordReset.storyboard in Resources */,
+				5F7277F41CF4EBEB009D153F /* TimeZonePicker.storyboard in Resources */,
 				A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */,
 				A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */,
 				A7351C951C753C370073C73A /* Assets.xcassets in Resources */,
@@ -646,6 +653,7 @@
 				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
+				5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */,
 				5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */,
 				A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */,
 				0F4742E71CDC055700B27992 /* DeviceSharesListViewModel.swift in Sources */,
@@ -743,6 +751,14 @@
 				5F4632971CCAE921005580EC /* Base */,
 			);
 			name = PasswordReset.storyboard;
+			sourceTree = "<group>";
+		};
+		5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5F7277F31CF4EBEB009D153F /* Base */,
+			);
+			name = TimeZonePicker.storyboard;
 			sourceTree = "<group>";
 		};
 		A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */ = {
