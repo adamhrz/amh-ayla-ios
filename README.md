@@ -42,6 +42,10 @@ The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).
 
 #Release Notes
 
+v5.0.01    2016-05-24
+------
+- work with iOS_AylaSDK 5.0.01
+
 v5.0.00    2016-04-22
 ------
 -initial release (requires Ayla SDK v5.0.00)
