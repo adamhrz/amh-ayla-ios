@@ -25,15 +25,15 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
     /// Identifier (name) of the currently selected time zone
     var timeZoneID:String? {
         get {
-            return self.internalTimeZoneID
+            return self.privateTimeZoneID
         }
         set {
-            internalTimeZoneID = newValue
-            self.selectTimeZone(self.internalTimeZoneID)
+            self.privateTimeZoneID = newValue
+            self.selectTimeZone(self.privateTimeZoneID)
         }
     }
     
-    internal var internalTimeZoneID:String? = nil
+    private var privateTimeZoneID:String? = nil
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -153,14 +153,13 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
         if let timeZonePickerSection = TimeZonePickerViewControllerSection(rawValue: indexPath.section) {
             switch timeZonePickerSection {
                 case .TimeZonePickerViewControllerSectionTimeZones:
-                    self.internalTimeZoneID = self.timeZones[indexPath.row]
+                    self.privateTimeZoneID = self.timeZones[indexPath.row]
                 break
                 default:
                     assert(true, "Unexpected section!")
             }
         }
     }
-    
 }
 
 // MARK: -
