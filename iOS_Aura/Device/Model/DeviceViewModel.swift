@@ -80,20 +80,30 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
     }
     
     func unregisterDevice(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
-        device.unregisterWithSuccess({
+        let name = device.productName ?? "unnamed device"
+        let dsn = device.dsn ?? "unknown"
+        let alert = UIAlertController(title: "Are you sure you want to unregister \(name) (DSN: \(dsn))?", message: nil, preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let okAction = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
+            self.device.unregisterWithSuccess({
                 if let successHandler = successHandler{
                     successHandler()
                 }
-            }, failure: { (error) in
-                let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
-                let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
-                    if let failureHandler = failureHandler{
-                        failureHandler(error: error)
-                    }
-                })
-                alert.addAction(gotIt)
-                presentingViewController.presentViewController(alert, animated: true, completion: nil)
-        })
+                }, failure: { (error) in
+                    let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
+                    let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
+                        if let failureHandler = failureHandler{
+                            failureHandler(error: error)
+                        }
+                    })
+                    alert.addAction(gotIt)
+                    presentingViewController.presentViewController(alert, animated: true, completion: nil)
+            })
+        }
+
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+        presentingViewController.presentViewController(alert, animated: true, completion: nil)
     }
     
     func renameDevice(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?){
