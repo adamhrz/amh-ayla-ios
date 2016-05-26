@@ -35,12 +35,12 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
     
     private var privateTimeZoneID:String? = nil
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     
-    let cellReuseIdentifier = "TimeZonePickerCell"
-    let timeZones = NSTimeZone.knownTimeZoneNames()
+    private let cellReuseIdentifier = "TimeZonePickerCell"
+    private let timeZones = NSTimeZone.knownTimeZoneNames()
     
-    enum TimeZonePickerViewControllerSection: Int {
+    private enum TimeZonePickerViewControllerSection: Int {
         case TimeZonePickerViewControllerSectionTimeZones = 0, TimeZonePickerViewControllerSectionCount
     }
 
@@ -59,11 +59,11 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
     
     // MARK: - Actions
 
-    @IBAction func cancel(sender: AnyObject) {
+    @IBAction private func cancel(sender: AnyObject) {
         self.delegate?.timeZonePickerDidCancel(self)
     }
 
-    @IBAction func save(sender: AnyObject) {
+    @IBAction private func save(sender: AnyObject) {
         if (self.timeZoneID != nil) {
             self.delegate?.timeZonePicker(self, didSelectTimeZoneID: self.timeZoneID!)
         } else {
@@ -76,7 +76,7 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
 
     // MARK: - Utilities
     
-    func selectTimeZone(timeZone: String?) {
+    private func selectTimeZone(timeZone: String?) {
         if (self.tableView == nil) {
             return;
         }
@@ -164,7 +164,7 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
 
 // MARK: -
 
-class TimeZonePickerTableViewCell : UITableViewCell {
+private class TimeZonePickerTableViewCell : UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
