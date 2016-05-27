@@ -14,6 +14,7 @@
 fastlane_version "1.81.0"
 
 default_platform :ios
+VERSION_FILE="Info.plist"
 
 def check_env_var(var_arr)
     var_arr.each { |v|
@@ -24,17 +25,37 @@ def check_env_var(var_arr)
     }
 end
 
-def check_required_argument(arg)
+def check_required_argument(arg, arg_string_format)
     if arg.nil? or arg.empty?
-        puts "please add version_number:x.y.z argument"
+        puts "please add required #{arg_string_format} argument for this command."
         exit!
     end
 end
 
+def get_version_file
+    file_name = `find ../iOS_Aura -name #{VERSION_FILE}`
+    if file_name.nil? or file_name.empty?
+        puts "Can not find version file by command #{file_name}. Please double check path and file name"
+        exit!
+    else
+        file_name=file_name.chomp
+    end
+end
+
 def get_version_string
-    version_sentence = `find ../iOS_Aura -name Info.plist | xargs grep -A1 "<key>CFBundleShortVersionString</key>"`
+    vFile=get_version_file
+    version_sentence = `cat #{vFile} | grep -A1 "<key>CFBundleShortVersionString</key>"`
     version_string = version_sentence.split("\n").last.gsub!(/.*<string>(.*)<\/string>.*/, "\\1")
     version_string.chomp
+end
+
+def set_version_string(version)
+    vFile = get_version_file
+    [vFile].each do |f|
+        file_contents = File.read(f)
+        file_contents.gsub!(/(.*<key>CFBundleShortVersionString<\/key>\n.*<string>)(.*)(<\/string>.*)/, "\\1#{version}\\3")
+        File.write(f, file_contents)
+    end
 end
 
 platform :ios do
@@ -73,15 +94,26 @@ platform :ios do
     # frameit
   end
 
+  lane :show_version do
+    release_number = get_version_string
+    puts "Your release version is: " + release_number
+  end
+
+  lane :set_version do |options|
+     check_required_argument(options[:version], "version:x.y.z")
+     set_version_string(options[:version])
+  end
+
   desc "make a release. This lane requires: 1) \"public\" and \"origin\" remote have been configured; 2) developers should have already added release notes in README.md"
   desc "and modified version number strings in various files; 3) there is already a release/x.y.z branch existing. Developers make a PR from release branch to master"
   desc "branch, release engineer merges PR, than run command like"
   desc " fastlane release"
   lane :release do |options|
     check_env_var(["GITHUB_API_TOKEN", "RELEASE_USER"])
-    repo_name="AylaNetworks/iOS_Aura_Public"
+    internal_repo="AylaNetworks/iOS_Aura"
+    public_repo="#{internal_repo}_Public"
     release_number = get_version_string
-    check_required_argument(release_number)
+    check_required_argument(release_number, "release_number:x.y.z")
     puts "Your release version is: " + release_number + ", is this correct(y/n)?"
     answer = $stdin.getch
     exit! unless answer.eql?("y")
@@ -97,7 +129,7 @@ platform :ios do
 
     # not use automatic publish for now since it will trigger massive release emails immediately so be careful
     #publish a release which will create the tag on public. this requires you to set your own environment variable GITHUB_API_TOKEN
-    #set_github_release(api_token: ENV["GITHUB_API_TOKEN"], repository_name: repo_name, tag_name: v, name: v+" Release", description: "see README.md for details")
+    #set_github_release(api_token: ENV["GITHUB_API_TOKEN"], repository_name: public_repo, tag_name: v, name: v+" Release", description: "see README.md for details")
     # pull tag to local
     #git_command(full_command: "git pull public master --tags");
     # push tag to internal repo
@@ -116,18 +148,21 @@ platform :ios do
     ensure_git_status_clean
     git_command(full_command: "git push public release/#{release_number}")
 
-    # if not auto-publish above, log in with release user on github and do release if everything is OK.
     # create PR to merge master back to develop and notify tech lead
+    git_command(full_command: "git checkout master")
+    ensure_git_status_clean
+    create_pull_request(api_token: ENV["GITHUB_API_TOKEN"], title: "merge back to develop for #{v} related changes", repo: internal_repo, base: "develop")
+
+    # if not auto-publish above, log in with release user on github and do release if everything is OK.
     # send release notification email
     puts "Congratulations! Code push completed successfully. Do release pubish if not yet when everything is OK."
-    puts "Then create PR to merge master back to develop"
   end
 
   desc "untag a release. In case you have new commits for a release after you have already tagged the release."
   desc "use this command to untag the release. So that you can do \"release\" again to include new commits."
   lane :untag do |options|
     release_number = get_version_string
-    check_required_argument(release_number)
+    check_required_argument(release_number, "release_number:x.y.z")
     puts "You want to untag version: " + release_number + ", is this correct(y/n)?"
     answer = $stdin.getch
     exit! unless answer.eql?("y")
