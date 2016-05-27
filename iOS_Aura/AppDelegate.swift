@@ -19,9 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Setup core manager
         let settings = AylaSystemSettings.defaultSystemSettings()
         // Setup app id/secret
-        settings.serviceType = .Development
-        settings.appId = "aura_0dfc7900-id"
-        settings.appSecret = "aura_0dfc7900-eUo-3Se7R25Z_QLeEiXqYkQDUNA"
+        setupAuraOptions(settings)
 
         // Set device detail provider
         settings.deviceDetailProvider = DeviceDetailProvider()
@@ -40,16 +38,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func setupAuraOptions(settings: AylaSystemSettings) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let type = defaults.integerForKey(AuraOptions.KeyServiceType)
+        if type == 0 { // 0 == AylaServiceType.Dynamic
+            settings.serviceType = .Development
+        }
+        else {
+            settings.serviceType = AylaServiceType(rawValue: UInt16(type)) ?? .Development
+        }
+        
+        let location = defaults.integerForKey(AuraOptions.KeyServiceLocation)
+        settings.serviceLocation = AylaServiceLocation(rawValue: UInt16(location)) ?? .US
+        
+        if settings.serviceLocation == .CN {
+            settings.appId = AuraOptions.AppIdCN
+            settings.appSecret = AuraOptions.AppSecretCN
+        }
+        else if settings.serviceLocation == .EU {
+            settings.appId = AuraOptions.AppIdEU
+            settings.appSecret = AuraOptions.AppSecretEU
+        }
+        else {
+            settings.appId = AuraOptions.AppIdUS
+            settings.appSecret = AuraOptions.AppSecretUS
+        }
+    }
+    
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         func displayViewController(controller: UIViewController){
             //  VC hierarchy is different if we are logged in than if we are not. 
             //  This will ensure the VC is displayed.
-            if self.window?.rootViewController?.presentedViewController != nil {
-                UIApplication.sharedApplication().keyWindow?.rootViewController?.presentedViewController?.presentViewController(controller,animated:true,completion:nil)
+            let topController = topViewController()
+            topController.presentViewController(controller, animated: true, completion: nil)
+        }
+        
+        func topViewControllerFromRoot(rootVC:UIViewController) ->UIViewController{
+            if rootVC.isKindOfClass(UITabBarController) {
+                let tabVC = rootVC as! UITabBarController
+                return topViewControllerFromRoot(tabVC.selectedViewController!)
+            } else if rootVC.isKindOfClass(UINavigationController) {
+                let navC = rootVC as! UINavigationController
+                return topViewControllerFromRoot(navC.visibleViewController!)
+            } else if let presentedVC = rootVC.presentedViewController {
+                return topViewControllerFromRoot(presentedVC)
+            } else {
+                return rootVC
             }
-            else {
-                self.window?.rootViewController?.presentViewController(controller, animated: true, completion: nil)
-            }
+        }
+        
+        func topViewController() -> UIViewController {
+            let rootController = UIApplication.sharedApplication().keyWindow?.rootViewController
+             return topViewControllerFromRoot(rootController!)
         }
         
         // Instantiate and display a UIAlertViewController as needed
@@ -173,6 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+
     }
 
 

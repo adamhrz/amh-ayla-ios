@@ -22,18 +22,31 @@
 
 /* Begin PBXBuildFile section */
 		0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */; };
+		0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */; };
+		0F47221B1CDD39800055D6C3 /* DeviceSharesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */; };
+		0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */; };
+		0F4722221CDD4F300055D6C3 /* CreateDeviceShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4722211CDD4F300055D6C3 /* CreateDeviceShareViewController.swift */; };
+		0F4742E71CDC055700B27992 /* DeviceSharesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4742E61CDC055700B27992 /* DeviceSharesListViewModel.swift */; };
+		0F4742E91CDC074400B27992 /* DeviceShareViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4742E81CDC074400B27992 /* DeviceShareViewModel.swift */; };
+		0F6B73581CD9581100560563 /* DeviceSharesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */; };
 		0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */; };
 		0FBEB0A31CC07AE600E8EE6F /* UIAlertView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB0A01CC07AE600E8EE6F /* UIAlertView_Extensions.swift */; };
 		0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */; };
+		0FD5AA631CEBBAD6000931D6 /* RegistrationManualTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD5AA621CEBBAD6000931D6 /* RegistrationManualTVCell.swift */; };
+		0FE0D54A1CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */; };
 		5F4632921CCAE911005580EC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632901CCAE911005580EC /* Profile.storyboard */; };
 		5F4632951CCAE919005580EC /* Signup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632931CCAE919005580EC /* Signup.storyboard */; };
 		5F4632981CCAE921005580EC /* PasswordReset.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632961CCAE921005580EC /* PasswordReset.storyboard */; };
 		5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA31CC84CF100233D99 /* AuraLabel.swift */; };
 		5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA41CC84CF100233D99 /* AuraTextField.swift */; };
+		A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
 		A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */; };
+		A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */; };
+		A5E0DF3F1CE257E800D0E87F /* ScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */; };
+		A5E0DF411CE2623000D0E87F /* ScheduleEditorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E0DF401CE2623000D0E87F /* ScheduleEditorTableViewController.swift */; };
 		A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AC81C757F32007B1AB3 /* Login.storyboard */; };
 		A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ACD1C758140007B1AB3 /* AuraButton.swift */; };
 		A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */; };
@@ -88,9 +101,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceShareTVCell.swift; path = Sharing/DeviceShareTVCell.swift; sourceTree = "<group>"; };
+		0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesModel.swift; path = Sharing/DeviceSharesModel.swift; sourceTree = "<group>"; };
+		0F47221F1CDD4D600055D6C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateShare.storyboard; sourceTree = "<group>"; };
+		0F4722211CDD4F300055D6C3 /* CreateDeviceShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateDeviceShareViewController.swift; path = Sharing/CreateDeviceShareViewController.swift; sourceTree = "<group>"; };
+		0F4742E61CDC055700B27992 /* DeviceSharesListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesListViewModel.swift; path = Sharing/DeviceSharesListViewModel.swift; sourceTree = "<group>"; };
+		0F4742E81CDC074400B27992 /* DeviceShareViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceShareViewModel.swift; path = Sharing/DeviceShareViewModel.swift; sourceTree = "<group>"; };
+		0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesTableViewController.swift; path = Sharing/DeviceSharesTableViewController.swift; sourceTree = "<group>"; };
 		0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Utils.swift"; path = "Utils/String+Utils.swift"; sourceTree = "<group>"; };
 		0FBEB0A01CC07AE600E8EE6F /* UIAlertView_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertView_Extensions.swift; path = Utils/UIAlertView_Extensions.swift; sourceTree = "<group>"; };
 		0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+AuraColors.swift"; path = "Utils/UIColor+AuraColors.swift"; sourceTree = "<group>"; };
+		0FD5AA621CEBBAD6000931D6 /* RegistrationManualTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationManualTVCell.swift; path = Device/Presentation/RegistrationManualTVCell.swift; sourceTree = "<group>"; };
+		0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationModeSelectorTVCell.swift; path = Device/Presentation/RegistrationModeSelectorTVCell.swift; sourceTree = "<group>"; };
 		146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
 		434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.debug.xcconfig"; sourceTree = "<group>"; };
 		5F4632911CCAE911005580EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Profile.storyboard; sourceTree = "<group>"; };
@@ -99,10 +121,14 @@
 		5FDCECA31CC84CF100233D99 /* AuraLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraLabel.swift; path = UX/AuraLabel.swift; sourceTree = "<group>"; };
 		5FDCECA41CC84CF100233D99 /* AuraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraTextField.swift; path = UX/AuraTextField.swift; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionOptionViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
 		A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLoginViewController.swift; sourceTree = "<group>"; };
+		A5E0DF3C1CE2579000D0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Schedules.storyboard; sourceTree = "<group>"; };
+		A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleTableViewController.swift; path = Device/Presentation/ScheduleTableViewController.swift; sourceTree = "<group>"; };
+		A5E0DF401CE2623000D0E87F /* ScheduleEditorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleEditorTableViewController.swift; path = Device/Presentation/ScheduleEditorTableViewController.swift; sourceTree = "<group>"; };
 		A7104AC91C757F32007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
 		A7104ACD1C758140007B1AB3 /* AuraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraButton.swift; path = UX/AuraButton.swift; sourceTree = "<group>"; };
 		A7104ACF1C75816F007B1AB3 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -112,7 +138,7 @@
 		A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListTVController.swift; path = Device/Presentation/DeviceListTVController.swift; sourceTree = "<group>"; };
 		A7104ADD1C7AD04A007B1AB3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A7104AE01C7AD289007B1AB3 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceListViewModel.swift; path = Device/Model/DeviceListViewModel.swift; sourceTree = "<group>"; };
-		A7351C8A1C753C360073C73A /* iOS_Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7351C8A1C753C360073C73A /* Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7351C8D1C753C370073C73A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7351C921C753C370073C73A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A7351C941C753C370073C73A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -171,6 +197,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F6B73591CD9581800560563 /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */,
+				0F4742E61CDC055700B27992 /* DeviceSharesListViewModel.swift */,
+				0F4722211CDD4F300055D6C3 /* CreateDeviceShareViewController.swift */,
+				0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */,
+				0F4742E81CDC074400B27992 /* DeviceShareViewModel.swift */,
+				0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */,
+			);
+			name = Sharing;
+			sourceTree = "<group>";
+		};
 		0FBEB09E1CC07AD100E8EE6F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,9 +237,11 @@
 				A78080161CBC271A00C779B5 /* Me.storyboard */,
 				5F4632961CCAE921005580EC /* PasswordReset.storyboard */,
 				5F4632901CCAE911005580EC /* Profile.storyboard */,
+				0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */,
 				A7104AD41C7599BF007B1AB3 /* Setup.storyboard */,
 				5F4632931CCAE919005580EC /* Signup.storyboard */,
 				A78DC8EB1CB8538F002EE6B0 /* Test.storyboard */,
+				A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -221,6 +262,7 @@
 				A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */,
 				A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */,
 				A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */,
+				A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -265,6 +307,10 @@
 				A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */,
 				A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */,
 				A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */,
+				0FD5AA621CEBBAD6000931D6 /* RegistrationManualTVCell.swift */,
+				0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */,
+				A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */,
+				A5E0DF401CE2623000D0E87F /* ScheduleEditorTableViewController.swift */,
 			);
 			name = Presentation;
 			sourceTree = "<group>";
@@ -295,7 +341,7 @@
 		A7351C8B1C753C360073C73A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A7351C8A1C753C360073C73A /* iOS_Aura.app */,
+				A7351C8A1C753C360073C73A /* Aura.app */,
 				A7351C9E1C753C370073C73A /* iOS_AuraTests.xctest */,
 				A7351CA91C753C370073C73A /* iOS_AuraUITests.xctest */,
 			);
@@ -308,6 +354,7 @@
 				A78FEAD01C7FC66400B7EA72 /* Me */,
 				A7A8C90D1C7BC7A700612C39 /* Log */,
 				A7104AD71C7ABBDC007B1AB3 /* Device */,
+				0F6B73591CD9581800560563 /* Sharing */,
 				A7104ACB1C757FA7007B1AB3 /* Login */,
 				A7104AD11C759917007B1AB3 /* Setup */,
 				0FBEB09E1CC07AD100E8EE6F /* Utils */,
@@ -397,7 +444,7 @@
 			);
 			name = iOS_Aura;
 			productName = iOS_Aura;
-			productReference = A7351C8A1C753C360073C73A /* iOS_Aura.app */;
+			productReference = A7351C8A1C753C360073C73A /* Aura.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A7351C9D1C753C370073C73A /* iOS_AuraTests */ = {
@@ -496,6 +543,8 @@
 				A7351C981C753C370073C73A /* LaunchScreen.storyboard in Resources */,
 				A7351C951C753C370073C73A /* Assets.xcassets in Resources */,
 				A78DC8ED1CB8538F002EE6B0 /* Test.storyboard in Resources */,
+				0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */,
+				A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */,
 				A78080181CBC271A00C779B5 /* Me.storyboard in Resources */,
 				5F4632951CCAE919005580EC /* Signup.storyboard in Resources */,
 				A7351C931C753C370073C73A /* Main.storyboard in Resources */,
@@ -584,31 +633,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5E0DF3F1CE257E800D0E87F /* ScheduleTableViewController.swift in Sources */,
 				A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */,
+				0F47221B1CDD39800055D6C3 /* DeviceSharesModel.swift in Sources */,
 				A78DC8F01CB8547F002EE6B0 /* TestPanelViewController.swift in Sources */,
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A78DC8F21CB85702002EE6B0 /* TestModel.swift in Sources */,
 				0FBEB0A31CC07AE600E8EE6F /* UIAlertView_Extensions.swift in Sources */,
+				0F6B73581CD9581100560563 /* DeviceSharesTableViewController.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
 				A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */,
 				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */,
+				A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */,
+				0F4742E71CDC055700B27992 /* DeviceSharesListViewModel.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
 				0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */,
+				0F4722221CDD4F300055D6C3 /* CreateDeviceShareViewController.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
 				A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */,
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */,
 				A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */,
 				0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */,
+				0FD5AA631CEBBAD6000931D6 /* RegistrationManualTVCell.swift in Sources */,
 				A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */,
 				A78DC8F71CBAC42D002EE6B0 /* TestSequencer.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
 				A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */,
+				0F4742E91CDC074400B27992 /* DeviceShareViewModel.swift in Sources */,
 				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
 				A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */,
+				0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
 				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
 				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
@@ -616,8 +674,10 @@
 				A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */,
 				A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */,
 				A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */,
+				A5E0DF411CE2623000D0E87F /* ScheduleEditorTableViewController.swift in Sources */,
 				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 				A78DC8F51CB87289002EE6B0 /* LanModeTestModel.swift in Sources */,
+				0FE0D54A1CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,6 +713,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0F47221F1CDD4D600055D6C3 /* Base */,
+			);
+			name = CreateShare.storyboard;
+			sourceTree = "<group>";
+		};
 		5F4632901CCAE911005580EC /* Profile.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -675,6 +743,14 @@
 				5F4632971CCAE921005580EC /* Base */,
 			);
 			name = PasswordReset.storyboard;
+			sourceTree = "<group>";
+		};
+		A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5E0DF3C1CE2579000D0E87F /* Base */,
+			);
+			name = Schedules.storyboard;
 			sourceTree = "<group>";
 		};
 		A7104AC81C757F32007B1AB3 /* Login.storyboard */ = {
@@ -836,7 +912,7 @@
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -852,7 +928,7 @@
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
