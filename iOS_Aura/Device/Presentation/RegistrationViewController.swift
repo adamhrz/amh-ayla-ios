@@ -72,6 +72,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         
         // Add tap recognizer to dismiss keyboard.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
