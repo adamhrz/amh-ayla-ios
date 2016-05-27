@@ -9,7 +9,7 @@
 import UIKit
 import iOS_AylaSDK
 
-class DeviceViewController: UIViewController, PropertyListViewModelDelegate, PropertyModelDelegate, DeviceSharesModelDelegate {
+class DeviceViewController: UIViewController, PropertyListViewModelDelegate, PropertyModelDelegate, DeviceSharesModelDelegate, TimeZonePickerViewControllerDelegate {
 
     @IBOutlet weak var panelView: DevicePanelView!
     @IBOutlet weak var tableView: UITableView!
@@ -22,6 +22,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     
     /// Segue id to schedules view
     let segueIdToSchedules: String = "toSchedules"
+    
+    /// Segue id to time zone picker
+    let segueIdToTimeZonePicker = "toTimeZonePicker"
     
     /// Device which is represented on this device view.
     var device :AylaDevice?
@@ -58,6 +61,8 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         self.deviceViewModel!.update()
     }
     
@@ -88,7 +93,19 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         })
     }
     
-    // MARK - Options
+    func changeTimeZone() {
+        self.device?.fetchTimeZoneWithSuccess({ (timeZone) in
+            self.performSegueWithIdentifier(self.segueIdToTimeZonePicker, sender: timeZone.tzID)
+            }, failure: { (error) in
+                let alert = UIAlertController(title: "Failed to fetch Time Zone", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert)
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
+                self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+    
+    // MARK: - Options
+    
     func showOptions() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         let schedules = UIAlertAction(title: "Schedules", style: .Default) { (action) in
@@ -103,6 +120,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         let share = UIAlertAction(title: "Share", style: .Default) { (action) in
             self.shareDevice()
         }
+        let timeZone = UIAlertAction(title: "Change Time Zone", style: .Default) { (action) in
+            self.changeTimeZone()
+        }
         let unregister = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
             self.unregister()
         }
@@ -112,22 +132,24 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         alert.addAction(autoTest)
         alert.addAction(rename)
         alert.addAction(share)
+        alert.addAction(timeZone)
         alert.addAction(cancel)
         alert.addAction(unregister)
         presentViewController(alert, animated: true, completion: nil)
     }
     
-    // MARK - Device Shares Model Delegate
+    // MARK: - DeviceSharesModelDelegate
+    
     func deviceSharesModel(model: DeviceSharesModel, ownedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
-        self.deviceViewModel!.update()
+        self.deviceViewModel?.update()
     }
     
     func deviceSharesModel(model: DeviceSharesModel, receivedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
-        self.deviceViewModel!.update()
+        self.deviceViewModel?.update()
     }
     
+    // MARK: - PropertyListViewModelDelegate
     
-    // MARK - Property list view model delegate
     func propertyListViewModel(viewModel: PropertyListViewModel, didSelectProperty property: AylaProperty, assignedPropertyModel propertyModel: PropertyModel) {
         propertyModel.delegate = self
         propertyModel.presentActions(presentingViewController: self);
@@ -138,7 +160,8 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         propertyModel.chosenAction(PropertyModelAction.Details)
     }
 
-    // MARK - Property model delegate
+    // MARK: - PropertyModelDelegate
+    
     func propertyModel(model: PropertyModel, didSelectAction action: PropertyModelAction) {
         switch (action) {
         case .Details:
@@ -147,20 +170,49 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         }
     }
     
-    // MARK - Segue
+    // MARK: - TimeZonePickerViewControllerDelegate
+    
+    func timeZonePickerDidCancel(picker: TimeZonePickerViewController)
+    {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func timeZonePicker(picker: TimeZonePickerViewController, didSelectTimeZoneID timeZoneID:String) {
+        self.device?.updateTimeZoneTo(timeZoneID,
+                                      success: { (timeZone) in
+                                        self.deviceViewModel?.update()
+            },
+                                      failure: { (error) in
+                                        let alert = UIAlertController(title: "Failed to save Time Zone", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert)
+                                        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                                        alert.addAction(okAction)
+                                        self.presentViewController(alert, animated: true, completion: nil)
+        })
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    // MARK: - Segue
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == segueIdToPropertyView {
             let vc = segue.destinationViewController as! PropertyViewController
             vc.propertyModel = sender as? PropertyModel
         }
-        if segue.identifier == segueIdToLanTestView {
+        else if segue.identifier == segueIdToLanTestView {
             let nvc = segue.destinationViewController as! UINavigationController
             let vc = nvc.viewControllers[0] as! TestPanelViewController
             vc.testModel = LanModeTestModel(testPanelVC: vc, deviceManager: device?.deviceManager, device: device)
         }
-        if segue.identifier == segueIdToSchedules {
+        else if segue.identifier == segueIdToSchedules {
             let vc = segue.destinationViewController as! ScheduleTableViewController
             vc.device = device
+        }
+        else if segue.identifier == segueIdToTimeZonePicker {
+            let nvc = segue.destinationViewController as! UINavigationController
+            let vc = nvc.viewControllers[0] as! TimeZonePickerViewController
+            vc.timeZoneID = sender as? String
+            vc.delegate = self
         }
     }
     

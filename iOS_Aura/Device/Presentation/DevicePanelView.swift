@@ -19,10 +19,10 @@ class DevicePanelView: UIView {
     @IBOutlet weak var macAddressLabel: UILabel!
     @IBOutlet weak var lanIPAddressLabel: UILabel!
     @IBOutlet weak var lanModeActiveLabel: UILabel!
+    @IBOutlet weak var timeZoneLabel: UILabel!
     @IBOutlet weak var sharesLabel: UILabel!
     @IBOutlet weak var shareNamesLabel: UILabel!
     @IBOutlet weak var sharingNamesView: UIView!
-    
     
     func configure(device:AylaDevice, sharesModel: DeviceSharesModel?) {
         nameLabel.text = String(format: "%@", device.productName!)
@@ -48,6 +48,16 @@ class DevicePanelView: UIView {
             self.lanModeActiveLabel.text = "Inactive"
         }
         
+        let timeZoneBase = "Time Zone: "
+        if (self.timeZoneLabel == nil) {
+            self.timeZoneLabel.text = timeZoneBase
+        }
+        device.fetchTimeZoneWithSuccess({ (timeZone) in
+            self.timeZoneLabel.text = timeZoneBase + String.stringFromStringNumberOrNil(timeZone.tzID)
+        }) { (error) in
+            self.timeZoneLabel.text = timeZoneBase + "Unknown"
+        }
+
         var sharesText = "Not Shared"
         if sharesModel != nil {
             if device.grant == nil {
@@ -88,8 +98,5 @@ class DevicePanelView: UIView {
         
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGrayColor().CGColor
-
     }
 }
-
-
