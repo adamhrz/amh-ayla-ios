@@ -86,7 +86,7 @@ class DevicePanelView: UIView {
             }
             else {
                 if let receivedShare = sharesModel?.receivedShareForDevice(device) {
-                    sharesText = "Shared to you by " + receivedShare.userEmail
+                    sharesText = "Shared to you by " + receivedShare.ownerProfile.email
                 }
 
             }
