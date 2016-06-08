@@ -79,6 +79,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
                 vc.device = device
                 vc.sharesModel = self.viewModel?.sharesModel
             }
+        } else if segue.identifier == segueIdToRegisterView { // To registration page
         }
     }
     

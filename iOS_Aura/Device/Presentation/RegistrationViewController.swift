@@ -10,15 +10,19 @@ import iOS_AylaSDK
 import UIKit
 
 
-class RegistrationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CellButtonDelegate, CellSelectorDelegate {
+class RegistrationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CellButtonDelegate, CellSelectorDelegate, AylaDeviceManagerListener, AylaDeviceListener {
     
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var logTextView: UITextView!
     
+    /// Segue id to property view
+    let segueIdToNodeRegistrationView :String = "toNodeRegistrationPage"
+    
     enum Section :Int {
         case SameLan
         case ButtonPush
+        case GatewayNode
         case Manual
         case SectionCount
     }
@@ -33,21 +37,29 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     var selectorIndex : Int!
     
-    /// Device model used by view controller to present this device.
+    /// Reference to our current AylaSessionManager instance.
     var sessionManager :AylaSessionManager?
+    
+    /// Reference to our current AylaDeviceManager instance.
+    var deviceManager : AylaDeviceManager?
+    
+    /// Reference to our current list of devices.
+    var devices: [AylaDevice] = []
+    
     var candidateSameLan :AylaRegistrationCandidate?
     var candidateButtonPush :AylaRegistrationCandidate?
     var candidateManual :AylaRegistrationCandidate?
-    
+    var gateways : [AylaDeviceGateway?] = []
+
     
     let RegistrationCellId :String = "CandidateCellId"
+    
+    let RegistrationModeSelectorCellId :String = "ModeSelectorCellId"
+    
     let RegistrationDSNCellId :String = "CandidateDSNCellId"
     let RegistrationDisplayCellId :String = "CandidateDisplayCellId"
     let RegistrationAPModeCellId :String = "CandidateAPModeCellId"
     let RegistrationManualCellId :String = "CandidateManualCellId"
-
-    let RegistrationModeSelectorCellId :String = "ModeSelectorCellId"
-
 
     
     override func viewDidLoad() {
@@ -55,6 +67,9 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         
         if let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
             self.sessionManager = sessionManager
+            self.deviceManager = sessionManager.deviceManager
+            // Add self as device manager listener
+            self.deviceManager!.addListener(self)
         }
         else {
             print("- WARNING - session manager can't be found")
@@ -74,6 +89,21 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+    
+    func updateGatewaysList() {
+        self.devices = self.deviceManager!.devices.values.map({ (device) -> AylaDevice in
+            return device as! AylaDevice
+        })
+        gateways = []
+        if self.devices.count > 0 {
+            for device in self.devices {
+                if device.isKindOfClass(AylaDeviceGateway) {
+                    gateways.append((device as! AylaDeviceGateway))
+                }
+            }
+        }
+        self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.GatewayNode.rawValue, 1)), withRowAnimation: .Automatic)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -124,6 +154,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func refresh() {
+        self.updateGatewaysList()
         if let reg = sessionManager?.deviceManager.registration {
         
             let aGroup = dispatch_group_create()
@@ -276,6 +307,11 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 case Section.ButtonPush.rawValue:
                     cell?.configure(candidateButtonPush)
                     break
+                case Section.GatewayNode.rawValue:
+                    if let gateway = gateways[indexPath.row] {
+                    cell?.nameLabel.text = gateway.productName
+                    cell?.dsnLabel.text = gateway.dsn
+                    }
                 default:
                     cell?.configure(nil)
                 }
@@ -292,8 +328,11 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             return Int(candidateSameLan != nil);
         case Section.ButtonPush.rawValue:
             return Int(candidateButtonPush != nil);
+        case Section.GatewayNode.rawValue:
+            return gateways.count
         case Section.Manual.rawValue:
             return 2;
+            
         default:
             return 0;
         }
@@ -320,6 +359,8 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             return "Same LAN Candidate"
         case Section.ButtonPush.rawValue:
             return "Button Push Candidate"
+        case Section.GatewayNode.rawValue:
+            return "Add Node to Gateway"
         case Section.Manual.rawValue:
             return "Enter Candidate Details Manually"
         default:
@@ -330,6 +371,8 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == Section.Manual.rawValue{
             
+        } else if indexPath.section == Section.GatewayNode.rawValue {
+            self.performSegueWithIdentifier(segueIdToNodeRegistrationView, sender: gateways[indexPath.row])
         } else {
             self.registerAlertForIndexPath(indexPath)
         }
@@ -491,5 +534,51 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == segueIdToNodeRegistrationView {
+            let vc = segue.destinationViewController as! NodeRegistrationViewController
+            vc.targetGateway = (sender as! AylaDeviceGateway)
+        }
+    }
+    
+    // MARK - device manager listener
+    func deviceManager(deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : NSError]) {
+        print("Init complete")
+        self.updateGatewaysList()
+    }
+    
+    func deviceManager(deviceManager: AylaDeviceManager, didInitFailure error: NSError) {
+        print("Failed to init: \(error)")
+    }
+    
+    func deviceManager(deviceManager: AylaDeviceManager, didObserveDeviceListChange change: AylaDeviceListChange) {
+        print("Observe device list change")
+        if change.addedItems.count > 0 {
+            for device:AylaDevice in change.addedItems {
+                device.addListener(self)
+            }
+        }
+        else {
+            // We don't remove self as listener from device manager removed devices.
+        }
+        
+        self.updateGatewaysList()
+    }
+    
+    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
+        print("Change in deviceManager state: new state \(newState), was \(oldState)")
+    }
+    
+    func device(device: AylaDevice, didObserveChange change: AylaChange) {
+        if change.isKindOfClass(AylaDeviceChange) {
+            // Not a good long term update strategy
+            self.updateGatewaysList()
+        }
+    }
+    
+    func device(device: AylaDevice, didFail error: NSError) {
+        // Device errors are not handled here.
     }
 }
