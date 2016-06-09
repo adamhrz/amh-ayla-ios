@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m9m-D0-krJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m9m-D0-krJ">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -1299,7 +1299,7 @@
         <!--Registration-->
         <scene sceneID="cyn-lX-ksc">
             <objects>
-                <viewController id="ifq-c2-Pds" customClass="RegistrationViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="registrationController" id="ifq-c2-Pds" customClass="RegistrationViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="udp-om-jjw"/>
                         <viewControllerLayoutGuide type="bottom" id="E8l-Hg-KBT"/>

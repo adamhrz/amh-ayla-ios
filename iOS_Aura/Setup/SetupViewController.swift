@@ -171,32 +171,68 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      Use this method to confirm device connnection status with cloud service.
      */
     func confirmConnectionToService() {
-        self.updatePrompt("Confirming device status ...")
-        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(self.setup.setupDevice?.dsn)!, setupToken:token!, success: { () -> Void in
-            self.updatePrompt("- Succeeded -")
-            self.addDescription("Confirmed device connection to service.\n- Succeeded -");
-
-            let alertString = String(format:"Setup for device %@ completed successfully, using the setup token %@.\n\n You may wish to store this token if the device uses AP Mode registration.", (self.setup.setupDevice?.dsn)!, self.token!)
-            let alert = UIAlertController(title: "Setup Successful", message: alertString, preferredStyle: .Alert)
-            let copyAction = UIAlertAction(title: "Copy Token to Clipboard", style: .Default, handler: { (action) -> Void in
-                UIPasteboard.generalPasteboard().string = self.token!
-            })
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Default, handler: { (action) -> Void in
-            })
-            alert.addAction(copyAction)
-            alert.addAction(cancelAction)
+        func storeDeviceDetailsInKeychain(){
+            // Store device info in keychain for use during a later registration attempt.
             PDKeychainBindings.sharedKeychainBindings().setString(self.token, forKey: AuraDeviceSetupTokenKeychainKey)
             PDKeychainBindings.sharedKeychainBindings().setString(self.setup.setupDevice?.dsn, forKey: AuraDeviceSetupDSNKeychainKey)
+        }
+        
+        self.updatePrompt("Confirming device status ...")
+        let deviceDSN = self.setup.setupDevice?.dsn
+        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(deviceDSN)!, setupToken:token!, success: { () -> Void in
+                self.updatePrompt("- Succeeded -")
+                self.addDescription("Confirmed device connection to service.\n- Succeeded -");
 
-            self.presentViewController(alert, animated: true, completion: nil)
+                let alertString = String(format:"Setup for device %@ completed successfully, using the setup token %@.\n\n You may wish to store this token if the device uses AP Mode registration.", (self.setup.setupDevice?.dsn)!, self.token!)
+            if let features = self.setup.setupDevice?.features {
+                print("FEATURES")
+                for feature in features {
+                    print(feature)
+                }
+            }
 
-            // Clean scan results
-            self.scanResults = nil
-            self.tableView.reloadData()
-            
+                let alert = UIAlertController(title: "Setup Successful", message: alertString, preferredStyle: .Alert)
+                let copyAction = UIAlertAction(title: "Copy Token to Clipboard", style: .Default, handler: { (action) -> Void in
+                    UIPasteboard.generalPasteboard().string = self.token!
+                    storeDeviceDetailsInKeychain()
+                })
+                let cancelAction = UIAlertAction(title: "No, Thanks", style: .Cancel, handler: { (action) -> Void in
+                    storeDeviceDetailsInKeychain()
+                })
+                if let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
+                    var deviceAlreadyRegistered = false
+                    let devices = sessionManager.deviceManager.devices.values.map({ (device) -> AylaDevice in
+                        return device as! AylaDevice
+                    })
+                    for device in devices {
+                        if device.dsn == deviceDSN {
+                            deviceAlreadyRegistered = true
+                            self.addDescription("FYI, Device appears to be registered or shared to you already.");
+                        }
+                    }
+                    
+                    if deviceAlreadyRegistered == false {
+                        let registerNowAction = UIAlertAction(title: "Register Device Now", style: .Default, handler: { (action) -> Void in
+                            storeDeviceDetailsInKeychain()
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let regVC = storyboard.instantiateViewControllerWithIdentifier("registrationController")
+                                self.navigationController?.pushViewController(regVC, animated: true)
+                        })
+                        alert.addAction(registerNowAction)
+                    }
+                }
+                
+                alert.addAction(copyAction)
+                alert.addAction(cancelAction)
+
+                self.presentViewController(alert, animated: true, completion: nil)
+
+                // Clean scan results
+                self.scanResults = nil
+                self.tableView.reloadData()
             
             }) { (error) -> Void in
-            self.displayError(error)
+                self.displayError(error)
         }
     }
     
@@ -217,12 +253,13 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let currentAlert = alert {
             currentAlert.dismissViewControllerAnimated(false, completion: nil)
         }
-        
-        let alertController = UIAlertController(title: "Error", message: "\(error.userInfo[AylaRequestErrorResponseJsonKey]!)", preferredStyle: .Alert)
+        var message = "Unknown Error Occurred."
+        if let errorKey = error.userInfo[AylaRequestErrorResponseJsonKey] {
+            message = errorKey as! String
+        }
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Got it", style: .Cancel, handler: nil))
-        
         alert = alertController
-        
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
