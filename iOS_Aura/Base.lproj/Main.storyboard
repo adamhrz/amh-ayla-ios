@@ -1299,7 +1299,7 @@
         <!--Registration-->
         <scene sceneID="cyn-lX-ksc">
             <objects>
-                <viewController id="ifq-c2-Pds" customClass="RegistrationViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="registrationController" id="ifq-c2-Pds" customClass="RegistrationViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="udp-om-jjw"/>
                         <viewControllerLayoutGuide type="bottom" id="E8l-Hg-KBT"/>
