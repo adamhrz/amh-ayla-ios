@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		0746548122F6BAA6C0E80526 /* Pods_iOS_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */; };
+		0F0DD7B11D07825600013752 /* NodeRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0DD7B01D07825600013752 /* NodeRegistrationViewController.swift */; };
 		0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */; };
 		0F47221B1CDD39800055D6C3 /* DeviceSharesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */; };
 		0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F47221E1CDD4D600055D6C3 /* CreateShare.storyboard */; };
@@ -103,6 +104,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F0DD7B01D07825600013752 /* NodeRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeRegistrationViewController.swift; path = Device/Presentation/NodeRegistrationViewController.swift; sourceTree = "<group>"; };
 		0F4722181CDD289A0055D6C3 /* DeviceShareTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceShareTVCell.swift; path = Sharing/DeviceShareTVCell.swift; sourceTree = "<group>"; };
 		0F47221A1CDD39800055D6C3 /* DeviceSharesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesModel.swift; path = Sharing/DeviceSharesModel.swift; sourceTree = "<group>"; };
 		0F47221F1CDD4D600055D6C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateShare.storyboard; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */,
 				A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */,
 				A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */,
+				0F0DD7B01D07825600013752 /* NodeRegistrationViewController.swift */,
 				A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */,
 				0FD5AA621CEBBAD6000931D6 /* RegistrationManualTVCell.swift */,
 				0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */,
@@ -685,6 +688,7 @@
 				A5E0DF411CE2623000D0E87F /* ScheduleEditorTableViewController.swift in Sources */,
 				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 				A78DC8F51CB87289002EE6B0 /* LanModeTestModel.swift in Sources */,
+				0F0DD7B11D07825600013752 /* NodeRegistrationViewController.swift in Sources */,
 				0FE0D54A1CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
