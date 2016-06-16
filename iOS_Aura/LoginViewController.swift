@@ -8,6 +8,7 @@ import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
 import SSKeychain
+import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
 
@@ -66,19 +67,32 @@ class LoginViewController: UIViewController {
             // Create auth provider with user input.
             let auth = AylaUsernameAuthProvider(username: username, password: password)
             
-            // Login with login manager
-            self.presentLoading("Login...")
-            let loginManager = AylaNetworks.shared().loginManager
-            loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
+            let success = { (authorization: AylaAuthorization, sessionManager: AylaSessionManager) -> Void in
                 PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
                 SSKeychain.setPassword(password, forService: settings.appId, account: username)
                 self.dismissLoading(false, completion: { () -> Void in
+                    KeychainWrapper.setObject(authorization, forKey: "LANLoginAuthorization")
                     // Once succeeded, present view controller in `Main` storyboard.
                     self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
                 })
-                
-                }, failure: { (error) -> Void in
 
+            }
+            
+            // Login with login manager
+            self.presentLoading("Login...")
+            let loginManager = AylaNetworks.shared().loginManager
+            loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: success, failure: { [unowned loginManager] (error) -> Void in
+                    if settings.allowOfflineUse {
+                        if let cachedAuth = KeychainWrapper.objectForKey("LANLoginAuthorization") as? AylaAuthorization {
+                            let provider = AylaCachedAuthProvider(authorization: cachedAuth)
+                            loginManager.loginWithAuthProvider(provider, sessionName: AuraSessionOneName, success: success, failure: { (error) in
+                                self.dismissLoading(false, completion: { () -> Void in
+                                    self.presentError(error)
+                                })
+                            })
+                            return;
+                        }
+                    }
                     self.dismissLoading(false, completion: { () -> Void in
                         self.presentError(error)
                     })
