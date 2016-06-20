@@ -34,6 +34,9 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         if let sessionManager = sessionManager {
             viewModel = DeviceListViewModel(deviceManager: sessionManager.deviceManager, tableView: tableView)
             viewModel?.delegate = self
+            if sessionManager.cachedSession {
+                UIAlertController.alert("Offline Mode", message: "Logged in LAN Mode, some features might not be available", buttonTitle: "OK", fromController: self)
+            }
         }
         else {
             print(" - WARNING - device list with a nil session manager")
