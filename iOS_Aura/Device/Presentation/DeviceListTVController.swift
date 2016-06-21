@@ -55,6 +55,11 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         actionSheet.addAction(UIAlertAction(title: "Register a Device", style: .Default, handler: { (action) -> Void in
             self.performSegueWithIdentifier(self.segueIdToRegisterView, sender: nil)
         }))
+        actionSheet.addAction(UIAlertAction(title: "Wi-Fi Setup", style: .Default, handler: { (action) -> Void in
+            let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
+            let setupVC = setupStoryboard.instantiateInitialViewController()
+            self.navigationController?.presentViewController(setupVC!, animated: true, completion:nil)
+        }))
         actionSheet.addAction(UIAlertAction(title: "View Device Shares", style: .Default, handler: { (action) -> Void in
             self.performSegueWithIdentifier(self.segueIdToSharesView, sender: nil)
         }))
