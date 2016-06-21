@@ -120,7 +120,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.fetchApList()
             }) { (error) -> Void in
                 self.updatePrompt("")
-                self.addDescription("Unable to find device: \(error.description)")
+                self.addDescription("Unable to find device: \(error.localizedDescription)")
                 let message = "Are you sure you are connected to the device's AP?\n\nIf not, please tap the button below to move to the Settings application.  Navigate to Wi-Fi settings section and select the AP/network name for your device.\n\nOnce the network is joined, you should be redirected here momentarily."
                 let alert = UIAlertController(title: "No Device Found", message: message, preferredStyle: .Alert)
                 let settingsAction = UIAlertAction(title: "Go To Settings App", style:.Default, handler: { (action) in
@@ -147,7 +147,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             }, failure: { (error) -> Void in
                 self.updatePrompt("Failed")
-                self.addDescription("Fetch AP results: \(error.description)")
+                self.addDescription("Fetch AP results: \(error.localizedDescription)")
         })
     }
     
