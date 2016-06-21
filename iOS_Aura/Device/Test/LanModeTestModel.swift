@@ -211,7 +211,7 @@ class LanModeTestModel: TestModel {
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        if let curVal = property!.datapoint?.value.intValue {
+        if let curVal = property!.value.intValue {
             dp.value = NSNumber(int: 1 - curVal)
         }
         else {
@@ -221,9 +221,9 @@ class LanModeTestModel: TestModel {
         addLog(.Info, log: "Using property \(property?.name), dp.value \(dp.value)")
         
         let confirm = device?.lanTest_getConfirmingPropertyAndDatapointParamsFor(property!, dpParams: dp)
-        createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdDatapoint) -> Bool in
+        createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdValue) -> Bool in
             if let expectedParams = confirm?.1 {
-                return createdDatapoint.value.boolValue == expectedParams.value.boolValue
+                return createdValue.boolValue == expectedParams.value.boolValue
             }
             return false
         }
@@ -246,9 +246,9 @@ class LanModeTestModel: TestModel {
         addLog(.Info, log: "Using property \(property?.name), dp.value \(dp.value)")
         
         let confirm = device?.lanTest_getConfirmingPropertyAndDatapointParamsFor(property!, dpParams: dp)
-        createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdDatapoint) -> Bool in
+        createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdValue) -> Bool in
             if let expectedParams = confirm?.1 {
-                return createdDatapoint.value as! String == expectedParams.value as! String
+                return createdValue as! String == expectedParams.value as! String
             }
             return false
         }
@@ -267,7 +267,7 @@ class LanModeTestModel: TestModel {
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        if let curVal = property!.datapoint?.value.intValue {
+        if let curVal = property!.value.intValue {
             dp.value = NSNumber(int: 1 - curVal)
         }
         else {
@@ -294,7 +294,7 @@ class LanModeTestModel: TestModel {
 
     }
 
-    func createAndConfirmDatapoint(tc:TestCase, property: AylaProperty, datapoint: AylaDatapointParams , confirmProperty: AylaProperty?, checkBlock: (AylaDatapoint) -> Bool)  {
+    func createAndConfirmDatapoint(tc:TestCase, property: AylaProperty, datapoint: AylaDatapointParams , confirmProperty: AylaProperty?, checkBlock: (AnyObject) -> Bool)  {
 
         let device = self.device
         // Create a datapoint
@@ -306,8 +306,8 @@ class LanModeTestModel: TestModel {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), {
                     self.addLog(.Info, log: "Fetching property \"\(confirmProperty!.name)\" to confirm datapoint.")
                     device?.fetchPropertiesLAN([ confirmProperty!.name ], success: { (properties) in
-                            if let dp = properties.first?.datapoint {
-                                if checkBlock(dp) {
+                            if let createdValue = properties.first?.value {
+                                if checkBlock(createdValue) {
                                     self.passTestCase(tc)
                                 }
                                 else {
