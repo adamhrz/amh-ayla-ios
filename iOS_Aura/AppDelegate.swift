@@ -27,6 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set DSS as allowed
         settings.allowDSS = true;
         
+        // Uncomment following line to allow Offline use
+        //settings.allowOfflineUse = true
+        
         // Init device manager
         AylaNetworks.initializeWithSettings(settings)
         
