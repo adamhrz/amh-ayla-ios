@@ -112,15 +112,26 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     func attemptToConnect() {
 
-        updatePrompt("loading...")
+        updatePrompt("Loading...")
         
         currentTask = setup.connectToNewDevice({ (setupDevice) -> Void in
             self.addDescription("Find device: \(setupDevice.dsn)")
-            // Start fetching ap list.
+            // Start fetching AP list from module.
             self.fetchApList()
             }) { (error) -> Void in
-            self.updatePrompt("No device found")
-            self.addDescription("Unable to find device: \(error.description)")
+                self.updatePrompt("")
+                self.addDescription("Unable to find device: \(error.description)")
+                let message = "Are you sure you are connected to the device's AP?\n\nIf not, please tap the button below to move to the Settings application.  Navigate to Wi-Fi settings section and select the AP/network name for your device.\n\nOnce the network is joined, you should be redirected here momentarily."
+                let alert = UIAlertController(title: "No Device Found", message: message, preferredStyle: .Alert)
+                let settingsAction = UIAlertAction(title: "Go To Settings App", style:.Default, handler: { (action) in
+                    UIApplication.sharedApplication().openURL(NSURL(string:UIApplicationOpenSettingsURLString)!)
+                })
+                let cancelAction = UIAlertAction(title: "Cancel", style:.Cancel, handler: { (action) in
+                    self.updatePrompt("No Device Found")
+                })
+                alert.addAction(settingsAction)
+                alert.addAction(cancelAction)
+                self.presentViewController(alert, animated: true, completion: {})
         }
     }
 
@@ -128,7 +139,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      Use this method to fetch ap list from setup.
      */
     func fetchApList() {
-        updatePrompt("loading...")
+        updatePrompt("Loading...")
         currentTask = setup.fetchDeviceAccessPoints({ (scanResults) -> Void in
             self.updatePrompt(self.setup.setupDevice?.dsn ?? "")
             self.scanResults = scanResults
@@ -136,7 +147,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             }, failure: { (error) -> Void in
                 self.updatePrompt("Failed")
-                self.addDescription("Fetch ap results: \(error.description)")
+                self.addDescription("Fetch AP results: \(error.description)")
         })
     }
     
