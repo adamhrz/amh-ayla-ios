@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         settings.deviceDetailProvider = DeviceDetailProvider()
         
         // Set DSS as allowed
-        settings.allowDSS = true;
+        settings.allowDSS = false;
         
         // Uncomment following line to allow Offline use
         //settings.allowOfflineUse = true
