@@ -59,7 +59,7 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
                         successHandler()
                     }
                     }, failure: { (error) in
-                        let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
+                        let alert = UIAlertController(title: "Error. Failed to Delete Share.", message: error.description, preferredStyle: .Alert)
                         let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
                         alert.addAction(gotIt)
                         presentingViewController.presentViewController(alert, animated: true, completion: nil)

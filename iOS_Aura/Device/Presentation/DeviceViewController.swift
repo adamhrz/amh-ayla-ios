@@ -79,7 +79,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     }
     
     func unregister() {
-        deviceViewModel?.unregisterDevice(self, successHandler: { Void in
+        deviceViewModel?.unregisterDeviceWithConfirmation(self, successHandler: { Void in
             self.navigationController?.popViewControllerAnimated(true)
             }, failureHandler: { (error) in
 

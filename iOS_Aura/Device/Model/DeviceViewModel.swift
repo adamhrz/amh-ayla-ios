@@ -79,13 +79,18 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
         
     }
     
-    func unregisterDevice(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
+    func unregisterDeviceWithConfirmation(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
         let name = device.productName ?? "unnamed device"
         let dsn = device.dsn ?? "unknown"
         
         func unregisterDeviceWithError(){
             self.device.unregisterWithSuccess({
-                    if let successHandler = successHandler{successHandler()}
+                    let alert = UIAlertController(title: "Device Unregistered.", message: nil, preferredStyle: .Alert)
+                    let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
+                        if let successHandler = successHandler{successHandler()}
+                    })
+                    alert.addAction(gotIt)
+                    presentingViewController.presentViewController(alert, animated: true, completion: nil)
                 }, failure: { (error) in
                     let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
                     let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
@@ -130,10 +135,22 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
                         let alert = UIAlertController(title:"Device is shared to \(shares.count) other user" + (shares.count > 1 ? "s." : "." ), message: "You must unshare it from all users to which you have shared it first.", preferredStyle: .Alert)
                         let unshareAction = UIAlertAction(title:(shares.count < 2 ? "Delete Share" : "Delete Shares"), style: .Destructive) { (action) in
                             // Delete all extant owned shares
+                            var sharesCount = shares.count
                             for share in (shares as [AylaShare]!) {
                                 let shareViewModel = ShareViewModel(share: share)
                                 shareViewModel.deleteShareWithoutConfirmation(presentingViewController, successHandler: {
-                                    
+                                    sharesCount = sharesCount - 1
+                                    if sharesCount == 0 {
+                                        //  Unregister device when done deleting shares.
+                                        let alert = UIAlertController(title: "Shares Deleted.", message: "Unregister Device Now?", preferredStyle: .Alert)
+                                        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {(action) -> Void in })
+                                        let continueAction = UIAlertAction(title: "Continue", style: .Destructive, handler: {(action) -> Void in
+                                            unregisterDeviceWithError()
+                                        })
+                                        alert.addAction(cancelAction)
+                                        alert.addAction(continueAction)
+                                        presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                                    }
                                     }, failureHandler: { (error) in
                                         let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
                                         let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
@@ -143,10 +160,6 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
                                         presentingViewController.presentViewController(alert, animated: true, completion: nil)
                                 })
                             }
-                            UIAlertController(title: "Shares count after deletion = \(shares.count)", message: nil, preferredStyle: .Alert)
-                            //  Unregister device when done deleting shares.
-                            unregisterDeviceWithError()
-
                         }
                         let cancelAction = UIAlertAction(title: "Cancel", style: .Default) { (action) in }
                         alert.addAction(cancelAction)

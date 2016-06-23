@@ -81,7 +81,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     
     func deviceListViewModel(viewModel: DeviceListViewModel, didUnregisterDevice device: AylaDevice){
         let deviceViewModel = DeviceViewModel(device: device, panel: nil, propertyListTableView: nil, sharesModel: self.viewModel!.sharesModel)
-        deviceViewModel.unregisterDevice(self, successHandler: {
+        deviceViewModel.unregisterDeviceWithConfirmation(self, successHandler: {
             self.tableView.reloadData()
             }, failureHandler: { (error) in
                 self.tableView.reloadData()
