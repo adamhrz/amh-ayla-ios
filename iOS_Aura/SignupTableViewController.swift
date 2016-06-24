@@ -24,6 +24,7 @@ class SignupTableViewController: UITableViewController {
     @IBOutlet weak var zipTextField: UITextField!
     @IBOutlet weak var countryTextField: UITextField!
     @IBOutlet weak var devKitNumTextField: UITextField!
+    @IBOutlet weak var signupButton: AuraButton!
 
     var tokenTextField: UITextField?
     override func viewDidLoad() {
@@ -89,14 +90,18 @@ class SignupTableViewController: UITableViewController {
         
         let emailTemplate = AylaEmailTemplate(id: "aura_confirmation_template_01", subject: "Aura Signup", bodyHTML: nil)
         
+        signupButton.enabled = false
+        signupButton.alpha = 0.6
         let loginManager = AylaNetworks.shared().loginManager
         loginManager.signUpWithUser(user, emailTemplate: emailTemplate, success: { () -> Void in
             let presentingController = self.presentingViewController
             self.dismissViewControllerAnimated(true, completion: {
                 UIAlertController.alert( "Account created", message: "Please check your email for a confirmation",buttonTitle: "OK",fromController: presentingController!)
             })
-            }) { (error) -> Void in
-                UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
+        }) { (error) -> Void in
+            self.signupButton.enabled = true
+            self.signupButton.alpha = 1.0
+            UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
         }
     }
     

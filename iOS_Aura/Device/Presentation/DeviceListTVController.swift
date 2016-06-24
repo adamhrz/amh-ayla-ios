@@ -34,6 +34,9 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         if let sessionManager = sessionManager {
             viewModel = DeviceListViewModel(deviceManager: sessionManager.deviceManager, tableView: tableView)
             viewModel?.delegate = self
+            if sessionManager.cachedSession {
+                UIAlertController.alert("Offline Mode", message: "Logged in LAN Mode, some features might not be available", buttonTitle: "OK", fromController: self)
+            }
         }
         else {
             print(" - WARNING - device list with a nil session manager")
@@ -51,6 +54,11 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         actionSheet.addAction(UIAlertAction(title: "Register a Device", style: .Default, handler: { (action) -> Void in
             self.performSegueWithIdentifier(self.segueIdToRegisterView, sender: nil)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Wi-Fi Setup", style: .Default, handler: { (action) -> Void in
+            let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
+            let setupVC = setupStoryboard.instantiateInitialViewController()
+            self.navigationController?.presentViewController(setupVC!, animated: true, completion:nil)
         }))
         actionSheet.addAction(UIAlertAction(title: "View Device Shares", style: .Default, handler: { (action) -> Void in
             self.performSegueWithIdentifier(self.segueIdToSharesView, sender: nil)
