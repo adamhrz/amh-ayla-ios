@@ -35,13 +35,21 @@
 		0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */; };
 		0FD5AA631CEBBAD6000931D6 /* RegistrationManualTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD5AA621CEBBAD6000931D6 /* RegistrationManualTVCell.swift */; };
 		0FE0D54A1CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */; };
+		5F2429E81D1B6A27003F2D40 /* ContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2429E71D1B6A27003F2D40 /* ContactManager.swift */; };
+		5F3CFE3B1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3CFE391D1C278A00386C5E /* PropertyNotificationDetailsContactTableViewCell.swift */; };
+		5F3CFE3C1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F3CFE3A1D1C278A00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib */; };
 		5F4632921CCAE911005580EC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632901CCAE911005580EC /* Profile.storyboard */; };
 		5F4632951CCAE919005580EC /* Signup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632931CCAE919005580EC /* Signup.storyboard */; };
 		5F4632981CCAE921005580EC /* PasswordReset.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4632961CCAE921005580EC /* PasswordReset.storyboard */; };
+		5F6046D61D0B55B6007E1AE6 /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F6046D41D0B55B6007E1AE6 /* Notifications.storyboard */; };
+		5F6046D81D0B5CA9007E1AE6 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6046D71D0B5CA9007E1AE6 /* NotificationsViewController.swift */; };
+		5F6C383A1D122108000CC897 /* AylaDevice_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6C38391D122108000CC897 /* AylaDevice_extensions.swift */; };
+		5F6C383C1D1230A8000CC897 /* PropertyNotificationDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6C383B1D1230A8000CC897 /* PropertyNotificationDetailsViewController.swift */; };
 		5F7277F41CF4EBEB009D153F /* TimeZonePicker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */; };
 		5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */; };
 		5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA31CC84CF100233D99 /* AuraLabel.swift */; };
 		5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA41CC84CF100233D99 /* AuraTextField.swift */; };
+		5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */; };
 		A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
@@ -119,13 +127,21 @@
 		0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationModeSelectorTVCell.swift; path = Device/Presentation/RegistrationModeSelectorTVCell.swift; sourceTree = "<group>"; };
 		146F444393CBF99F78A226B0 /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
 		434BD7251564D75A4BE297A6 /* Pods-iOS_Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		5F2429E71D1B6A27003F2D40 /* ContactManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactManager.swift; path = Contacts/ContactManager.swift; sourceTree = "<group>"; };
+		5F3CFE391D1C278A00386C5E /* PropertyNotificationDetailsContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyNotificationDetailsContactTableViewCell.swift; path = Device/Presentation/PropertyNotificationDetailsContactTableViewCell.swift; sourceTree = "<group>"; };
+		5F3CFE3A1D1C278A00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PropertyNotificationDetailsContactTableViewCell.xib; path = Device/Presentation/PropertyNotificationDetailsContactTableViewCell.xib; sourceTree = "<group>"; };
 		5F4632911CCAE911005580EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Profile.storyboard; sourceTree = "<group>"; };
 		5F4632941CCAE919005580EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Signup.storyboard; sourceTree = "<group>"; };
 		5F4632971CCAE921005580EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PasswordReset.storyboard; sourceTree = "<group>"; };
+		5F6046D51D0B55B6007E1AE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Notifications.storyboard; sourceTree = "<group>"; };
+		5F6046D71D0B5CA9007E1AE6 /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationsViewController.swift; path = Device/Presentation/NotificationsViewController.swift; sourceTree = "<group>"; };
+		5F6C38391D122108000CC897 /* AylaDevice_extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AylaDevice_extensions.swift; path = Device/Utils/AylaDevice_extensions.swift; sourceTree = "<group>"; };
+		5F6C383B1D1230A8000CC897 /* PropertyNotificationDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyNotificationDetailsViewController.swift; path = Device/Presentation/PropertyNotificationDetailsViewController.swift; sourceTree = "<group>"; };
 		5F7277F31CF4EBEB009D153F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TimeZonePicker.storyboard; sourceTree = "<group>"; };
 		5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeZonePickerViewController.swift; path = Device/Presentation/TimeZonePickerViewController.swift; sourceTree = "<group>"; };
 		5FDCECA31CC84CF100233D99 /* AuraLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraLabel.swift; path = UX/AuraLabel.swift; sourceTree = "<group>"; };
 		5FDCECA41CC84CF100233D99 /* AuraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraTextField.swift; path = UX/AuraTextField.swift; sourceTree = "<group>"; };
+		5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactNotificationButton.swift; path = Device/Presentation/ContactNotificationButton.swift; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionOptionViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
@@ -234,6 +250,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5F2429E61D1B69F7003F2D40 /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				5F2429E71D1B6A27003F2D40 /* ContactManager.swift */,
+			);
+			name = Contacts;
+			sourceTree = "<group>";
+		};
 		5F46328F1CCAE8D1005580EC /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,6 +266,7 @@
 				A7104AC81C757F32007B1AB3 /* Login.storyboard */,
 				A7351C911C753C370073C73A /* Main.storyboard */,
 				A78080161CBC271A00C779B5 /* Me.storyboard */,
+				5F6046D41D0B55B6007E1AE6 /* Notifications.storyboard */,
 				5F4632961CCAE921005580EC /* PasswordReset.storyboard */,
 				5F4632901CCAE911005580EC /* Profile.storyboard */,
 				A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */,
@@ -251,6 +276,14 @@
 				5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */,
 			);
 			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		5F6C38381D1220DF000CC897 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				5F6C38391D122108000CC897 /* AylaDevice_extensions.swift */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 		99687F7A875709CF60B6A4BE /* Pods */ = {
@@ -298,6 +331,7 @@
 				A78DC8F31CB87213002EE6B0 /* Test */,
 				A7104ADF1C7AD263007B1AB3 /* Model */,
 				A7104AD81C7AC290007B1AB3 /* Presentation */,
+				5F6C38381D1220DF000CC897 /* Utils */,
 				A77F3C4B1CA78B6A00461F2B /* DeviceDetailProvider.swift */,
 			);
 			name = Device;
@@ -306,14 +340,19 @@
 		A7104AD81C7AC290007B1AB3 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */,
+				5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */,
 				A7104ADB1C7AC4FA007B1AB3 /* DeviceListTVController.swift */,
 				A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */,
-				A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */,
+				A7104AD91C7AC2E8007B1AB3 /* DeviceTVCell.swift */,
 				A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */,
+				0F0DD7B01D07825600013752 /* NodeRegistrationViewController.swift */,
+				5F6046D71D0B5CA9007E1AE6 /* NotificationsViewController.swift */,
+				5F3CFE391D1C278A00386C5E /* PropertyNotificationDetailsContactTableViewCell.swift */,
+				5F3CFE3A1D1C278A00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib */,
+				5F6C383B1D1230A8000CC897 /* PropertyNotificationDetailsViewController.swift */,
+				A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */,
 				A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */,
 				A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */,
-				0F0DD7B01D07825600013752 /* NodeRegistrationViewController.swift */,
 				A78DC8E91CB4CCF2002EE6B0 /* RegistrationTVCell.swift */,
 				0FD5AA621CEBBAD6000931D6 /* RegistrationManualTVCell.swift */,
 				0FE0D5491CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift */,
@@ -362,6 +401,7 @@
 			children = (
 				A78FEAD01C7FC66400B7EA72 /* Me */,
 				A7A8C90D1C7BC7A700612C39 /* Log */,
+				5F2429E61D1B69F7003F2D40 /* Contacts */,
 				A7104AD71C7ABBDC007B1AB3 /* Device */,
 				0F6B73591CD9581800560563 /* Sharing */,
 				A7104ACB1C757FA7007B1AB3 /* Login */,
@@ -555,7 +595,9 @@
 				A78DC8ED1CB8538F002EE6B0 /* Test.storyboard in Resources */,
 				0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */,
 				A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */,
+				5F3CFE3C1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib in Resources */,
 				A78080181CBC271A00C779B5 /* Me.storyboard in Resources */,
+				5F6046D61D0B55B6007E1AE6 /* Notifications.storyboard in Resources */,
 				5F4632951CCAE919005580EC /* Signup.storyboard in Resources */,
 				A7351C931C753C370073C73A /* Main.storyboard in Resources */,
 			);
@@ -649,6 +691,7 @@
 				A78DC8F01CB8547F002EE6B0 /* TestPanelViewController.swift in Sources */,
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A78DC8F21CB85702002EE6B0 /* TestModel.swift in Sources */,
+				5F6C383C1D1230A8000CC897 /* PropertyNotificationDetailsViewController.swift in Sources */,
 				0FBEB0A31CC07AE600E8EE6F /* UIAlertView_Extensions.swift in Sources */,
 				0F6B73581CD9581100560563 /* DeviceSharesTableViewController.swift in Sources */,
 				A7104AD01C75816F007B1AB3 /* LoginViewController.swift in Sources */,
@@ -658,6 +701,7 @@
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */,
 				5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */,
+				5F6046D81D0B5CA9007E1AE6 /* NotificationsViewController.swift in Sources */,
 				A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */,
 				0F4742E71CDC055700B27992 /* DeviceSharesListViewModel.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
@@ -669,8 +713,11 @@
 				A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */,
 				A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */,
 				0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */,
+				5F6C383A1D122108000CC897 /* AylaDevice_extensions.swift in Sources */,
 				0FD5AA631CEBBAD6000931D6 /* RegistrationManualTVCell.swift in Sources */,
 				A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */,
+				5F2429E81D1B6A27003F2D40 /* ContactManager.swift in Sources */,
+				5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */,
 				A78DC8F71CBAC42D002EE6B0 /* TestSequencer.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
 				A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */,
@@ -688,6 +735,7 @@
 				A5E0DF411CE2623000D0E87F /* ScheduleEditorTableViewController.swift in Sources */,
 				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 				A78DC8F51CB87289002EE6B0 /* LanModeTestModel.swift in Sources */,
+				5F3CFE3B1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.swift in Sources */,
 				0F0DD7B11D07825600013752 /* NodeRegistrationViewController.swift in Sources */,
 				0FE0D54A1CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift in Sources */,
 			);
@@ -755,6 +803,14 @@
 				5F4632971CCAE921005580EC /* Base */,
 			);
 			name = PasswordReset.storyboard;
+			sourceTree = "<group>";
+		};
+		5F6046D41D0B55B6007E1AE6 /* Notifications.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5F6046D51D0B55B6007E1AE6 /* Base */,
+			);
+			name = Notifications.storyboard;
 			sourceTree = "<group>";
 		};
 		5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */ = {
