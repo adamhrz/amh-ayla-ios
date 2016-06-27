@@ -12,7 +12,11 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
 
     var device: AylaDevice!
     
-    var propertyTriggers = [AylaPropertyTrigger]()
+    var propertyTriggers = [AylaPropertyTrigger]() {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
 
     @IBOutlet private weak var tableView: UITableView!
     
@@ -50,24 +54,35 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
     // MARK: - Utilities
     
     func reloadTriggers() {
-        // Clear out any previous triggers
-        self.propertyTriggers = []
+        let fetchTriggersGroup = dispatch_group_create()
+        var fetchedPropertyTriggers = [AylaPropertyTrigger]()
+        var fetchErrors = [NSError]()
         
         // Rebuild the array by getting the properties we care about and fetching all triggers attached to them
         if let properties = device.managedPropertyNames() {
             for propertyName in properties {
                 if let property = device.getProperty(propertyName) {
+                    dispatch_group_enter(fetchTriggersGroup)
                     property.fetchTriggersWithSuccess({ (triggers) in
-                        self.propertyTriggers += triggers
-                        self.tableView.reloadData()
+                        fetchedPropertyTriggers += triggers
+                        dispatch_group_leave(fetchTriggersGroup)
                     }) { (error) in
-                        UIAlertController.alert("Failed to fetch Property Triggers", message: error.description, buttonTitle: "OK", fromController: self)
+                        fetchErrors.append(error)
+                        dispatch_group_leave(fetchTriggersGroup)
                     }
                 }
             }
         }
         
-        tableView.reloadData()
+        dispatch_group_notify(fetchTriggersGroup, dispatch_get_main_queue()) {
+            if !fetchErrors.isEmpty {
+                print("Failed to fetch \(fetchErrors.count) Property Triggers: \(fetchErrors)")
+                UIAlertController.alert("Failed to fetch \(fetchErrors.count) Property Triggers", message: "First error: \(fetchErrors.first?.description)", buttonTitle: "OK", fromController: self)
+            }
+            
+            // Now that all of the fetch requests have completed, update our table with the new data
+            self.propertyTriggers = fetchedPropertyTriggers
+        }
     }
 
     // MARK: - UITableViewDataSource
