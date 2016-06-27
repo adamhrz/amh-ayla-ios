@@ -270,8 +270,8 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         case .GreaterThan: index = .GreaterThan
         case .GreaterThanOrEqualTo: index = .GreaterThanOrEqual
         case .LessThan: index = .LessThan
-        case .LessThanOrEqualTo: index = .LessThanOrEqual; assert(false, "Unexpected triggerCompare!")
-        default: index = .Equal
+        case .LessThanOrEqualTo: index = .LessThanOrEqual
+        default: index = .Equal; assert(false, "Unexpected triggerCompare!")
         }
         
         return index
