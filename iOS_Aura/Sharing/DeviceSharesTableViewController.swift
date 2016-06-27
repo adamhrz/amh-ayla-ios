@@ -71,6 +71,10 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
             self.viewModel!.sharesModel?.updateSharesList({ (shares) in
                     self.reloadTableData()
                 }, failureHandler: { (error) in
+                    let alert = UIAlertController(title: "Failed to Update Shares List.", message: error.description, preferredStyle: .Alert)
+                    let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
+                    alert.addAction(gotIt)
+                    self.presentViewController(alert, animated: true, completion: nil)
                     self.reloadTableData()
             })
             }) { (error) in }

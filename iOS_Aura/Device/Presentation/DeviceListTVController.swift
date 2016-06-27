@@ -79,6 +79,15 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         self.performSegueWithIdentifier(segueIdToDevice, sender: device)
     }
     
+    func deviceListViewModel(viewModel: DeviceListViewModel, didUnregisterDevice device: AylaDevice){
+        let deviceViewModel = DeviceViewModel(device: device, panel: nil, propertyListTableView: nil, sharesModel: self.viewModel!.sharesModel)
+        deviceViewModel.unregisterDeviceWithConfirmation(self, successHandler: {
+            self.tableView.reloadData()
+            }, failureHandler: { (error) in
+                self.tableView.reloadData()
+        })
+    }
+    
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == segueIdToDevice { // To device page

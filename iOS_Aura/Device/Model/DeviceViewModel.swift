@@ -79,31 +79,107 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
         
     }
     
-    func unregisterDevice(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
+    func unregisterDeviceWithConfirmation(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
         let name = device.productName ?? "unnamed device"
         let dsn = device.dsn ?? "unknown"
-        let alert = UIAlertController(title: "Are you sure you want to unregister \(name) (DSN: \(dsn))?", message: nil, preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        let okAction = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
+        
+        func unregisterDeviceWithError(){
             self.device.unregisterWithSuccess({
-                if let successHandler = successHandler{
-                    successHandler()
-                }
+                    let alert = UIAlertController(title: "Device Unregistered.", message: nil, preferredStyle: .Alert)
+                    let okayAction = UIAlertAction(title: "Okay", style: .Cancel, handler: {(action) -> Void in
+                        if let successHandler = successHandler{successHandler()}
+                    })
+                    alert.addAction(okayAction)
+                    presentingViewController.presentViewController(alert, animated: true, completion: nil)
                 }, failure: { (error) in
                     let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
-                    let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
-                        if let failureHandler = failureHandler{
-                            failureHandler(error: error)
-                        }
+                    let okayAction = UIAlertAction(title: "Okay", style: .Cancel, handler: {(action) -> Void in
+                        if let failureHandler = failureHandler{failureHandler(error: error)}
                     })
-                    alert.addAction(gotIt)
+                    alert.addAction(okayAction)
                     presentingViewController.presentViewController(alert, animated: true, completion: nil)
             })
         }
+        
+        if device.grant != nil { // Device is shared to the user
+            let alert = UIAlertController(title:"Cannot Unregister this device", message: "This device is shared to you, so you are not able to unregister it, but you may unshare it.", preferredStyle: .Alert)
+            let unshareAction = UIAlertAction(title:"Delete Share", style: .Destructive) { (action) in
+                if let share =  self.sharesModel?.receivedShareForDevice(self.device) {
+                    let shareViewModel = ShareViewModel(share: share)
+                    shareViewModel.deleteShareWithoutConfirmation(presentingViewController, successHandler: {
+                        unregisterDeviceWithError()
+                        }, failureHandler: { (error) in
+                            let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
+                            let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
+                                if let failureHandler = failureHandler{
+                                    failureHandler(error: error)
+                                }
+                            })
+                            alert.addAction(gotIt)
+                            presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                    })
+                }
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Default) { (action) in }
+            alert.addAction(cancelAction)
+            alert.addAction(unshareAction)
+            presentingViewController.presentViewController(alert, animated: true, completion:nil)
+        } else { // Device owned by user
+            let alert = UIAlertController(title: "Continue?", message: "Are you sure you want to unregister device \(name), (DSN: \(dsn))?", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            let okAction = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
+                // Check if device is shared to anyone before unregistering
+                if let shares =  self.sharesModel?.ownedSharesForDevice(self.device) {
+                    // Device is shared
+                    if shares.count > 0 {
+                        let alert = UIAlertController(title:"Device is shared to \(shares.count) other user" + (shares.count > 1 ? "s." : "." ), message: "You must unshare it from all users to whom you have shared it first.", preferredStyle: .Alert)
+                        let unshareAction = UIAlertAction(title:(shares.count < 2 ? "Delete Share" : "Delete Shares"), style: .Destructive) { (action) in
+                            // Delete all extant owned shares
+                            var sharesCount = shares.count
+                            for share in (shares as [AylaShare]!) {
+                                let shareViewModel = ShareViewModel(share: share)
+                                shareViewModel.deleteShareWithoutConfirmation(presentingViewController, successHandler: {
+                                    sharesCount = sharesCount - 1
+                                    if sharesCount == 0 {
+                                        //  Unregister device when done deleting shares.
+                                        let alert = UIAlertController(title: "Shares Successfully Deleted.", message: "Continue with Unregistration?", preferredStyle: .Alert)
+                                        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {(action) -> Void in })
+                                        let continueAction = UIAlertAction(title: "Continue", style: .Destructive, handler: {(action) -> Void in
+                                            unregisterDeviceWithError()
+                                        })
+                                        alert.addAction(cancelAction)
+                                        alert.addAction(continueAction)
+                                        presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                                    }
+                                    }, failureHandler: { (error) in
+                                        let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
+                                        let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: {(action) -> Void in
+                                            if let failureHandler = failureHandler{failureHandler(error: error)}
+                                        })
+                                        alert.addAction(gotIt)
+                                        presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                                })
+                            }
+                        }
+                        let cancelAction = UIAlertAction(title: "Cancel", style: .Default) { (action) in }
+                        alert.addAction(cancelAction)
+                        alert.addAction(unshareAction)
 
-        alert.addAction(cancelAction)
-        alert.addAction(okAction)
-        presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                        presentingViewController.presentViewController(alert, animated: true, completion:nil)
+                    }
+                    // Device not shared.
+                    else {
+                        unregisterDeviceWithError()
+                    }
+                // Shares comes back nil, not empty.  This shouldn't happen, but try to unregister anyway.
+                } else {
+                    unregisterDeviceWithError()
+                }
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
+            presentingViewController.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
     func renameDevice(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?){
@@ -153,7 +229,9 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
      Use this method to update UI which are managed by this view model.
      */
     func update() {
-        devicePanel?.configure(device, sharesModel:sharesModel)
+        if self.devicePanel != nil {
+            devicePanel?.configure(device, sharesModel:sharesModel)
+        }
         // We don't update property list here since PropertyListViewModel will take care of it.
     }
     

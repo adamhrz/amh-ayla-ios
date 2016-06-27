@@ -59,7 +59,7 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
                         successHandler()
                     }
                     }, failure: { (error) in
-                        let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
+                        let alert = UIAlertController(title: "Error. Failed to Delete Share.", message: error.description, preferredStyle: .Alert)
                         let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
                         alert.addAction(gotIt)
                         presentingViewController.presentViewController(alert, animated: true, completion: nil)
@@ -78,6 +78,27 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
             print("No Session Manager found!")
         }
         
+    }
+    
+    func deleteShareWithoutConfirmation(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
+        if let sessionManager = sessionManager {
+            sessionManager.deleteShare(self.share, success: {
+                NSNotificationCenter.defaultCenter().postNotificationName(AuraNotifications.SharesChanged, object:self)
+                if let successHandler = successHandler {
+                    successHandler()
+                }
+                }, failure: { (error) in
+                    let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
+                    let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
+                    alert.addAction(gotIt)
+                    presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                    if let failureHandler = failureHandler {
+                        failureHandler(error: error)
+                    }
+            })
+        } else {
+            print("No Session Manager found!")
+        }
     }
     
     func valueFromString(str:String?) -> AnyObject? {
