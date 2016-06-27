@@ -266,7 +266,11 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         var message = "Unknown Error Occurred."
         if let errorKey = error.userInfo[AylaRequestErrorResponseJsonKey] {
-            message = errorKey as! String
+            if errorKey.isKindOfClass(NSDictionary){
+                message = errorKey.description
+            } else {
+                message = errorKey as! String
+            }
         }
         let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Got it", style: .Cancel, handler: nil))
