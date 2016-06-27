@@ -111,6 +111,9 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        triggerTypeSegmentedControl.tintColor = UIColor.auraTintColor()
+        triggerCompareSegmentedControl.tintColor = UIColor.auraTintColor()
+        
         tableView.registerNib(PropertyNotificationDetailsContactTableViewCell.nib, forCellReuseIdentifier: propertyNotificationDetailsContactCellReuseIdentifier)
         
         if (propertyTrigger != nil) {
