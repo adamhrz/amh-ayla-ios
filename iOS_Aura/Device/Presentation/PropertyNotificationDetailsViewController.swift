@@ -165,16 +165,22 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         property?.createTrigger(trigger, success: { (createdTrigger) in
             self.createTriggerAppsForProperty(property!, trigger: createdTrigger)
             
+            let notifyDelegateForSave = {
+                self.delegate?.propertyNotificationDetailsDidSave(self)
+            }
+            
             // Delete the original trigger, if there was one
             if self.propertyTrigger != nil {
                 property?.deleteTrigger(self.propertyTrigger!, success: {
                     self.propertyTrigger = nil
+                    notifyDelegateForSave()
                     }, failure: { (error) in
                         print("Failed to delete orginal trigger: \(error.description)")
+                        notifyDelegateForSave()
                 })
+            } else {
+                notifyDelegateForSave()
             }
-            
-            self.delegate?.propertyNotificationDetailsDidSave(self)
             }, failure: { (error) in
                 UIAlertController.alert("Failed to create new trigger", message: error.description, buttonTitle: "OK", fromController: self)
         })
