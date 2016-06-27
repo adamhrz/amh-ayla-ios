@@ -35,7 +35,9 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
         
         let cancel = UIBarButtonItem(barButtonSystemItem:.Cancel, target: self, action: #selector(DeviceSharesTableViewController.cancel))
         self.navigationItem.leftBarButtonItem = cancel
-
+        self.navigationController?.navigationBar.translucent = false;
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh shares")
+        self.refreshControl?.addTarget(self, action: #selector(DeviceSharesTableViewController.refreshShareData), forControlEvents: .ValueChanged)
     }
     
     override func didReceiveMemoryWarning() {
@@ -49,6 +51,17 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
     
     func reloadTableData(){
         self.tableView.reloadData()
+    }
+    
+    func refreshShareData(){
+        print("Manually Refreshing Share Data.")
+        self.viewModel!.sharesModel!.updateSharesList({ (shares) in
+            self.reloadTableData()
+            self.refreshControl?.endRefreshing()
+        }) { (error) in
+            self.refreshControl?.endRefreshing()
+            UIAlertController.alert("Failed to Refresh", message: error.description, buttonTitle: "OK", fromController: self)
+        }
     }
     
     // MARK: - DeviceSharesListViewModelDelegate
