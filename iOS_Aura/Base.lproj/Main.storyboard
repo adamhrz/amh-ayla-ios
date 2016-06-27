@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m9m-D0-krJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="m9m-D0-krJ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -199,6 +199,14 @@
             </objects>
             <point key="canvasLocation" x="861" y="-376"/>
         </scene>
+        <!--Notifications-->
+        <scene sceneID="8uJ-KW-7cW">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Notifications" id="oMm-X2-ZBj" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7I8-aS-kzB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2171" y="-748"/>
+        </scene>
         <!--Schedules-->
         <scene sceneID="bRj-xL-nuM">
             <objects>
@@ -218,7 +226,7 @@
                         <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DeviceShareCellId" rowHeight="215" id="SEQ-8M-jTB" customClass="DeviceShareTVCell" customModule="Aura" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="215"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="215"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SEQ-8M-jTB" id="EHl-IR-xjd">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="214"/>
@@ -669,7 +677,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ubm-gd-mCl" customClass="DevicePanelView" customModule="Aura" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="600" height="209"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="228"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ebP-an-ueG">
                                         <rect key="frame" x="12" y="8" width="580" height="30"/>
@@ -702,7 +710,7 @@
                                                 <rect key="frame" x="0.0" y="19" width="564" height="17"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Online" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQh-hL-1Rh">
-                                                        <rect key="frame" x="113" y="0.0" width="108" height="17"/>
+                                                        <rect key="frame" x="102" y="0.0" width="108" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="108" id="ZLS-ZB-qCE"/>
                                                             <constraint firstAttribute="width" constant="84" id="vkx-NV-Not"/>
@@ -717,7 +725,7 @@
                                                         </variation>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Status:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="Ysf-9H-COf">
-                                                        <rect key="frame" x="0.0" y="0.0" width="105" height="17"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="94" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="17" id="adY-Or-2EK"/>
                                                         </constraints>
@@ -748,7 +756,7 @@
                                                 <rect key="frame" x="0.0" y="38" width="564" height="17"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LAN Mode:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="Odc-pR-3lK">
-                                                        <rect key="frame" x="0.0" y="0.0" width="81" height="17"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="72" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="17" id="OPJ-Kw-1rJ"/>
                                                         </constraints>
@@ -757,7 +765,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Active" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="foY-TL-5d5">
-                                                        <rect key="frame" x="89" y="0.0" width="108" height="17"/>
+                                                        <rect key="frame" x="80" y="0.0" width="108" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="108" id="GPg-6C-RTU"/>
                                                             <constraint firstAttribute="width" constant="84" id="xtV-2o-nQe"/>
@@ -835,7 +843,7 @@
                                                 <rect key="frame" x="0.0" y="152" width="564" height="17"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sharing:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="NoR-8S-wuW">
-                                                        <rect key="frame" x="0.0" y="0.0" width="61" height="17"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="54" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="17" id="Rag-DM-OB6"/>
                                                         </constraints>
@@ -844,7 +852,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="n/a" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="5Sg-t0-k4G">
-                                                        <rect key="frame" x="69" y="0.0" width="495" height="17"/>
+                                                        <rect key="frame" x="62" y="0.0" width="502" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="108" id="VpP-p9-XbE"/>
                                                             <constraint firstAttribute="width" constant="84" id="tkU-JP-gWB"/>
@@ -976,7 +984,7 @@
                                 </connections>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ap0-u1-kSG">
-                                <rect key="frame" x="0.0" y="273" width="600" height="278"/>
+                                <rect key="frame" x="0.0" y="292" width="600" height="259"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" placeholder="property name" showsCancelButton="YES" id="TEz-TC-NIy">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -987,7 +995,7 @@
                                     </connections>
                                 </searchBar>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="k23-ls-IZv" userLabel="Footer">
-                                    <rect key="frame" x="0.0" y="234" width="600" height="44"/>
+                                    <rect key="frame" x="0.0" y="259" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yvJ-sW-cUK" userLabel="Separator">
@@ -1233,6 +1241,7 @@
                         <segue destination="ncm-l0-4MD" kind="presentation" identifier="toLanModeTest" id="9Es-1s-UOl"/>
                         <segue destination="uzZ-yf-R44" kind="show" identifier="toSchedules" id="uCB-Kf-9XP"/>
                         <segue destination="QUB-ta-70c" kind="presentation" identifier="toTimeZonePicker" id="3YS-56-Uuy"/>
+                        <segue destination="oMm-X2-ZBj" kind="show" identifier="toNotifications" id="7Lp-c9-W9J"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6cj-Vr-Kay" userLabel="First Responder" sceneMemberID="firstResponder"/>

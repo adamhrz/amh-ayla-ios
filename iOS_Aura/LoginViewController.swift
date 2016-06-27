@@ -14,6 +14,7 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var logoImageView: UIImageView!
     
     /// Id of a segue which is linked to `Main` storyboard.
     let segueIdToMain :String = "toMain"
@@ -23,6 +24,9 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        logoImageView.image = logoImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+        logoImageView.tintColor = UIColor.aylaBahamaBlueColor()
         
         // Add tap recognizer to dismiss keyboard.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -70,6 +74,10 @@ class LoginViewController: UIViewController {
             let success = { (authorization: AylaAuthorization, sessionManager: AylaSessionManager) -> Void in
                 PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
                 SSKeychain.setPassword(password, forService: settings.appId, account: username)
+                
+                // Reset the Contact Manager for the new user
+                ContactManager.sharedInstance.reload()
+                
                 self.dismissLoading(false, completion: { () -> Void in
                     KeychainWrapper.setObject(authorization, forKey: "LANLoginAuthorization")
                     // Once succeeded, present view controller in `Main` storyboard.

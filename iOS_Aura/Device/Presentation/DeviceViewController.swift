@@ -22,7 +22,10 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     
     /// Segue id to schedules view
     let segueIdToSchedules: String = "toSchedules"
-    
+
+    /// Segue id to notifications view
+    let segueIdToNotifications: String = "toNotifications"
+
     /// Segue id to time zone picker
     let segueIdToTimeZonePicker = "toTimeZonePicker"
     
@@ -111,6 +114,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         let schedules = UIAlertAction(title: "Schedules", style: .Default) { (action) in
             self.performSegueWithIdentifier(self.segueIdToSchedules, sender: nil)
         }
+        let notifications = UIAlertAction(title: "Notifications", style: .Default) { (action) in
+            self.performSegueWithIdentifier(self.segueIdToNotifications, sender: nil)
+        }
         let autoTest = UIAlertAction(title: "AutoTest", style: .Default) { (action) in
             self.performSegueWithIdentifier(self.segueIdToLanTestView, sender: nil)
         }
@@ -129,6 +135,14 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
 
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
         alert.addAction(schedules)
+        
+        // Only present Notifications if we have at least one contact and the device has at least one property
+        let contacts = ContactManager.sharedInstance.contacts ?? []
+        let managedProperties = device?.managedPropertyNames() ?? []
+        if !contacts.isEmpty && !managedProperties.isEmpty {
+            alert.addAction(notifications)
+        }
+        
         alert.addAction(autoTest)
         alert.addAction(rename)
         alert.addAction(share)
@@ -206,6 +220,10 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         }
         else if segue.identifier == segueIdToSchedules {
             let vc = segue.destinationViewController as! ScheduleTableViewController
+            vc.device = device
+        }
+        else if segue.identifier == segueIdToNotifications {
+            let vc = segue.destinationViewController as! NotificationsViewController
             vc.device = device
         }
         else if segue.identifier == segueIdToTimeZonePicker {
