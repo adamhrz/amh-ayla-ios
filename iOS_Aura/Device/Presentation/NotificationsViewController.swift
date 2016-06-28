@@ -12,11 +12,7 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
 
     var device: AylaDevice!
     
-    var propertyTriggers = [AylaPropertyTrigger]() {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    var propertyTriggers = [AylaPropertyTrigger]()
 
     @IBOutlet private weak var tableView: UITableView!
     
@@ -82,6 +78,7 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
             
             // Now that all of the fetch requests have completed, update our table with the new data
             self.propertyTriggers = fetchedPropertyTriggers
+            self.tableView.reloadData()
         }
     }
 
