@@ -18,10 +18,14 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     @IBOutlet weak var repeatPicker: UIPickerView!
     @IBOutlet weak var saveScheduleButton: AuraButton!
     @IBOutlet weak var utcSwitch: UISwitch!
+    @IBOutlet weak var actionPicker: UIPickerView!
     
     var dateFormatter : NSDateFormatter!
     var timeFormatter : NSDateFormatter!
     var timeZone : NSTimeZone!
+    
+    var atStartAction : AylaScheduleAction?
+    var atEndAction : AylaScheduleAction?
     
     enum RepeatType: Int {
         case None
@@ -35,7 +39,34 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         }()
     }
     
+    enum ActionType: Int {
+        case TurnOnOff
+        case TurnOffOn
+        case TurnOn
+        case TurnOff
+        
+        static let count : Int = {
+            var count = 0
+            while let _ = RepeatType(rawValue: count) { count += 1 }
+            return count
+        }()
+        
+        func description() -> String {
+            switch self {
+            case .TurnOff:
+                return "Turn Off"
+            case .TurnOffOn:
+                return "Turn Off/On"
+            case .TurnOn:
+                return "Turn On"
+            case .TurnOnOff:
+                return "Turn On/Off"
+            }
+        }
+    }
+    
     var repeatType = RepeatType.None
+    var actionType = ActionType.TurnOnOff
     
     var schedule : AylaSchedule! = nil {
         didSet {
@@ -48,6 +79,43 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             timeFormatter = NSDateFormatter()
             timeFormatter.dateFormat = "HH:mm:ss"
             timeFormatter.timeZone = timeZone
+
+            schedule.fetchAllScheduleActionsWithSuccess({ (actions) in
+                if actions.count != 2 {
+                    print("Found more or less than 2 actions, schedule will not work properly")
+                    return
+                }
+                
+                if actions.first?.firePoint == .AtStart {
+                    self.atStartAction = actions.first
+                    self.atEndAction = actions.last
+                } else {
+                    self.atStartAction = actions.last
+                    self.atEndAction = actions.first
+                }
+                self.actionType = ActionType(rawValue: 0)!
+                if self.atStartAction!.active {
+                    if self.atEndAction!.active {
+                        if self.atStartAction!.value as! Int == 1 {
+                            self.actionType = .TurnOnOff
+                        } else {
+                            self.actionType = .TurnOffOn
+                        }
+                    } else {
+                        if self.atStartAction!.value as! Int == 1 {
+                            self.actionType = .TurnOn
+                        } else {
+                            self.actionType = .TurnOff
+                        }
+                        
+                        self.tableView.beginUpdates()
+                        self.tableView.endUpdates()
+                    }
+                    self.actionPicker.selectRow(self.actionType.rawValue, inComponent: 0, animated: true)
+                }
+                }) { (error) in
+                    print(error.userInfo)
+            }
         }
     }
     
@@ -72,6 +140,28 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         
         utcSwitch.on = schedule.utc
         displayNameTextField.text = schedule.displayName
+        
+        repeatType = .None
+        if let daysOfWeek = schedule.daysOfWeek {
+            let intAndNumberArraysAreEqual: ([Int],[NSNumber]) -> Bool = { (intArray, numberArray) in
+                var equals = true
+                for number in numberArray {
+                    if !intArray.contains(number.integerValue) {
+                        equals = false
+                        break
+                    }
+                }
+                return equals
+            }
+            if intAndNumberArraysAreEqual([1,7],daysOfWeek) {
+                repeatType = .Weekends
+            } else if intAndNumberArraysAreEqual(Array(2...6),daysOfWeek) {
+                repeatType = .Weekdays
+            }
+        } else if schedule.endDate == nil || schedule.endDate!.isEmpty {
+            repeatType = .Daily
+        }
+        self.repeatPicker.selectRow(repeatType.rawValue, inComponent: 0, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,14 +174,40 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return RepeatType.count
+        switch pickerView {
+        case self.actionPicker:
+            return ActionType.count
+        case self.repeatPicker:
+            return RepeatType.count
+        default:
+            return 0
+        }
+    }
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        switch pickerView {
+        case self.actionPicker:
+            actionType = ActionType(rawValue: row)!
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        case self.repeatPicker:
+            repeatType = RepeatType(rawValue: row)!
+            offDatePicker.enabled = repeatType != .Daily
+        default:
+            break
+        }
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        repeatType = RepeatType(rawValue: row)!
-        offDatePicker.enabled = repeatType != .Daily
-
-        return "\(repeatType)"
+        switch pickerView {
+        case self.actionPicker:
+            return "\(ActionType(rawValue: row)!.description())"
+            
+        case self.repeatPicker:
+            return "\(RepeatType(rawValue: row)!)"
+        default:
+            return nil
+        }
     }
     
     @IBAction func saveAction(sender: UIButton) {
@@ -117,32 +233,63 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         schedule.endTimeEachDay = endTime
         
         switch repeatType {
-        case .None:
-            schedule.dayOccurOfMonth = []
-            schedule.daysOfMonth = []
-            schedule.daysOfWeek = []
         case .Weekdays:
             schedule.daysOfWeek = Array(2...6) // monday through friday
         case .Weekends:
             schedule.daysOfWeek = [1,7] //sunday and saturday
         case .Daily:
-            //do nothing, it's already been taken care of
             fallthrough
-        default: break
+        case .None:
+            schedule.dayOccurOfMonth = nil
+            schedule.daysOfMonth = nil
+            schedule.daysOfWeek = nil
         }
         
         schedule.utc = utcSwitch.on
         
+        atStartAction!.active = true
+        atEndAction!.active = true
+        switch actionType {
+        case .TurnOn:
+            atEndAction!.active = false
+            fallthrough
+        case .TurnOnOff:
+            atStartAction!.value = 1
+            atEndAction!.value = 0
+        case .TurnOff:
+            atEndAction!.active = false
+            fallthrough
+        case .TurnOffOn:
+            atStartAction!.value = 0
+            atEndAction!.value = 1
+        }
+        
         saveScheduleButton.enabled = false
         device.updateSchedule(schedule, success: { (schedule) -> Void in
-            self.schedule = schedule
-            self.updateUI()
-            UIAlertController.alert("Success", message: "Saved Schedule", buttonTitle: "OK", fromController: self)
-            self.saveScheduleButton.enabled = true
+            let actions = [self.atStartAction!, self.atEndAction!]
+
+            self.schedule.updateScheduleActions(actions, success: { (actions) in
+                UIAlertController.alert("Success", message: "Saved Schedule", buttonTitle: "OK", fromController: self)
+                self.saveScheduleButton.enabled = true
+                }, failure: { (error) in
+                    self.saveScheduleButton.enabled = true
+                    UIAlertController.alert("Error", message: "Could not save schedule(\(error.code))", buttonTitle: "OK", fromController: self)
+                    print("Failed to update actions \(error)")
+            })
         }) { (error) -> Void in
             self.saveScheduleButton.enabled = true
             UIAlertController.alert("Error", message: "Could not save schedule(\(error.code))", buttonTitle: "OK", fromController: self)
-            print("Failed to create schedule \(error)")
+            print("Failed to update schedule \(error)")
         }
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.row == 2 && actionType == .TurnOff {
+            return 0
+        }
+        if indexPath.row == 3 && actionType == .TurnOn {
+            return 0
+        }
+        return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
     }
 }
