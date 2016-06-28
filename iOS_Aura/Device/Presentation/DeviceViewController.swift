@@ -117,7 +117,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         let notifications = UIAlertAction(title: "Notifications", style: .Default) { (action) in
             self.performSegueWithIdentifier(self.segueIdToNotifications, sender: nil)
         }
-        let autoTest = UIAlertAction(title: "AutoTest", style: .Default) { (action) in
+        let testRunner = UIAlertAction(title: "TestRunner", style: .Default) { (action) in
             self.performSegueWithIdentifier(self.segueIdToLanTestView, sender: nil)
         }
         let rename = UIAlertAction(title: "Rename", style: .Default) { (action) in
@@ -143,7 +143,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             alert.addAction(notifications)
         }
         
-        alert.addAction(autoTest)
+        alert.addAction(testRunner)
         alert.addAction(rename)
         alert.addAction(share)
         alert.addAction(timeZone)
