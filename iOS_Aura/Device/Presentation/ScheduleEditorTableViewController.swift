@@ -225,12 +225,27 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         calendar.rangeOfUnit(.Minute, startDate: &endTimeDate, interval: nil, forDate: offTimeDatePicker.date)
         let endTime = timeFormatter.stringFromDate(endTimeDate!)
         
-        
         schedule.displayName = displayNameTextField.text
-        schedule.startDate = startDate
-        schedule.startTimeEachDay = startTime
-        schedule.endDate =  repeatType == .Daily ? "" : endDate //use "" temporarily since lib currently doesn't pass nil info to cloud
-        schedule.endTimeEachDay = endTime
+        
+        switch actionType {
+        case .TurnOffOn:
+            fallthrough
+        case .TurnOnOff:
+            schedule.startDate = startDate
+            schedule.startTimeEachDay = startTime
+            schedule.endDate =  repeatType == .Daily ? "" : endDate //use "" temporarily since lib currently doesn't pass nil info to cloud
+            schedule.endTimeEachDay = endTime
+        case .TurnOn:
+            schedule.startDate = startDate
+            schedule.startTimeEachDay = startTime
+            schedule.endDate = startDate
+            schedule.endTimeEachDay = startTime
+        case .TurnOff:
+            schedule.startDate = endDate
+            schedule.startTimeEachDay = endTime
+            schedule.endDate = endDate
+            schedule.endTimeEachDay = endTime
+        }
         
         switch repeatType {
         case .Weekdays:
