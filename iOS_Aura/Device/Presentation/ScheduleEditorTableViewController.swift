@@ -264,6 +264,8 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         
         atStartAction!.active = true
         atEndAction!.active = true
+        atStartAction!.firePoint = .AtStart
+        atEndAction!.firePoint = .AtEnd
         switch actionType {
         case .TurnOn:
             atEndAction!.active = false
