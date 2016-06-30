@@ -29,6 +29,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     var atStartAction : AylaScheduleAction?
     var atEndAction : AylaScheduleAction?
     var properties : [String]!
+    var actions : [AylaScheduleAction]?
     
     enum RepeatType: Int {
         case None
@@ -88,6 +89,15 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             self.properties = allProperties.filter{ $0.direction == AylaScheduleDirectionToDevice }.map{ $0.name }
 
             fetchActions({
+                
+                if self.actions!.count != 2 && self.schedule.fixedActions {
+                    
+                    UIAlertController.alert("Error", message: "Schedule configuration error. No actions found for a fixed action schedule.", buttonTitle: "OK", fromController: self) {_ in 
+                        self.navigationController?.popViewControllerAnimated(true)
+                    }
+                    print("Schedule with fixed actions has actions.cound != 2")
+                }
+                
                 }) { (error) in
                     print(error.userInfo)
             }
@@ -98,6 +108,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     
     func fetchActions(success : ()-> Void, failure : (NSError)->Void) {
         schedule.fetchAllScheduleActionsWithSuccess({ (actions) in
+            self.actions = actions
             //determine wether to create or use existing actions
             switch actions.count {
             case 0:
@@ -336,10 +347,6 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             actionsToCreate.append(self.atEndAction!)
         } else {
             existingActions.append(self.atEndAction!)
-        }
-        
-        if actionsToCreate.count > 0 && schedule.fixedActions {
-            schedule.fixedActions = false
         }
         
         schedule.active = activeSwitch.on
