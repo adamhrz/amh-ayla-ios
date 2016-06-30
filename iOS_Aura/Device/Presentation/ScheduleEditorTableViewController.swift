@@ -425,10 +425,10 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.row == 2 && actionType == .TurnOff {
+        if indexPath.row == 3 && actionType == .TurnOff {
             return 0
         }
-        if indexPath.row == 3 && actionType == .TurnOn {
+        if indexPath.row == 4 && actionType == .TurnOn {
             return 0
         }
         return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
