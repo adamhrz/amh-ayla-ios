@@ -253,7 +253,10 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         
         switch actionType {
         case .TurnOffOn:
-            fallthrough
+          schedule.startDate = endDate
+          schedule.startTimeEachDay = endTime
+          schedule.endDate =  repeatType == .Daily ? "" : startDate //use "" temporarily since lib currently doesn't pass nil info to cloud
+          schedule.endTimeEachDay = startTime
         case .TurnOnOff:
             schedule.startDate = startDate
             schedule.startTimeEachDay = startTime
