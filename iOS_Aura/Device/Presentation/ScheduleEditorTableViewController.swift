@@ -19,6 +19,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     @IBOutlet weak var saveScheduleButton: AuraButton!
     @IBOutlet weak var utcSwitch: UISwitch!
     @IBOutlet weak var actionPicker: UIPickerView!
+    @IBOutlet weak var propertyPicker: UIPickerView!
     
     var dateFormatter : NSDateFormatter!
     var timeFormatter : NSDateFormatter!
@@ -26,6 +27,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     
     var atStartAction : AylaScheduleAction?
     var atEndAction : AylaScheduleAction?
+    var properties : [String]!
     
     enum RepeatType: Int {
         case None
@@ -79,20 +81,36 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             timeFormatter = NSDateFormatter()
             timeFormatter.dateFormat = "HH:mm:ss"
             timeFormatter.timeZone = timeZone
+            
+            //fetch bool, toDevice managed properties
+            let allProperties = self.schedule.device!.properties!.map { $0.1 } as! [AylaProperty]
+            self.properties = allProperties.filter{ $0.direction == AylaScheduleDirectionToDevice }.map{ $0.name }
 
             schedule.fetchAllScheduleActionsWithSuccess({ (actions) in
-                if actions.count != 2 {
-                    print("Found more or less than 2 actions, schedule will not work properly")
-                    return
+                //determine wether to create or use existing actions
+                switch actions.count {
+                case 0:
+                    self.atStartAction = AylaScheduleAction(name: self.schedule.name, value: 0, baseType: AylaPropertyBaseTypeBoolean, active: true, firePoint: .AtStart, schedule: self.schedule)
+                    self.atEndAction = AylaScheduleAction(name: self.schedule.name, value: 1, baseType: AylaPropertyBaseTypeBoolean, active: true, firePoint: .AtEnd, schedule: self.schedule)
+                case 1:
+                    self.atStartAction = actions.first
+                    self.atEndAction = AylaScheduleAction(name: self.schedule.name, value: 1, baseType: AylaPropertyBaseTypeBoolean, active: true, firePoint: .AtEnd, schedule: self.schedule)
+                default:
+                    if actions.first?.firePoint == .AtStart {
+                        self.atStartAction = actions.first
+                        self.atEndAction = actions.last
+                    } else {
+                        self.atStartAction = actions.last
+                        self.atEndAction = actions.first
+                    }
                 }
                 
-                if actions.first?.firePoint == .AtStart {
-                    self.atStartAction = actions.first
-                    self.atEndAction = actions.last
-                } else {
-                    self.atStartAction = actions.last
-                    self.atEndAction = actions.first
+                let propertyName = self.atStartAction!.name
+                if let propertyNameIndex = self.properties.indexOf(propertyName) {
+                    self.propertyPicker.selectRow(propertyNameIndex, inComponent: 0, animated: true)
                 }
+                
+                
                 self.actionType = ActionType(rawValue: 0)!
                 if self.atStartAction!.active {
                     if self.atEndAction!.active {
@@ -179,6 +197,8 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             return ActionType.count
         case self.repeatPicker:
             return RepeatType.count
+        case self.propertyPicker:
+            return properties.count
         default:
             return 0
         }
@@ -205,6 +225,10 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             
         case self.repeatPicker:
             return "\(RepeatType(rawValue: row)!)"
+            
+        case self.propertyPicker:
+            return properties[row]
+            
         default:
             return nil
         }
@@ -262,6 +286,11 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         
         schedule.utc = utcSwitch.on
         
+        let propertyName = properties[self.propertyPicker.selectedRowInComponent(0)]
+        
+        atEndAction!.name = propertyName
+        atStartAction!.name = propertyName
+        
         atStartAction!.active = true
         atEndAction!.active = true
         atStartAction!.firePoint = .AtStart
@@ -281,17 +310,61 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             atEndAction!.value = 1
         }
         
+        // determine what actions to create and what to update
+        var existingActions = [AylaScheduleAction]()
+        var actionsToCreate = [AylaScheduleAction]()
+        if self.atStartAction!.key == nil {
+            actionsToCreate.append(self.atStartAction!)
+        } else {
+            existingActions.append(self.atStartAction!)
+        }
+        
+        if self.atEndAction!.key == nil {
+            actionsToCreate.append(self.atEndAction!)
+        } else {
+            existingActions.append(self.atEndAction!)
+        }
+        
+        if actionsToCreate.count > 0 && schedule.fixedActions {
+            schedule.fixedActions = false
+        }
+        
         saveScheduleButton.enabled = false
         device.updateSchedule(schedule, success: { (schedule) -> Void in
-            let actions = [self.atStartAction!, self.atEndAction!]
-
-            self.schedule.updateScheduleActions(actions, success: { (actions) in
-                UIAlertController.alert("Success", message: "Saved Schedule", buttonTitle: "OK", fromController: self)
-                self.saveScheduleButton.enabled = true
-                }, failure: { (error) in
+            
+            let createUpdateGroup = dispatch_group_create()
+            var errors = [NSError]()
+            if existingActions.count > 0 {
+                dispatch_group_enter(createUpdateGroup)
+                self.schedule.updateScheduleActions(existingActions, success: { (actions) in
+                    dispatch_group_leave(createUpdateGroup)
+                    }, failure: { (error) in
+                        errors.append(error)
+                        dispatch_group_leave(createUpdateGroup)
+                })
+            }
+            
+            if actionsToCreate.count > 0 {
+                for action in actionsToCreate {
+                    dispatch_group_enter(createUpdateGroup)
+                    self.schedule.createScheduleAction(action, success: { (createdAction) in
+                        dispatch_group_leave(createUpdateGroup)
+                        }, failure: { (error) in
+                            errors.append(error)
+                            dispatch_group_leave(createUpdateGroup)
+                    })
+                }
+            }
+            
+            dispatch_group_notify(createUpdateGroup, dispatch_get_main_queue(), {
+                if let error = errors.first {
                     self.saveScheduleButton.enabled = true
                     UIAlertController.alert("Error", message: "Could not save schedule(\(error.code))", buttonTitle: "OK", fromController: self)
                     print("Failed to update actions \(error)")
+                } else {
+                    UIAlertController.alert("Success", message: "Saved Schedule", buttonTitle: "OK", fromController: self)
+                    self.saveScheduleButton.enabled = true
+                }
             })
         }) { (error) -> Void in
             self.saveScheduleButton.enabled = true
