@@ -92,10 +92,10 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
                 
                 if self.actions!.count != 2 && self.schedule.fixedActions {
                     
-                    UIAlertController.alert("Error", message: "Schedule configuration error. No actions found for a fixed action schedule.", buttonTitle: "OK", fromController: self) {_ in 
+                    UIAlertController.alert("Error", message: "Schedule configuration error. Found \(self.actions!.count) actions found for a fixed action schedule, and expected two.", buttonTitle: "OK", fromController: self) {_ in
                         self.navigationController?.popViewControllerAnimated(true)
                     }
-                    print("Schedule with fixed actions has actions.cound != 2")
+                    print("Schedule with fixed actions has actions.count != 2. Found \(self.actions!.count) actions")
                 }
                 
                 }) { (error) in
@@ -170,11 +170,11 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
                     self.updateUI()
                     UIAlertController.alert("Success", message: "Deleted all schedule actions", buttonTitle: "OK", fromController: self)
                     }, failure: { (error) in
-                        UIAlertController.alert("Error", message: "Could not update action status(\(error.code))", buttonTitle: "OK", fromController: self)
+                        UIAlertController.alert("Error", message: "Could not update action status\n\n\(error.description)", buttonTitle: "OK", fromController: self)
                         print("Failed to update action status \(error)")
                 })
             }) { (error) in
-                UIAlertController.alert("Error", message: "Could not delete actions(\(error.code))", buttonTitle: "OK", fromController: self)
+                UIAlertController.alert("Error", message: "Could not delete actions\n\n\(error.description)", buttonTitle: "OK", fromController: self)
                 print("Failed to delete actions \(error)")
             }
         }
@@ -404,7 +404,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             dispatch_group_notify(createUpdateGroup, dispatch_get_main_queue(), {
                 if let error = errors.first {
                     self.saveScheduleButton.enabled = true
-                    UIAlertController.alert("Error", message: "Could not save schedule(\(error.code))", buttonTitle: "OK", fromController: self)
+                    UIAlertController.alert("Error", message:"Failed to Save Schedule.\n\n\(error.description)", buttonTitle: "OK", fromController: self)
                     print("Failed to update actions \(error)")
                 } else {
                     self.fetchActions({
@@ -412,14 +412,14 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
                         self.saveScheduleButton.enabled = true
                         }, failure: { (error) in
                             
-                            UIAlertController.alert("Error", message: "Could not refresh actions(\(error.code))", buttonTitle: "OK", fromController: self)
+                            UIAlertController.alert("Error", message: "Could not refresh actions\n\n(\(error.description))", buttonTitle: "OK", fromController: self)
                             print("Failed to fetch actions \(error)")
                     })
                 }
             })
         }) { (error) -> Void in
             self.saveScheduleButton.enabled = true
-            UIAlertController.alert("Error", message: "Could not save schedule(\(error.code))", buttonTitle: "OK", fromController: self)
+            UIAlertController.alert("Error", message: "Failed to Save Schedule.\n\n\(error.description)", buttonTitle: "OK", fromController: self)
             print("Failed to update schedule \(error)")
         }
     }
