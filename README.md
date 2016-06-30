@@ -49,21 +49,15 @@ The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).
 v5.1.00    2016-06-27
 ------
 New Features:
-- New setup wizard for WiFi setup and registration
 - Offline (LAN) sign-in and LAN device connectivity using cached data
 - Generic Gateway and Node registration
-- Developer Options activity to configure developer settings
-- Additional test cases for TestRunner
-- Update account email address
-- Device Detail Provider support for additional device types including Ayla smart plugs, generic gateways
 - Change device time zones
 - Device Sharing
 - Device Schedules
+- Notifications for properties: push, email, and sms
 
 Enhancements and Bug Fixes:
 - Code updates to support 5.1.00 Ayla Mobile SDK
-- WiFi setup flow fixes
-- UI improvements
 
 v5.0.02    2016-06-15
 ------
