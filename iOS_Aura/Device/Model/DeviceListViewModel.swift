@@ -11,6 +11,7 @@ import iOS_AylaSDK
 
 protocol DeviceListViewModelDelegate: class {
     func deviceListViewModel(viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
+    func deviceListViewModel(viewModel:DeviceListViewModel, didUnregisterDevice device:AylaDevice)
 }
 
 class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
@@ -23,6 +24,8 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     
     /// Devices which are being represented in table view.
     var devices : [ AylaDevice ]
+    
+    var sharesModel : DeviceSharesModel?
 
     weak var delegate: DeviceListViewModelDelegate?
     
@@ -38,6 +41,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         self.tableView = tableView
 
         super.init()
+        self.sharesModel = DeviceSharesModel(deviceManager: deviceManager)
         
         // Add self as device manager listener
         deviceManager.addListener(self)
@@ -77,6 +81,15 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         }
         
         return cell!
+    }
+    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let unregisterAction = UITableViewRowAction(style: .Default, title: "Unregister") { (action, indexPath) in
+            let device = self.devices[indexPath.row]
+            self.delegate?.deviceListViewModel(self, didUnregisterDevice: device)
+        }
+        unregisterAction.backgroundColor = UIColor.auraRedColor()
+        return [unregisterAction]
     }
     
     // MARK: Table View Delegate

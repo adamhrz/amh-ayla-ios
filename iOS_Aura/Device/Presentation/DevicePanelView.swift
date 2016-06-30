@@ -19,9 +19,12 @@ class DevicePanelView: UIView {
     @IBOutlet weak var macAddressLabel: UILabel!
     @IBOutlet weak var lanIPAddressLabel: UILabel!
     @IBOutlet weak var lanModeActiveLabel: UILabel!
+    @IBOutlet weak var timeZoneLabel: UILabel!
+    @IBOutlet weak var sharesLabel: UILabel!
+    @IBOutlet weak var shareNamesLabel: UILabel!
+    @IBOutlet weak var sharingNamesView: UIView!
     
-    
-    func configure(device:AylaDevice) {
+    func configure(device:AylaDevice, sharesModel: DeviceSharesModel?) {
         nameLabel.text = String(format: "%@", device.productName!)
         dsnLabel.text = String(format: "%@ %@", "DSN: ", device.dsn!)
         
@@ -45,8 +48,55 @@ class DevicePanelView: UIView {
             self.lanModeActiveLabel.text = "Inactive"
         }
         
+        let timeZoneBase = "Time Zone: "
+        if (self.timeZoneLabel == nil) {
+            self.timeZoneLabel.text = timeZoneBase
+        }
+        device.fetchTimeZoneWithSuccess({ (timeZone) in
+            self.timeZoneLabel.text = timeZoneBase + String.stringFromStringNumberOrNil(timeZone.tzID)
+        }) { (error) in
+            self.timeZoneLabel.text = timeZoneBase + "Unknown"
+        }
+
+        var sharesText = "Not Shared"
+        if sharesModel != nil {
+            if device.grant == nil {
+                if let ownedShares = sharesModel?.ownedSharesForDevice(device){
+                    if ownedShares.count > 0 {
+
+                        sharesText = String(format:"Shared to %d %@", ownedShares.count, ownedShares.count > 1 ? "people" : "person" )
+                        var shareNamesText = ""
+                        for share in ownedShares {
+                            if shareNamesText != "" {
+                                shareNamesText = shareNamesText + "\n" + share.userEmail }
+                            else {
+                                shareNamesText = share.userEmail
+                            }
+                        }
+                        UIView.animateWithDuration(0.2, animations: {
+                            self.shareNamesLabel.text = shareNamesText
+                            self.sharingNamesView.hidden = false
+                        })
+                    } else {
+                        UIView.animateWithDuration(0.2, animations: {
+                            self.sharingNamesView.hidden = true
+                        })
+                    }
+                }
+            }
+            else {
+                if let receivedShare = sharesModel?.receivedShareForDevice(device) {
+                    sharesText = "Shared to you by " + receivedShare.ownerProfile.email
+                }
+
+            }
+            self.sharesLabel.text = sharesText
+        } else {
+            print("Panel View Shares Model is NIL")
+            self.sharesLabel.text = "Unknown"
+        }
+        
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGrayColor().CGColor
-
     }
 }

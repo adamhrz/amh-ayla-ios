@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import PDKeychainBindingsController
 import iOS_AylaSDK
 
 class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -111,15 +112,26 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     func attemptToConnect() {
 
-        updatePrompt("loading...")
+        updatePrompt("Loading...")
         
         currentTask = setup.connectToNewDevice({ (setupDevice) -> Void in
             self.addDescription("Find device: \(setupDevice.dsn)")
-            // Start fetching ap list.
+            // Start fetching AP list from module.
             self.fetchApList()
             }) { (error) -> Void in
-            self.updatePrompt("No device found")
-            self.addDescription("Unable to find device: \(error.description)")
+                self.updatePrompt("")
+                self.addDescription("Unable to find device: \(error.description)")
+                let message = "Are you sure you are connected to the device's AP?\n\nIf not, please tap the button below to move to the Settings application.  Navigate to Wi-Fi settings section and select the AP/network name for your device.\n\nOnce the network is joined, you should be redirected here momentarily."
+                let alert = UIAlertController(title: "No Device Found", message: message, preferredStyle: .Alert)
+                let settingsAction = UIAlertAction(title: "Go To Settings App", style:.Default, handler: { (action) in
+                    UIApplication.sharedApplication().openURL(NSURL(string:UIApplicationOpenSettingsURLString)!)
+                })
+                let cancelAction = UIAlertAction(title: "Cancel", style:.Cancel, handler: { (action) in
+                    self.updatePrompt("No Device Found")
+                })
+                alert.addAction(settingsAction)
+                alert.addAction(cancelAction)
+                self.presentViewController(alert, animated: true, completion: {})
         }
     }
 
@@ -127,7 +139,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      Use this method to fetch ap list from setup.
      */
     func fetchApList() {
-        updatePrompt("loading...")
+        updatePrompt("Loading...")
         currentTask = setup.fetchDeviceAccessPoints({ (scanResults) -> Void in
             self.updatePrompt(self.setup.setupDevice?.dsn ?? "")
             self.scanResults = scanResults
@@ -135,7 +147,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             }, failure: { (error) -> Void in
                 self.updatePrompt("Failed")
-                self.addDescription("Fetch ap results: \(error.description)")
+                self.addDescription("Fetch AP results: \(error.description)")
         })
     }
     
@@ -147,10 +159,11 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     func connectToSSID(ssid: String, password: String?) {
     
-        // TODO: Should create a random token.
-        token = "AToken"
+        token = generateRandomToken(7)
         
         self.updatePrompt("Connecting device to '\(ssid)'...")
+        let tokenString = String(format:"Using Setup Token %@", self.token!)
+        self.addDescription(tokenString)
         self.setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { () -> Void in
             
             // Succeeded, go confirming.
@@ -169,17 +182,68 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      Use this method to confirm device connnection status with cloud service.
      */
     func confirmConnectionToService() {
+        func storeDeviceDetailsInKeychain(){
+            // Store device info in keychain for use during a later registration attempt.
+            PDKeychainBindings.sharedKeychainBindings().setString(self.token, forKey: AuraDeviceSetupTokenKeychainKey)
+            PDKeychainBindings.sharedKeychainBindings().setString(self.setup.setupDevice?.dsn, forKey: AuraDeviceSetupDSNKeychainKey)
+        }
+        
         self.updatePrompt("Confirming device status ...")
-        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(self.setup.setupDevice?.dsn)!, setupToken:token!, success: { () -> Void in
-            self.updatePrompt("- Succeeded -")
-            self.addDescription("Confirmed device connection to servce.\n- Succeeded -");
-            
-            // Clean scan results
-            self.scanResults = nil
-            self.tableView.reloadData()
+        let deviceDSN = self.setup.setupDevice?.dsn
+        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(deviceDSN)!, setupToken:token!, success: { (setupDevice) -> Void in
+                self.updatePrompt("- Succeeded -")
+                self.addDescription("Confirmed device connection to service.\n- Succeeded -");
+
+                let alertString = String(format:"Setup for device %@ completed successfully, using the setup token %@.\n\n You may wish to store this token if the device uses AP Mode registration.", (self.setup.setupDevice?.dsn)!, self.token!)
+            if let features = self.setup.setupDevice?.features {
+                print("FEATURES")
+                for feature in features {
+                    print(feature)
+                }
+            }
+
+                let alert = UIAlertController(title: "Setup Successful", message: alertString, preferredStyle: .Alert)
+                let copyAction = UIAlertAction(title: "Copy Token to Clipboard", style: .Default, handler: { (action) -> Void in
+                    UIPasteboard.generalPasteboard().string = self.token!
+                    storeDeviceDetailsInKeychain()
+                })
+                let cancelAction = UIAlertAction(title: "No, Thanks", style: .Cancel, handler: { (action) -> Void in
+                    storeDeviceDetailsInKeychain()
+                })
+                if let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
+                    var deviceAlreadyRegistered = false
+                    let devices = sessionManager.deviceManager.devices.values.map({ (device) -> AylaDevice in
+                        return device as! AylaDevice
+                    })
+                    for device in devices {
+                        if device.dsn == deviceDSN {
+                            deviceAlreadyRegistered = true
+                            self.addDescription("FYI, Device appears to be registered or shared to you already.");
+                        }
+                    }
+                    
+                    if deviceAlreadyRegistered == false {
+                        let registerNowAction = UIAlertAction(title: "Register Device Now", style: .Default, handler: { (action) -> Void in
+                            storeDeviceDetailsInKeychain()
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let regVC = storyboard.instantiateViewControllerWithIdentifier("registrationController")
+                                self.navigationController?.pushViewController(regVC, animated: true)
+                        })
+                        alert.addAction(registerNowAction)
+                    }
+                }
+                
+                alert.addAction(copyAction)
+                alert.addAction(cancelAction)
+
+                self.presentViewController(alert, animated: true, completion: nil)
+
+                // Clean scan results
+                self.scanResults = nil
+                self.tableView.reloadData()
             
             }) { (error) -> Void in
-            self.displayError(error)
+                self.displayError(error)
         }
     }
     
@@ -200,12 +264,17 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let currentAlert = alert {
             currentAlert.dismissViewControllerAnimated(false, completion: nil)
         }
-        
-        let alertController = UIAlertController(title: "Error", message: "\(error.userInfo[AylaRequestErrorResponseJsonKey]!)", preferredStyle: .Alert)
+        var message = "Unknown Error Occurred."
+        if let errorKey = error.userInfo[AylaRequestErrorResponseJsonKey] {
+            if errorKey.isKindOfClass(NSDictionary){
+                message = errorKey.description
+            } else {
+                message = errorKey as! String
+            }
+        }
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Got it", style: .Cancel, handler: nil))
-        
         alert = alertController
-        
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
@@ -299,8 +368,23 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-
     
+    func generateRandomToken(length:Int) -> String {
+        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let allowedCharsCount = UInt32(allowedChars.characters.count)
+        var token = ""
+        
+        for _ in (0..<length) {
+            let randomNum = Int(arc4random_uniform(allowedCharsCount))
+            let newCharacter = allowedChars[allowedChars.startIndex.advancedBy(randomNum)]
+            token += String(newCharacter)
+        }
+        return token
+    }
+    
+
+
+
     /*
     // MARK: - Navigation
 

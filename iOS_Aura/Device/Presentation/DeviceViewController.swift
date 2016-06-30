@@ -9,7 +9,7 @@
 import UIKit
 import iOS_AylaSDK
 
-class DeviceViewController: UIViewController, PropertyListViewModelDelegate, PropertyModelDelegate {
+class DeviceViewController: UIViewController, PropertyListViewModelDelegate, PropertyModelDelegate, DeviceSharesModelDelegate, TimeZonePickerViewControllerDelegate {
 
     @IBOutlet weak var panelView: DevicePanelView!
     @IBOutlet weak var tableView: UITableView!
@@ -20,11 +20,22 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     /// Segue id to test view
     let segueIdToLanTestView: String = "toLanModeTest"
     
+    /// Segue id to schedules view
+    let segueIdToSchedules: String = "toSchedules"
+
+    /// Segue id to notifications view
+    let segueIdToNotifications: String = "toNotifications"
+
+    /// Segue id to time zone picker
+    let segueIdToTimeZonePicker = "toTimeZonePicker"
+    
     /// Device which is represented on this device view.
     var device :AylaDevice?
     
     /// Device model used by view controller to present this device.
     var deviceViewModel :DeviceViewModel?
+    
+    var sharesModel: DeviceSharesModel?
     
     var nameTextField :UITextField!
     
@@ -33,10 +44,12 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         
         if let device = self.device {
             // Allocate a device view model to handle UX of panel view and table view.
-            deviceViewModel = DeviceViewModel(device: device, panel: panelView, propertyListTableView: tableView)
+            deviceViewModel = DeviceViewModel(device: device, panel: panelView, propertyListTableView: tableView, sharesModel:sharesModel)
             deviceViewModel?.propertyListViewModel?.delegate = self
             
             let options = UIBarButtonItem(barButtonSystemItem:.Action, target: self, action: #selector(DeviceViewController.showOptions))
+            sharesModel?.delegate = self
+            
             self.navigationItem.rightBarButtonItem = options
         }
         else {
@@ -50,6 +63,12 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.deviceViewModel!.update()
+    }
+    
     @IBAction func fetchAllPropertiesAction(sender: AnyObject) {
         self.device?.fetchPropertiesCloud(nil, success: { (properties) in
             print("Fetched properties")
@@ -59,67 +78,92 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     }
     
     func rename() {
-        let alert = UIAlertController(title: "Rename " + (device?.productName)!, message: "Enter the new name", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            textField.placeholder = "New name"
-            textField.tintColor = UIColor(red: 93.0/255.0, green: 203/255.0, blue: 152/255.0, alpha: 1.0)
-            self.nameTextField = textField
-        }
-        let okAction = UIAlertAction (title: "Confirm", style: UIAlertActionStyle.Default) { (action) -> Void in
-            let newName = self.nameTextField!.text
-            if newName == nil || newName!.characters.count < 1 {
-                
-                UIAlertController.alert("Error", message: "No name was provided", buttonTitle: "OK",fromController: self)
-                return;
-            }
-            self.device?.updateProductNameTo(newName!, success: { () -> Void in
-                let alert = UIAlertController(title: "Device renamed", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
-                alert.addAction(okAction)
-                self.presentViewController(alert, animated: true, completion: nil)
-                }, failure: { (error) -> Void in
-                    UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
-            })
-        }
-        
-        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-        alert.addAction(cancelAction)
-        alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        deviceViewModel?.renameDevice(self, successHandler: nil, failureHandler: nil)
     }
     
     func unregister() {
-        device?.unregisterWithSuccess({ 
+        deviceViewModel?.unregisterDeviceWithConfirmation(self, successHandler: { Void in
             self.navigationController?.popViewControllerAnimated(true)
+            }, failureHandler: { (error) in
+
+        })
+    }
+    
+    func shareDevice() {
+        deviceViewModel?.shareDevice(self, successHandler: { (share) in
+            }, failureHandler: { (error) in
+                
+        })
+    }
+    
+    func changeTimeZone() {
+        self.device?.fetchTimeZoneWithSuccess({ (timeZone) in
+            self.performSegueWithIdentifier(self.segueIdToTimeZonePicker, sender: timeZone.tzID)
             }, failure: { (error) in
-                let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
-                let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
-                alert.addAction(gotIt)
+                let alert = UIAlertController(title: "Failed to fetch Time Zone", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert)
+                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                alert.addAction(okAction)
                 self.presentViewController(alert, animated: true, completion: nil)
         })
     }
     
-    // MARK - Options
+    // MARK: - Options
+    
     func showOptions() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        let autoTest = UIAlertAction(title: "AutoTest", style: .Default) { (action) in
+        let schedules = UIAlertAction(title: "Schedules", style: .Default) { (action) in
+            self.performSegueWithIdentifier(self.segueIdToSchedules, sender: nil)
+        }
+        let notifications = UIAlertAction(title: "Notifications", style: .Default) { (action) in
+            self.performSegueWithIdentifier(self.segueIdToNotifications, sender: nil)
+        }
+        let testRunner = UIAlertAction(title: "TestRunner", style: .Default) { (action) in
             self.performSegueWithIdentifier(self.segueIdToLanTestView, sender: nil)
         }
         let rename = UIAlertAction(title: "Rename", style: .Default) { (action) in
             self.rename()
         }
+        let share = UIAlertAction(title: "Share", style: .Default) { (action) in
+            self.shareDevice()
+        }
+        let timeZone = UIAlertAction(title: "Change Time Zone", style: .Default) { (action) in
+            self.changeTimeZone()
+        }
         let unregister = UIAlertAction(title: "Unregister", style: .Destructive) { (action) in
             self.unregister()
         }
+
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
-        alert.addAction(autoTest)
+        alert.addAction(schedules)
+        
+        // Only present Notifications if we have at least one contact and the device has at least one property
+        let contacts = ContactManager.sharedInstance.contacts ?? []
+        let managedProperties = device?.managedPropertyNames() ?? []
+        if !contacts.isEmpty && !managedProperties.isEmpty {
+            alert.addAction(notifications)
+        }
+        
+        alert.addAction(testRunner)
         alert.addAction(rename)
+        alert.addAction(share)
+        alert.addAction(timeZone)
         alert.addAction(cancel)
         alert.addAction(unregister)
         presentViewController(alert, animated: true, completion: nil)
     }
     
-    // MARK - Property list view model delegate
+    // MARK: - DeviceSharesModelDelegate
+    
+    func deviceSharesModel(model: DeviceSharesModel, ownedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
+        self.deviceViewModel?.update()
+    }
+    
+    func deviceSharesModel(model: DeviceSharesModel, receivedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
+        self.deviceViewModel?.update()
+    }
+    
+    // MARK: - PropertyListViewModelDelegate
+    
     func propertyListViewModel(viewModel: PropertyListViewModel, didSelectProperty property: AylaProperty, assignedPropertyModel propertyModel: PropertyModel) {
         propertyModel.delegate = self
         propertyModel.presentActions(presentingViewController: self);
@@ -130,7 +174,8 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         propertyModel.chosenAction(PropertyModelAction.Details)
     }
 
-    // MARK - Property model delegate
+    // MARK: - PropertyModelDelegate
+    
     func propertyModel(model: PropertyModel, didSelectAction action: PropertyModelAction) {
         switch (action) {
         case .Details:
@@ -139,16 +184,53 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         }
     }
     
-    // MARK - Segue
+    // MARK: - TimeZonePickerViewControllerDelegate
+    
+    func timeZonePickerDidCancel(picker: TimeZonePickerViewController)
+    {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func timeZonePicker(picker: TimeZonePickerViewController, didSelectTimeZoneID timeZoneID:String) {
+        self.device?.updateTimeZoneTo(timeZoneID,
+                                      success: { (timeZone) in
+                                        self.deviceViewModel?.update()
+            },
+                                      failure: { (error) in
+                                        let alert = UIAlertController(title: "Failed to save Time Zone", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert)
+                                        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                                        alert.addAction(okAction)
+                                        self.presentViewController(alert, animated: true, completion: nil)
+        })
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    // MARK: - Segue
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == segueIdToPropertyView {
             let vc = segue.destinationViewController as! PropertyViewController
             vc.propertyModel = sender as? PropertyModel
         }
-        if segue.identifier == segueIdToLanTestView {
+        else if segue.identifier == segueIdToLanTestView {
             let nvc = segue.destinationViewController as! UINavigationController
             let vc = nvc.viewControllers[0] as! TestPanelViewController
             vc.testModel = LanModeTestModel(testPanelVC: vc, deviceManager: device?.deviceManager, device: device)
+        }
+        else if segue.identifier == segueIdToSchedules {
+            let vc = segue.destinationViewController as! ScheduleTableViewController
+            vc.device = device
+        }
+        else if segue.identifier == segueIdToNotifications {
+            let vc = segue.destinationViewController as! NotificationsViewController
+            vc.device = device
+        }
+        else if segue.identifier == segueIdToTimeZonePicker {
+            let nvc = segue.destinationViewController as! UINavigationController
+            let vc = nvc.viewControllers[0] as! TimeZonePickerViewController
+            vc.timeZoneID = sender as? String
+            vc.delegate = self
         }
     }
     

@@ -46,6 +46,19 @@ The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).
 
 #Release Notes
 
+v5.1.00    2016-06-27
+------
+New Features:
+- Offline (LAN) sign-in and LAN device connectivity using cached data
+- Generic Gateway and Node registration
+- Change device time zones
+- Device Sharing
+- Device Schedules
+- Notifications for properties: push, email, and sms
+
+Enhancements and Bug Fixes:
+- Code updates to support 5.1.00 Ayla Mobile SDK
+
 v5.0.02    2016-06-15
 ------
 - add release notes about CocoaPods version requirement
