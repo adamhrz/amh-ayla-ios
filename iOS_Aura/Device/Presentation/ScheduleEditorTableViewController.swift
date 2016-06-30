@@ -20,6 +20,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
     @IBOutlet weak var utcSwitch: UISwitch!
     @IBOutlet weak var actionPicker: UIPickerView!
     @IBOutlet weak var propertyPicker: UIPickerView!
+    @IBOutlet weak var activeSwitch: UISwitch!
     
     var dateFormatter : NSDateFormatter!
     var timeFormatter : NSDateFormatter!
@@ -166,6 +167,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         
         utcSwitch.on = schedule.utc
         displayNameTextField.text = schedule.displayName
+        activeSwitch.on = schedule.active
         
         repeatType = .None
         if let daysOfWeek = schedule.daysOfWeek {
@@ -340,6 +342,7 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
             schedule.fixedActions = false
         }
         
+        schedule.active = activeSwitch.on
         saveScheduleButton.enabled = false
         device.updateSchedule(schedule, success: { (schedule) -> Void in
             

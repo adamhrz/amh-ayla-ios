@@ -106,8 +106,8 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6qg-OZ-TJk">
-                                                    <rect key="frame" x="181" y="-86.5" width="411" height="216"/>
+                                                <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6qg-OZ-TJk">
+                                                    <rect key="frame" x="181" y="-87" width="411" height="217"/>
                                                     <connections>
                                                         <outlet property="dataSource" destination="UMc-Vq-NeK" id="NSo-nb-hWc"/>
                                                         <outlet property="delegate" destination="UMc-Vq-NeK" id="mXz-lH-19L"/>
@@ -304,8 +304,34 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="FtV-jv-vx8">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="39O-Af-K6C">
                                         <rect key="frame" x="0.0" y="481" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="39O-Af-K6C" id="nLf-NE-RJI">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kHr-Gy-kNM">
+                                                    <rect key="frame" x="543" y="6" width="51" height="31"/>
+                                                </switch>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Active" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.40000000596046448" translatesAutoresizingMaskIntoConstraints="NO" id="iW4-Xt-NIN">
+                                                    <rect key="frame" x="8" y="11" width="527" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="kHr-Gy-kNM" secondAttribute="trailing" id="DnA-YR-HSm"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="iW4-Xt-NIN" secondAttribute="leading" id="XBk-m5-ens"/>
+                                                <constraint firstItem="kHr-Gy-kNM" firstAttribute="centerY" secondItem="nLf-NE-RJI" secondAttribute="centerY" id="baw-pl-afa"/>
+                                                <constraint firstItem="iW4-Xt-NIN" firstAttribute="centerY" secondItem="nLf-NE-RJI" secondAttribute="centerY" id="jLW-bC-yWF"/>
+                                                <constraint firstItem="kHr-Gy-kNM" firstAttribute="leading" secondItem="iW4-Xt-NIN" secondAttribute="trailing" constant="8" id="mGU-gs-mUb"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="FtV-jv-vx8">
+                                        <rect key="frame" x="0.0" y="525" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FtV-jv-vx8" id="XX2-pS-ZqK">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -340,6 +366,7 @@
                     </tableView>
                     <connections>
                         <outlet property="actionPicker" destination="6qg-OZ-TJk" id="W6U-Jf-Pb5"/>
+                        <outlet property="activeSwitch" destination="kHr-Gy-kNM" id="FSe-eu-8j1"/>
                         <outlet property="displayNameTextField" destination="9Zu-mC-Huo" id="JN7-i6-pIC"/>
                         <outlet property="offDatePicker" destination="ThR-fD-dK9" id="dcN-bG-yG0"/>
                         <outlet property="offTimeDatePicker" destination="GSR-Du-aBG" id="DiW-eD-kbf"/>
