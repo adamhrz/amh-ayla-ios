@@ -190,7 +190,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.updatePrompt("Confirming device status ...")
         let deviceDSN = self.setup.setupDevice?.dsn
-        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(deviceDSN)!, setupToken:token!, success: { () -> Void in
+        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(deviceDSN)!, setupToken:token!, success: { (setupDevice) -> Void in
                 self.updatePrompt("- Succeeded -")
                 self.addDescription("Confirmed device connection to service.\n- Succeeded -");
 
