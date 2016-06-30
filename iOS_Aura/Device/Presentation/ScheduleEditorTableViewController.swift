@@ -101,6 +101,9 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
                 }) { (error) in
                     print(error.userInfo)
             }
+            if  !self.schedule.fixedActions {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: #selector(clearAllActions))
+            }
         }
     }
     
@@ -157,6 +160,27 @@ class ScheduleEditorTableViewController: UITableViewController, UIPickerViewData
         }) { (error) in
             failure(error);
         }
+    }
+    
+    func clearAllActions() {
+        let confirmationAlert = UIAlertController(title: "Delete Actions", message: "Are you sure you want to delete all actions of this schedule? This will not delete the schedule, just the actions.", preferredStyle: .Alert)
+        let confirmAction = UIAlertAction(title: "Confirm", style: .Destructive) { (action) in
+            self.schedule.deleteAllScheduleActionsWithSuccess({
+                self.fetchActions({
+                    self.updateUI()
+                    UIAlertController.alert("Success", message: "Deleted all schedule actions", buttonTitle: "OK", fromController: self)
+                    }, failure: { (error) in
+                        UIAlertController.alert("Error", message: "Could not update action status(\(error.code))", buttonTitle: "OK", fromController: self)
+                        print("Failed to update action status \(error)")
+                })
+            }) { (error) in
+                UIAlertController.alert("Error", message: "Could not delete actions(\(error.code))", buttonTitle: "OK", fromController: self)
+                print("Failed to delete actions \(error)")
+            }
+        }
+        confirmationAlert.addAction(confirmAction)
+        confirmationAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        self.presentViewController(confirmationAlert, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
