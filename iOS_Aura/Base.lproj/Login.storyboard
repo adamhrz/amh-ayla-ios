@@ -445,7 +445,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Service Type" id="fEq-Uf-y55">
+                            <tableViewSection headerTitle="Use Service" id="fEq-Uf-y55">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="i5T-bG-r1b" style="IBUITableViewCellStyleDefault" id="8nB-FB-fUM">
                                         <rect key="frame" x="0.0" y="252" width="600" height="44"/>

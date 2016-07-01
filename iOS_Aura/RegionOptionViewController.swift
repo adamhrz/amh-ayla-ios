@@ -66,6 +66,21 @@ class RegionOptionViewController: UITableViewController {
     }
 
     func saveConfigs() {
+        if settings.serviceType == .Staging {
+            settings.appId = AuraOptions.AppIdStaging
+            settings.appSecret = AuraOptions.AppSecretStaging
+        }
+        else {
+            setupAppIdByLocation()
+        }
+        AylaNetworks.initializeWithSettings(self.settings)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setInteger(Int(self.settings.serviceLocation.rawValue), forKey: AuraOptions.KeyServiceLocation)
+        defaults.setInteger(Int(self.settings.serviceType.rawValue), forKey: AuraOptions.KeyServiceType)
+    }
+    
+    func setupAppIdByLocation() {
         if self.settings.serviceLocation == .CN {
             self.settings.appId = AuraOptions.AppIdCN
             self.settings.appSecret = AuraOptions.AppSecretCN
@@ -78,10 +93,5 @@ class RegionOptionViewController: UITableViewController {
             self.settings.appId = AuraOptions.AppIdUS
             self.settings.appSecret = AuraOptions.AppSecretUS
         }
-        AylaNetworks.initializeWithSettings(self.settings)
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(Int(self.settings.serviceLocation.rawValue), forKey: AuraOptions.KeyServiceLocation)
-        defaults.setInteger(Int(self.settings.serviceType.rawValue), forKey: AuraOptions.KeyServiceType)
     }
 }
