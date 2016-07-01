@@ -11,6 +11,7 @@ import iOS_AylaSDK
 
 protocol DeviceListViewModelDelegate: class {
     func deviceListViewModel(viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
+    func deviceListViewModel(viewModel:DeviceListViewModel, rowActionWithDevice device:AylaDevice)
 }
 
 class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
@@ -80,6 +81,23 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         }
         
         return cell!
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let lanOTAAction = UITableViewRowAction(style: .Default, title: "LAN OTA") { (action, indexPath) in
+            let device = self.devices[indexPath.row]
+            self.delegate?.deviceListViewModel(self, rowActionWithDevice: device)
+        }
+        
+        return [lanOTAAction]
     }
     
     // MARK: Table View Delegate

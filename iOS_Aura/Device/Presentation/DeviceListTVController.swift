@@ -20,6 +20,9 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     /// Segue id to Shares List view
     let segueIdToSharesView :String = "toSharesPage"
     
+    /// Segue id to LAN OTA
+    let segueIdToLANOTA = "toLANOTA"
+    
     /// The session manager which retains device manager of device list showing on this table view.
     var sessionManager :AylaSessionManager?
     
@@ -55,6 +58,10 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         actionSheet.addAction(UIAlertAction(title: "View Device Shares", style: .Default, handler: { (action) -> Void in
             self.performSegueWithIdentifier(self.segueIdToSharesView, sender: nil)
         }))
+        let lanOTA = UIAlertAction(title: "LAN OTA", style: .Default) { (action) in
+            self.performSegueWithIdentifier(self.segueIdToLANOTA, sender: nil)
+        }
+        actionSheet.addAction(lanOTA)
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
@@ -71,6 +78,11 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         self.performSegueWithIdentifier(segueIdToDevice, sender: device)
     }
     
+    func deviceListViewModel(viewModel: DeviceListViewModel, rowActionWithDevice device: AylaDevice) {
+        // Swith to LAN OTA page
+        self.performSegueWithIdentifier(segueIdToLANOTA, sender: device)
+    }
+    
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == segueIdToDevice { // To device page
@@ -80,6 +92,13 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
                 vc.sharesModel = self.viewModel?.sharesModel
             }
         } else if segue.identifier == segueIdToRegisterView { // To registration page
+        }
+        else if segue.identifier == segueIdToLANOTA {
+            if let device = sender as? AylaDevice, sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
+                let otaDevice = AylaLANOTADevice(sessionManager: sessionManager, DSN: device.dsn!, lanIP: device.lanIp!)
+                let vc = segue.destinationViewController as! LANOTAViewController
+                vc.device = otaDevice
+            }
         }
     }
     

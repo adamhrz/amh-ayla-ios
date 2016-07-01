@@ -42,6 +42,7 @@
 		5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */; };
 		5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA31CC84CF100233D99 /* AuraLabel.swift */; };
 		5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA41CC84CF100233D99 /* AuraTextField.swift */; };
+		A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */; };
 		A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
@@ -127,6 +128,7 @@
 		5FDCECA31CC84CF100233D99 /* AuraLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraLabel.swift; path = UX/AuraLabel.swift; sourceTree = "<group>"; };
 		5FDCECA41CC84CF100233D99 /* AuraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraTextField.swift; path = UX/AuraTextField.swift; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LANOTAViewController.swift; path = Device/Presentation/LANOTAViewController.swift; sourceTree = "<group>"; };
 		A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionOptionViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				A7A8C9051C7B897B00612C39 /* DevicePanelView.swift */,
 				A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */,
 				A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */,
+				A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */,
 				A73DB5B01C9606DD0024AF5E /* PropertyViewController.swift */,
 				A78DC8E71CB4C130002EE6B0 /* RegistrationViewController.swift */,
 				0F0DD7B01D07825600013752 /* NodeRegistrationViewController.swift */,
@@ -678,6 +681,7 @@
 				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
 				A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */,
 				0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */,
+				A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
 				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
 				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
