@@ -11,11 +11,8 @@ import iOS_AylaSDK
 
 protocol DeviceListViewModelDelegate: class {
     func deviceListViewModel(viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
-<<<<<<< HEAD
-    func deviceListViewModel(viewModel:DeviceListViewModel, rowActionWithDevice device:AylaDevice)
-=======
+    func deviceListViewModel(viewModel:DeviceListViewModel, lanOTAWithDevice device:AylaDevice)
     func deviceListViewModel(viewModel:DeviceListViewModel, didUnregisterDevice device:AylaDevice)
->>>>>>> andy/staging-supporting
 }
 
 class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
@@ -98,7 +95,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         let lanOTAAction = UITableViewRowAction(style: .Default, title: "LAN OTA") { (action, indexPath) in
             let device = self.devices[indexPath.row]
-            self.delegate?.deviceListViewModel(self, rowActionWithDevice: device)
+            self.delegate?.deviceListViewModel(self, lanOTAWithDevice: device)
         }
         
         let unregisterAction = UITableViewRowAction(style: .Default, title: "Unregister") { (action, indexPath) in

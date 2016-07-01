@@ -86,7 +86,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         self.performSegueWithIdentifier(segueIdToDevice, sender: device)
     }
     
-    func deviceListViewModel(viewModel: DeviceListViewModel, rowActionWithDevice device: AylaDevice) {
+    func deviceListViewModel(viewModel: DeviceListViewModel, lanOTAWithDevice device: AylaDevice) {
         // Swith to LAN OTA page
         self.performSegueWithIdentifier(segueIdToLANOTA, sender: device)
     }
