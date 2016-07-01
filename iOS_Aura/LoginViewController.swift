@@ -8,11 +8,13 @@ import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
 import SSKeychain
+import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var logoImageView: UIImageView!
     
     /// Id of a segue which is linked to `Main` storyboard.
     let segueIdToMain :String = "toMain"
@@ -22,6 +24,9 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        logoImageView.image = logoImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+        logoImageView.tintColor = UIColor.aylaBahamaBlueColor()
         
         // Add tap recognizer to dismiss keyboard.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -66,19 +71,36 @@ class LoginViewController: UIViewController {
             // Create auth provider with user input.
             let auth = AylaUsernameAuthProvider(username: username, password: password)
             
-            // Login with login manager
-            self.presentLoading("Login...")
-            let loginManager = AylaNetworks.shared().loginManager
-            loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
+            let success = { (authorization: AylaAuthorization, sessionManager: AylaSessionManager) -> Void in
                 PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
                 SSKeychain.setPassword(password, forService: settings.appId, account: username)
+                
+                // Reset the Contact Manager for the new user
+                ContactManager.sharedInstance.reload()
+                
                 self.dismissLoading(false, completion: { () -> Void in
+                    KeychainWrapper.setObject(authorization, forKey: "LANLoginAuthorization")
                     // Once succeeded, present view controller in `Main` storyboard.
                     self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
                 })
-                
-                }, failure: { (error) -> Void in
 
+            }
+            
+            // Login with login manager
+            self.presentLoading("Login...")
+            let loginManager = AylaNetworks.shared().loginManager
+            loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: success, failure: { [unowned loginManager] (error) -> Void in
+                    if settings.allowOfflineUse {
+                        if let cachedAuth = KeychainWrapper.objectForKey("LANLoginAuthorization") as? AylaAuthorization {
+                            let provider = AylaCachedAuthProvider(authorization: cachedAuth)
+                            loginManager.loginWithAuthProvider(provider, sessionName: AuraSessionOneName, success: success, failure: { (error) in
+                                self.dismissLoading(false, completion: { () -> Void in
+                                    self.presentError(error)
+                                })
+                            })
+                            return;
+                        }
+                    }
                     self.dismissLoading(false, completion: { () -> Void in
                         self.presentError(error)
                     })

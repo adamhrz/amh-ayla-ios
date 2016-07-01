@@ -17,7 +17,11 @@ require_relative './Podhelper'
 
 #Configuration Section: you can change the following variables to configure your build
 conditional_assign("ayla_build_branch", "") #"release/4.4.0"
+<<<<<<< HEAD
 conditional_assign("ayla_sdk_branch", "featrue/lan_ota") #or @ayla_build_branch)
+=======
+conditional_assign("ayla_sdk_branch", "release/5.1.00") #or @ayla_build_branch)
+>>>>>>> andy/staging-supporting
 conditional_assign("ayla_sdk_repo", "") #"https://github.com/AylaNetworks/iOS_AylaSDK(_Public).git"
 conditional_assign("ayla_public", "")
 conditional_assign("ayla_remote", "origin")
@@ -64,6 +68,7 @@ target :iOS_Aura do
     pod 'iOS_AylaSDK',
 #    :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
     :path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
+    pod 'SwiftKeychainWrapper'
     pod 'SSKeychain'
     pod 'PDKeychainBindingsController'
 end

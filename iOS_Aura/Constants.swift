@@ -20,6 +20,9 @@ struct AuraNotifications {
 
 struct AuraOptions {
     static let EasterEgg    = "aylarocks"
+    
+    static let AppIdStaging     = "aura_0dfc7900-dev-id"
+    static let AppSecretStaging = "aura_0dfc7900-dev-Dc3OtN_li7Xdepo_7SmXbcjCXxM"
 
     static let AppIdUS     = "aura_0dfc7900-id"
     static let AppSecretUS = "aura_0dfc7900-eUo-3Se7R25Z_QLeEiXqYkQDUNA"

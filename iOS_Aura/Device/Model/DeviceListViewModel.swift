@@ -11,7 +11,11 @@ import iOS_AylaSDK
 
 protocol DeviceListViewModelDelegate: class {
     func deviceListViewModel(viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
+<<<<<<< HEAD
     func deviceListViewModel(viewModel:DeviceListViewModel, rowActionWithDevice device:AylaDevice)
+=======
+    func deviceListViewModel(viewModel:DeviceListViewModel, didUnregisterDevice device:AylaDevice)
+>>>>>>> andy/staging-supporting
 }
 
 class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
@@ -97,7 +101,12 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
             self.delegate?.deviceListViewModel(self, rowActionWithDevice: device)
         }
         
-        return [lanOTAAction]
+        let unregisterAction = UITableViewRowAction(style: .Default, title: "Unregister") { (action, indexPath) in
+            let device = self.devices[indexPath.row]
+            self.delegate?.deviceListViewModel(self, didUnregisterDevice: device)
+        }
+        unregisterAction.backgroundColor = UIColor.auraRedColor()
+        return [lanOTAAction, unregisterAction]
     }
     
     // MARK: Table View Delegate

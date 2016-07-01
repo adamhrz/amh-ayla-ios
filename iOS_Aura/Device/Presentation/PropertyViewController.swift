@@ -31,7 +31,7 @@ class PropertyViewController: UIViewController {
     func refresh() {
         if let property = propertyModel?.property {
             displayNameLabel.text = property.displayName
-            valueLabel.text = "\(String.stringFromStringNumberOrNil(property.datapoint?.value))"
+            valueLabel.text = "\(String.stringFromStringNumberOrNil(property.value))"
             nameLabel.text = property.name
             baseTypeLabel.text = property.baseType
         }

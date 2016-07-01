@@ -58,7 +58,7 @@ class PropertyTVCell: UITableViewCell {
             if baseType == "boolean"{
                 if let direction = self.property?.direction {
                     propertySwitch?.enabled = direction == "input" ? true : false
-                    if let value = self.property?.datapoint?.value {
+                    if let value = self.property?.value {
                         propertySwitch?.on = value as! Bool
                     }
                     else {
@@ -74,7 +74,7 @@ class PropertyTVCell: UITableViewCell {
         nameLabel.text = self.property?.name
         infoLabel?.text = String.localizedStringWithFormat("%@ - %@", (self.property?.direction)!, (self.property?.baseType)!)
         
-        let value = String.stringFromStringNumberOrNil(self.property?.datapoint?.value)
+        let value = String.stringFromStringNumberOrNil(self.property?.value)
         valueLabel.text = value
     }
     
@@ -96,7 +96,7 @@ class PropertyTVCell: UITableViewCell {
         
         // Check for previous value of property. If there is no previous value, create datapoint with value (1).
         var boolValue = NSNumber(int: 0)
-        if let curVal = self.property?.datapoint?.value {
+        if let curVal = self.property?.value {
             boolValue = curVal as! NSNumber
         }
             

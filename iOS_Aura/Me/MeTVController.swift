@@ -10,6 +10,7 @@ import iOS_AylaSDK
 import PDKeychainBindingsController
 import SSKeychain
 import CoreTelephony
+import SwiftKeychainWrapper
 
 class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate {
     
@@ -32,6 +33,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         SSKeychain.deletePasswordForService(settings.appId, account: username)
         if let manager = sessionManager {
             manager.logoutWithSuccess({ () -> Void in
+                KeychainWrapper.removeObjectForKey("LANLoginAuthorization")
                 self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
                 });
                 }, failure: { (error) -> Void in
@@ -40,6 +42,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
                         let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                             
+                            KeychainWrapper.removeObjectForKey("LANLoginAuthorization")
                             self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
                             });
                         })

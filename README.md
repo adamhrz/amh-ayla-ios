@@ -2,6 +2,7 @@
 ####Ayla Networks' iOS Demo Application
 
 Supports iOS version 8.0 and above;  
+Supports CocoaPods version 0.39.0 and below;  
 
 #Getting Started
 The following steps should be run in Terminal.
@@ -12,7 +13,10 @@ The following steps should be run in Terminal.
     
 2.  Install [Cocoapods](https://cocoapods.org) if you do not already have it: 
 
-    >```gem install cocoapods```
+    >```gem install cocoapods -v 0.39.0```
+
+    Note: we only supoort Cocoapods version 0.39.0 or below. If you installed version higher like 1.0.1, run the following command and then select 1.0.1 to uninstall
+    >```gem uninstall cocoapods```
 
 3. Then run the following command within the Aura folder: 
 
@@ -41,6 +45,23 @@ The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).
 - SocketRocket ([License](https://github.com/square/SocketRocket/blob/master/LICENSE))
 
 #Release Notes
+
+v5.1.00    2016-06-27
+------
+New Features:
+- Offline (LAN) sign-in and LAN device connectivity using cached data
+- Generic Gateway and Node registration
+- Change device time zones
+- Device Sharing
+- Device Schedules
+- Notifications for properties: push, email, and sms
+
+Enhancements and Bug Fixes:
+- Code updates to support 5.1.00 Ayla Mobile SDK
+
+v5.0.02    2016-06-15
+------
+- add release notes about CocoaPods version requirement
 
 v5.0.01    2016-05-24
 ------
