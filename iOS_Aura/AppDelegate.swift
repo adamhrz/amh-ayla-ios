@@ -42,6 +42,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setupAuraOptions(settings: AylaSystemSettings) {
+        
+        func setupAppIdByLocation() {
+            if settings.serviceLocation == .CN {
+                settings.appId = AuraOptions.AppIdCN
+                settings.appSecret = AuraOptions.AppSecretCN
+            }
+            else if settings.serviceLocation == .EU {
+                settings.appId = AuraOptions.AppIdEU
+                settings.appSecret = AuraOptions.AppSecretEU
+            }
+            else {
+                settings.appId = AuraOptions.AppIdUS
+                settings.appSecret = AuraOptions.AppSecretUS
+            }
+        }
+        
         let defaults = NSUserDefaults.standardUserDefaults()
         let type = defaults.integerForKey(AuraOptions.KeyServiceType)
         if type == 0 { // 0 == AylaServiceType.Dynamic
@@ -54,17 +70,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let location = defaults.integerForKey(AuraOptions.KeyServiceLocation)
         settings.serviceLocation = AylaServiceLocation(rawValue: UInt16(location)) ?? .US
         
-        if settings.serviceLocation == .CN {
-            settings.appId = AuraOptions.AppIdCN
-            settings.appSecret = AuraOptions.AppSecretCN
-        }
-        else if settings.serviceLocation == .EU {
-            settings.appId = AuraOptions.AppIdEU
-            settings.appSecret = AuraOptions.AppSecretEU
+        if settings.serviceType == .Staging {
+            settings.appId = AuraOptions.AppIdStaging
+            settings.appSecret = AuraOptions.AppSecretStaging
         }
         else {
-            settings.appId = AuraOptions.AppIdUS
-            settings.appSecret = AuraOptions.AppSecretUS
+            setupAppIdByLocation()
         }
     }
     
