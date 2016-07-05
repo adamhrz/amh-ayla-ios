@@ -56,12 +56,17 @@ class LANOTAViewController: UIViewController {
     @IBAction func downloadOTAImageAction(sender: UIButton) {
         updatePrompt("downloadOTAImage")
         if let _ = imageInfo {
-            self.device?.fetchOTAImageFile(self.imageInfo!,
-            success: {
-                self.showAlert("Success", message: "You can push the OTA image to device now")
-            },
-            failure: { error in
-                self.showAlert("Download image failed", message: error.localizedDescription)
+            self.device?.downloadOTAImageFile(self.imageInfo!,
+                progress: { progress in
+                    self.addDescription("Downloading...\(progress.completedUnitCount)/\(progress.totalUnitCount)")
+                },
+                success: {
+                    self.showAlert("Success", message: "You can push the OTA image to device now")
+                    self.addDescription("Download image success!")
+                },
+                failure: { error in
+                    self.showAlert("Download image failed", message: error.localizedDescription)
+                    self.addDescription("Download image failed:\(error.userInfo)")
             })
         }
         else {
@@ -102,6 +107,17 @@ class LANOTAViewController: UIViewController {
 
 extension LANOTAViewController: AylaLANOTADeviceDelegate {
     func lanOTADevice(device: AylaLANOTADevice, didUpdateImagePushStatus status: ImagePushStatus) {
-        self.addDescription("Push image to device status update:\(status.rawValue)")
+        var display = ""
+        if status == ImagePushStatus.Done {
+            display = "Done"
+        }
+        else if status == ImagePushStatus.Initial {
+            display = "Initial"
+        }
+        else {
+            display = "Error"
+        }
+        
+        self.addDescription("Push image to device status update:\(display)")
     }
 }

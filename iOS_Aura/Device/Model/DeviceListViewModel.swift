@@ -97,6 +97,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
             let device = self.devices[indexPath.row]
             self.delegate?.deviceListViewModel(self, lanOTAWithDevice: device)
         }
+        lanOTAAction.backgroundColor = UIColor.auraLeafGreenColor();
         
         let unregisterAction = UITableViewRowAction(style: .Default, title: "Unregister") { (action, indexPath) in
             let device = self.devices[indexPath.row]
