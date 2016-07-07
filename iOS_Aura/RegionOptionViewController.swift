@@ -11,15 +11,18 @@ import iOS_AylaSDK
 
 class RegionOptionViewController: UITableViewController {
     
-    let settings = AylaNetworks.shared().systemSettings
-    
     let serviceLocations:[AylaServiceLocation] = [.US, .CN, .EU]
     let serviceTypes:[AylaServiceType] = [.Development, .Field, .Staging]
+    
+    var location: AylaServiceLocation = .US
+    var service: AylaServiceType = .Development
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let settings = AylaNetworks.shared().systemSettings
+        location = settings.serviceLocation
+        service = settings.serviceType
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,7 +33,7 @@ class RegionOptionViewController: UITableViewController {
     // MARK: - DataSource & Delegate
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {  // region
-            if serviceLocations.indexOf(settings.serviceLocation) == indexPath.row {
+            if serviceLocations.indexOf(self.location) == indexPath.row {
                 cell.accessoryType = .Checkmark
             }
             else {
@@ -38,7 +41,7 @@ class RegionOptionViewController: UITableViewController {
             }
         }
         else {  // service type
-            if serviceTypes.indexOf(settings.serviceType) == indexPath.row {
+            if serviceTypes.indexOf(self.service) == indexPath.row {
                 cell.accessoryType = .Checkmark
             }
             else {
@@ -51,10 +54,10 @@ class RegionOptionViewController: UITableViewController {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         if indexPath.section == 0 {
-            settings.serviceLocation = serviceLocations[indexPath.row]
+            self.location = serviceLocations[indexPath.row]
         }
         else {
-            settings.serviceType = serviceTypes[indexPath.row]
+            self.service = serviceTypes[indexPath.row]
         }
         tableView.reloadData()
     }
@@ -66,32 +69,11 @@ class RegionOptionViewController: UITableViewController {
     }
 
     func saveConfigs() {
-        if settings.serviceType == .Staging {
-            settings.appId = AuraOptions.AppIdStaging
-            settings.appSecret = AuraOptions.AppSecretStaging
-        }
-        else {
-            setupAppIdByLocation()
-        }
-        AylaNetworks.initializeWithSettings(self.settings)
+        let settings = DeveloperOptionsUtil.systemSettingsWithLocation(self.location, service: self.service)
+        AylaNetworks.initializeWithSettings(settings)
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(Int(self.settings.serviceLocation.rawValue), forKey: AuraOptions.KeyServiceLocation)
-        defaults.setInteger(Int(self.settings.serviceType.rawValue), forKey: AuraOptions.KeyServiceType)
-    }
-    
-    func setupAppIdByLocation() {
-        if self.settings.serviceLocation == .CN {
-            self.settings.appId = AuraOptions.AppIdCN
-            self.settings.appSecret = AuraOptions.AppSecretCN
-        }
-        else if self.settings.serviceLocation == .EU {
-            self.settings.appId = AuraOptions.AppIdEU
-            self.settings.appSecret = AuraOptions.AppSecretEU
-        }
-        else {
-            self.settings.appId = AuraOptions.AppIdUS
-            self.settings.appSecret = AuraOptions.AppSecretUS
-        }
+        defaults.setInteger(Int(settings.serviceLocation.rawValue), forKey: AuraOptions.KeyServiceLocation)
+        defaults.setInteger(Int(settings.serviceType.rawValue), forKey: AuraOptions.KeyServiceType)
     }
 }

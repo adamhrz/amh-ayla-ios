@@ -17,9 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         // Setup core manager
-        let settings = AylaSystemSettings.defaultSystemSettings()
-        // Setup app id/secret
-        setupAuraOptions(settings)
+        let settings = auraSettings()
 
         // Set device detail provider
         settings.deviceDetailProvider = DeviceDetailProvider()
@@ -41,42 +39,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func setupAuraOptions(settings: AylaSystemSettings) {
-        
-        func setupAppIdByLocation() {
-            if settings.serviceLocation == .CN {
-                settings.appId = AuraOptions.AppIdCN
-                settings.appSecret = AuraOptions.AppSecretCN
-            }
-            else if settings.serviceLocation == .EU {
-                settings.appId = AuraOptions.AppIdEU
-                settings.appSecret = AuraOptions.AppSecretEU
-            }
-            else {
-                settings.appId = AuraOptions.AppIdUS
-                settings.appSecret = AuraOptions.AppSecretUS
-            }
-        }
+    /**
+     Setup App Id/secret, service location, service type
+     */
+    func auraSettings() -> AylaSystemSettings{
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let type = defaults.integerForKey(AuraOptions.KeyServiceType)
-        if type == 0 { // 0 == AylaServiceType.Dynamic
-            settings.serviceType = .Development
-        }
-        else {
-            settings.serviceType = AylaServiceType(rawValue: UInt16(type)) ?? .Development
-        }
-        
         let location = defaults.integerForKey(AuraOptions.KeyServiceLocation)
-        settings.serviceLocation = AylaServiceLocation(rawValue: UInt16(location)) ?? .US
         
-        if settings.serviceType == .Staging {
-            settings.appId = AuraOptions.AppIdStaging
-            settings.appSecret = AuraOptions.AppSecretStaging
+        var serviceType: AylaServiceType = .Development
+        var serviceLocation: AylaServiceLocation = .US
+        if type == 0 { // 0 == AylaServiceType.Dynamic
+            serviceType = .Development
         }
         else {
-            setupAppIdByLocation()
+            serviceType = AylaServiceType(rawValue: UInt16(type)) ?? .Development
         }
+        serviceLocation = AylaServiceLocation(rawValue: UInt16(location)) ?? .US
+        
+        return DeveloperOptionsUtil.systemSettingsWithLocation(serviceLocation, service: serviceType)
     }
     
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
