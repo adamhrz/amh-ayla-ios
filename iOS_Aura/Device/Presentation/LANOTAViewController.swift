@@ -33,7 +33,6 @@ class LANOTAViewController: UIViewController {
     }
     
     @IBAction func checkOTAInfoFromCloudAction(sender: UIButton) {
-        updatePrompt("checkOTAInfoFromCloud")
         if let dsn = dsnField.text, lanIP = lanIPField.text {
             if dsn.isEmpty || lanIP.isEmpty {
                 self.showAlert("Error", message: "Please input device DSN and lan IP")
@@ -43,6 +42,7 @@ class LANOTAViewController: UIViewController {
             self.device = AylaLANOTADevice(sessionManager: sessionManager!, DSN: dsn, lanIP: lanIP)
         }
         
+        updatePrompt("checkOTAInfoFromCloud")
         self.device?.fetchOTAImageInfoWithSuccess({ [weak self] imageInfo in
             self?.imageInfo = imageInfo
             self?.addDescription("OTA image infor:\(imageInfo)")
@@ -54,8 +54,8 @@ class LANOTAViewController: UIViewController {
     }
 
     @IBAction func downloadOTAImageAction(sender: UIButton) {
-        updatePrompt("downloadOTAImage")
         if let _ = imageInfo {
+            updatePrompt("downloadOTAImage")
             self.device?.downloadOTAImageFile(self.imageInfo!,
                 progress: { progress in
                     self.addDescription("Downloading...\(progress.completedUnitCount)/\(progress.totalUnitCount)")
