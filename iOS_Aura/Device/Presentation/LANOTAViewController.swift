@@ -56,7 +56,7 @@ class LANOTAViewController: UIViewController {
     @IBAction func downloadOTAImageAction(sender: UIButton) {
         if let _ = imageInfo {
             updatePrompt("downloadOTAImage")
-            self.device?.downloadOTAImageFile(self.imageInfo!,
+            self.device?.fetchOTAImageFile(self.imageInfo!,
                 progress: { progress in
                     self.addDescription("Downloading...\(progress.completedUnitCount)/\(progress.totalUnitCount)")
                 },
@@ -75,15 +75,20 @@ class LANOTAViewController: UIViewController {
     }
     
     @IBAction func pushImageToDeviceAction(sender: UIButton) {
-        updatePrompt("pushImageToDevice")
-        addDescription("Start push image to device.")
-        self.device?.pushOTAImageToDeviceWithSuccess({ 
-            self.addDescription("Success: Device will download the OTA image soon!")
-        },
-        failure: { error in
-            self.showAlert("Error", message: error.localizedDescription)
-            self.addDescription("Error: \(error.description)")
-        })
+        if self.device!.isOTAImageAvailable() {
+            updatePrompt("pushImageToDevice")
+            addDescription("Start push image to device.")
+            self.device?.pushOTAImageToDeviceWithSuccess({
+                self.addDescription("Success: Device will download the OTA image soon!")
+                },
+                                                         failure: { error in
+                                                            self.showAlert("Error", message: error.localizedDescription)
+                                                            self.addDescription("Error: \(error.description)")
+            })
+        }
+        else {
+            addDescription("No OTA image file founded, please download it first.")
+        }
     }
     
     func showAlert(title:String?, message: String?) {
