@@ -11,6 +11,7 @@ import iOS_AylaSDK
 
 class ScheduleTableViewController: UITableViewController {
     let segueToScheduleEditorId = "toScheduleEditor"
+    let scheduleCellID = "ScheduleTableViewCell"
     
     var device : AylaDevice!
     var schedules = [AylaSchedule]()
@@ -56,19 +57,12 @@ class ScheduleTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("\(ScheduleTableViewController.self)", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(self.scheduleCellID, forIndexPath: indexPath) as! ScheduleTableViewCell
 
         let schedule = schedules[indexPath.row]
+        cell.configure(schedule)
         
-        cell.textLabel?.text = "\(schedule.displayName ?? "") (\(schedule.name))"
-        let startAt = "\(schedule.startTimeEachDay ?? "")"
-        let endTimeEachDay = "\(schedule.endTimeEachDay ?? "No end time")"
-        let startDate = "\(schedule.startDate ?? "immediately")"
-        let endDate = "\(schedule.endDate ?? "indefinite")"
-        let active = "\(schedule.active ? "Active" : "Inactive")"
-        let utc = "\(schedule.utc ? "UTC" : "Non-UTC")"
         
-        cell.detailTextLabel?.text = "\(startAt) - \(endTimeEachDay), \(startDate) - \(endDate), \(utc), \(active)"
         
         return cell
     }
@@ -83,7 +77,7 @@ class ScheduleTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == segueToScheduleEditorId) {
-            let scheduleEditorController = segue.destinationViewController as! ScheduleEditorTableViewController
+            let scheduleEditorController = segue.destinationViewController as! ScheduleEditorViewController
             scheduleEditorController.device = device
             scheduleEditorController.schedule = sender as! AylaSchedule
         }
