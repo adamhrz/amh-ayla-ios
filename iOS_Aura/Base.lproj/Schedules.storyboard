@@ -129,7 +129,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="zDA-ej-k7I">
-                                <rect key="frame" x="10" y="65" width="580" height="1031"/>
+                                <rect key="frame" x="10" y="65" width="580" height="1061"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit Schedule" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wiI-4D-VSc">
                                         <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
@@ -248,10 +248,10 @@
                                         </connections>
                                     </datePicker>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dz2-9P-f1Y" userLabel="Tooltip View">
-                                        <rect key="frame" x="0.0" y="225" width="580" height="65"/>
+                                        <rect key="frame" x="0.0" y="225" width="580" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sI0-Dq-29A">
-                                                <rect key="frame" x="16" y="8" width="548" height="49"/>
+                                                <rect key="frame" x="16" y="8" width="548" height="64"/>
                                                 <string key="text">The date the schedule takes effect and the time each day when the schedule fires. 'At Start' actions fire and 'In Range' actions start at this time.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -264,11 +264,11 @@
                                             <constraint firstAttribute="trailing" secondItem="sI0-Dq-29A" secondAttribute="trailing" constant="16" id="P6t-3L-64p"/>
                                             <constraint firstItem="sI0-Dq-29A" firstAttribute="leading" secondItem="Dz2-9P-f1Y" secondAttribute="leading" constant="16" id="VgE-uR-f8X"/>
                                             <constraint firstItem="sI0-Dq-29A" firstAttribute="top" secondItem="Dz2-9P-f1Y" secondAttribute="top" constant="8" id="ZaE-Fn-6i6"/>
-                                            <constraint firstAttribute="height" constant="65" id="rhH-Xo-eTx"/>
+                                            <constraint firstAttribute="height" constant="80" id="rhH-Xo-eTx"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rdm-wR-ZdM" userLabel="EndDate Line Item Stack">
-                                        <rect key="frame" x="0.0" y="302" width="580" height="30"/>
+                                        <rect key="frame" x="0.0" y="317" width="580" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="End Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wF5-ku-Ued">
                                                 <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
@@ -292,7 +292,7 @@
                                         </connections>
                                     </stackView>
                                     <datePicker hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="tzh-PO-R67" userLabel="EndDate Picker">
-                                        <rect key="frame" x="0.0" y="338" width="580" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="353" width="580" height="0.0"/>
                                         <date key="date" timeIntervalSinceReferenceDate="484269453.951612">
                                             <!--2016-05-06 23:17:33 +0000-->
                                         </date>
@@ -301,7 +301,7 @@
                                         </connections>
                                     </datePicker>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XxT-L4-ngx" userLabel="EndTime Line Item Stack">
-                                        <rect key="frame" x="0.0" y="344" width="580" height="30"/>
+                                        <rect key="frame" x="0.0" y="359" width="580" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="End Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96C-Zl-PPX">
                                                 <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
@@ -325,7 +325,7 @@
                                         </connections>
                                     </stackView>
                                     <datePicker hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="vyZ-jI-4c5" userLabel="EndTime Picker">
-                                        <rect key="frame" x="0.0" y="380" width="580" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="395" width="580" height="0.0"/>
                                         <date key="date" timeIntervalSinceReferenceDate="484269453.951612">
                                             <!--2016-05-06 23:17:33 +0000-->
                                         </date>
@@ -334,10 +334,10 @@
                                         </connections>
                                     </datePicker>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TSG-wB-PPF" userLabel="Tooltip View">
-                                        <rect key="frame" x="0.0" y="386" width="580" height="65"/>
+                                        <rect key="frame" x="0.0" y="401" width="580" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0K-30-0l7">
-                                                <rect key="frame" x="16" y="8" width="548" height="49"/>
+                                                <rect key="frame" x="16" y="8" width="548" height="64"/>
                                                 <string key="text">The date the schedule ceases to fire and the time each day when it ends. 'At End' actions fire and 'In Range' actions stop at this time.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -348,13 +348,13 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="N0K-30-0l7" secondAttribute="trailing" constant="16" id="2l7-D6-YSK"/>
                                             <constraint firstItem="N0K-30-0l7" firstAttribute="leading" secondItem="TSG-wB-PPF" secondAttribute="leading" constant="16" id="H4E-cV-bbn"/>
-                                            <constraint firstAttribute="height" constant="65" id="Iv8-h3-fkL"/>
+                                            <constraint firstAttribute="height" constant="80" id="Iv8-h3-fkL"/>
                                             <constraint firstAttribute="bottom" secondItem="N0K-30-0l7" secondAttribute="bottom" constant="8" id="Uyo-p6-cFu"/>
                                             <constraint firstItem="N0K-30-0l7" firstAttribute="top" secondItem="TSG-wB-PPF" secondAttribute="top" constant="8" id="eFv-9j-S0j"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JPP-8m-p5h" userLabel="UTC Switch Line Item Stack">
-                                        <rect key="frame" x="0.0" y="463" width="580" height="31"/>
+                                        <rect key="frame" x="0.0" y="493" width="580" height="31"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O4q-Fr-Eca">
                                                 <rect key="frame" x="0.0" y="0.0" width="531" height="31"/>
@@ -379,9 +379,9 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rc1-kY-beW" userLabel="Tooltip View">
-                                        <rect key="frame" x="0.0" y="506" width="580" height="65"/>
+                                        <rect key="frame" x="0.0" y="536" width="580" height="65"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Whether dates and times are kept in UTC (Universal Time Code) or translated to the device's local timezone." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="b5h-7x-6aq">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Whether dates and times are kept in UTC or translated to the device's local timezone." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="b5h-7x-6aq">
                                                 <rect key="frame" x="16" y="8" width="548" height="49"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -398,7 +398,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TZc-3e-FKx" userLabel="Repeat Line Item Stack">
-                                        <rect key="frame" x="0.0" y="583" width="580" height="30"/>
+                                        <rect key="frame" x="0.0" y="613" width="580" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repeat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ans-gX-Wua">
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="30"/>
@@ -422,10 +422,10 @@
                                         </connections>
                                     </stackView>
                                     <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6OS-RX-aRg" userLabel="Repeat Picker View">
-                                        <rect key="frame" x="0.0" y="619" width="580" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="649" width="580" height="0.0"/>
                                     </pickerView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qHM-nT-0b8" userLabel="TooltipView">
-                                        <rect key="frame" x="0.0" y="625" width="580" height="70"/>
+                                        <rect key="frame" x="0.0" y="655" width="580" height="70"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How often or on which combination of days the schedule will fire (between start and end dates)." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="coP-jH-j1A">
                                                 <rect key="frame" x="16" y="8" width="548" height="54"/>
@@ -444,7 +444,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="nmr-rO-0lR" userLabel="Actions">
-                                        <rect key="frame" x="0.0" y="707" width="580" height="188"/>
+                                        <rect key="frame" x="0.0" y="737" width="580" height="188"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pwW-yI-tDa">
                                                 <rect key="frame" x="0.0" y="0.0" width="580" height="30"/>
@@ -573,13 +573,13 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BTz-zQ-2tf" userLabel="SpacerView">
-                                        <rect key="frame" x="0.0" y="907" width="580" height="10"/>
+                                        <rect key="frame" x="0.0" y="937" width="580" height="10"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="10" id="blj-d9-kXM"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="317-ja-Ee8" customClass="AuraButton" customModule="Aura" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="929" width="580" height="45"/>
+                                        <rect key="frame" x="0.0" y="959" width="580" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="A5m-Cs-5KM"/>
                                             <constraint firstAttribute="width" constant="200" id="TDi-6K-xlq"/>
@@ -595,7 +595,7 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ics-6J-FDo" userLabel="SpacerView">
-                                        <rect key="frame" x="0.0" y="986" width="580" height="45"/>
+                                        <rect key="frame" x="0.0" y="1016" width="580" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="iCo-h9-Z0Z"/>
                                         </constraints>
