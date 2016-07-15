@@ -5,10 +5,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Schedule Table View Controller-->
+        <!--Device Schedules-->
         <scene sceneID="imi-ch-lUy">
             <objects>
-                <tableViewController id="DCU-vi-eLf" customClass="ScheduleTableViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Device Schedules" id="DCU-vi-eLf" customClass="ScheduleTableViewController" customModule="Aura" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="78" sectionHeaderHeight="28" sectionFooterHeight="28" id="lK5-Rg-C58">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -21,7 +21,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="77"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKo-Uj-Znv" userLabel="mainLabel">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Schedule Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKo-Uj-Znv" userLabel="mainLabel">
                                             <rect key="frame" x="8" y="8" width="496" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="Nar-SN-eak"/>
@@ -30,7 +30,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iTD-j4-1q4" userLabel="infoTop">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start Information" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iTD-j4-1q4" userLabel="infoTop">
                                             <rect key="frame" x="19" y="29" width="573" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="OsT-KF-4Iz"/>
@@ -39,7 +39,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Dq-Jy-bBL" userLabel="infoBttom">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="End Informatin" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Dq-Jy-bBL" userLabel="infoBttom">
                                             <rect key="frame" x="19" y="50" width="573" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="4ic-9I-JA9"/>
@@ -48,15 +48,15 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1w2-wz-GLB" userLabel="activeLabel">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Active" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1w2-wz-GLB" userLabel="activeLabel">
                                             <rect key="frame" x="512" y="8" width="80" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="UJ2-Yu-xQ6"/>
                                                 <constraint firstAttribute="height" constant="61" id="n9d-mQ-6pN"/>
-                                                <constraint firstAttribute="width" constant="70" id="qa5-Sa-EP1"/>
+                                                <constraint firstAttribute="width" constant="80" id="qa5-Sa-EP1"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.1141904071" green="0.49319788809999998" blue="0.079485878349999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                             <variation key="default">
                                                 <mask key="constraints">
@@ -68,6 +68,7 @@
                                     <constraints>
                                         <constraint firstItem="1w2-wz-GLB" firstAttribute="top" secondItem="1ng-ga-WWc" secondAttribute="topMargin" id="3nm-Fd-H5P"/>
                                         <constraint firstItem="iTD-j4-1q4" firstAttribute="top" secondItem="1w2-wz-GLB" secondAttribute="bottom" id="40B-uM-Fmh"/>
+                                        <constraint firstItem="iTD-j4-1q4" firstAttribute="trailing" secondItem="1ng-ga-WWc" secondAttribute="trailingMargin" id="7oC-AO-RRS"/>
                                         <constraint firstItem="iTD-j4-1q4" firstAttribute="top" secondItem="GKo-Uj-Znv" secondAttribute="bottom" id="C7L-O4-fBV"/>
                                         <constraint firstItem="1w2-wz-GLB" firstAttribute="centerY" secondItem="1ng-ga-WWc" secondAttribute="centerY" id="Juv-jv-XyK"/>
                                         <constraint firstItem="1w2-wz-GLB" firstAttribute="trailing" secondItem="1ng-ga-WWc" secondAttribute="trailingMargin" id="QXl-vx-GUC"/>
@@ -128,7 +129,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="zDA-ej-k7I">
-                                <rect key="frame" x="10" y="65" width="580" height="954"/>
+                                <rect key="frame" x="10" y="65" width="580" height="1031"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit Schedule" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wiI-4D-VSc">
                                         <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
@@ -249,8 +250,9 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dz2-9P-f1Y" userLabel="Tooltip View">
                                         <rect key="frame" x="0.0" y="225" width="580" height="65"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The date and time when the schedule first begins. 'At Start' actions fire and 'In Range' actions start at this time." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sI0-Dq-29A">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sI0-Dq-29A">
                                                 <rect key="frame" x="16" y="8" width="548" height="49"/>
+                                                <string key="text">The date the schedule takes effect and the time each day when the schedule fires. 'At Start' actions fire and 'In Range' actions start at this time.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -334,8 +336,9 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TSG-wB-PPF" userLabel="Tooltip View">
                                         <rect key="frame" x="0.0" y="386" width="580" height="65"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The date and time when the schedule ends. 'At End' actions fire and 'In Range' actions stop at this time." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0K-30-0l7">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0K-30-0l7">
                                                 <rect key="frame" x="16" y="8" width="548" height="49"/>
+                                                <string key="text">The date the schedule ceases to fire and the time each day when it ends. 'At End' actions fire and 'In Range' actions stop at this time.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -369,11 +372,33 @@
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VBd-sZ-paP">
                                                 <rect key="frame" x="531" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="utcSwitchTapped:" destination="W19-2s-POt" eventType="valueChanged" id="RfC-rJ-1j4"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                     </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rc1-kY-beW" userLabel="Tooltip View">
+                                        <rect key="frame" x="0.0" y="506" width="580" height="65"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Whether dates and times are kept in UTC (Universal Time Code) or translated to the device's local timezone." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="b5h-7x-6aq">
+                                                <rect key="frame" x="16" y="8" width="548" height="49"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="b5h-7x-6aq" secondAttribute="trailing" constant="16" id="3UE-N7-bpF"/>
+                                            <constraint firstItem="b5h-7x-6aq" firstAttribute="top" secondItem="rc1-kY-beW" secondAttribute="top" constant="8" id="9IK-5F-qkH"/>
+                                            <constraint firstItem="b5h-7x-6aq" firstAttribute="leading" secondItem="rc1-kY-beW" secondAttribute="leading" constant="16" id="fFh-AP-SjX"/>
+                                            <constraint firstAttribute="bottom" secondItem="b5h-7x-6aq" secondAttribute="bottom" constant="8" id="teu-HZ-Eco"/>
+                                            <constraint firstAttribute="height" constant="65" id="zFs-ij-7SN"/>
+                                        </constraints>
+                                    </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TZc-3e-FKx" userLabel="Repeat Line Item Stack">
-                                        <rect key="frame" x="0.0" y="506" width="580" height="30"/>
+                                        <rect key="frame" x="0.0" y="583" width="580" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repeat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ans-gX-Wua">
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="30"/>
@@ -397,12 +422,12 @@
                                         </connections>
                                     </stackView>
                                     <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6OS-RX-aRg" userLabel="Repeat Picker View">
-                                        <rect key="frame" x="0.0" y="542" width="580" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="619" width="580" height="0.0"/>
                                     </pickerView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qHM-nT-0b8" userLabel="TooltipView">
-                                        <rect key="frame" x="0.0" y="548" width="580" height="70"/>
+                                        <rect key="frame" x="0.0" y="625" width="580" height="70"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How often or on which combination of days the schedule will fire." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="coP-jH-j1A">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How often or on which combination of days the schedule will fire (between start and end dates)." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="coP-jH-j1A">
                                                 <rect key="frame" x="16" y="8" width="548" height="54"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -419,7 +444,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="nmr-rO-0lR" userLabel="Actions">
-                                        <rect key="frame" x="0.0" y="630" width="580" height="188"/>
+                                        <rect key="frame" x="0.0" y="707" width="580" height="188"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pwW-yI-tDa">
                                                 <rect key="frame" x="0.0" y="0.0" width="580" height="30"/>
@@ -547,34 +572,14 @@
                                             </view>
                                         </subviews>
                                     </stackView>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rc1-kY-beW" userLabel="Tooltip View">
-                                        <rect key="frame" x="0.0" y="824" width="580" height="0.0"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="b5h-7x-6aq">
-                                                <rect key="frame" x="16" y="8" width="548" height="69"/>
-                                                <string key="text">Access control for the shared device. Role Name is the full string (i.e. 'OEM::Ayla::EndUser') used for RBAC. Note: Role Name and Operation are mutally exclusive parameters.</string>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="b5h-7x-6aq" secondAttribute="trailing" constant="16" id="3UE-N7-bpF"/>
-                                            <constraint firstItem="b5h-7x-6aq" firstAttribute="top" secondItem="rc1-kY-beW" secondAttribute="top" constant="8" id="9IK-5F-qkH"/>
-                                            <constraint firstItem="b5h-7x-6aq" firstAttribute="leading" secondItem="rc1-kY-beW" secondAttribute="leading" constant="16" id="fFh-AP-SjX"/>
-                                            <constraint firstAttribute="bottom" secondItem="b5h-7x-6aq" secondAttribute="bottom" constant="8" id="teu-HZ-Eco"/>
-                                            <constraint firstAttribute="height" constant="85" id="zFs-ij-7SN"/>
-                                        </constraints>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BTz-zQ-2tf" userLabel="SpacerView">
-                                        <rect key="frame" x="0.0" y="830" width="580" height="10"/>
+                                        <rect key="frame" x="0.0" y="907" width="580" height="10"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="10" id="blj-d9-kXM"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="317-ja-Ee8" customClass="AuraButton" customModule="Aura" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="852" width="580" height="45"/>
+                                        <rect key="frame" x="0.0" y="929" width="580" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="A5m-Cs-5KM"/>
                                             <constraint firstAttribute="width" constant="200" id="TDi-6K-xlq"/>
@@ -590,7 +595,7 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ics-6J-FDo" userLabel="SpacerView">
-                                        <rect key="frame" x="0.0" y="909" width="580" height="45"/>
+                                        <rect key="frame" x="0.0" y="986" width="580" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="iCo-h9-Z0Z"/>
                                         </constraints>
@@ -870,7 +875,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P9V-yY-pV0" userLabel="Tooltip View">
                                         <rect key="frame" x="0.0" y="321" width="580" height="50"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The point during the schedule at which the action will fire." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="PaP-td-mit">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The point during the schedule's run at which the action will fire." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="PaP-td-mit">
                                                 <rect key="frame" x="16" y="8" width="548" height="34"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -932,9 +937,9 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="Pih-6l-GnL"/>
-                                <exclude reference="IbA-3q-Bra"/>
                                 <exclude reference="8Id-Yd-8SU"/>
+                                <exclude reference="IbA-3q-Bra"/>
+                                <exclude reference="Pih-6l-GnL"/>
                                 <exclude reference="quc-dj-SvO"/>
                             </mask>
                         </variation>

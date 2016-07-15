@@ -264,6 +264,18 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         field.text = dateFormatter.stringFromDate(date)
     }
 
+    @IBAction func utcSwitchTapped(sender: UISwitch) {
+        timeZone = sender.on ? NSTimeZone(forSecondsFromGMT: 0) : NSTimeZone.localTimeZone()
+
+        dateFormatter.timeZone = timeZone
+        timeFormatter.timeZone = timeZone
+        
+        self.setDateTextFieldValue(startDatePicker.date, field: startDateTextField)
+        self.setTimeTextFieldValue(startTimePicker.date, field: startTimeTextField)
+        self.setDateTextFieldValue(endDatePicker.date, field: endDateTextField)
+        self.setTimeTextFieldValue(endTimePicker.date, field: endTimeTextField)
+    }
+    
     @IBAction func startDateFieldTapped(sender:AnyObject){
         toggleViewVisibilityAnimated(self.startDatePicker)
     }
@@ -492,9 +504,15 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         if textField == self.startDateTextField {
             toggleViewVisibilityAnimated(startDatePicker)
             return false
+        } else if textField == self.startTimeTextField {
+            toggleViewVisibilityAnimated(startTimePicker)
+            return false
         } else if textField == self.endDateTextField {
             toggleViewVisibilityAnimated(endDatePicker)
             return false
+        } else if textField == self.endTimeTextField {
+                toggleViewVisibilityAnimated(endTimePicker)
+                return false
         } else if textField == self.repeatTextField {
             toggleViewVisibilityAnimated(repeatPicker)
             return false
@@ -516,6 +534,14 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         } else if textField == self.endDateTextField {
             endDatePicker.reloadInputViews()
             endDate = nil
+            return true
+        } else if textField == self.startTimeTextField {
+            startTimePicker.reloadInputViews()
+            startTime = nil
+            return true
+        } else if textField == self.endTimeTextField {
+            endTimePicker.reloadInputViews()
+            endTime = nil
             return true
         } else if textField == self.repeatTextField {
             repeatPicker.reloadInputViews()

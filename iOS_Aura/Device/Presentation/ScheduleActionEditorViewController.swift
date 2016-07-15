@@ -369,12 +369,12 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
             }
             return false
         case AylaPropertyBaseTypeInteger:
-            if let intValue = Int(str!) {
+            if Int(str!) != nil {
                 return true
             }
             return false
         case AylaPropertyBaseTypeDecimal:
-            if let doubleValue = Double(str!) {
+            if Double(str!) != nil {
                 return true
             }
             return false
