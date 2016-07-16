@@ -16,55 +16,47 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var parentScheduleNameLabel: UILabel!
-    
     @IBOutlet weak var activeSwitch: UISwitch!
-
     @IBOutlet weak var propertyPicker: UIPickerView!
     @IBOutlet weak var propertyTextField: UITextField!
     @IBOutlet weak var valueTextField: UITextField!
     @IBOutlet weak var saveActionButton: AuraButton!
-
     @IBOutlet weak var valueLineItem: UIStackView!
     @IBOutlet weak var firePointSelector: UISegmentedControl!
     
-    var properties : [AylaProperty]!
-    var propertyNames : [String]!
+    var properties : [AylaProperty?] = []
+    var propertyNames : [String?] = []
 
     var selectedProperty : AylaProperty? = nil {
         didSet{
-            self.selectedPropertyBaseType = selectedProperty!.baseType
-            self.valueLineItem.hidden = self.selectedProperty == nil ? true : false
-        }
-    }
-    
-    var selectedPropertyBaseType : String? = nil {
-        didSet {
-            self.valueTextField.keyboardType = self.keyboardTypeForPropertyBaseType(self.selectedPropertyBaseType)
+            if let property = self.selectedProperty {
+                valueTextField.keyboardType = keyboardTypeForPropertyBaseType(property.baseType)
+            }
+            valueLineItem.hidden = selectedProperty == nil ? true : false
         }
     }
     var selectedValue : AnyObject?
     var selectedFirePoint : AylaScheduleActionFirePoint?
     
-    var actions : [AylaScheduleAction]?
     var action : AylaScheduleAction? = nil
     
-    var device : AylaDevice!
-    
-    static let NoActionCellId: String = "NoActionsCellId"
-    static let ActionDetailCellId: String = "ActionDetailCellId"
-    
-    var schedule : AylaSchedule! = nil {
+    var schedule : AylaSchedule? = nil {
         didSet {
-            
-            // Once retrived from the schedule, store all properties for which an action can be created
-            let allProperties = self.schedule.device!.properties!.map { $0.1 } as! [AylaProperty]
-            self.properties = allProperties.filter{ $0.direction == AylaScheduleDirectionToDevice }.filter{ ["boolean", "string", "integer", "decimal"].contains($0.baseType) }.map{ $0 }
-            self.propertyNames = self.properties.map{ $0.name }
+            // Once retrieved from the schedule, store all properties for which an action can be created
+            var allProperties : [AylaProperty?] = []
+            if schedule?.device?.properties != nil {
+                allProperties = schedule!.device!.properties!.map { ($0.1 as! AylaProperty) }
+            }
+            if !allProperties.isEmpty {
+                properties = allProperties.filter{ $0!.direction == AylaScheduleDirectionToDevice }.filter{ ["boolean", "string", "integer", "decimal"].contains($0!.baseType) }.map{ $0 }
+            }
+            if !properties.isEmpty {
+                propertyNames = properties.map{ $0!.name }
+            }
         }
     }
     
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,58 +68,56 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
         }
         
         let cancel = UIBarButtonItem(barButtonSystemItem:.Cancel, target: self, action: #selector(ScheduleActionEditorViewController.cancel))
-        self.navigationItem.leftBarButtonItem = cancel
+        navigationItem.leftBarButtonItem = cancel
         
-        self.propertyTextField.delegate = self
-        self.valueTextField.delegate = self
+        propertyTextField.delegate = self
+        valueTextField.delegate = self
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(ScheduleActionEditorViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
 
         view.addGestureRecognizer(tap)
         
-        self.propertyTextField.inputView = UIView()
-        self.propertyPicker.dataSource = self
-        self.propertyPicker.delegate = self
-
-        
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        propertyTextField.inputView = UIView()
+        propertyPicker.dataSource = self
+        propertyPicker.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        populateUI()
+    }
+    
+    func populateUI() {
+        // Populate UI elements based on properties of a received schedule action, if one exists
         if action != nil {
-            updateUIFromScheduleAction()
-            self.titleLabel.text = "Edit Schedule Action"
-            self.saveActionButton.titleLabel?.text = "Update Action"
+            titleLabel.text = "Edit Schedule Action"
+            saveActionButton.titleLabel?.text = "Update Action"
+            let propertyName = self.action?.name
+            if let propertyNameIndex = self.properties.indexOf({ $0!.name == propertyName }) {
+                propertyPicker.selectRow(propertyNameIndex, inComponent: 0, animated: true)
+                if let property = properties[propertyNameIndex] {
+                    propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
+                    selectedProperty = property
+                }
+            }
+            valueTextField.text = String(action!.value)
+            firePointSelector.selectedSegmentIndex = Int(action!.firePoint.rawValue - 1)
+            parentScheduleNameLabel.text = schedule?.displayName
+            activeSwitch.on = action!.active
         } else {
-            parentScheduleNameLabel.text = schedule.displayName
-            self.titleLabel.text = "Create Schedule Action"
-            self.saveActionButton.titleLabel?.text = "Create Action"
+            parentScheduleNameLabel.text = schedule?.displayName
+            titleLabel.text = "Create Schedule Action"
+            saveActionButton.titleLabel?.text = "Create Action"
             selectedFirePoint = AylaScheduleActionFirePoint(rawValue: UInt(firePointSelector.selectedSegmentIndex + 1))
         }
         firePointSelector.tintColor = UIColor.auraLeafGreenColor()
     }
-
     
-    func updateUIFromScheduleAction() {
-        // Populate UI elements based on properties of a received schedule action
-        let propertyName = self.action!.name
-        if let propertyNameIndex = self.propertyNames.indexOf(propertyName) {
-            self.propertyPicker.selectRow(propertyNameIndex, inComponent: 0, animated: true)
-            let property = properties[propertyNameIndex]
-            self.propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
-            self.selectedProperty = property
-        }
-        
-        self.valueTextField.text = String(self.action!.value)
-        self.firePointSelector.selectedSegmentIndex = Int(action!.firePoint.rawValue - 1)
-        parentScheduleNameLabel.text = schedule.displayName
-        activeSwitch.on = action!.active
-
+    func internalError(){
+        UIAlertController.alert("Internal Error", message: "A problem has occurred.", buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
+            self.cancel()
+        })
     }
     
     func dismissKeyboard() {
@@ -136,7 +126,7 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     }
     
     func cancel() {
-        self.navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func toggleViewVisibilityAnimated(view: UIView){
@@ -148,11 +138,14 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     }
 
     @IBAction func propertyFieldTapped(sender:AnyObject){
-        toggleViewVisibilityAnimated(self.propertyPicker)
+        toggleViewVisibilityAnimated(propertyPicker)
         if selectedProperty == nil {
-            let property = properties[propertyPicker.selectedRowInComponent(0)]
-            selectedProperty = property
-            self.propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
+            if let property = properties[propertyPicker.selectedRowInComponent(0)] {
+                selectedProperty = property
+                propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
+            } else {
+                internalError()
+            }
         }
     }
 
@@ -168,11 +161,11 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     func checkAllRequiredFields() -> Bool{
         // Verify that all required properties have a value set and show alerts for missing ones.
         var message : String? = nil
-        if self.selectedProperty == nil {
+        if selectedProperty == nil {
             message = "You must select a property."
-        } else if self.selectedValue == nil {
+        } else if selectedValue == nil {
             message = "You must enter a valid value for the property."
-        } else if self.selectedFirePoint == nil {
+        } else if selectedFirePoint == nil {
             message = "You must select a fire point for the action."
         }
         if message != nil {
@@ -189,7 +182,7 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     
     @IBAction func saveActionButtonPressed(sender: AnyObject) {
         // If an action is present try to update it, otherwise, create a new one.
-        self.saveActionButton.enabled = false
+        saveActionButton.enabled = false
         if action != nil {
             // Presence of a key indicates it exists on the service and should be updated
             if action!.key != nil {
@@ -217,63 +210,76 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     
     
     func updateScheduleAction(action: AylaScheduleAction, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?){
-        // Make a copy of exisiting action
-        let actionToUpdate : AylaScheduleAction = self.action!.copy() as! AylaScheduleAction
-        
-        // Pull settings from UI and change existing schedule action accordingly
-        if let property = self.selectedProperty {
-            actionToUpdate.name = property.name
-            actionToUpdate.baseType = property.baseType
-        }
-        if let newValue = self.selectedValue {
-            actionToUpdate.value = newValue
-        }
-        
-        if let newFirePoint = self.selectedFirePoint {
-            actionToUpdate.firePoint = newFirePoint
-        }
-        actionToUpdate.active = activeSwitch.on
+        // Make a copy of existing action
+        if self.action == nil {
+            internalError()
+        } else {
+            let actionToUpdate : AylaScheduleAction = self.action!.copy() as! AylaScheduleAction
+            
+            // Pull settings from UI and change existing schedule action accordingly
+            if let property = selectedProperty {
+                actionToUpdate.name = property.name
+                actionToUpdate.baseType = property.baseType
+            }
+            if let newValue = self.selectedValue {
+                actionToUpdate.value = newValue
+            }
+            
+            if let newFirePoint = self.selectedFirePoint {
+                actionToUpdate.firePoint = newFirePoint
+            }
+            actionToUpdate.active = activeSwitch.on
 
-        
-        schedule.updateScheduleActions([actionToUpdate], success: { (action) in
-            UIAlertController.alert("Success", message: "Action Successfully Updated", buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
-                if let success = successHandler {
-                    success()
+            if schedule != nil {
+                schedule!.updateScheduleActions([actionToUpdate], success: { (action) in
+                    UIAlertController.alert("Success", message: "Action Successfully Updated", buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
+                        if let success = successHandler {
+                            success()
+                        }
+                    })
+                    }) { (error) in
+                        UIAlertController.alert("Failed to Update Action", message: error.description, buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
+                            if let failure = failureHandler {
+                                failure(error:error)
+                            }
+                        })
                 }
-            })
-            }) { (error) in
-                UIAlertController.alert("Failed to Update Action", message: error.description, buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
-                    if let failure = failureHandler {
-                        failure(error:error)
-                    }
-                })
+            } else {
+                internalError()
+            }
         }
     }
     
     func createNewScheduleAction(successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?){
         if checkAllRequiredFields() == true {
-            let value = selectedValue
-            let name = selectedProperty!.name
-            
-            let newAction = AylaScheduleAction(name: name, value:value!, baseType: selectedPropertyBaseType!, active: activeSwitch.on, firePoint: selectedFirePoint!, schedule: schedule)
-            schedule.createScheduleAction(newAction, success: { (action) in
-                    UIAlertController.alert("Success", message: "Action Successfully Created", buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
-                        self.action = action
-                        if let success = successHandler {
-                            success()
-                        }
-                    })
-                }) { (error) in
+            if let schedule = schedule, let value = selectedValue, property = selectedProperty{
+                let newAction = AylaScheduleAction(name: property.name,
+                                                   value:value,
+                                                   baseType: property.baseType,
+                                                   active: activeSwitch.on,
+                                                   firePoint: selectedFirePoint!,
+                                                   schedule: schedule)
+                schedule.createScheduleAction(newAction, success: { (action) in
+                        UIAlertController.alert("Success", message: "Action Successfully Created", buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
+                            self.action = action
+                            if let success = successHandler {
+                                success()
+                            }
+                        })
+                    }) { (error) in
 
-                    UIAlertController.alert("Failed to Update Action", message: error.description, buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
-                        if let failure = failureHandler {
-                            failure(error:error)
-                        }
-                    })
+                        UIAlertController.alert("Failed to Update Action", message: error.description, buttonTitle: "OK", fromController: self, okHandler: { (alertAction) in
+                            if let failure = failureHandler {
+                                failure(error:error)
+                            }
+                        })
+                }
+            } else {
+                internalError()
             }
         }
     }
-        
+    
     
     // MARK: Text Field Delegate
     
@@ -281,19 +287,18 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
         if textField == self.propertyTextField {
             toggleViewVisibilityAnimated(propertyPicker)
             if selectedProperty == nil {
-                let property = properties[propertyPicker.selectedRowInComponent(0)]
-                selectedProperty = property
-                self.propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
+                if let property = properties[propertyPicker.selectedRowInComponent(0)] {
+                    selectedProperty = property
+                    propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
+                } else {
+                    internalError()
+                }
             }
             return false
         } else {
             
             return true
         }
-    }
-    
-    func textFieldDidBeginEditing(textField: UITextField) {
-        
     }
     
     func textFieldShouldClear(textField: UITextField) -> Bool {
@@ -306,79 +311,77 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
         }
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
-    
-    }
-    
     func textFieldShouldEndEditing(textField: UITextField) -> Bool {
         if textField == self.valueTextField {
-            if self.validateStringInputForPropertyBaseType(textField.text, baseType: selectedPropertyBaseType) == true {
-                self.selectedValue = valueForStringAndPropertyBaseType(textField.text, baseType: selectedPropertyBaseType)
+            if validateStringInputForProperty(textField.text, property: selectedProperty) == true {
+                selectedValue = valueForStringAndProperty(textField.text, property: selectedProperty)
                 return true
-            }
-            else {
+            } else {
                 UIAlertController.alert("Invalid Value", message: "Invalid Value for selected property.", buttonTitle: "OK", fromController: self)
                 return false
             }
-        }
-        else {
+        } else {
             return true
         }
     }
     
-    func valueForStringAndPropertyBaseType(str:String?, baseType: String!) -> AnyObject? {
+    func valueForStringAndProperty(str:String?, property: AylaProperty?) -> AnyObject? {
         // Given a string, and a target baseType, return a valid action.value if possible, otherwise nil.
-        if str == nil {
+        if str == nil || property == nil{
             return nil
+        } else {
+            switch property!.baseType{
+            case AylaPropertyBaseTypeString:
+                return str;
+            case AylaPropertyBaseTypeBoolean:
+                if str == "1" {
+                    return 1
+                }
+                if str == "0" {
+                    return 0
+                }
+                return nil
+            case AylaPropertyBaseTypeInteger:
+                if let intValue = Int(str!) {
+                    return intValue
+                }
+                return nil
+            case AylaPropertyBaseTypeDecimal:
+                if let doubleValue = Double(str!) {
+                    return doubleValue
+                }
+                return nil
+            default:
+                return nil
+            }
         }
-        switch baseType{
-        case AylaPropertyBaseTypeString:
-            return str;
-        case AylaPropertyBaseTypeBoolean:
-            if str == "1" {
-                return 1
-            }
-            if str == "0" {
-                return 0
-            }
-            return nil
-        case AylaPropertyBaseTypeInteger:
-            if let intValue = Int(str!) {
-                return intValue
-            }
-            return nil
-        case AylaPropertyBaseTypeDecimal:
-            if let doubleValue = Double(str!) {
-                return doubleValue
-            }
-            return nil
-        default:
-            return nil
-        }
-
     }
     
-    func validateStringInputForPropertyBaseType(str:String?, baseType: String!) -> Bool {
+    func validateStringInputForProperty(str:String?, property: AylaProperty?) -> Bool {
         // Given a string, and a target baseType, return a boolean for whether the string is a valid action.value.
-        switch baseType{
-        case AylaPropertyBaseTypeString:
-            return true;
-        case AylaPropertyBaseTypeBoolean:
-            if str == "1" || str == "0" {
-                return true
+        if let property = property {
+            switch property.baseType{
+            case AylaPropertyBaseTypeString:
+                return true;
+            case AylaPropertyBaseTypeBoolean:
+                if str == "1" || str == "0" {
+                    return true
+                }
+                return false
+            case AylaPropertyBaseTypeInteger:
+                if Int(str!) != nil {
+                    return true
+                }
+                return false
+            case AylaPropertyBaseTypeDecimal:
+                if Double(str!) != nil {
+                    return true
+                }
+                return false
+            default:
+                return false
             }
-            return false
-        case AylaPropertyBaseTypeInteger:
-            if Int(str!) != nil {
-                return true
-            }
-            return false
-        case AylaPropertyBaseTypeDecimal:
-            if Double(str!) != nil {
-                return true
-            }
-            return false
-        default:
+        } else {
             return false
         }
     }
@@ -410,7 +413,7 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch pickerView {
-        case self.propertyPicker:
+        case propertyPicker:
             return properties.count
         default:
             return 0
@@ -419,10 +422,11 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch pickerView {
-        case self.propertyPicker:
-            let property = properties[row]
-            propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
-            self.selectedProperty = properties[row]
+        case propertyPicker:
+            if let property = properties[row] {
+                propertyTextField.text = propertyAndBaseTypeStringForProperty(property)
+                selectedProperty = properties[row]
+            }
         default:
             break
         }
@@ -430,7 +434,7 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView {
-        case self.propertyPicker:
+        case propertyPicker:
             return propertyNames[row]
         default:
             return nil

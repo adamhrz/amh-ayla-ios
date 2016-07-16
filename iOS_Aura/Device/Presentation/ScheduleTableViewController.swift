@@ -23,6 +23,12 @@ class ScheduleTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.refreshControl?.enabled = true
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh schedules")
+        self.refreshControl?.addTarget(self, action: #selector(self.reloadSchedules), forControlEvents: .ValueChanged)    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         self.reloadSchedules()
     }
     
@@ -34,9 +40,15 @@ class ScheduleTableViewController: UITableViewController {
             
             //reload table view
             self.tableView.reloadData()
+            if self.refreshControl?.refreshing == true {
+                self.refreshControl?.endRefreshing()
+            }
         }) { (error) in
+            if self.refreshControl?.refreshing == true {
+                self.refreshControl?.endRefreshing()
+            }
             // display an alert in case of error
-                UIAlertController.alert("Error", message: "Could not fetch schedules", buttonTitle: "OK", fromController: self)
+            UIAlertController.alert("Failed to fetch schedules", message: error.description, buttonTitle: "OK", fromController: self)
         }
     }
 
@@ -58,12 +70,8 @@ class ScheduleTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(self.scheduleCellID, forIndexPath: indexPath) as! ScheduleTableViewCell
-
         let schedule = schedules[indexPath.row]
         cell.configure(schedule)
-        
-        
-        
         return cell
     }
     
@@ -77,9 +85,10 @@ class ScheduleTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == segueToScheduleEditorId) {
+            let schedule : AylaSchedule = (sender as? AylaSchedule)!
             let scheduleEditorController = segue.destinationViewController as! ScheduleEditorViewController
             scheduleEditorController.device = device
-            scheduleEditorController.schedule = sender as! AylaSchedule
+            scheduleEditorController.schedule = schedule
         }
     }
 

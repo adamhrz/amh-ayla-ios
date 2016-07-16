@@ -108,6 +108,10 @@
                             <outlet property="delegate" destination="DCU-vi-eLf" id="uBZ-1t-b5z"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="8O4-3V-71B">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <segue destination="W19-2s-POt" kind="show" identifier="toScheduleEditor" id="BeV-sT-P1w"/>
                     </connections>
@@ -630,7 +634,7 @@
                         <outlet property="actionsTableView" destination="1c2-y5-yJJ" id="W4Q-Bw-eO2"/>
                         <outlet property="actionsTableViewHeightConstraint" destination="ABO-nC-7b4" id="94I-Vp-3eW"/>
                         <outlet property="actionsTitleLabel" destination="dNy-m0-NJ1" id="HpU-x3-Qcd"/>
-                        <outlet property="activeSwitch" destination="VBd-sZ-paP" id="dEA-y5-OMq"/>
+                        <outlet property="activeSwitch" destination="afq-vC-Jne" id="cFa-Tg-hu8"/>
                         <outlet property="addActionButton" destination="noq-4I-bAn" id="JmY-qP-Env"/>
                         <outlet property="displayNameTextField" destination="jlP-wc-BwJ" id="zTE-w7-ml9"/>
                         <outlet property="endDatePicker" destination="tzh-PO-R67" id="lC5-aU-qtU"/>
@@ -645,7 +649,7 @@
                         <outlet property="startTimePicker" destination="gOg-cS-49L" id="VUw-xB-FxF"/>
                         <outlet property="startTimeTextField" destination="FXk-65-8r6" id="edw-WN-gab"/>
                         <outlet property="titleLabel" destination="wiI-4D-VSc" id="BmB-Ds-AFW"/>
-                        <outlet property="utcSwitch" destination="afq-vC-Jne" id="HN1-MD-8Nm"/>
+                        <outlet property="utcSwitch" destination="VBd-sZ-paP" id="8nQ-lM-905"/>
                         <segue destination="byF-5G-gDk" kind="show" identifier="toScheduleActionEditor" id="Gm6-JV-ror"/>
                     </connections>
                 </viewController>
