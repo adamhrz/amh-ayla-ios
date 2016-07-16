@@ -136,7 +136,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
                 }) { (error) in
                     UIAlertController.alert("Failed to fetch actions", message: error.description, buttonTitle: "OK", fromController: self)
             }
-            updateUIFromSchedule()
+            populateUIFromSchedule()
         }
     }
     
@@ -155,7 +155,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         view.layoutIfNeeded()
     }
     
-    func updateUIFromSchedule() {
+    func populateUIFromSchedule() {
         // Populate UI elements based on properties of associated schedule.
         if schedule != nil {
             if schedule?.fixedActions == true {
@@ -223,7 +223,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     }
 
     func cancel() {
-        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.popViewControllerAnimated(true)
     }
 
     func toggleViewVisibilityAnimated(view: UIView){
@@ -331,7 +331,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         let confirmAction = UIAlertAction(title: "Confirm", style: .Destructive) { (action) in
             self.schedule?.deleteAllScheduleActionsWithSuccess({
                 self.fetchActions({
-                    self.updateUIFromSchedule()
+                    self.populateUIFromSchedule()
                     UIAlertController.alert("Success", message: "Deleted all schedule actions", buttonTitle: "OK", fromController: self)
                     }, failure: { (error) in
                         UIAlertController.alert("Error", message: "Could not update action status\n\n\(error.description)", buttonTitle: "OK", fromController: self)
