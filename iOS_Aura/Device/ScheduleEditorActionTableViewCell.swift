@@ -2,7 +2,6 @@
 //  ScheduleEditorActionTableViewCell.swift
 //  iOS_Aura
 //
-//  Created by Kevin Bella on 7/12/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
@@ -12,16 +11,10 @@ import iOS_AylaSDK
 
 class ScheduleEditorActionTableViewCell : UITableViewCell {
     
-    
-    @IBOutlet weak var mainLabel: UILabel!
-    @IBOutlet weak var infoLabel: UILabel!
-    @IBOutlet weak var actionActiveLabel: UILabel!
-    
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    @IBOutlet private weak var mainLabel: UILabel!
+    @IBOutlet private weak var infoLabel: UILabel!
+    @IBOutlet private weak var actionActiveLabel: UILabel!
+
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -49,7 +42,7 @@ class ScheduleEditorActionTableViewCell : UITableViewCell {
         return text
     }
     
-    func configure(scheduleAction: AylaScheduleAction) {
+    private func configure(scheduleAction: AylaScheduleAction) {
         //assert( scheduleAction != nil, "Schedule Action can not be nil")
         mainLabel.text = mainLabelTextFromScheduleAction(scheduleAction)
         infoLabel.text = infoLabelTextFromScheduleAction(scheduleAction)
@@ -60,12 +53,6 @@ class ScheduleEditorActionTableViewCell : UITableViewCell {
             actionActiveLabel.text = "Inactive"
             actionActiveLabel.textColor = UIColor.auraRedColor()
         }
-    }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
     
 }

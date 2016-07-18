@@ -17,12 +17,7 @@ class ScheduleTableViewCell : UITableViewCell {
     @IBOutlet private weak var infoLabelBottom: UILabel!
     @IBOutlet private weak var actionActiveLabel: UILabel!
     
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -50,12 +45,6 @@ class ScheduleTableViewCell : UITableViewCell {
             actionActiveLabel.text = "Inactive"
             actionActiveLabel.textColor = UIColor.auraRedColor()
         }
-    }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
     
 }
