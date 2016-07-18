@@ -2,7 +2,6 @@
 //  ScheduleActionEditorViewController.swift
 //  iOS_Aura
 //
-//  Created by Kevin Bella on 7/12/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
@@ -12,17 +11,17 @@ import iOS_AylaSDK
 
 class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate{
     
-    var sessionManager : AylaSessionManager?
+    private var sessionManager : AylaSessionManager?
     
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var parentScheduleNameLabel: UILabel!
-    @IBOutlet weak var activeSwitch: UISwitch!
-    @IBOutlet weak var propertyPicker: UIPickerView!
-    @IBOutlet weak var propertyTextField: UITextField!
-    @IBOutlet weak var valueTextField: UITextField!
-    @IBOutlet weak var saveActionButton: AuraButton!
-    @IBOutlet weak var valueLineItem: UIStackView!
-    @IBOutlet weak var firePointSelector: UISegmentedControl!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var parentScheduleNameLabel: UILabel!
+    @IBOutlet private weak var activeSwitch: UISwitch!
+    @IBOutlet private weak var propertyPicker: UIPickerView!
+    @IBOutlet private weak var propertyTextField: UITextField!
+    @IBOutlet private weak var valueTextField: UITextField!
+    @IBOutlet private weak var saveActionButton: AuraButton!
+    @IBOutlet private weak var valueLineItem: UIStackView!
+    @IBOutlet private weak var firePointSelector: UISegmentedControl!
     
     private var properties : [AylaProperty?] = []
     private var propertyNames : [String?] = []
@@ -70,13 +69,13 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
             print("- WARNING - session manager can't be found")
         }
         
-        let cancel = UIBarButtonItem(barButtonSystemItem:.Cancel, target: self, action: #selector(self.cancel))
-        navigationItem.leftBarButtonItem = cancel
+        let cancelButton = UIBarButtonItem(barButtonSystemItem:.Cancel, target: self, action:#selector(cancel))
+        navigationItem.leftBarButtonItem = cancelButton
         
         propertyTextField.delegate = self
         valueTextField.delegate = self
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(self.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
 
         view.addGestureRecognizer(tap)
@@ -123,16 +122,16 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
         })
     }
     
-    func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     
-    func cancel() {
+    @objc private func cancel() {
         navigationController?.popViewControllerAnimated(true)
     }
     
-    func toggleViewVisibilityAnimated(view: UIView){
+    private func toggleViewVisibilityAnimated(view: UIView){
         dispatch_async(dispatch_get_main_queue()) {
             UIView.animateWithDuration(0.33) {
                 view.hidden = !(view.hidden)
@@ -140,7 +139,7 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
         }
     }
 
-    @IBAction func propertyFieldTapped(sender:AnyObject){
+    @IBAction private func propertyFieldTapped(sender:AnyObject){
         toggleViewVisibilityAnimated(propertyPicker)
         if selectedProperty == nil {
             if let property = properties[propertyPicker.selectedRowInComponent(0)] {
@@ -152,9 +151,10 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
         }
     }
 
-    @IBAction func segmentedControlChanged(sender: UISegmentedControl){
+    @IBAction private func segmentedControlChanged(sender: UISegmentedControl){
         selectedFirePoint = AylaScheduleActionFirePoint(rawValue: UInt(sender.selectedSegmentIndex + 1))
     }
+    
     // MARK: Schedule Handling Methods
     
     private func propertyAndBaseTypeStringForProperty(property: AylaProperty) -> String{
@@ -183,7 +183,7 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
         return false
     }
     
-    @IBAction func saveActionButtonPressed(sender: AnyObject) {
+    @IBAction private func saveActionButtonPressed(sender: AnyObject) {
         // If an action is present try to update it, otherwise, create a new one.
         saveActionButton.enabled = false
         if action != nil {

@@ -2,7 +2,6 @@
 //  ScheduleTableViewCell.swift
 //  iOS_Aura
 //
-//  Created by Kevin Bella on 7/14/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
@@ -13,10 +12,10 @@ import iOS_AylaSDK
 class ScheduleTableViewCell : UITableViewCell {
     
     
-    @IBOutlet weak var mainLabel: UILabel!
-    @IBOutlet weak var infoLabelTop: UILabel!
-    @IBOutlet weak var infoLabelBottom: UILabel!
-    @IBOutlet weak var actionActiveLabel: UILabel!
+    @IBOutlet private weak var mainLabel: UILabel!
+    @IBOutlet private weak var infoLabelTop: UILabel!
+    @IBOutlet private weak var infoLabelBottom: UILabel!
+    @IBOutlet private weak var actionActiveLabel: UILabel!
     
     
     override func awakeFromNib() {

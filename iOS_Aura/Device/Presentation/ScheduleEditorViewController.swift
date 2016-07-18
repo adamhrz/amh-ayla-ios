@@ -2,7 +2,6 @@
 //  ScheduleEditorViewController.swift
 //  iOS_Aura
 //
-//  Created by Kevin Bella on 7/11/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
@@ -12,7 +11,7 @@ import iOS_AylaSDK
 
 class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate{
     
-    var sessionManager : AylaSessionManager?
+    private var sessionManager : AylaSessionManager?
     
     private enum RepeatType: Int {
         case None
@@ -28,30 +27,30 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     
     private var repeatType = RepeatType.None
     
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
     
-    @IBOutlet weak var actionsTitleLabel: UILabel!
-    @IBOutlet weak var displayNameTextField: UITextField!
-    @IBOutlet weak var activeSwitch: UISwitch!
-    @IBOutlet weak var utcSwitch: UISwitch!
+    @IBOutlet private weak var actionsTitleLabel: UILabel!
+    @IBOutlet private weak var displayNameTextField: UITextField!
+    @IBOutlet private weak var activeSwitch: UISwitch!
+    @IBOutlet private weak var utcSwitch: UISwitch!
     
-    @IBOutlet weak var startDateTextField: UITextField!
-    @IBOutlet weak var startDatePicker: UIDatePicker!
-    @IBOutlet weak var startTimeTextField: UITextField!
-    @IBOutlet weak var startTimePicker: UIDatePicker!
+    @IBOutlet private weak var startDateTextField: UITextField!
+    @IBOutlet private weak var startDatePicker: UIDatePicker!
+    @IBOutlet private weak var startTimeTextField: UITextField!
+    @IBOutlet private weak var startTimePicker: UIDatePicker!
     
-    @IBOutlet weak var endDateTextField: UITextField!
-    @IBOutlet weak var endDatePicker: UIDatePicker!
-    @IBOutlet weak var endTimeTextField: UITextField!
-    @IBOutlet weak var endTimePicker: UIDatePicker!
+    @IBOutlet private weak var endDateTextField: UITextField!
+    @IBOutlet private weak var endDatePicker: UIDatePicker!
+    @IBOutlet private weak var endTimeTextField: UITextField!
+    @IBOutlet private weak var endTimePicker: UIDatePicker!
     
-    @IBOutlet weak var repeatTextField: UITextField!
-    @IBOutlet weak var repeatPicker: UIPickerView!
-    @IBOutlet weak var saveScheduleButton: AuraButton!
+    @IBOutlet private weak var repeatTextField: UITextField!
+    @IBOutlet private weak var repeatPicker: UIPickerView!
+    @IBOutlet private weak var saveScheduleButton: AuraButton!
     
-    @IBOutlet weak var addActionButton: UIButton!
-    @IBOutlet weak var actionsTableView : UITableView!
-    @IBOutlet weak var actionsTableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var addActionButton: UIButton!
+    @IBOutlet private weak var actionsTableView : UITableView!
+    @IBOutlet private weak var actionsTableViewHeightConstraint: NSLayoutConstraint!
     
     private var dateFormatter : NSDateFormatter! = NSDateFormatter()
     private var timeFormatter : NSDateFormatter! = NSDateFormatter()
@@ -62,6 +61,8 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     private static let ActionDetailCellId: String = "ActionDetailCellId"
     
     private let segueToScheduleActionEditorId : String = "toScheduleActionEditor"
+    
+    private let actionCellHeight: Int = 65
     
     var schedule : AylaSchedule? = nil {
         didSet {
@@ -97,7 +98,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         startTimeTextField.delegate = self
         endTimeTextField.delegate = self
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(ScheduleEditorViewController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
@@ -147,7 +148,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     
     private func autoResizeActionsTable(){
         // Called to adjust autolayout constraints of actions tableview to after adding or removing actions
-        let baseHeight = 65
+        let baseHeight = actionCellHeight
         var height : CGFloat = CGFloat(baseHeight)
         if actions != nil {
             if !actions!.isEmpty {
@@ -222,12 +223,12 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     }
     
     
-    func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
 
-    private func cancel() {
+    @objc private func cancel() {
         navigationController?.popViewControllerAnimated(true)
     }
 
@@ -263,7 +264,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         }
     }
 
-    @IBAction func utcSwitchTapped(sender: UISwitch) {
+    @IBAction private func utcSwitchTapped(sender: UISwitch) {
         timeZone = sender.on ? NSTimeZone(forSecondsFromGMT: 0) : NSTimeZone.localTimeZone()
 
         dateFormatter.timeZone = timeZone
@@ -280,47 +281,47 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         setTimeTextFieldValue(endTime, field: endTimeTextField)
     }
     
-    @IBAction func startDateFieldTapped(sender:AnyObject){
+    @IBAction private func startDateFieldTapped(sender:AnyObject){
         toggleViewVisibilityAnimated(startDatePicker)
     }
     
-    @IBAction func startTimeFieldTapped(sender:AnyObject){
+    @IBAction private func startTimeFieldTapped(sender:AnyObject){
         toggleViewVisibilityAnimated(startTimePicker)
     }
 
-    @IBAction func endDateFieldTapped(sender:AnyObject){
+    @IBAction private func endDateFieldTapped(sender:AnyObject){
         toggleViewVisibilityAnimated(endDatePicker)
     }
     
-    @IBAction func endTimeFieldTapped(sender:AnyObject){
+    @IBAction private func endTimeFieldTapped(sender:AnyObject){
         toggleViewVisibilityAnimated(endTimePicker)
     }
     
-    @IBAction func repeatFieldTapped(sender:AnyObject){
+    @IBAction private func repeatFieldTapped(sender:AnyObject){
         toggleViewVisibilityAnimated(repeatPicker)
     }
     
-    @IBAction func startDatePickerChanged(sender: UIDatePicker) {
+    @IBAction private func startDatePickerChanged(sender: UIDatePicker) {
         startDate = sender.date
         setDateTextFieldValue(startDate!, field:startDateTextField)
     }
 
-    @IBAction func endDatePickerChanged(sender: UIDatePicker) {
+    @IBAction private func endDatePickerChanged(sender: UIDatePicker) {
         endDate = sender.date
         setDateTextFieldValue(endDate!, field:endDateTextField)
     }
     
-    @IBAction func startTimePickerChanged(sender: UIDatePicker) {
+    @IBAction private func startTimePickerChanged(sender: UIDatePicker) {
         startTime = sender.date
         setTimeTextFieldValue(startTime!, field:startTimeTextField)
     }
     
-    @IBAction func endTimePickerChanged(sender: UIDatePicker) {
+    @IBAction private func endTimePickerChanged(sender: UIDatePicker) {
         endTime = sender.date
         setTimeTextFieldValue(endTime!, field:endTimeTextField)
     }
     
-    @IBAction func addScheduleActionButtonPressed(sender: UIButton) {
+    @IBAction private func addScheduleActionButtonPressed(sender: UIButton) {
         performSegueWithIdentifier(segueToScheduleActionEditorId, sender: nil)
     }
     
@@ -362,7 +363,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     }
     
     
-    @IBAction func saveScheduleButtonPressed(sender: AuraButton) {
+    @IBAction private func saveScheduleButtonPressed(sender: AuraButton) {
         if schedule == nil { return }
         let calendar = NSCalendar.currentCalendar()
         
@@ -472,7 +473,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 65
+        return CGFloat(actionCellHeight)
     }
     
     
@@ -634,8 +635,6 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
                 scheduleActionEditorController.action = (sender as! AylaScheduleAction)
             }
         }
-        else {
-            
-        }
     }
+    
 }

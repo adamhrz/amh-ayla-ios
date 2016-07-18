@@ -2,7 +2,6 @@
 //  ScheduleTableViewController.swift
 //  iOS_Aura
 //
-//  Created by Emanuel Peña Aguilar on 5/10/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
@@ -10,11 +9,12 @@ import UIKit
 import iOS_AylaSDK
 
 class ScheduleTableViewController: UITableViewController {
-    let segueToScheduleEditorId = "toScheduleEditor"
-    let scheduleCellID = "ScheduleTableViewCell"
+    private let segueToScheduleEditorId = "toScheduleEditor"
+    private let scheduleCellID = "ScheduleTableViewCell"
     
     var device : AylaDevice!
-    var schedules = [AylaSchedule]()
+    private var schedules = [AylaSchedule]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,16 +23,16 @@ class ScheduleTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.refreshControl?.enabled = true
-        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh schedules")
-        self.refreshControl?.addTarget(self, action: #selector(self.reloadSchedules), forControlEvents: .ValueChanged)    }
+        refreshControl?.enabled = true
+        refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh schedules")
+        refreshControl?.addTarget(self, action: #selector(reloadSchedules), forControlEvents: .ValueChanged)    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.reloadSchedules()
+        reloadSchedules()
     }
     
-    func reloadSchedules() {
+    @objc private func reloadSchedules() {
         // fetch schedules
         device.fetchAllSchedulesWithSuccess({ (schedules) in
             //assign schedules in case of success
@@ -69,7 +69,7 @@ class ScheduleTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(self.scheduleCellID, forIndexPath: indexPath) as! ScheduleTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(scheduleCellID, forIndexPath: indexPath) as! ScheduleTableViewCell
         let schedule = schedules[indexPath.row]
         cell.configure(schedule)
         return cell
@@ -78,7 +78,7 @@ class ScheduleTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let schedule = schedules[indexPath.row]
-        self.performSegueWithIdentifier(segueToScheduleEditorId, sender: schedule)
+        performSegueWithIdentifier(segueToScheduleEditorId, sender: schedule)
     }
     // MARK: - Navigation
 
