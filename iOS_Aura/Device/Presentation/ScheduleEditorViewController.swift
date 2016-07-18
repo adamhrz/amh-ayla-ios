@@ -149,8 +149,10 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         // Called to adjust autolayout constraints of actions tableview to after adding or removing actions
         let baseHeight = 65
         var height : CGFloat = CGFloat(baseHeight)
-        if let count = self.actions?.count {
-            height = CGFloat(baseHeight * count)
+        if actions != nil {
+            if !actions!.isEmpty {
+                height = CGFloat(baseHeight * actions!.count)
+            }
         }
         actionsTableViewHeightConstraint.constant = height
         view.layoutIfNeeded()
@@ -437,8 +439,12 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = self.actions?.count {
-            return count > 0 ? count : 1
+        if actions != nil {
+            if actions!.isEmpty || actions!.count < 1 {
+                return 1
+            } else {
+                return actions!.count
+            }
         }
         else {
             return 1
@@ -446,8 +452,8 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let count = self.actions?.count {
-            if count > 0 {
+        if actions != nil {
+            if !actions!.isEmpty {
                 let cell = tableView.dequeueReusableCellWithIdentifier(ScheduleEditorViewController.ActionDetailCellId) as! ScheduleEditorActionTableViewCell
                 cell.backgroundColor = UIColor.whiteColor()
                 cell.configure(self.actions![indexPath.row])
