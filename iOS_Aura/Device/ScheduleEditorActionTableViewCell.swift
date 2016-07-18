@@ -19,7 +19,6 @@ class ScheduleEditorActionTableViewCell : UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
     
     private func mainLabelTextFromScheduleAction (action: AylaScheduleAction) -> String {
         let text = "Set " + action.name + " to " + String(action.value)
@@ -43,7 +42,6 @@ class ScheduleEditorActionTableViewCell : UITableViewCell {
     }
     
     private func configure(scheduleAction: AylaScheduleAction) {
-        //assert( scheduleAction != nil, "Schedule Action can not be nil")
         mainLabel.text = mainLabelTextFromScheduleAction(scheduleAction)
         infoLabel.text = infoLabelTextFromScheduleAction(scheduleAction)
         if scheduleAction.active {
