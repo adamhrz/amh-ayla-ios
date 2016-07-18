@@ -14,7 +14,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     
     var sessionManager : AylaSessionManager?
     
-    enum RepeatType: Int {
+    private enum RepeatType: Int {
         case None
         case Daily
         case Weekends
@@ -26,7 +26,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         }()
     }
     
-    var repeatType = RepeatType.None
+    private var repeatType = RepeatType.None
     
     @IBOutlet weak var titleLabel: UILabel!
     
@@ -53,15 +53,15 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     @IBOutlet weak var actionsTableView : UITableView!
     @IBOutlet weak var actionsTableViewHeightConstraint: NSLayoutConstraint!
     
-    var dateFormatter : NSDateFormatter! = NSDateFormatter()
-    var timeFormatter : NSDateFormatter! = NSDateFormatter()
-    var timeZone : NSTimeZone! = NSTimeZone.localTimeZone()
-    var actions : [AylaScheduleAction]?
+    private var dateFormatter : NSDateFormatter! = NSDateFormatter()
+    private var timeFormatter : NSDateFormatter! = NSDateFormatter()
+    private var timeZone : NSTimeZone! = NSTimeZone.localTimeZone()
+    private var actions : [AylaScheduleAction]?
     
-    static let NoActionCellId: String = "NoActionsCellId"
-    static let ActionDetailCellId: String = "ActionDetailCellId"
+    private static let NoActionCellId: String = "NoActionsCellId"
+    private static let ActionDetailCellId: String = "ActionDetailCellId"
     
-    let segueToScheduleActionEditorId : String = "toScheduleActionEditor"
+    private let segueToScheduleActionEditorId : String = "toScheduleActionEditor"
     
     var schedule : AylaSchedule? = nil {
         didSet {
@@ -74,10 +74,11 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
             timeFormatter.timeZone = timeZone
         }
     }
-    var startDate : NSDate? = NSDate()
-    var endDate : NSDate? = NSDate()
-    var startTime : NSDate? = NSDate()
-    var endTime : NSDate? = NSDate()
+    private var startDate : NSDate? = nil
+    private var endDate : NSDate? = nil
+    private var startTime : NSDate? = nil
+    private var endTime : NSDate? = nil
+    
     var device : AylaDevice?
     
     override func viewDidLoad() {
@@ -155,7 +156,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         view.layoutIfNeeded()
     }
     
-    func populateUIFromSchedule() {
+    private func populateUIFromSchedule() {
         // Populate UI elements based on properties of associated schedule.
         if schedule != nil {
             if schedule?.fixedActions == true {
@@ -167,25 +168,27 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
                 actionsTitleLabel.text = "Schedule Actions"
             }
             
-            startDate = dateFormatter.dateFromString(schedule!.startDate != nil ? (schedule!.startDate!) : "") ?? NSDate()
-            endDate = dateFormatter.dateFromString(schedule!.endDate != nil ? (schedule!.endDate!) : "") ?? NSDate()
-            startTime = timeFormatter.dateFromString(schedule!.startTimeEachDay != nil ? schedule!.startTimeEachDay! : "") ?? NSDate()
-            endTime = timeFormatter.dateFromString(schedule!.endTimeEachDay != nil ? schedule!.endTimeEachDay! : "") ?? NSDate()
+            startDate = schedule!.startDate != nil ? dateFormatter.dateFromString(schedule!.startDate!) : nil
+            endDate = schedule!.endDate != nil ? dateFormatter.dateFromString(schedule!.endDate!) : nil
+            
+            startTime = schedule!.startTimeEachDay != nil ? timeFormatter.dateFromString(schedule!.startTimeEachDay!) : nil
+            
+            endTime = schedule!.endTimeEachDay != nil ? timeFormatter.dateFromString(schedule!.endTimeEachDay!) : nil
             
             startDatePicker.timeZone = timeZone
             endDatePicker.timeZone = timeZone
             startTimePicker.timeZone = timeZone
             endTimePicker.timeZone = timeZone
             
-            startDatePicker.date = startDate!
-            endDatePicker.date = endDate!
-            startTimePicker.date = startTime!
-            endTimePicker.date = endTime!
+            startDatePicker.date = startDate ?? NSDate()
+            endDatePicker.date = endDate ?? NSDate()
+            startTimePicker.date = startTime ?? NSDate()
+            endTimePicker.date = endTime ?? NSDate()
             
-            setDateTextFieldValue(startDatePicker.date, field:startDateTextField)
-            setDateTextFieldValue(endDatePicker.date, field:endDateTextField)
-            setTimeTextFieldValue(startTimePicker.date, field:startTimeTextField)
-            setTimeTextFieldValue(endTimePicker.date, field:endTimeTextField)
+            setDateTextFieldValue(startDate, field:startDateTextField)
+            setDateTextFieldValue(endDate, field:endDateTextField)
+            setTimeTextFieldValue(startTime, field:startTimeTextField)
+            setTimeTextFieldValue(endTime, field:endTimeTextField)
 
             utcSwitch.on = schedule!.utc
             displayNameTextField.text = schedule!.displayName
@@ -222,11 +225,11 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         view.endEditing(true)
     }
 
-    func cancel() {
+    private func cancel() {
         navigationController?.popViewControllerAnimated(true)
     }
 
-    func toggleViewVisibilityAnimated(view: UIView){
+    private func toggleViewVisibilityAnimated(view: UIView){
         dispatch_async(dispatch_get_main_queue()) {
             UIView.animateWithDuration(0.33) {
                 view.hidden = !(view.hidden)
@@ -234,20 +237,28 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         }
     }
 
-    func setDateTextFieldValue(date: NSDate, field: UITextField) {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.timeZone = timeZone
-        dateFormatter.dateStyle = .LongStyle
-        dateFormatter.timeStyle = .NoStyle
-        field.text = dateFormatter.stringFromDate(date)
+    private func setDateTextFieldValue(date: NSDate?, field: UITextField) {
+        if date != nil {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.timeZone = timeZone
+            dateFormatter.dateStyle = .LongStyle
+            dateFormatter.timeStyle = .NoStyle
+            field.text = dateFormatter.stringFromDate(date!)
+        } else {
+            field.text = ""
+        }
     }
     
-    func setTimeTextFieldValue(date: NSDate, field: UITextField) {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.timeZone = timeZone
-        dateFormatter.dateStyle = .NoStyle
-        dateFormatter.timeStyle = .LongStyle
-        field.text = dateFormatter.stringFromDate(date)
+    private func setTimeTextFieldValue(date: NSDate?, field: UITextField) {
+        if date != nil {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.timeZone = timeZone
+            dateFormatter.dateStyle = .NoStyle
+            dateFormatter.timeStyle = .LongStyle
+            field.text = dateFormatter.stringFromDate(date!)
+        } else {
+            field.text = ""
+        }
     }
 
     @IBAction func utcSwitchTapped(sender: UISwitch) {
@@ -255,15 +266,16 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
 
         dateFormatter.timeZone = timeZone
         timeFormatter.timeZone = timeZone
+        
         startDatePicker.timeZone = timeZone
         endDatePicker.timeZone = timeZone
         startTimePicker.timeZone = timeZone
         endTimePicker.timeZone = timeZone
         
-        setDateTextFieldValue(startDatePicker.date, field: startDateTextField)
+        setDateTextFieldValue(startDate, field: startDateTextField)
         setTimeTextFieldValue(startTimePicker.date, field: startTimeTextField)
-        setDateTextFieldValue(endDatePicker.date, field: endDateTextField)
-        setTimeTextFieldValue(endTimePicker.date, field: endTimeTextField)
+        setDateTextFieldValue(endDate, field: endDateTextField)
+        setTimeTextFieldValue(endTime, field: endTimeTextField)
     }
     
     @IBAction func startDateFieldTapped(sender:AnyObject){
@@ -312,7 +324,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
     
     // MARK: Schedule Handling Methods
     
-    func fetchActions(success : ()-> Void, failure : (NSError)->Void) {
+    private func fetchActions(success : ()-> Void, failure : (NSError)->Void) {
         if schedule == nil { return }
         schedule!.fetchAllScheduleActionsWithSuccess({ (actions) in
             // Sort Actions to display AtStart first, then AtEnd, then InRange
@@ -325,7 +337,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
 
     }
 
-    func clearAllActions() {
+    private func clearAllActions() {
         if schedule == nil { return }
         let confirmationAlert = UIAlertController(title: "Delete Actions", message: "Are you sure you want to delete all actions associated with this schedule? This will not delete the schedule, just the actions.", preferredStyle: .Alert)
         let confirmAction = UIAlertAction(title: "Confirm", style: .Destructive) { (action) in
@@ -352,18 +364,31 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         if schedule == nil { return }
         let calendar = NSCalendar.currentCalendar()
         
-        let startDateString = dateFormatter.stringFromDate(self.startDate!)
+        var startDateString : String? = nil
+        var startTimeString : String? = nil
+        var endDateString : String? = nil
+        var endTimeString : String? = nil
+        
         var startTimeDate : NSDate?
-        // remove seconds
-        calendar.rangeOfUnit(.Minute, startDate: &startTimeDate, interval: nil, forDate: self.startTime!)
-        let startTimeString = timeFormatter.stringFromDate(startTimeDate!)
-        
-        let endDateString = dateFormatter.stringFromDate(self.endDate!)
         var endTimeDate : NSDate?
-        // remove seconds
-        calendar.rangeOfUnit(.Minute, startDate: &endTimeDate, interval: nil, forDate: self.endTime!)
-        let endTimeString = timeFormatter.stringFromDate(endTimeDate!)
         
+        if startDate != nil {
+            startDateString = dateFormatter.stringFromDate(self.startDate!)
+        }
+        if startTime != nil {
+            // remove seconds
+            calendar.rangeOfUnit(.Minute, startDate: &startTimeDate, interval: nil, forDate: self.startTime!)
+            startTimeString = timeFormatter.stringFromDate(startTimeDate!)
+        }
+        if endDate != nil {
+            endDateString = dateFormatter.stringFromDate(self.endDate!)
+        }
+        if endTime != nil {
+            // remove seconds
+            calendar.rangeOfUnit(.Minute, startDate: &endTimeDate, interval: nil, forDate: self.endTime!)
+            endTimeString = timeFormatter.stringFromDate(endTimeDate!)
+        }
+
         schedule!.displayName = displayNameTextField.text
         schedule!.startDate = startDateString
         schedule!.startTimeEachDay = startTimeString
@@ -540,9 +565,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
             endDate = nil
             return true
         case startTimeTextField:
-            startTimePicker.reloadInputViews()
-            startTime = nil
-            return true
+            return false
         case endTimeTextField:
             endTimePicker.reloadInputViews()
             endTime = nil
