@@ -41,7 +41,7 @@ class ScheduleEditorActionTableViewCell : UITableViewCell {
         return text
     }
     
-    private func configure(scheduleAction: AylaScheduleAction) {
+    func configure(scheduleAction: AylaScheduleAction) {
         mainLabel.text = mainLabelTextFromScheduleAction(scheduleAction)
         infoLabel.text = infoLabelTextFromScheduleAction(scheduleAction)
         if scheduleAction.active {
