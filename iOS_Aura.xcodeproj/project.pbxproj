@@ -54,8 +54,8 @@
 		5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA31CC84CF100233D99 /* AuraLabel.swift */; };
 		5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA41CC84CF100233D99 /* AuraTextField.swift */; };
 		5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */; };
-		A1575AE91D2E009100B852C9 /* DeveloperOptionsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1575AE81D2E009100B852C9 /* DeveloperOptionsUtil.swift */; };
-		A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */; };
+		A139827A1D473F9200F823A3 /* AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13982791D473F9200F823A3 /* AuraConfig.swift */; };
+		A1D0914A1CCF0879003A4816 /* DeveloperOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
@@ -151,8 +151,8 @@
 		5FDCECA41CC84CF100233D99 /* AuraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraTextField.swift; path = UX/AuraTextField.swift; sourceTree = "<group>"; };
 		5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactNotificationButton.swift; path = Device/Presentation/ContactNotificationButton.swift; sourceTree = "<group>"; };
 		A135EF709F81F74E441C08F2 /* Pods_iOS_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1575AE81D2E009100B852C9 /* DeveloperOptionsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeveloperOptionsUtil.swift; path = Utils/DeveloperOptionsUtil.swift; sourceTree = "<group>"; };
-		A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionOptionViewController.swift; sourceTree = "<group>"; };
+		A13982791D473F9200F823A3 /* AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConfig.swift; path = Utils/AuraConfig.swift; sourceTree = "<group>"; };
+		A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 				0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */,
 				0FBEB0A01CC07AE600E8EE6F /* UIAlertView_Extensions.swift */,
 				0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */,
-				A1575AE81D2E009100B852C9 /* DeveloperOptionsUtil.swift */,
+				A13982791D473F9200F823A3 /* AuraConfig.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -311,7 +311,7 @@
 				A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */,
 				A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */,
 				A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */,
-				A1D091491CCF0879003A4816 /* RegionOptionViewController.swift */,
+				A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -717,7 +717,7 @@
 				5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */,
 				5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */,
 				5F6046D81D0B5CA9007E1AE6 /* NotificationsViewController.swift in Sources */,
-				A1D0914A1CCF0879003A4816 /* RegionOptionViewController.swift in Sources */,
+				A1D0914A1CCF0879003A4816 /* DeveloperOptionsViewController.swift in Sources */,
 				0F4742E71CDC055700B27992 /* DeviceSharesListViewModel.swift in Sources */,
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
 				0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */,
@@ -727,7 +727,6 @@
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */,
 				A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */,
-				A1575AE91D2E009100B852C9 /* DeveloperOptionsUtil.swift in Sources */,
 				0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */,
 				0F660F931D384B97000522AA /* ScheduleTableViewCell.swift in Sources */,
 				5F6C383A1D122108000CC897 /* AylaDevice_extensions.swift in Sources */,
@@ -749,6 +748,7 @@
 				A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */,
 				A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */,
 				A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */,
+				A139827A1D473F9200F823A3 /* AuraConfig.swift in Sources */,
 				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 				A78DC8F51CB87289002EE6B0 /* LanModeTestModel.swift in Sources */,
 				5F3CFE3B1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.swift in Sources */,
