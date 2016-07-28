@@ -30,6 +30,14 @@ class LANOTAViewController: UIViewController {
             self.device = AylaLANOTADevice(sessionManager: sessionManager!, DSN: self.dsnField.text!, lanIP: self.lanIPField.text!)
         }
         self.device?.delegate = self
+        // Add tap recognizer to dismiss keyboard.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     @IBAction func checkOTAInfoFromCloudAction(sender: UIButton) {
