@@ -11,22 +11,22 @@ import iOS_AylaSDK
 class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     /// Setup cell id
-    static let CellId: String = "SetupCellId"
+    private static let CellId: String = "SetupCellId"
     
     /// Description view to display status
-    @IBOutlet weak var descriptionTextView: UITextView!
+    @IBOutlet private weak var descriptionTextView: UITextView!
     
     /// Table view of scan results
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     
     /// A reserved view for future use.
-    @IBOutlet weak var controlPanel: UIView!
+    @IBOutlet private weak var controlPanel: UIView!
     
     /// AylaSetup instance used by this setup view controller
-    var setup: AylaSetup
+    private var setup: AylaSetup
     
     /// Current presenting alert controller
-    var alert: UIAlertController? {
+    private var alert: UIAlertController? {
         willSet(newAlert) {
             if let oldAlert = alert {
                 // If there is an alert presenting to user. dimiss it first.
@@ -36,23 +36,22 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     /// Current running connect task
-    var currentTask: AylaConnectTask?
+    private var currentTask: AylaConnectTask?
     
     /// Scan results which are presented in table view
-    var scanResults :AylaWifiScanResults?
+    private var scanResults :AylaWifiScanResults?
     
     /// Last used token.
-    var token: String?
+    private var token: String?
     
-    required init?(coder aDecoder: NSCoder)
-    {
+    required init?(coder aDecoder: NSCoder){
         // Init setup
         setup = AylaSetup(SDKRoot: AylaNetworks.shared())
         
         super.init(coder: aDecoder)
         
         // Monitor connectivity
-        self.monitorDeviceConnectivity()
+        monitorDeviceConnectivity()
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -62,7 +61,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
         
         // Monitor connectivity
-        self.monitorDeviceConnectivity()
+        monitorDeviceConnectivity()
     }
     
     override func viewDidLoad() {
@@ -73,24 +72,19 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
         
         let refreshButton = UIBarButtonItem(barButtonSystemItem:.Refresh, target: self, action: #selector(refresh))
-        self.navigationItem.rightBarButtonItem = refreshButton
+        navigationItem.rightBarButtonItem = refreshButton
         
         attemptToConnect()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    func updatePrompt(prompt: String?) {
-        self.navigationController?.navigationBar.topItem?.prompt = prompt
+    private func updatePrompt(prompt: String?) {
+        navigationController?.navigationBar.topItem?.prompt = prompt
     }
     
     /**
      Monitor device connectivity by adding KVO to property `connected` of setup device.
      */
-    func monitorDeviceConnectivity() {
+    private func monitorDeviceConnectivity() {
         // Add observer to setup device connection status.
         setup.addObserver(self, forKeyPath: "setupDevice.connected", options: .New, context: nil)
     }
@@ -98,8 +92,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     /**
      Use this method to connect to device again.
      */
-    func refresh() {
-        
+    @objc private func refresh() {
         // Clean scan results
         scanResults = nil
         tableView.reloadData()
@@ -110,14 +103,16 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     /**
      Must use this method to start setup for a device.
      */
-    func attemptToConnect() {
+    private func attemptToConnect() {
 
-        updatePrompt("Loading...")
+        updatePrompt("Connecting...")
         
         currentTask = setup.connectToNewDevice({ (setupDevice) -> Void in
-            self.addDescription("Find device: \(setupDevice.dsn)")
+            self.addDescription("Found device: \(setupDevice.dsn)")
+            
             // Start fetching AP list from module.
-            self.fetchApList()
+            self.fetchFreshAPListWithWiFiScan()
+            
             }) { (error) -> Void in
                 self.updatePrompt("")
                 self.addDescription("Unable to find device: \(error.description)")
@@ -136,11 +131,25 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     /**
-     Use this method to fetch ap list from setup.
+     * Use this method to have the module scan for Wi-Fi access points, then fetch the resulting AP list from setup.
      */
-    func fetchApList() {
-        updatePrompt("Loading...")
+    private func fetchFreshAPListWithWiFiScan() {
+        addDescription("Device Scanning for Wi-Fi APs...")
+        currentTask = setup.startDeviceScanForAccessPoints({
+            self.addDescription("Scan Complete")
+            self.fetchCurrentAPList()
+            }) { (error) in
+                self.updatePrompt("Wi-Fi Scan Failed")
+                self.addDescription("Wi-Fi Scan Failed\n\(error.description)")
+        }
+    }
+    
+    /**
+     * Use this method to have the setup device scan for Wi-Fi access points.
+     */
+    private func fetchCurrentAPList(){
         currentTask = setup.fetchDeviceAccessPoints({ (scanResults) -> Void in
+            self.addDescription("Fetched AP list.")
             self.updatePrompt(self.setup.setupDevice?.dsn ?? "")
             self.scanResults = scanResults
             self.tableView.reloadData()
@@ -149,6 +158,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.updatePrompt("Failed")
                 self.addDescription("Fetch AP results: \(error.description)")
         })
+
     }
     
     /**
@@ -157,17 +167,19 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      - parameter ssid:     The ssid which device would connect to.
      - parameter password: Password of the ssid.
      */
-    func connectToSSID(ssid: String, password: String?) {
+    private func connectToSSID(ssid: String, password: String?) {
     
-        token = generateRandomToken(7)
+        token = String.generateRandomAlphanumericToken(7)
         
-        self.updatePrompt("Connecting device to '\(ssid)'...")
-        let tokenString = String(format:"Using Setup Token %@", self.token!)
-        self.addDescription(tokenString)
-        self.setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { () -> Void in
+        updatePrompt("Connecting device to '\(ssid)'...")
+        addDescription("Connecting device to '\(ssid)'...")
+
+        let tokenString = String(format:"Using Setup Token %@", token!)
+        addDescription(tokenString)
+        setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { () -> Void in
             
             // Succeeded, go confirming.
-            self.addDescription("Connected to \(ssid)")
+            self.addDescription("Connected Successfully.")
             
             // Call to confirm connection.
             self.confirmConnectionToService()
@@ -181,26 +193,27 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     /**
      Use this method to confirm device connnection status with cloud service.
      */
-    func confirmConnectionToService() {
+    private func confirmConnectionToService() {
         func storeDeviceDetailsInKeychain(){
             // Store device info in keychain for use during a later registration attempt.
             PDKeychainBindings.sharedKeychainBindings().setString(self.token, forKey: AuraDeviceSetupTokenKeychainKey)
             PDKeychainBindings.sharedKeychainBindings().setString(self.setup.setupDevice?.dsn, forKey: AuraDeviceSetupDSNKeychainKey)
         }
         
-        self.updatePrompt("Confirming device status ...")
-        let deviceDSN = self.setup.setupDevice?.dsn
-        self.setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(deviceDSN)!, setupToken:token!, success: { (setupDevice) -> Void in
+        updatePrompt("Confirming device status ...")
+        addDescription("Confirming device connection to service")
+        let deviceDSN = setup.setupDevice?.dsn
+        setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(deviceDSN)!, setupToken:token!, success: { (setupDevice) -> Void in
                 self.updatePrompt("- Succeeded -")
-                self.addDescription("Confirmed device connection to service.\n- Succeeded -");
+                self.addDescription("- Succeeded. Setup Complete. -");
 
                 let alertString = String(format:"Setup for device %@ completed successfully, using the setup token %@.\n\n You may wish to store this token if the device uses AP Mode registration.", (self.setup.setupDevice?.dsn)!, self.token!)
-            if let features = self.setup.setupDevice?.features {
-                print("FEATURES")
-                for feature in features {
-                    print(feature)
+                if let features = self.setup.setupDevice?.features {
+                    print("FEATURES")
+                    for feature in features {
+                        print(feature)
+                    }
                 }
-            }
 
                 let alert = UIAlertController(title: "Setup Successful", message: alertString, preferredStyle: .Alert)
                 let copyAction = UIAlertAction(title: "Copy Token to Clipboard", style: .Default, handler: { (action) -> Void in
@@ -250,8 +263,12 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     /**
      Use this method to add a description to description text view.
      */
-    func addDescription(description: String) {
+    private func addDescription(description: String) {
         descriptionTextView.text = "\(descriptionTextView.text) \n\(description)"
+        // This scrolls the view to the bottom when the text extends beyond the edges
+        let count = descriptionTextView.text.characters.count
+        let bottom = NSMakeRange(count, 0)
+        descriptionTextView.scrollRangeToVisible(bottom)
     }
     
     /**
@@ -259,7 +276,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      
      - parameter error: The error which is going to be displayed.
      */
-    func displayError(error:NSError) {
+    private func displayError(error:NSError) {
     
         if let currentAlert = alert {
             currentAlert.dismissViewControllerAnimated(false, completion: nil)
@@ -278,14 +295,14 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    @IBAction func cancel(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) { () -> Void in
+    @IBAction private func cancel(sender: AnyObject) {
+        dismissViewControllerAnimated(true) { () -> Void in
             self.setup.exit()
         }
     }
     
     deinit {
-        self.setup.removeObserver(self, forKeyPath: "setupDevice.connected")
+        setup.removeObserver(self, forKeyPath: "setupDevice.connected")
     }
     
     // MARK: - Table view delegate
@@ -318,7 +335,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             alertController.addAction(connect)
             alertController.addAction(cancelAction)
             
-            self.presentViewController(alertController, animated: true, completion: nil)
+            presentViewController(alertController, animated: true, completion: nil)
             
             // Call to wake up main run loop
             CFRunLoopWakeUp(CFRunLoopGetCurrent());
@@ -342,7 +359,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // MARK: - Table view datasource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let results = self.scanResults?.results as [AylaWifiScanResult]!
+        let results = scanResults?.results as [AylaWifiScanResult]!
             
         let result = results[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier(SetupViewController.CellId)
@@ -360,39 +377,13 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // MARK: - KVO
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         
-        if object === self.setup.setupDevice as? AnyObject {
+        if object === setup.setupDevice as? AnyObject {
             if let device = object as? AylaSetupDevice {
                 if !device.connected {
-                    self.updatePrompt("Lost Connectivity To Device")
+                    updatePrompt("Lost Connectivity To Device")
                 }
             }
         }
     }
-    
-    func generateRandomToken(length:Int) -> String {
-        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let allowedCharsCount = UInt32(allowedChars.characters.count)
-        var token = ""
-        
-        for _ in (0..<length) {
-            let randomNum = Int(arc4random_uniform(allowedCharsCount))
-            let newCharacter = allowedChars[allowedChars.startIndex.advancedBy(randomNum)]
-            token += String(newCharacter)
-        }
-        return token
-    }
-    
-
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
