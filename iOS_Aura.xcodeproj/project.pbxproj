@@ -492,12 +492,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7351CB21C753C370073C73A /* Build configuration list for PBXNativeTarget "iOS_Aura" */;
 			buildPhases = (
-				25F6372F996D988D3A776A9B /* Check Pods Manifest.lock */,
+				25F6372F996D988D3A776A9B /* [CP] Check Pods Manifest.lock */,
 				A7351C861C753C360073C73A /* Sources */,
 				A7351C871C753C360073C73A /* Frameworks */,
 				A7351C881C753C360073C73A /* Resources */,
-				B4394C1FDEF22B2AD113851E /* Embed Pods Frameworks */,
-				FEADDAEA304A7BA8812C6A37 /* Copy Pods Resources */,
+				B4394C1FDEF22B2AD113851E /* [CP] Embed Pods Frameworks */,
+				FEADDAEA304A7BA8812C6A37 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -560,13 +560,16 @@
 					A7351C891C753C360073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = 4K93KVU666;
+						LastSwiftMigration = 0800;
 					};
 					A7351C9D1C753C370073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = A7351C891C753C360073C73A;
 					};
 					A7351CA81C753C370073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = A7351C891C753C360073C73A;
 					};
 				};
@@ -645,29 +648,29 @@
 			shellPath = /bin/sh;
 			shellScript = "# please install ruby gem \"jazzy\" first by #sudo gem install jazzy\ncommand -v jazzy >/dev/null 2>&1 || {\n    echo \"Please install jazzy by: $ sudo gem install jazzy\"\n    exit 1\n}\njazzy\nopen \"${PROJECT_DIR}/docs/index.html\"";
 		};
-		25F6372F996D988D3A776A9B /* Check Pods Manifest.lock */ = {
+		25F6372F996D988D3A776A9B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		B4394C1FDEF22B2AD113851E /* Embed Pods Frameworks */ = {
+		B4394C1FDEF22B2AD113851E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -675,14 +678,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FEADDAEA304A7BA8812C6A37 /* Copy Pods Resources */ = {
+		FEADDAEA304A7BA8812C6A37 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1007,6 +1010,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -1024,6 +1028,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -1035,6 +1040,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS_Aura.app/iOS_Aura";
 			};
 			name = Debug;
@@ -1047,6 +1053,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS_Aura.app/iOS_Aura";
 			};
 			name = Release;
@@ -1058,6 +1065,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = iOS_Aura;
 				USES_XCTRUNNER = YES;
 			};
@@ -1070,6 +1078,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = iOS_Aura;
 				USES_XCTRUNNER = YES;
 			};

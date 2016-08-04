@@ -27,7 +27,7 @@ class ContactNotificationButton: UIButton {
         
         newImage.drawInRect(CGRect(x: 0.0, y: 0.0, width: newImage.size.width, height: newImage.size.height))
         
-        newImage = UIGraphicsGetImageFromCurrentImageContext()
+        newImage = UIGraphicsGetImageFromCurrentImageContext()!
         
         UIGraphicsEndImageContext()
         
