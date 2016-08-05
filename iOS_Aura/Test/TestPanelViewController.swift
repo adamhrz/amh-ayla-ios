@@ -24,15 +24,15 @@ protocol TestPanelVCDelegate {
 /**
  Default view controller for integration/function tests. Developers can go to Test.storyboard to find the corresponding UI
  
- @note TestPanelViewController is designed to be shared among test models. Any significant changes to exsiting UI components are highly discouraged.
-        If necessary, developers could always subclass this test pancel view controller (or create new view controller) to satisfy test requirements.
+ @note TestPanelViewController is designed to be shared among test models. Any significant changes to existing UI components are highly discouraged.
+        If necessary, developers could always subclass this test panel view controller (or create a new view controller) to satisfy test requirements.
         Read comments in TestModel for more details.
  */
 class TestPanelViewController: UIViewController {
     
     @IBOutlet weak var rightBarButtonItem: UIBarButtonItem!
     
-    @IBOutlet weak var outputTextView: UITextView!
+    @IBOutlet weak var consoleView: AuraConsoleTextView!
     
     @IBOutlet weak var tf1Label: UILabel!
     @IBOutlet weak var tf1: UITextField!
@@ -47,7 +47,7 @@ class TestPanelViewController: UIViewController {
     @IBOutlet weak var btn2: UIButton!
     @IBOutlet weak var btn3: UIButton!
     
-    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var startButton: AuraButton!
     @IBOutlet weak var statusTF: UITextField!
     
     @IBOutlet weak var errCountLabel: UILabel!
@@ -60,6 +60,8 @@ class TestPanelViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        initDefaultUIState()
+        
         let leftBarButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(cancel))
         self.navigationItem.leftBarButtonItem = leftBarButton
 
@@ -72,6 +74,10 @@ class TestPanelViewController: UIViewController {
         
         testModel?.testPanelIsReady()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    }
 
     func cancel() {
         testModel?.testPanelIsDismissed()
@@ -81,8 +87,24 @@ class TestPanelViewController: UIViewController {
     func resetStartButton() {
         startButton.setTitle("Start", forState: .Normal)
     }
+
+    private func initDefaultUIState() {
+        consoleView.backgroundColor = UIColor.whiteColor()
+
+        tf1.hidden = true
+        tf1Label.hidden = true
+        btn1.hidden = true
+
+        tf2.hidden = true
+        tf2Label.hidden = true
+        btn2.hidden = true
+
+        tf3.hidden = true
+        tf3Label.hidden = true
+        btn3.hidden = true
+    }
     
-    func startButtonTapped() {
+    @objc private func startButtonTapped() {
         if let model = testModel {
             if(startButton.currentTitle?.lowercaseString == "start") {
                 let start = model.testPanelVC(self, didTapOnStartButton:startButton)
@@ -107,7 +129,7 @@ class TestPanelViewController: UIViewController {
      Use this method to append a string on text view.
     */
     func outputLogText(text :String) {
-        outputAttributedLogText(NSAttributedString(string: text))
+        consoleView.addLogLine(text)
     }
     
     func dismissKeyboard() {
@@ -120,10 +142,7 @@ class TestPanelViewController: UIViewController {
      Use this method to append an attributed string on text view.
      */
     func outputAttributedLogText(attributedText :NSAttributedString) {
-        let wholeText =  self.outputTextView.attributedText.mutableCopy() as! NSMutableAttributedString
-        wholeText.appendAttributedString(NSAttributedString(string: "\n"))
-        wholeText.appendAttributedString(attributedText)
-        self.outputTextView.attributedText = wholeText
+        consoleView.addAttributedLogline(attributedText)
     }
     
 }

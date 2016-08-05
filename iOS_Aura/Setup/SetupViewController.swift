@@ -14,7 +14,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     private static let CellId: String = "SetupCellId"
     
     /// Description view to display status
-    @IBOutlet private weak var descriptionTextView: UITextView!
+    @IBOutlet private weak var consoleView: AuraConsoleTextView!
     
     /// Table view of scan results
     @IBOutlet private weak var tableView: UITableView!
@@ -264,11 +264,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      Use this method to add a description to description text view.
      */
     private func addDescription(description: String) {
-        descriptionTextView.text = "\(descriptionTextView.text) \n\(description)"
-        // This scrolls the view to the bottom when the text extends beyond the edges
-        let count = descriptionTextView.text.characters.count
-        let bottom = NSMakeRange(count, 0)
-        descriptionTextView.scrollRangeToVisible(bottom)
+        consoleView.addLogLine(description)
     }
     
     /**
