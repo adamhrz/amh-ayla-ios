@@ -53,7 +53,7 @@ extension AylaDevice {
         var property: AylaProperty?
         if let properties = self.properties {
             let filtered = properties.filter({ (key, property) -> Bool in
-                if property.baseType == "string" && property.direction == "input" {
+                if property.baseType == AylaPropertyBaseTypeBoolean && property.direction == "input" {
                     return true
                 }
                 return false
@@ -83,7 +83,7 @@ extension AylaDevice {
         var property: AylaProperty?
         if let properties = self.properties {
             let filtered = properties.filter({ (key, property) -> Bool in
-                if property.baseType == "string" && property.direction == "input" {
+                if property.baseType == AylaPropertyBaseTypeString && property.direction == "input" {
                     return true
                 }
                 return false
@@ -136,6 +136,8 @@ class LanModeTestModel: TestModel {
     
     override func testPanelIsReady() {
         testPanelVC?.title = "LAN Test"
+        testPanelVC?.tf1.hidden = false
+        testPanelVC?.tf1Label.hidden = false
         testPanelVC?.tf1Label.text = "Iters"
         testPanelVC?.tf1.keyboardType = .NumberPad
     }
@@ -176,7 +178,8 @@ class LanModeTestModel: TestModel {
     }
 
     // NOTE: Lan Mode Test Model only supports devices with oemModel `ledevb`
-    // You could still start test for other modules, but there is no gurantee Lan Mode Test could be fully passed
+    // For this test suite to succeed, mobile device must be on the same LAN as the module (so as to enable LAN Mode)
+    // You may still run the test for other modules, but there is no guarantee the full test suite will pass.
     
     // MARK Test in sequence
 
