@@ -12,11 +12,11 @@ import iOS_AylaSDK
 class LANOTAViewController: UIViewController {
     
     var device: AylaLANOTADevice?
-    var imageInfo: AylaOTAImageInfo?
+    private var imageInfo: AylaOTAImageInfo?
     
-    @IBOutlet weak var descriptionView: UITextView!
-    @IBOutlet weak var dsnField: UITextField!
-    @IBOutlet weak var lanIPField: UITextField!
+    @IBOutlet private weak var consoleView: AuraConsoleTextView!
+    @IBOutlet private weak var dsnField: UITextField!
+    @IBOutlet private weak var lanIPField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,14 +36,14 @@ class LANOTAViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     
-    @IBAction func checkOTAInfoFromCloudAction(sender: UIButton) {
+    @IBAction private func checkOTAInfoFromCloudAction(sender: UIButton) {
         if let dsn = dsnField.text, lanIP = lanIPField.text {
             if dsn.isEmpty || lanIP.isEmpty {
-                self.showAlert("Error", message: "Please input device DSN and lan IP")
+                self.showAlert("Error", message: "Please input the device's DSN and LAN IP Address.")
                 return
             }
             let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
@@ -51,43 +51,46 @@ class LANOTAViewController: UIViewController {
         }
         
         updatePrompt("checkOTAInfoFromCloud")
+        addDescription("Checking Service for an available OTA Image for this device.")
         self.device?.fetchOTAImageInfoWithSuccess({ [weak self] imageInfo in
             self?.imageInfo = imageInfo
-            self?.addDescription("OTA image infor:\(imageInfo)")
+            self?.addDescription("OTA image information: \(imageInfo)")
         },
         failure: { error in
-            self.showAlert("Failed to fetch OTA image info", message: error.localizedDescription)
-            self.addDescription("Failed to fetch OTA image info:\(error)")
+            self.showAlert("Failed to fetch OTA image info", message: (error.localizedDescription))
+            self.addDescription("Failed to fetch OTA image info: \(error.aylaServiceDescription ?? String(error.userInfo))")
         })
     }
 
-    @IBAction func downloadOTAImageAction(sender: UIButton) {
+    @IBAction private func downloadOTAImageAction(sender: UIButton) {
         if let _ = imageInfo {
             updatePrompt("downloadOTAImage")
+            addDescription("Attempting to download image from service.")
             self.device?.fetchOTAImageFile(self.imageInfo!,
                 progress: { progress in
-                    self.addDescription("Downloading...\(progress.completedUnitCount)/\(progress.totalUnitCount)")
+                    self.addDescription("Download in Progress- \(progress.completedUnitCount)/\(progress.totalUnitCount)")
                 },
                 success: {
-                    self.showAlert("Success", message: "You can push the OTA image to device now")
-                    self.addDescription("Download image success!")
+                    self.showAlert("Success", message: "The image has been downloaded and can now be pushed to the device.")
+                    self.addDescription("OTA Image Download Complete.")
                 },
                 failure: { error in
-                    self.showAlert("Download image failed", message: error.localizedDescription)
-                    self.addDescription("Download image failed:\(error.userInfo)")
+                    let message = "Failed to download image: \(error.aylaServiceDescription ?? String(error.userInfo))"
+                    self.showAlert("Error", message: message)
+                    self.addDescription(message)
             })
         }
         else {
-            self.showAlert("Image info is empty", message: "Please fetch OTA info first")
+            self.showAlert("Error", message: "Please fetch OTA information first")
         }
     }
     
-    @IBAction func pushImageToDeviceAction(sender: UIButton) {
+    @IBAction private func pushImageToDeviceAction(sender: UIButton) {
         if self.device!.isOTAImageAvailable() {
             updatePrompt("pushImageToDevice")
-            addDescription("Start push image to device.")
+            addDescription("Attempting to push OTA image to the device.")
             self.device?.pushOTAImageToDeviceWithSuccess({
-                self.addDescription("Success: Device will download the OTA image soon!")
+                self.addDescription("Success!\nDevice will now attept to apply the OTA image.")
                 },
                                                          failure: { error in
                                                             self.showAlert("Error", message: error.localizedDescription)
@@ -95,26 +98,26 @@ class LANOTAViewController: UIViewController {
             })
         }
         else {
-            addDescription("No OTA image file founded, please download it first.")
+            addDescription("No OTA image file found, please download it first.")
         }
     }
     
-    func showAlert(title:String?, message: String?) {
+    private func showAlert(title:String?, message: String?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
         alert.addAction(okAction)
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func updatePrompt(prompt: String?) {
+    private func updatePrompt(prompt: String?) {
         self.navigationController?.navigationBar.topItem?.prompt = prompt
     }
     
     /**
      Use this method to add a description to description text view.
      */
-    func addDescription(description: String) {
-        descriptionView.text = "\(descriptionView.text) \n\(description)"
+    private func addDescription(description: String) {
+        consoleView.addLogLine(description)
     }
 }
 
@@ -125,12 +128,12 @@ extension LANOTAViewController: AylaLANOTADeviceDelegate {
             display = "Done"
         }
         else if status == ImagePushStatus.Initial {
-            display = "Initial"
+            display = "Initializing"
         }
         else {
             display = "Error"
         }
         
-        self.addDescription("Push image to device status update:\(display)")
+        self.addDescription("OTA Image Push to Device - Status:\(display)")
     }
 }
