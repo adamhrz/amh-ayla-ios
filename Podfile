@@ -68,3 +68,9 @@ target :iOS_Aura do
     pod 'SSKeychain'
     pod 'PDKeychainBindingsController'
 end
+
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << " DD_LEGACY_MACROS=1"
+  end
+end

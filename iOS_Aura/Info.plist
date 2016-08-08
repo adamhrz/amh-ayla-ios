@@ -63,5 +63,48 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+    
+    <!-- Aura Config -->
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Aura Config</string>
+            <key>CFBundleTypeIconFiles</key>
+            <array>
+                <string>Icon-Small.png</string>
+                <string>Icon.png</string>
+            </array>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.aylanetworks.auraconfig</string>
+            </array>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSHandlerRank</key>
+            <string>Owner</string>
+        </dict>
+    </array>
+    
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>Aura Config File</string>
+            <key>UTTypeIdentifier</key>
+            <string>com.aylanetworks.auraconfig</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <string>auraconfig</string>
+                <key>public.mime-type</key>
+                <string>application/json</string>
+            </dict>
+        </dict>
+    </array>
 </dict>
 </plist>
