@@ -65,7 +65,7 @@ target :iOS_Aura do
     :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
 #    :path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
     pod 'SwiftKeychainWrapper'
-    pod 'SSKeychain'
+    pod 'SAMKeychain'
     pod 'PDKeychainBindingsController'
 end
 
