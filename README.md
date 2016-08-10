@@ -1,8 +1,8 @@
 #Aura
 ####Ayla Networks' iOS Demo Application
 
-Supports iOS version 8.0 and above;  
-Supports CocoaPods version 0.39.0 and below;  
+Supports iOS version 9.0 and above;  
+Supports CocoaPods version 1.0.0 and above.  No longer supports version 0.39.0.  
 
 #Getting Started
 The following steps should be run in Terminal.
@@ -13,10 +13,10 @@ The following steps should be run in Terminal.
     
 2.  Install [Cocoapods](https://cocoapods.org) if you do not already have it: 
 
-    >```gem install cocoapods -v 0.39.0```
+    >```gem install cocoapods```
 
-    Note: we only supoort Cocoapods version 0.39.0 or below. If you installed version higher like 1.0.1, run the following command and then select 1.0.1 to uninstall
-    >```gem uninstall cocoapods```
+    Note: This version of Aura only supports Cocoapods version 1.0.0 and above. If you currently have a version of Cocoapods lower than 1.0.0 (such as the previously supported and incompatible version 0.39.0, please enter the following command to upgrade.
+    >```gem upgrade cocoapods```
 
 3. Then run the following command within the Aura folder: 
 
@@ -24,7 +24,7 @@ The following steps should be run in Terminal.
  
 4. (Optional) Set the AYLA_SDK_BRANCH environment variable to the name of the AylaSDK branch you want to include. If the variable is unset, Cocoapods will default to the latest SDK release branch.
 
-    >```export AYLA_SDK_BRANCH=release/5.0.00```
+    >```export AYLA_SDK_BRANCH=release/5.2.00```
     
 5. Install Pods
 
@@ -43,6 +43,9 @@ The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).
 - CocoaAsyncSocket ([License](https://github.com/robbiehanson/CocoaAsyncSocket/wiki/License))
 - CocoaHTTPServer ([License](https://github.com/robbiehanson/CocoaHTTPServer/blob/master/LICENSE.txt))
 - SocketRocket ([License](https://github.com/square/SocketRocket/blob/master/LICENSE))
+- SwiftKeychainWrapper ([License](https://github.com/jrendel/SwiftKeychainWrapper/blob/develop/LICENSE))
+- PDKeychainBindingsController ([License](https://github.com/carlbrown/PDKeychainBindingsController/blob/master/LICENSE))
+- SAMKeychain ([License](https://github.com/soffes/SAMKeychain/blob/master/LICENSE))
 
 #Release Notes
 
