@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gYA-rP-UBo">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -42,7 +41,7 @@
                                     <constraint firstAttribute="height" constant="35" id="6CS-2j-av2"/>
                                 </constraints>
                             </view>
-                            <textView clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cyX-ev-TCC">
+                            <textView clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cyX-ev-TCC" customClass="AuraConsoleTextView" customModule="Aura" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="382" width="600" height="175"/>
                                 <color key="backgroundColor" red="0.96012723445892334" green="0.96009838581085205" blue="0.96011471748352051" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -97,8 +96,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="consoleView" destination="cyX-ev-TCC" id="m5e-Qo-hQO"/>
                         <outlet property="controlPanel" destination="zAE-cU-uTz" id="N6N-qI-Jvt"/>
-                        <outlet property="descriptionTextView" destination="cyX-ev-TCC" id="z0W-My-jtj"/>
                         <outlet property="tableView" destination="kfe-cp-pfU" id="FAh-Eh-Och"/>
                     </connections>
                 </viewController>
