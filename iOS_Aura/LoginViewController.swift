@@ -56,10 +56,10 @@ class LoginViewController: UIViewController {
     @IBAction func login(sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
-            usernameTextField.text = "CAN NOT BE BLANK"
+            UIAlertController.alert(nil, message: "Must supply a username", buttonTitle: "OK", fromController: self)
         }
         else if (passwordTextField.text ?? "") == "" {
-            passwordTextField.text = "CAN NOT BE BLANK"
+            UIAlertController.alert(nil, message: "Must supply a password", buttonTitle: "OK", fromController: self)
         }
         else {
             
