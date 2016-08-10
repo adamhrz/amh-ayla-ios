@@ -109,7 +109,7 @@ extension UIColor {
     }
 
     class func aylaFiordColor() -> UIColor {
-        return UIColor(hexRGB: 0x5c6f7c)
+        return UIColor(hexRGB: 0x425968)
     }
 
     // MARK: -  Ayla secondary colors: Browns

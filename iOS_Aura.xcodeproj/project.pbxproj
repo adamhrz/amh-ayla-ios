@@ -32,6 +32,8 @@
 		0F660F8F1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F660F8E1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift */; };
 		0F660F911D35A493000522AA /* ScheduleActionEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F660F901D35A493000522AA /* ScheduleActionEditorViewController.swift */; };
 		0F660F931D384B97000522AA /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F660F921D384B97000522AA /* ScheduleTableViewCell.swift */; };
+		0F66C9191D4ADAF200738A16 /* NSError+AylaErrorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F66C9181D4ADAF200738A16 /* NSError+AylaErrorUtils.swift */; };
+		0F6791CD1D4BF84600E83CA0 /* AuraConsoleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6791CC1D4BF84600E83CA0 /* AuraConsoleTextView.swift */; };
 		0F6B73581CD9581100560563 /* DeviceSharesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */; };
 		0F832AAE1D342733009D05E0 /* ScheduleEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F832AAD1D342733009D05E0 /* ScheduleEditorViewController.swift */; };
 		0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */; };
@@ -127,6 +129,8 @@
 		0F660F8E1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleEditorActionTableViewCell.swift; path = Device/ScheduleEditorActionTableViewCell.swift; sourceTree = "<group>"; };
 		0F660F901D35A493000522AA /* ScheduleActionEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleActionEditorViewController.swift; path = Device/Presentation/ScheduleActionEditorViewController.swift; sourceTree = "<group>"; };
 		0F660F921D384B97000522AA /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleTableViewCell.swift; path = Device/ScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		0F66C9181D4ADAF200738A16 /* NSError+AylaErrorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSError+AylaErrorUtils.swift"; path = "Utils/NSError+AylaErrorUtils.swift"; sourceTree = "<group>"; };
+		0F6791CC1D4BF84600E83CA0 /* AuraConsoleTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConsoleTextView.swift; path = UX/AuraConsoleTextView.swift; sourceTree = "<group>"; };
 		0F6B73571CD9581100560563 /* DeviceSharesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceSharesTableViewController.swift; path = Sharing/DeviceSharesTableViewController.swift; sourceTree = "<group>"; };
 		0F832AAD1D342733009D05E0 /* ScheduleEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleEditorViewController.swift; path = Device/Presentation/ScheduleEditorViewController.swift; sourceTree = "<group>"; };
 		0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Utils.swift"; path = "Utils/String+Utils.swift"; sourceTree = "<group>"; };
@@ -248,6 +252,7 @@
 				0FBEB09F1CC07AE600E8EE6F /* String+Utils.swift */,
 				0FBEB0A01CC07AE600E8EE6F /* UIAlertView_Extensions.swift */,
 				0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */,
+				0F66C9181D4ADAF200738A16 /* NSError+AylaErrorUtils.swift */,
 				A13982791D473F9200F823A3 /* AuraConfig.swift */,
 			);
 			name = Utils;
@@ -313,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				A7104ACD1C758140007B1AB3 /* AuraButton.swift */,
+				0F6791CC1D4BF84600E83CA0 /* AuraConsoleTextView.swift */,
 				5FDCECA31CC84CF100233D99 /* AuraLabel.swift */,
 				5FDCECA41CC84CF100233D99 /* AuraTextField.swift */,
 			);
@@ -721,6 +727,7 @@
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				0F660F8F1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift in Sources */,
 				5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */,
+				0F66C9191D4ADAF200738A16 /* NSError+AylaErrorUtils.swift in Sources */,
 				5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */,
 				5F6046D81D0B5CA9007E1AE6 /* NotificationsViewController.swift in Sources */,
 				A1D0914A1CCF0879003A4816 /* DeveloperOptionsViewController.swift in Sources */,
@@ -737,6 +744,7 @@
 				0F660F931D384B97000522AA /* ScheduleTableViewCell.swift in Sources */,
 				5F6C383A1D122108000CC897 /* AylaDevice_extensions.swift in Sources */,
 				0FD5AA631CEBBAD6000931D6 /* RegistrationManualTVCell.swift in Sources */,
+				0F6791CD1D4BF84600E83CA0 /* AuraConsoleTextView.swift in Sources */,
 				A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */,
 				5F2429E81D1B6A27003F2D40 /* ContactManager.swift in Sources */,
 				5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */,

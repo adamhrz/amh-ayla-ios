@@ -56,10 +56,10 @@ class LoginViewController: UIViewController {
     @IBAction func login(sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
-            usernameTextField.text = "CAN NOT BE BLANK"
+            UIAlertController.alert(nil, message: "Must supply a username", buttonTitle: "OK", fromController: self)
         }
         else if (passwordTextField.text ?? "") == "" {
-            passwordTextField.text = "CAN NOT BE BLANK"
+            UIAlertController.alert(nil, message: "Must supply a password", buttonTitle: "OK", fromController: self)
         }
         else {
             
@@ -191,7 +191,7 @@ class LoginViewController: UIViewController {
      Use to display an message.
      */
     func presentError(error: NSError) {
-        let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription ?? error.description) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
         
         alert.addAction(UIAlertAction(
             title: "Got it", style: .Cancel, handler: nil))
