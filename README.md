@@ -42,7 +42,29 @@ The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).
 - PDKeychainBindingsController ([License](https://github.com/carlbrown/PDKeychainBindingsController/blob/master/LICENSE))
 - SAMKeychain ([License](https://github.com/soffes/SAMKeychain/blob/master/LICENSE))
 
+##Contribute your code
+
+If you would like to contribute your own code change to our project, please submit pull requests against the "incoming" branch on Github. We will review and approve your pull requests if appropriate.
+
 #Release Notes
+
+v5.2.00    2016-08-2;2
+------
+New & Improved
+- Offline (LAN) sign-in and LAN device connectivity using cached data
+- Generic Gateway and Node registration using Raspberry Pi
+- Update account email address
+- Device property notifications for email, sms, and push
+- Change device time zones
+- Device Sharing
+- Device Schedules
+
+Bug Fixes & Chores
+- Automated testing via Jenkins, Appium with test cases via Zephyr
+- Using Fastlane for automated build and release
+- All 5.1.0x hot-fixes
+- UI improvements
+- Built using the latest SDK
 
 v5.1.00    2016-06-27
 ------
