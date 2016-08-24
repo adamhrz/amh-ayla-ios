@@ -9,9 +9,6 @@
 import Foundation
 import iOS_AylaSDK
 
-enum TestModelLoggingLevel {
-    case Pass, Fail, Warning, Error, Info
-}
 
 enum TestModelTestState: String {
     case Empty = ""
@@ -21,7 +18,8 @@ enum TestModelTestState: String {
 }
 
 /**
-A TestModel represents a complete functional/intergration test flow. It interacts with TestPanelViewController to receive user's action, deploy tests, and push logs on screen.
+A TestModel represents a complete functional/integration test flow. It interacts with TestPanelViewController to receive user's actions and input, deploys tests, 
+ and displays log messages in the on-screen console.
  When implementing a new test flow, you should always create a new subclass of TestModel, and override methods to input your own test flow.
  
  Some methods you could consider to override:
@@ -34,7 +32,7 @@ A TestModel represents a complete functional/intergration test flow. It interact
  */
 class TestModel : NSObject, TestPanelVCDelegate {
     
-    /// Device panel, refer to DevicePanelView for details
+    /// Reference to the view controller using this model.
     weak var testPanelVC : TestPanelViewController?
     
     var testSequencer :TestSequencer? {
@@ -91,7 +89,6 @@ class TestModel : NSObject, TestPanelVCDelegate {
     
     /**
      Call this method when input test case is passed.
-     
      - parameter tc: Test case which is passed.
      */
     func passTestCase(tc: TestCase) {
@@ -101,7 +98,6 @@ class TestModel : NSObject, TestPanelVCDelegate {
     
     /**
      Call this method when input test case is failed.
-     
      - parameter tc:    Test case which is passed.
      - parameter error: Generated error.
      */
@@ -117,19 +113,13 @@ class TestModel : NSObject, TestPanelVCDelegate {
     
     /**
      Call this method to add a log message on text view of test panel.
-     
      - parameter level: Logging level of this message.
      - parameter log:   Log text.
      */
-    func addLog(level: TestModelLoggingLevel, log: String) {
-        if let attributedLogText = attributedStringFromLoggingLevel(level, logText: log) {
-            self.testPanelVC?.outputAttributedLogText(attributedLogText)
-        }
-        else  {
-            self.testPanelVC?.outputLogText("\(tagFromLoggingLevel(level)), \(log)")
-        }
+    func addLog(level: AuraConsoleTextView.ConsoleLoggingLevel, log: String) {
+        testPanelVC?.consoleView.addLogLine(level, log: log)
     }
-    
+    /*
     private func tagFromLoggingLevel(level: TestModelLoggingLevel) -> String {
         var tag :String
         switch level {
@@ -151,9 +141,9 @@ class TestModel : NSObject, TestPanelVCDelegate {
         }
         return tag
     }
+    */
     
-    private func attributedStringFromLoggingLevel(level: TestModelLoggingLevel, logText: String) -> NSAttributedString? {
-        
+    /*private func attributedStringFromLoggingLevel(level: AuraConsoleTextView.ConsoleLoggingLevel, logText: String) -> NSAttributedString? {
         var htmlString :String = "\(tagFromLoggingLevel(level)), \(logText)"
         let fontSettings = "face=\"-apple-system\",\"HelveticaNeue\""
         switch level {
@@ -184,7 +174,7 @@ class TestModel : NSObject, TestPanelVCDelegate {
         }
         
         return string
-    }
+    }*/
     
     // MARK: Test panel delegate
     func testPanelVC(viewController: TestPanelViewController, didTapOnStartButton startButton: UIButton) -> Bool {

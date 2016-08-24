@@ -16,8 +16,8 @@
 require_relative './Podhelper'
 
 #Configuration Section: you can change the following variables to configure your build
-conditional_assign("ayla_build_branch", "") #"release/4.4.0"
-conditional_assign("ayla_sdk_branch", "release/5.1.00") #or @ayla_build_branch)
+conditional_assign("ayla_build_branch", "release/5.2.00") #"release/4.4.0"
+conditional_assign("ayla_sdk_branch", "release/5.2.00") #or @ayla_build_branch)
 conditional_assign("ayla_sdk_repo", "") #"https://github.com/AylaNetworks/iOS_AylaSDK(_Public).git"
 conditional_assign("ayla_public", "")
 conditional_assign("ayla_remote", "origin")
@@ -62,9 +62,15 @@ use_frameworks!
 
 target :iOS_Aura do
     pod 'iOS_AylaSDK',
-#    :path => "../iOS_AylaSDK"
     :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
+#    :path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
     pod 'SwiftKeychainWrapper'
-    pod 'SSKeychain'
+    pod 'SAMKeychain'
     pod 'PDKeychainBindingsController'
+end
+
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << " DD_LEGACY_MACROS=1"
+  end
 end

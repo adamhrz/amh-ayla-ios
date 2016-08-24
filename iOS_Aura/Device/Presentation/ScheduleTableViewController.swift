@@ -2,7 +2,6 @@
 //  ScheduleTableViewController.swift
 //  iOS_Aura
 //
-//  Created by Emanuel Peña Aguilar on 5/10/16.
 //  Copyright © 2016 Ayla Networks. All rights reserved.
 //
 
@@ -10,10 +9,12 @@ import UIKit
 import iOS_AylaSDK
 
 class ScheduleTableViewController: UITableViewController {
-    let segueToScheduleEditorId = "toScheduleEditor"
+    private let segueToScheduleEditorId = "toScheduleEditor"
+    private let scheduleCellID = "ScheduleTableViewCell"
     
     var device : AylaDevice!
-    var schedules = [AylaSchedule]()
+    private var schedules = [AylaSchedule]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,10 +23,16 @@ class ScheduleTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.reloadSchedules()
+        refreshControl?.enabled = true
+        refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh schedules")
+        refreshControl?.addTarget(self, action: #selector(reloadSchedules), forControlEvents: .ValueChanged)    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadSchedules()
     }
     
-    func reloadSchedules() {
+    @objc private func reloadSchedules() {
         // fetch schedules
         device.fetchAllSchedulesWithSuccess({ (schedules) in
             //assign schedules in case of success
@@ -33,9 +40,15 @@ class ScheduleTableViewController: UITableViewController {
             
             //reload table view
             self.tableView.reloadData()
+            if self.refreshControl?.refreshing == true {
+                self.refreshControl?.endRefreshing()
+            }
         }) { (error) in
+            if self.refreshControl?.refreshing == true {
+                self.refreshControl?.endRefreshing()
+            }
             // display an alert in case of error
-                UIAlertController.alert("Error", message: "Could not fetch schedules", buttonTitle: "OK", fromController: self)
+            UIAlertController.alert("Failed to fetch schedules", message: error.description, buttonTitle: "OK", fromController: self)
         }
     }
 
@@ -56,36 +69,26 @@ class ScheduleTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("\(ScheduleTableViewController.self)", forIndexPath: indexPath)
-
+        let cell = tableView.dequeueReusableCellWithIdentifier(scheduleCellID, forIndexPath: indexPath) as! ScheduleTableViewCell
         let schedule = schedules[indexPath.row]
-        
-        cell.textLabel?.text = "\(schedule.displayName ?? "") (\(schedule.name))"
-        let startAt = "\(schedule.startTimeEachDay ?? "")"
-        let endTimeEachDay = "\(schedule.endTimeEachDay ?? "No end time")"
-        let startDate = "\(schedule.startDate ?? "immediately")"
-        let endDate = "\(schedule.endDate ?? "indefinite")"
-        let active = "\(schedule.active ? "Active" : "Inactive")"
-        let utc = "\(schedule.utc ? "UTC" : "Non-UTC")"
-        
-        cell.detailTextLabel?.text = "\(startAt) - \(endTimeEachDay), \(startDate) - \(endDate), \(utc), \(active)"
-        
+        cell.configure(schedule)
         return cell
     }
     
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let schedule = schedules[indexPath.row]
-        self.performSegueWithIdentifier(segueToScheduleEditorId, sender: schedule)
+        performSegueWithIdentifier(segueToScheduleEditorId, sender: schedule)
     }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == segueToScheduleEditorId) {
-            let scheduleEditorController = segue.destinationViewController as! ScheduleEditorTableViewController
+            let schedule : AylaSchedule = (sender as? AylaSchedule)!
+            let scheduleEditorController = segue.destinationViewController as! ScheduleEditorViewController
             scheduleEditorController.device = device
-            scheduleEditorController.schedule = sender as! AylaSchedule
+            scheduleEditorController.schedule = schedule
         }
     }
 

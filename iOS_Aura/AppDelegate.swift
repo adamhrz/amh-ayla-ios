@@ -15,11 +15,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        if let url = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
+            if url.fileURL {
+                print("Aura config file opened.")
+            }
+        }
 
         // Setup core manager
         let settings = AylaSystemSettings.defaultSystemSettings()
-        // Setup app id/secret
-        setupAuraOptions(settings)
+        
+        // settings from AuraConfig
+        AuraConfig.currentConfig().applyTo(settings)
 
         // Set device detail provider
         settings.deviceDetailProvider = DeviceDetailProvider()
@@ -40,34 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-    
-    func setupAuraOptions(settings: AylaSystemSettings) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let type = defaults.integerForKey(AuraOptions.KeyServiceType)
-        if type == 0 { // 0 == AylaServiceType.Dynamic
-            settings.serviceType = .Development
-        }
-        else {
-            settings.serviceType = AylaServiceType(rawValue: UInt16(type)) ?? .Development
-        }
         
-        let location = defaults.integerForKey(AuraOptions.KeyServiceLocation)
-        settings.serviceLocation = AylaServiceLocation(rawValue: UInt16(location)) ?? .US
-        
-        if settings.serviceLocation == .CN {
-            settings.appId = AuraOptions.AppIdCN
-            settings.appSecret = AuraOptions.AppSecretCN
-        }
-        else if settings.serviceLocation == .EU {
-            settings.appId = AuraOptions.AppIdEU
-            settings.appSecret = AuraOptions.AppSecretEU
-        }
-        else {
-            settings.appId = AuraOptions.AppIdUS
-            settings.appSecret = AuraOptions.AppSecretUS
-        }
-    }
-    
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         func displayViewController(controller: UIViewController){
             //  VC hierarchy is different if we are logged in than if we are not. 
@@ -115,6 +95,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 displayViewController(alert)
             }
+        }
+        
+        // Aura Config
+        if url.fileURL && url.pathExtension == "auraconfig" {
+            let configData = NSData(contentsOfURL: url)
+            do {
+                let configJSON = try NSJSONSerialization.JSONObjectWithData(configData!, options: .AllowFragments)
+                guard let configDict: NSDictionary = configJSON as? NSDictionary else {
+                    presentAlertController("Invalid config file", message: nil, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
+                    return false
+                }
+                print("Aura Config: \(configDict)")
+                
+                let configName = configDict["name"] as! String
+                let storyboard = UIStoryboard(name: "Login", bundle: nil)
+                let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+                let naviVC = UINavigationController(rootViewController: developOptionsVC)
+                developOptionsVC.currentConfig = AuraConfig(name: configName, config: configDict)
+                displayViewController(naviVC)
+            }
+            catch let error as NSError {
+                print(error)
+            }
+            
+            return true
         }
         
         // Parse URL app was launched with
@@ -183,7 +188,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         else {
             presentAlertController("Not Yet Implemented.",
-                                        message: String.localizedStringWithFormat("Cannot currently parse url with %@ parameter", url.host!),
+                                        message: String.localizedStringWithFormat("Cannot currently parse url with %@ parameter", url.host ?? ""),
                                         withOkayButton: true,
                                         withCancelButton: false,
                                         okayHandler:nil,

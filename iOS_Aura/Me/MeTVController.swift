@@ -8,7 +8,7 @@ import MessageUI
 import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
-import SSKeychain
+import SAMKeychain
 import CoreTelephony
 import SwiftKeychainWrapper
 
@@ -30,7 +30,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     func logout() {
         let settings = AylaNetworks.shared().systemSettings
         let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
-        SSKeychain.deletePasswordForService(settings.appId, account: username)
+        SAMKeychain.deletePasswordForService(settings.appId, account: username)
         if let manager = sessionManager {
             manager.logoutWithSuccess({ () -> Void in
                 KeychainWrapper.removeObjectForKey("LANLoginAuthorization")
@@ -53,7 +53,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                     case AylaHTTPErrorCode.LostConnectivity.rawValue:
                         alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
                     default:
-                        alertWithLogout("An error has occurred", buttonTitle: "Continue")
+                        alertWithLogout("An error has occurred.\n" + (error.aylaServiceDescription ?? ""), buttonTitle: "Continue")
 
                     }
             })

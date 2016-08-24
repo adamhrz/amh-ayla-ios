@@ -11,6 +11,7 @@ import iOS_AylaSDK
 
 protocol DeviceListViewModelDelegate: class {
     func deviceListViewModel(viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
+    func deviceListViewModel(viewModel:DeviceListViewModel, lanOTAWithDevice device:AylaDevice)
     func deviceListViewModel(viewModel:DeviceListViewModel, didUnregisterDevice device:AylaDevice)
 }
 
@@ -83,13 +84,27 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         return cell!
     }
     
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let lanOTAAction = UITableViewRowAction(style: .Default, title: "LAN OTA") { (action, indexPath) in
+            let device = self.devices[indexPath.row]
+            self.delegate?.deviceListViewModel(self, lanOTAWithDevice: device)
+        }
+        lanOTAAction.backgroundColor = UIColor.auraLeafGreenColor();
+        
         let unregisterAction = UITableViewRowAction(style: .Default, title: "Unregister") { (action, indexPath) in
             let device = self.devices[indexPath.row]
             self.delegate?.deviceListViewModel(self, didUnregisterDevice: device)
         }
         unregisterAction.backgroundColor = UIColor.auraRedColor()
-        return [unregisterAction]
+        return [lanOTAAction, unregisterAction]
     }
     
     // MARK: Table View Delegate

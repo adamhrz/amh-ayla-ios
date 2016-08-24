@@ -15,7 +15,7 @@ import UIKit
 class NodeRegistrationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var logTextView: UITextView!
+    @IBOutlet weak var logTextView: AuraConsoleTextView!
     
     enum Section :Int {
         case TargetGateway
@@ -54,6 +54,7 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        self.logTextView.backgroundColor = UIColor.whiteColor()
     }
     
     override func viewWillAppear(animated: Bool) {

@@ -14,7 +14,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var logTextView: UITextView!
+    @IBOutlet weak var logTextView: AuraConsoleTextView!
     
     /// Segue id to property view
     let segueIdToNodeRegistrationView :String = "toNodeRegistrationPage"
@@ -89,6 +89,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        self.logTextView.backgroundColor = UIColor.whiteColor()
     }
     
     func updateGatewaysList() {

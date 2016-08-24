@@ -7,7 +7,7 @@
 import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
-import SSKeychain
+import SAMKeychain
 import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
@@ -44,7 +44,7 @@ class LoginViewController: UIViewController {
     func autoLogin() {
         let settings = AylaNetworks.shared().systemSettings
         let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
-        let password = SSKeychain.passwordForService(settings.appId, account: username)
+        let password = SAMKeychain.passwordForService(settings.appId, account: username)
         self.usernameTextField.text = username
         self.passwordTextField.text = password
         
@@ -56,10 +56,10 @@ class LoginViewController: UIViewController {
     @IBAction func login(sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
-            usernameTextField.text = "CAN NOT BE BLANK"
+            UIAlertController.alert(nil, message: "Must supply a username", buttonTitle: "OK", fromController: self)
         }
         else if (passwordTextField.text ?? "") == "" {
-            passwordTextField.text = "CAN NOT BE BLANK"
+            UIAlertController.alert(nil, message: "Must supply a password", buttonTitle: "OK", fromController: self)
         }
         else {
             
@@ -73,7 +73,7 @@ class LoginViewController: UIViewController {
             
             let success = { (authorization: AylaAuthorization, sessionManager: AylaSessionManager) -> Void in
                 PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
-                SSKeychain.setPassword(password, forService: settings.appId, account: username)
+                SAMKeychain.setPassword(password, forService: settings.appId, account: username)
                 
                 // Reset the Contact Manager for the new user
                 ContactManager.sharedInstance.reload()
@@ -191,7 +191,7 @@ class LoginViewController: UIViewController {
      Use to display an message.
      */
     func presentError(error: NSError) {
-        let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription ?? error.description) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
         
         alert.addAction(UIAlertAction(
             title: "Got it", style: .Cancel, handler: nil))

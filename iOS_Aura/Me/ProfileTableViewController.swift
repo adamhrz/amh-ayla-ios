@@ -9,7 +9,7 @@
 import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
-import SSKeychain
+import SAMKeychain
 
 class ProfileTableViewController: UITableViewController {
     var user: AylaUser!
@@ -97,7 +97,7 @@ class ProfileTableViewController: UITableViewController {
                 let settings = AylaNetworks.shared().systemSettings
                 let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
                 PDKeychainBindings.sharedKeychainBindings().removeObjectForKey(AuraUsernameKeychainKey)
-                SSKeychain.deletePasswordForService(settings.appId, account: username)
+                SAMKeychain.deletePasswordForService(settings.appId, account: username)
                 
                 let successAlert = UIAlertController(title: "Success",
                     message: "Your account has been deleted.  A new account will be required to log in again.",
