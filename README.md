@@ -58,6 +58,7 @@ New & Improved
 - Change device time zones
 - Device Sharing
 - Device Schedules
+- New LAN OTA platform feature support
 
 Bug Fixes & Chores
 - Automated testing via Jenkins, Appium with test cases via Zephyr
