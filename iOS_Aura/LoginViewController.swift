@@ -8,7 +8,6 @@ import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
 import SAMKeychain
-import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
 
@@ -79,9 +78,13 @@ class LoginViewController: UIViewController {
                 ContactManager.sharedInstance.reload()
                 
                 self.dismissLoading(false, completion: { () -> Void in
-                    KeychainWrapper.setObject(authorization, forKey: "LANLoginAuthorization")
-                    // Once succeeded, present view controller in `Main` storyboard.
-                    self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
+                    do {
+                        try SAMKeychain.setObject(authorization, forService: "LANLoginAuthorization", account: username)
+                        // Once succeeded, present view controller in `Main` storyboard.
+                        self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
+                    } catch _ {
+                        print("Failed to save authorization")
+                    }
                 })
 
             }
@@ -91,7 +94,8 @@ class LoginViewController: UIViewController {
             let loginManager = AylaNetworks.shared().loginManager
             loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: success, failure: { [unowned loginManager] (error) -> Void in
                     if settings.allowOfflineUse {
-                        if let cachedAuth = KeychainWrapper.objectForKey("LANLoginAuthorization") as? AylaAuthorization {
+                        do {
+                        if let cachedAuth = try SAMKeychain.objectForService("LANLoginAuthorization", account: username) as? AylaAuthorization {
                             let provider = AylaCachedAuthProvider(authorization: cachedAuth)
                             loginManager.loginWithAuthProvider(provider, sessionName: AuraSessionOneName, success: success, failure: { (error) in
                                 self.dismissLoading(false, completion: { () -> Void in
@@ -99,6 +103,9 @@ class LoginViewController: UIViewController {
                                 })
                             })
                             return;
+                        }
+                        } catch _ {
+                            print("Failed to get cached authorization")
                         }
                     }
                     self.dismissLoading(false, completion: { () -> Void in

@@ -63,6 +63,7 @@
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
 		A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */; };
+		A5B641211D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */; };
 		A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */; };
 		A5E0DF3F1CE257E800D0E87F /* ScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */; };
 		A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AC81C757F32007B1AB3 /* Login.storyboard */; };
@@ -162,6 +163,7 @@
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
 		A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLoginViewController.swift; sourceTree = "<group>"; };
+		A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SAMKeychain+AylaUtils.swift"; path = "Utils/SAMKeychain+AylaUtils.swift"; sourceTree = "<group>"; };
 		A5E0DF3C1CE2579000D0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Schedules.storyboard; sourceTree = "<group>"; };
 		A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleTableViewController.swift; path = Device/Presentation/ScheduleTableViewController.swift; sourceTree = "<group>"; };
 		A7104AC91C757F32007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */,
 				0F66C9181D4ADAF200738A16 /* NSError+AylaErrorUtils.swift */,
 				A13982791D473F9200F823A3 /* AuraConfig.swift */,
+				A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -747,6 +750,7 @@
 				0F6791CD1D4BF84600E83CA0 /* AuraConsoleTextView.swift in Sources */,
 				A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */,
 				5F2429E81D1B6A27003F2D40 /* ContactManager.swift in Sources */,
+				A5B641211D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift in Sources */,
 				5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */,
 				A78DC8F71CBAC42D002EE6B0 /* TestSequencer.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
