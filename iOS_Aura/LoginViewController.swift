@@ -75,6 +75,10 @@ class LoginViewController: UIViewController {
                 PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
                 SAMKeychain.setPassword(password, forService: settings.appId, account: username)
                 
+                // Register for AylaSessionListener
+                (UIApplication.sharedApplication().delegate as! AppDelegate).auraSessionListener = AuraSessionListener.sharedListener
+                (UIApplication.sharedApplication().delegate as! AppDelegate).auraSessionListener?.initializeAuraSessionListener()
+                
                 // Reset the Contact Manager for the new user
                 ContactManager.sharedInstance.reload()
                 

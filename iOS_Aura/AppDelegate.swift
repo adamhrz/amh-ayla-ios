@@ -13,6 +13,8 @@ import iOS_AylaSDK
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    var auraSessionListener : AuraSessionListener?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -49,31 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
         
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        func displayViewController(controller: UIViewController){
-            //  VC hierarchy is different if we are logged in than if we are not. 
-            //  This will ensure the VC is displayed.
-            let topController = topViewController()
-            topController.presentViewController(controller, animated: true, completion: nil)
-        }
-        
-        func topViewControllerFromRoot(rootVC:UIViewController) ->UIViewController{
-            if rootVC.isKindOfClass(UITabBarController) {
-                let tabVC = rootVC as! UITabBarController
-                return topViewControllerFromRoot(tabVC.selectedViewController!)
-            } else if rootVC.isKindOfClass(UINavigationController) {
-                let navC = rootVC as! UINavigationController
-                return topViewControllerFromRoot(navC.visibleViewController!)
-            } else if let presentedVC = rootVC.presentedViewController {
-                return topViewControllerFromRoot(presentedVC)
-            } else {
-                return rootVC
-            }
-        }
-        
-        func topViewController() -> UIViewController {
-            let rootController = UIApplication.sharedApplication().keyWindow?.rootViewController
-             return topViewControllerFromRoot(rootController!)
-        }
         
         // Instantiate and display a UIAlertViewController as needed
         func presentAlertController(title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?){
@@ -197,7 +174,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-
+    func displayViewController(controller: UIViewController){
+        //  VC hierarchy is different if we are logged in than if we are not.
+        //  This will ensure the VC is displayed.
+        let topController = topViewController()
+        topController.presentViewController(controller, animated: true, completion: nil)
+    }
+    
+    func topViewController() -> UIViewController {
+        let rootController = UIApplication.sharedApplication().keyWindow?.rootViewController
+        return topViewControllerFromRoot(rootController!)
+    }
+    
+    func topViewControllerFromRoot(rootVC:UIViewController) ->UIViewController{
+        if rootVC.isKindOfClass(UITabBarController) {
+            let tabVC = rootVC as! UITabBarController
+            return topViewControllerFromRoot(tabVC.selectedViewController!)
+        } else if rootVC.isKindOfClass(UINavigationController) {
+            let navC = rootVC as! UINavigationController
+            return topViewControllerFromRoot(navC.visibleViewController!)
+        } else if let presentedVC = rootVC.presentedViewController {
+            return topViewControllerFromRoot(presentedVC)
+        } else {
+            return rootVC
+        }
+    }
+    
+    // Called when AylaSessionManagerListener receives session closed event due to any error
+    func displayLoginView() {
+        
+        // If topVC is already login VC, do nothing
+        let topVC = topViewController()
+        if topVC.isKindOfClass(LoginViewController)  {
+            return;
+        }
+        
+        // Pop all existing VCs to root. Root is Login VC
+        let rootVC = UIApplication.sharedApplication().keyWindow?.rootViewController
+        rootVC?.dismissViewControllerAnimated(true, completion: nil)
+    }
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
