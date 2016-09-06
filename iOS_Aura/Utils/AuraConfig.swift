@@ -9,6 +9,36 @@ import Foundation
 import iOS_AylaSDK
 
 class AuraConfig {
+    class AuraDeviceConfig {
+        var dsn :String?
+        var oemModel :String?
+        var model :String?
+        var managedProperties :Array<String>?
+        
+        init (dsn :String, oemModel :String, model :String, managedProperties :Array<String>) {
+            self.dsn = dsn
+            self.oemModel = oemModel
+            self.model = model
+            self.managedProperties = managedProperties
+        }
+        
+        func toDictionary() -> NSDictionary {
+            let dictionary = NSMutableDictionary()
+            if let model = model {
+                dictionary["model"] = model
+            }
+            if let oemModel = oemModel {
+                dictionary["oemModel"] = oemModel
+            }
+            if let dsn = dsn {
+                dictionary["dsn"] = dsn
+            }
+            if let managedProperties = managedProperties {
+                dictionary["managedProperties"] = managedProperties
+            }
+            return dictionary
+        }
+    }
     
     static let KeyCurrentConfig = "current_config"
     static let KeyCurrentConfigName = "current_config_name"
@@ -103,5 +133,22 @@ class AuraConfig {
         if let defaultNetworkTimeoutMs = config["defaultNetworkTimeoutMs"] as? Int {
             settings.defaultNetworkTimeout = Double(defaultNetworkTimeoutMs / 1000)
         }
+    }
+    
+    static func createConfig(name:String, fromSettings settings:AylaSystemSettings, devices:Array<AuraDeviceConfig>?) throws -> NSData? {
+        guard let inmutableConfig = settings.toConfigDictionary(name)
+            else {
+                return nil
+        }
+        let config = NSMutableDictionary(dictionary: inmutableConfig)
+        
+        guard let devices = devices
+            else {
+                return try NSJSONSerialization.dataWithJSONObject(config, options: .PrettyPrinted)
+        }
+        
+        config["managedDevices"] = devices
+        
+        return try NSJSONSerialization.dataWithJSONObject(config, options: .PrettyPrinted)
     }
 }

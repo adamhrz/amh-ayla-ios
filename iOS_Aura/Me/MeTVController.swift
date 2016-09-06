@@ -16,10 +16,11 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     
     let sessionManager: AylaSessionManager?
     
-    struct Selection {
-        let myProfile = NSIndexPath(forRow: 0, inSection: 0)
-        let emaiLogs = NSIndexPath(forRow: 0, inSection: 1)
-        let logout = NSIndexPath(forRow: 0, inSection: 2)
+    enum Selection:Int {
+        case myProfile = 0
+        case emaiLogs
+        case configurationWizard
+        case logout
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,7 +34,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         SAMKeychain.deletePasswordForService(settings.appId, account: username)
         if let manager = sessionManager {
             manager.logoutWithSuccess({ () -> Void in
-                KeychainWrapper.removeObjectForKey("LANLoginAuthorization")
+                KeychainWrapper.defaultKeychainWrapper().removeObjectForKey("LANLoginAuthorization")
                 self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
                 });
                 }, failure: { (error) -> Void in
@@ -42,7 +43,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
                         let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                             
-                            KeychainWrapper.removeObjectForKey("LANLoginAuthorization")
+                            KeychainWrapper.defaultKeychainWrapper().removeObjectForKey("LANLoginAuthorization")
                             self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
                             });
                         })
@@ -107,16 +108,20 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selection = Selection()
-        if(indexPath == selection.myProfile) {
-            
-        } else if (indexPath == selection.emaiLogs) {
-            emailLogs()
-        } else if (indexPath == selection.logout) {
-            logout()
+        guard let selection = Selection(rawValue: indexPath.row)
+            else {
+                print("Unknown indexPath in `Me`")
+                return
         }
-        else {
-            print("Unknown indexPath in `Me`")
+        switch selection {
+        case .myProfile:
+            return
+        case .configurationWizard:
+            return
+        case .emaiLogs:
+            emailLogs()
+        case .logout:
+            logout()
         }
     }
     
