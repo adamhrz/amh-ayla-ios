@@ -61,6 +61,7 @@
 		A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */; };
 		A1D0914A1CCF0879003A4816 /* DeveloperOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
+		A51AC12B1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51AC12A1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
 		A57EDB7E1D7A04B600C9309E /* AuraConfig.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A57EDB7D1D7A04B600C9309E /* AuraConfig.storyboard */; };
@@ -164,6 +165,7 @@
 		A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LANOTAViewController.swift; path = Device/Presentation/LANOTAViewController.swift; sourceTree = "<group>"; };
 		A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
+		A51AC12A1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConfigDeviceViewController.swift; path = Me/AuraConfigDeviceViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
 		A57EDB7D1D7A04B600C9309E /* AuraConfig.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AuraConfig.storyboard; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				A78FEAD21C7FC6E700B7EA72 /* MeTVController.swift */,
 				A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */,
 				A57EDB7F1D7A09DA00C9309E /* AuraConfigViewController.swift */,
+				A51AC12A1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift */,
 			);
 			name = Me;
 			sourceTree = "<group>";
@@ -783,6 +786,7 @@
 				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 				A78DC8F51CB87289002EE6B0 /* LanModeTestModel.swift in Sources */,
 				5F3CFE3B1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.swift in Sources */,
+				A51AC12B1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift in Sources */,
 				0F0DD7B11D07825600013752 /* NodeRegistrationViewController.swift in Sources */,
 				0FE0D54A1CEE38EB009D8950 /* RegistrationModeSelectorTVCell.swift in Sources */,
 			);
