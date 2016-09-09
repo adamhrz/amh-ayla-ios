@@ -10,7 +10,6 @@ import iOS_AylaSDK
 import PDKeychainBindingsController
 import SAMKeychain
 import CoreTelephony
-import SwiftKeychainWrapper
 
 class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate {
     
