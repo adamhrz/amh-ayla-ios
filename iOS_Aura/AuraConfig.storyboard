@@ -287,7 +287,7 @@
                                                         <color key="titleColor" red="0.36506867408752441" green="0.79678308963775635" blue="0.55954498052597046" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="sendConfig:" destination="Xkf-Lh-m8e" eventType="touchUpInside" id="S6U-MD-8zS"/>
+                                                        <action selector="saveConfigAction:" destination="Xkf-Lh-m8e" eventType="touchUpInside" id="v00-od-kSo"/>
                                                     </connections>
                                                 </button>
                                             </subviews>

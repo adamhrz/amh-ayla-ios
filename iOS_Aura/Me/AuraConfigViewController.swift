@@ -25,12 +25,11 @@ class AuraConfigViewController: UITableViewController, UIPickerViewDelegate, UIP
     @IBOutlet weak var defaultNetworkTimeoutMSTextField: UITextField!
     @IBOutlet weak var configNameTextField: UITextField!
 
-    var settings : AylaSystemSettings!
     var deviceConfigurations = [[String:AnyObject]]()
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        settings = AylaNetworks.shared().systemSettings.aura_copy()
+        let settings = AylaNetworks.shared().systemSettings.aura_copy()
         self.appIdTextField.text = settings.appId
         self.appSecretTextField.text = settings.appSecret
         self.serviceTypePicker.selectRow(Int(settings.serviceType.rawValue), inComponent: 0, animated: true)
@@ -45,40 +44,66 @@ class AuraConfigViewController: UITableViewController, UIPickerViewDelegate, UIP
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func saveConfigAction(sender: AnyObject) {
+        guard let configPair = generateConfigData()
+            else {
+            return
+        }
+        
+        let fileManager = NSFileManager.defaultManager()
+        let paths = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let documentsDirectory = paths[0]
+        do {
+            let url = documentsDirectory.URLByAppendingPathComponent("\(configPair.configName).auraconfig")!
+            try configPair.configData.writeToFile(url.path!, options: .DataWritingAtomic)
+            self.navigationController?.popViewControllerAnimated(true)
+        } catch _ {
+            UIAlertController.alert("Error", message: "Could not write to file", buttonTitle: "OK", fromController: self)
+        }
+    }
+    
     @IBAction func sendConfig(sender: AnyObject) {
+        guard let configPair = generateConfigData()
+            else {
+            return
+        }
+        showMailComposer(configPair.configName, configData: configPair.configData)
+    }
+    func generateConfigData() -> (configName: String, configData: NSData)? {
         guard appIdTextField.text?.characters.count > 0
             else {
                 UIAlertController.alert("Error", message: "AppID is required", buttonTitle: "OK", fromController: self)
-                return
+                return nil
         }
         let appId = appIdTextField.text!
         
         guard appSecretTextField.text?.characters.count > 0
             else {
                 UIAlertController.alert("Error", message: "AppSecret is required", buttonTitle: "OK", fromController: self)
-                return
+                return nil
         }
         let appSecret = appSecretTextField.text!
         
         guard defaultNetworkTimeoutMSTextField.text?.characters.count > 0
             else {
                 UIAlertController.alert("Error", message: "defaultNetworkTimeout is required", buttonTitle: "OK", fromController: self)
-                return
+                return nil
         }
         guard let defaultNetworkTimeout = NSTimeInterval(defaultNetworkTimeoutMSTextField.text!)
             else {
                 UIAlertController.alert("Error", message: "defaultNetworkTimeout is invalid", buttonTitle: "OK", fromController: self)
-                return
+                return nil
         }
         
         guard configNameTextField.text?.characters.count > 0
             else {
                 UIAlertController.alert("Error", message: "Config name is required", buttonTitle: "OK", fromController: self)
-                return
+                return nil
         }
         let configName = configNameTextField.text!
         
         do {
+            let settings = AylaNetworks.shared().systemSettings.aura_copy()
             settings.appId = appId
             settings.appSecret = appSecret
             settings.serviceType = AylaServiceType(rawValue:UInt16(self.serviceTypePicker.selectedRowInComponent(0)))!
@@ -91,13 +116,14 @@ class AuraConfigViewController: UITableViewController, UIPickerViewDelegate, UIP
             guard let configData = try AuraConfig.createConfig(configName, fromSettings: settings, devices: deviceConfigurations)
                 else {
                     UIAlertController.alert("Error", message: "Invalid settings, could not create config file", buttonTitle: "OK", fromController: self)
-                    return
+                    return nil
             }
             let configText = String(data: configData, encoding: NSUTF8StringEncoding)
             print(configText!)
-            showMailComposer(configName, configData: configData)
+            return (configName, configData)
         } catch _ {
             UIAlertController.alert("Error", message: "Invalid settings, could not create config file", buttonTitle: "OK", fromController: self)
+            return nil
         }
         
     }
@@ -120,7 +146,8 @@ class AuraConfigViewController: UITableViewController, UIPickerViewDelegate, UIP
         }
     }
     func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        dismissViewControllerAnimated(true, completion: nil)
+        controller.dismissViewControllerAnimated(true, completion: nil)
+        UIAlertController.alert("Done", message: "Configuration sent", buttonTitle: "OK", fromController: self)
     }
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
@@ -211,6 +238,7 @@ class AuraConfigViewController: UITableViewController, UIPickerViewDelegate, UIP
             configuration.removeValueForKey("managedProperties")
         }
         
+        
         propertyCell?.textLabel?.text = configuration.description
         
         return propertyCell!
@@ -239,6 +267,6 @@ class AuraConfigViewController: UITableViewController, UIPickerViewDelegate, UIP
     func deviceConfiguration(deviceConfiguration: AuraConfigDeviceViewController, didFinishWithObject deviceConfig: [String : AnyObject]) {
         deviceConfigurations.append(deviceConfig)
         deviceConfiguration.navigationController?.popViewControllerAnimated(true)
-        tableView.reloadData()
+        tableView.reloadSections(NSIndexSet(index: Section.Devices.rawValue), withRowAnimation: .Automatic)
     }
 }

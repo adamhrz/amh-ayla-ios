@@ -17,12 +17,21 @@ class AuraConfigListTableViewController: UITableViewController {
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if let fileList = self.fetchFiles() {
+            configURLList = fileList
+        }
+        tableView.reloadData()
+    }
 
-    lazy var configURLList : [NSURL]! = {
-        [unowned self] in
+    var configURLList = [NSURL]()
+    
+    func fetchFiles() -> [NSURL]? {
         let fileManager = NSFileManager.defaultManager()
         
-        let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let paths = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         let documentsDirectory = paths[0]
         
         do {
@@ -41,7 +50,7 @@ class AuraConfigListTableViewController: UITableViewController {
             UIAlertController.alert("Error", message: "Could not read Documents directory", buttonTitle: "OK", fromController: self)
             return nil
         }
-    }()
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -88,4 +97,8 @@ class AuraConfigListTableViewController: UITableViewController {
         }
     }
 
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let url = configURLList[indexPath.row]
+        (UIApplication.sharedApplication().delegate as? AppDelegate)?.openConfigAtURL(url)
+    }
 }

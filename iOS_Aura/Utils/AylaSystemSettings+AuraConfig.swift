@@ -60,8 +60,8 @@ extension AylaSystemSettings {
         
         
         let dictionary = [
-            "allowDSS": allowDSS ? "true" : "false",
-            "allowOfflineUse": allowOfflineUse ? "true" : "false",
+            "allowDSS": allowDSS,
+            "allowOfflineUse": allowOfflineUse,
             "appId": appId,
             "appSecret": appSecret,
             "defaultNetworkTimeoutMs": defaultNetworkTimeout,
