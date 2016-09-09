@@ -76,7 +76,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Aura Config
         if url.fileURL && url.pathExtension == "auraconfig" {
-            let configData = NSData(contentsOfURL: url)
+            let fileManager = NSFileManager.defaultManager()
+            
+            let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+            let filePath = paths[0].URLByAppendingPathComponent(url.lastPathComponent!)
+            do {
+                try fileManager.moveItemAtURL(url, toURL: filePath!)
+            } catch _ {
+                UIAlertController.alert("Error", message: "Failed to import file, it won't be available later from configurations list", buttonTitle: "OK", fromController: (self.window?.rootViewController)!)
+            }
+            let configData = NSData(contentsOfURL: filePath!)
             do {
                 let configJSON = try NSJSONSerialization.JSONObjectWithData(configData!, options: .AllowFragments)
                 guard let configDict: NSDictionary = configJSON as? NSDictionary else {
