@@ -267,6 +267,7 @@
 				0F66C9181D4ADAF200738A16 /* NSError+AylaErrorUtils.swift */,
 				A13982791D473F9200F823A3 /* AuraConfig.swift */,
 				A57EDB811D7A240100C9309E /*  AylaSystemSettings+AuraConfig.swift */,
+				A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";

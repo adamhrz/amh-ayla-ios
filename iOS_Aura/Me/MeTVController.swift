@@ -33,18 +33,25 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         SAMKeychain.deletePasswordForService(settings.appId, account: username)
         if let manager = sessionManager {
             manager.logoutWithSuccess({ () -> Void in
-                KeychainWrapper.defaultKeychainWrapper().removeObjectForKey("LANLoginAuthorization")
-                self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
-                });
+                do {
+                    try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                    self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                    });
+                } catch _ {
+                    print("Failed to remove cached authorization")
+                }
                 }, failure: { (error) -> Void in
                     print("Log out operation failed: %@", error)
                     func alertWithLogout (message: String!, buttonTitle: String!){
                         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
                         let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-                            
-                            KeychainWrapper.defaultKeychainWrapper().removeObjectForKey("LANLoginAuthorization")
-                            self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
-                            });
+                            do {
+                                try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                                self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                                });
+                            } catch _ {
+                                print("Failed to remove cached authorization")
+                            }
                         })
                         alert.addAction(okAction)
                         self.presentViewController(alert, animated: true, completion: nil)
@@ -107,7 +114,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        guard let selection = Selection(rawValue: indexPath.row)
+        guard let selection = Selection(rawValue: indexPath.section)
             else {
                 print("Unknown indexPath in `Me`")
                 return
