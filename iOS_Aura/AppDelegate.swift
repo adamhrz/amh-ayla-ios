@@ -49,52 +49,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-        
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        
-        // Instantiate and display a UIAlertViewController as needed
-        func presentAlertController(title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?){
-            let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            if withOkayButton {
-                let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
-                    if let okayHandler = okayHandler{
-                        okayHandler()
+    
+    // Instantiate and display a UIAlertViewController as needed
+    func presentAlertController(title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        if withOkayButton {
+            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+                if let okayHandler = okayHandler{
+                    okayHandler()
+                }
+            })
+            alert.addAction(okAction)
+            if withCancelButton {
+                let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{(action) -> Void in
+                    if let cancelHandler = cancelHandler{
+                        cancelHandler()
                     }
                 })
-                alert.addAction(okAction)
-                if withCancelButton {
-                    let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{(action) -> Void in
-                        if let cancelHandler = cancelHandler{
-                            cancelHandler()
-                        }
-                    })
-                    alert.addAction(cancelAction)
-                }
-                displayViewController(alert)
+                alert.addAction(cancelAction)
             }
+            displayViewController(alert)
         }
+    }
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         
         // Aura Config
         if url.fileURL && url.pathExtension == "auraconfig" {
-            let configData = NSData(contentsOfURL: url)
+            let fileManager = NSFileManager.defaultManager()
+            
+            let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+            let filePath = paths[0].URLByAppendingPathComponent(url.lastPathComponent!)
             do {
-                let configJSON = try NSJSONSerialization.JSONObjectWithData(configData!, options: .AllowFragments)
-                guard let configDict: NSDictionary = configJSON as? NSDictionary else {
-                    presentAlertController("Invalid config file", message: nil, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
-                    return false
-                }
-                print("Aura Config: \(configDict)")
-                
-                let configName = configDict["name"] as! String
-                let storyboard = UIStoryboard(name: "Login", bundle: nil)
-                let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
-                let naviVC = UINavigationController(rootViewController: developOptionsVC)
-                developOptionsVC.currentConfig = AuraConfig(name: configName, config: configDict)
-                displayViewController(naviVC)
+                try fileManager.moveItemAtURL(url, toURL: filePath!)
+            } catch _ {
+                UIAlertController.alert("Error", message: "Failed to import file, it won't be available later from configurations list", buttonTitle: "OK", fromController: (self.window?.rootViewController)!)
             }
-            catch let error as NSError {
-                print(error)
-            }
+            
+            openConfigAtURL(filePath!)
             
             return true
         }
@@ -133,14 +125,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     // Get LoginManager and send account confirmation token
                                     let loginManager = AylaNetworks.shared().loginManager
                                     loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
-                                        presentAlertController("Account Confirmed",
+                                        self.presentAlertController("Account Confirmed",
                                             message: "Enter your credentials to log in",
                                             withOkayButton: true,
                                             withCancelButton: false,
                                             okayHandler:nil,
                                             cancelHandler:nil)
                                         }, failure: { (error) -> Void in
-                                            presentAlertController("Account Confirmation Failed.",
+                                            self.presentAlertController("Account Confirmation Failed.",
                                                 message: "Account may already be confirmed. Try logging in.",
                                                 withOkayButton: true,
                                                 withCancelButton: false,
@@ -172,6 +164,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                         cancelHandler:nil)
         }
         return true
+    }
+    
+    func openConfigAtURL(filePath :NSURL) {
+        let configData = NSData(contentsOfURL: filePath)
+        do {
+            let configJSON = try NSJSONSerialization.JSONObjectWithData(configData!, options: .AllowFragments)
+            guard let configDict: NSDictionary = configJSON as? NSDictionary else {
+                presentAlertController("Invalid config file", message: nil, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
+                return
+            }
+            print("Aura Config: \(configDict)")
+            
+            let configName = configDict["name"] as! String
+            let storyboard = UIStoryboard(name: "Login", bundle: nil)
+            let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+            let naviVC = UINavigationController(rootViewController: developOptionsVC)
+            developOptionsVC.currentConfig = AuraConfig(name: configName, config: configDict)
+            displayViewController(naviVC)
+        }
+        catch let error as NSError {
+            print(error)
+        }
     }
     
     func displayViewController(controller: UIViewController){

@@ -104,4 +104,18 @@ class AuraConfig {
             settings.defaultNetworkTimeout = Double(defaultNetworkTimeoutMs / 1000)
         }
     }
+    
+    static func createConfig(name:String, fromSettings settings:AylaSystemSettings, devices:[[String:AnyObject]]?) throws -> NSData? {
+        guard let inmutableConfig = settings.toConfigDictionary(name)
+            else {
+                return nil
+        }
+        let config = NSMutableDictionary(dictionary: inmutableConfig)
+        
+        if devices?.count > 0 {
+            config["managedDevices"] = devices!
+        }
+        
+        return try NSJSONSerialization.dataWithJSONObject(config, options: .PrettyPrinted)
+    }
 }
