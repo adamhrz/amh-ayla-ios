@@ -46,9 +46,14 @@ The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).
 
 If you would like to contribute your own code change to our project, please submit pull requests against the "incoming" branch on Github. We will review and approve your pull requests if appropriate.
 
+##Version of major build tools used
+===================================
+Xcode: 7.3.1
+CocoaPods: 1.0.1
+
 #Release Notes
 
-v5.2.00    2016-08-2;2
+v5.2.00    2016-08-22
 ------
 New & Improved
 - Offline (LAN) sign-in and LAN device connectivity using cached data
