@@ -58,6 +58,19 @@ def set_version_string(version)
     end
 end
 
+def set_build_tool_version
+    vXcode = `xcodebuild -version | grep Xcode | cut -d' ' -f 2`
+    vCocoapods = `pod --version`
+    readmeFile = "../README.md"
+
+    puts "Your Xcode version is: #{vXcode.chomp}"
+    puts "Your Cocoapds version is: #{vCocoapods}"
+    file_contents = File.read(readmeFile)
+    file_contents.gsub!(/(.*Xcode: )(.*[\s])(.*)/, "\\1#{vXcode}\\3")
+    file_contents.gsub!(/(.*CocoaPods: )(.*[\s])(.*)/, "\\1#{vCocoapods}\\3")
+    File.write(readmeFile, file_contents)
+end
+
 platform :ios do
   before_all do
     # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
@@ -102,6 +115,11 @@ platform :ios do
   lane :set_version do |options|
      check_required_argument(options[:version], "version:x.y.z")
      set_version_string(options[:version])
+  end
+
+  lane :set_build_tool_version do
+    # automatically set build too version in README.md file
+    set_build_tool_version
   end
 
   desc "make a release. This lane requires: 1) \"public\" and \"origin\" remote have been configured; 2) developers should have already added release notes in README.md"
