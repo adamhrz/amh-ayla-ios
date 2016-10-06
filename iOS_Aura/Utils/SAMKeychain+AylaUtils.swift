@@ -26,7 +26,9 @@ extension SAMKeychain {
         query.service = serviceName
         query.account = account
         try query.fetch()
-        
-        return NSKeyedUnarchiver.unarchiveObjectWithData(query.passwordData);
+        if let data = query.passwordData {
+            return NSKeyedUnarchiver.unarchiveObjectWithData(data)
+        }
+        return nil
     }
 }
