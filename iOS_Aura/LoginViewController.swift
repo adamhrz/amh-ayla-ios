@@ -42,13 +42,14 @@ class LoginViewController: UIViewController {
      */
     func autoLogin() {
         let settings = AylaNetworks.shared().systemSettings
-        let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
-        let password = SAMKeychain.passwordForService(settings.appId, account: username)
-        self.usernameTextField.text = username
-        self.passwordTextField.text = password
-        
-        if username?.characters.count > 0 && password?.characters.count > 0 {
-            login(self)
+        if let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey) {
+            let password = SAMKeychain.passwordForService(settings.appId, account: username)
+            self.usernameTextField.text = username
+            self.passwordTextField.text = password
+            
+            if username.characters.count > 0 && password?.characters.count > 0 {
+                login(self)
+            }
         }
     }
     
@@ -84,11 +85,13 @@ class LoginViewController: UIViewController {
                 self.dismissLoading(false, completion: { () -> Void in
                     do {
                         try SAMKeychain.setObject(authorization, forService: "LANLoginAuthorization", account: username)
-                        // Once succeeded, present view controller in `Main` storyboard.
-                        self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
-                    } catch _ {
+                        
+                    } catch {
+                        let err = error as NSError
                         print("Failed to save authorization")
                     }
+                    // Once succeeded, present view controller in `Main` storyboard.
+                    self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
                 })
 
             }
