@@ -8,7 +8,7 @@ import UIKit
 import PDKeychainBindingsController
 import iOS_AylaSDK
 
-class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AylaDeviceWifiStateChangeListener {
 
     /// Setup cell id
     private static let CellId: String = "SetupCellId"
@@ -49,6 +49,9 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         setup = AylaSetup(SDKRoot: AylaNetworks.shared())
         
         super.init(coder: aDecoder)
+        
+        //register as WiFi State listener
+        setup.addWiFiStateListener(self)
         
         // Monitor connectivity
         monitorDeviceConnectivity()
@@ -299,6 +302,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     deinit {
         setup.removeObserver(self, forKeyPath: "setupDevice.connected")
+        setup.removeWiFiStateListener(self)
     }
     
     // MARK: - Table view delegate
@@ -380,6 +384,13 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
+    }
+    
+    func wifiStateDidChange(state: String) {
+        let prompt = "WiFi State: \(state)"
+        print(prompt)
+        updatePrompt(prompt)
+        addDescription(prompt)
     }
 
 }
