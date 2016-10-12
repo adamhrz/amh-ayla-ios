@@ -122,5 +122,8 @@ class AuraConsoleTextView : UITextView {
         
     }
     
+    func clear() {
+        self.attributedText = NSMutableAttributedString()
+    }
 }
 

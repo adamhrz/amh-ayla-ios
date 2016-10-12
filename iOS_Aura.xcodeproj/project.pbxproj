@@ -64,6 +64,7 @@
 		A51AC12B1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51AC12A1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
+		A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */; };
 		A57EDB7E1D7A04B600C9309E /* AuraConfig.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A57EDB7D1D7A04B600C9309E /* AuraConfig.storyboard */; };
 		A57EDB801D7A09DA00C9309E /* AuraConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57EDB7F1D7A09DA00C9309E /* AuraConfigViewController.swift */; };
 		A57EDB821D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */; };
@@ -170,6 +171,7 @@
 		A51AC12A1D7F5D7B00A9F94B /* AuraConfigDeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConfigDeviceViewController.swift; path = Me/AuraConfigDeviceViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
+		A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkProfilerModel.swift; sourceTree = "<group>"; };
 		A57EDB7D1D7A04B600C9309E /* AuraConfig.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AuraConfig.storyboard; sourceTree = "<group>"; };
 		A57EDB7F1D7A09DA00C9309E /* AuraConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConfigViewController.swift; path = Me/AuraConfigViewController.swift; sourceTree = "<group>"; };
 		A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AylaSystemSettings+AuraConfig.swift"; path = "Utils/AylaSystemSettings+AuraConfig.swift"; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				A78DC8F41CB87289002EE6B0 /* LanModeTestModel.swift */,
+				A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */,
 			);
 			name = Test;
 			path = Device/Test;
@@ -784,6 +787,7 @@
 				0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */,
 				A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
+				A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */,
 				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
 				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
 				5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */,
