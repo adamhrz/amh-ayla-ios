@@ -44,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         AylaLogManager.sharedManager().loggingLevel = .Info
         
+        AylaNetworks.enableNetworkProfiler()
+        
         UITabBar.appearance().tintColor = UIColor.auraTintColor()
         UINavigationBar.appearance().tintColor = UIColor.auraTintColor()
         

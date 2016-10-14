@@ -20,6 +20,9 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     /// Segue id to test view
     let segueIdToLanTestView: String = "toLanModeTest"
     
+    /// Segue id to test view
+    let segueIdToNetworkProfilerView: String = "toNetworkProfiler"
+    
     /// Segue id to schedules view
     let segueIdToSchedules: String = "toSchedules"
 
@@ -120,6 +123,10 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         let testRunner = UIAlertAction(title: "TestRunner", style: .Default) { (action) in
             self.performSegueWithIdentifier(self.segueIdToLanTestView, sender: nil)
         }
+        
+        let networkProfiler = UIAlertAction(title: "Network Profiler", style: .Default) { (action) in
+            self.performSegueWithIdentifier(self.segueIdToNetworkProfilerView, sender: nil)
+        }
         let rename = UIAlertAction(title: "Rename", style: .Default) { (action) in
             self.rename()
         }
@@ -144,6 +151,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
         }
         
         alert.addAction(testRunner)
+        alert.addAction(networkProfiler)
         alert.addAction(rename)
         alert.addAction(share)
         alert.addAction(timeZone)
@@ -217,6 +225,11 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             let nvc = segue.destinationViewController as! UINavigationController
             let vc = nvc.viewControllers[0] as! TestPanelViewController
             vc.testModel = LanModeTestModel(testPanelVC: vc, deviceManager: device?.deviceManager, device: device)
+        }
+        else if segue.identifier ==  segueIdToNetworkProfilerView {
+            let nvc = segue.destinationViewController as! UINavigationController
+            let vc = nvc.viewControllers[0] as! TestPanelViewController
+            vc.testModel = NetworkProfilerModel(testPanelVC: vc, device: device)
         }
         else if segue.identifier == segueIdToSchedules {
             let vc = segue.destinationViewController as! ScheduleTableViewController
