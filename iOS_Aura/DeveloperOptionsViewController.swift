@@ -21,9 +21,14 @@ class ConfigDetailCell: UITableViewCell {
     @IBOutlet private weak var allowOfflineLabel: UILabel!
     @IBOutlet private weak var networkTimeoutLabel: UILabel!
     
-    func configCell(config: NSDictionary) {
+    func configCell(config: NSDictionary, showSecret: Bool) {
         appIdLabel.text = config["appId"] as? String
-        appSecretLabel.text = config["appSecret"] as? String
+        if showSecret {
+            appSecretLabel.text = config["appSecret"] as? String
+        } else {
+            appSecretLabel.text = "*********"
+        }
+        
         serviceTypeLabel.text = config["serviceType"] as? String
         serviceLocationLabel.text = config["serviceLocation"] as? String
         
@@ -180,7 +185,7 @@ class DeveloperOptionsViewController: UITableViewController {
         
         if indexPath.section == Section.Details.rawValue {
             cell = tableView.dequeueReusableCellWithIdentifier(IdentifyConfigItemCell)!
-            (cell as! ConfigDetailCell).configCell(self.currentConfig.config)
+            (cell as! ConfigDetailCell).configCell(self.currentConfig.config, showSecret:easterEgg)
         } else if indexPath.section == Section.Defaults.rawValue {
             cell = tableView.dequeueReusableCellWithIdentifier(IdentifyAvailableCell)!
             let name = self.defaultConfigurations[indexPath.row].name
