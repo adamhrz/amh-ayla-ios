@@ -326,7 +326,7 @@ class DeveloperOptionsViewController: UITableViewController {
             SAMKeychain.deletePasswordForService(settings.appId, account: username)
             
             if let manager = sessionManager {
-                manager.logoutWithSuccess({ () -> Void in
+                manager.shutDownWithSuccess({ () -> Void in
                     do {
                         try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
                     } catch _ {
