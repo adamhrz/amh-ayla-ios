@@ -13,13 +13,13 @@ import SAMKeychain
 
 class ConfigDetailCell: UITableViewCell {
     
-    @IBOutlet weak var appIdLabel: UILabel!
-    @IBOutlet weak var appSecretLabel: UILabel!
-    @IBOutlet weak var serviceTypeLabel: UILabel!
-    @IBOutlet weak var serviceLocationLabel: UILabel!
-    @IBOutlet weak var allowDSSLabel: UILabel!
-    @IBOutlet weak var allowOfflineLabel: UILabel!
-    @IBOutlet weak var networkTimeoutLabel: UILabel!
+    @IBOutlet private weak var appIdLabel: UILabel!
+    @IBOutlet private weak var appSecretLabel: UILabel!
+    @IBOutlet private weak var serviceTypeLabel: UILabel!
+    @IBOutlet private weak var serviceLocationLabel: UILabel!
+    @IBOutlet private weak var allowDSSLabel: UILabel!
+    @IBOutlet private weak var allowOfflineLabel: UILabel!
+    @IBOutlet private weak var networkTimeoutLabel: UILabel!
     
     func configCell(config: NSDictionary) {
         appIdLabel.text = config["appId"] as? String
@@ -31,22 +31,19 @@ class ConfigDetailCell: UITableViewCell {
         
         if let allowDSS = config["allowDSS"] as? Bool {
             allowDSSLabel.text = allowDSS ? "YES" : "NO"
-        }
-        else {
+        } else {
             allowDSSLabel.text = settings.allowDSS ? "YES" : "NO"
         }
         
         if let allowOfflineUse = config["allowOfflineUse"] as? Bool {
             allowOfflineLabel.text = allowOfflineUse ? "YES" : "NO"
-        }
-        else {
+        } else {
             allowOfflineLabel.text = settings.allowOfflineUse ? "YES" : "NO"
         }
         
         if let timeout = config["defaultNetworkTimeoutMs"] as? Int {
             networkTimeoutLabel.text = String(timeout)
-        }
-        else {
+        } else {
             networkTimeoutLabel.text = String(settings.defaultNetworkTimeout * 1000)
         }
     }
@@ -54,8 +51,8 @@ class ConfigDetailCell: UITableViewCell {
 
 class DeveloperOptionsViewController: UITableViewController {
     
-    let IdentifyAvailibaleCell = "AvailableConfig"
-    let IdentifyConfigItemCell = "ConfigDetail"
+    private let IdentifyAvailableCell = "AvailableConfig"
+    private let IdentifyConfigItemCell = "ConfigDetail"
     
     var currentConfig: AuraConfig! {
         didSet {
@@ -65,7 +62,7 @@ class DeveloperOptionsViewController: UITableViewController {
         }
     }
 
-    var currentConfigIndexPath: NSIndexPath!
+    private var currentConfigIndexPath: NSIndexPath!
     
     var easterEgg: Bool = false {
         didSet {
@@ -79,9 +76,9 @@ class DeveloperOptionsViewController: UITableViewController {
     var fromLoginScreen: Bool = false
     var newConfigImport: Bool = false
     
-    var defaultConfigurations: [AuraConfig] = AuraConfig.defaultConfigurations
+    private var defaultConfigurations: [AuraConfig] = AuraConfig.defaultConfigurations
     
-    enum Section :Int {
+    private enum Section :Int {
         case Header
         case Defaults
         case Custom
@@ -89,7 +86,7 @@ class DeveloperOptionsViewController: UITableViewController {
         case SectionCount
     }
     
-    var configURLList = [NSURL]()
+    private var configURLList = [NSURL]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,12 +97,6 @@ class DeveloperOptionsViewController: UITableViewController {
         if let fileList = self.fetchConfigFileURLs() {
             configURLList = fileList
         }
-        
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -120,7 +111,7 @@ class DeveloperOptionsViewController: UITableViewController {
         }
     }
     
-    func fetchConfigFileURLs() -> [NSURL]? {
+    private func fetchConfigFileURLs() -> [NSURL]? {
         let fileManager = NSFileManager.defaultManager()
         
         let paths = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
@@ -191,7 +182,7 @@ class DeveloperOptionsViewController: UITableViewController {
             cell = tableView.dequeueReusableCellWithIdentifier(IdentifyConfigItemCell)!
             (cell as! ConfigDetailCell).configCell(self.currentConfig.config)
         } else if indexPath.section == Section.Defaults.rawValue {
-            cell = tableView.dequeueReusableCellWithIdentifier(IdentifyAvailibaleCell)!
+            cell = tableView.dequeueReusableCellWithIdentifier(IdentifyAvailableCell)!
             let name = self.defaultConfigurations[indexPath.row].name
             cell.textLabel?.text = name
             if name == currentConfig.name {
@@ -201,7 +192,7 @@ class DeveloperOptionsViewController: UITableViewController {
                 cell.accessoryType = .None
             }
         } else if indexPath.section == Section.Custom.rawValue {
-            cell = tableView.dequeueReusableCellWithIdentifier(IdentifyAvailibaleCell)!
+            cell = tableView.dequeueReusableCellWithIdentifier(IdentifyAvailableCell)!
             let url = configURLList[indexPath.row]
             cell.textLabel?.text = url.lastPathComponent
             if url.lastPathComponent == String(format:"%@.auraconfig", currentConfig.name) {
@@ -244,10 +235,9 @@ class DeveloperOptionsViewController: UITableViewController {
             if let config = (UIApplication.sharedApplication().delegate as? AppDelegate)?.loadConfigAtURL(url) {
                 self.currentConfig = config
                 tableView.reloadData()
-            } else {
-                
             }
         }
+        
         if self.currentConfig.name != AuraConfig.currentConfig().name {
             self.navigationItem.rightBarButtonItem?.enabled = true
         } else {
@@ -285,7 +275,7 @@ class DeveloperOptionsViewController: UITableViewController {
     }
     
     
-    @IBAction func savePressed(sender: AnyObject) {
+    @IBAction private func savePressed(sender: AnyObject) {
         var message = "Please log in using an account for the configuration selected, or create a new account for this configuration."
         if !fromLoginScreen {
             message = "You will now be logged out.  " + message
@@ -293,12 +283,9 @@ class DeveloperOptionsViewController: UITableViewController {
         
         let alert = UIAlertController(title:"New Configuration Selected.", message:message, preferredStyle: UIAlertControllerStyle.Alert)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            //self.navigationController?.dismissViewControllerAnimated(true, completion: {
-                self.saveConfigs()
-                //})
+            self.saveConfigs()
         })
         let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-            
         })
         alert.addAction(okAction)
         alert.addAction(cancelAction)
@@ -306,7 +293,7 @@ class DeveloperOptionsViewController: UITableViewController {
         self.presentViewController(alert, animated: true, completion: nil)
     }
 
-    @IBAction func cancelPressed(sender: AnyObject) {
+    @IBAction private func cancelPressed(sender: AnyObject) {
         if fromLoginScreen || newConfigImport {
             self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
         } else {
@@ -314,8 +301,7 @@ class DeveloperOptionsViewController: UITableViewController {
         }
     }
     
-
-    func saveConfigs() {
+    private func saveConfigs() {
         let settings = AylaSystemSettings.defaultSystemSettings()
         let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
         
