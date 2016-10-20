@@ -24,6 +24,8 @@ extension NSError {
                 }
                 return returnString?.capitalizedString
             }
+        } else if let originalError = self.userInfo[AylaHTTPErrorOrignialErrorKey] as? NSError {
+            return originalError.localizedDescription
         }
         return nil
     }
@@ -52,13 +54,14 @@ extension NSError {
             if let response = originalError.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] as? NSHTTPURLResponse {
                 if let returnText = response.allHeaderFields["Text" as NSObject] as? String {
                     return returnText.capitalizedString
-                } else {
-                    return self.responseError
                 }
             }
-        } else {
-            return self.responseError
         }
-        return nil
+        return self.responseError
+    }
+    
+    func displayAsAlertController() {
+        let message = String(format:"%@", self.aylaServiceDescription ?? "Unknown Error")
+        (UIApplication.sharedApplication().delegate as! AppDelegate).presentAlertController("Error", message:message , withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
     }
 }
