@@ -169,24 +169,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func openConfigAtURL(filePath :NSURL) {
+        if let loadedConfig = loadConfigAtURL(filePath) {
+            let storyboard = UIStoryboard(name: "Login", bundle: nil)
+            let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+            let naviVC = UINavigationController(rootViewController: developOptionsVC)
+            developOptionsVC.currentConfig = loadedConfig
+            developOptionsVC.newConfigImport = true
+            displayViewController(naviVC)
+        }
+
+    }
+    
+    func loadConfigAtURL(filePath :NSURL) -> AuraConfig? {
         let configData = NSData(contentsOfURL: filePath)
         do {
             let configJSON = try NSJSONSerialization.JSONObjectWithData(configData!, options: .AllowFragments)
             guard let configDict: NSDictionary = configJSON as? NSDictionary else {
                 presentAlertController("Invalid config file", message: nil, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
-                return
+                return nil
             }
             print("Aura Config: \(configDict)")
             
             let configName = configDict["name"] as! String
-            let storyboard = UIStoryboard(name: "Login", bundle: nil)
-            let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
-            let naviVC = UINavigationController(rootViewController: developOptionsVC)
-            developOptionsVC.currentConfig = AuraConfig(name: configName, config: configDict)
-            displayViewController(naviVC)
+            return AuraConfig(name: configName, config: configDict)
         }
         catch let error as NSError {
             print(error)
+            let message = String(format: "Something went wrong with the config file: \n%@", error.localizedDescription)
+            presentAlertController("Error", message: message, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
+            return nil
         }
     }
     

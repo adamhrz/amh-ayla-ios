@@ -14,6 +14,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var configLabel: UILabel!
+    @IBOutlet weak var settingsButton: UIButton!
     
     /// Id of a segue which is linked to `Main` storyboard.
     let segueIdToMain :String = "toMain"
@@ -21,16 +23,30 @@ class LoginViewController: UIViewController {
     /// Current presenting alert controller.
     var alert: UIAlertController?
     
+    var easterEgg: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         logoImageView.image = logoImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
         logoImageView.tintColor = UIColor.aylaBahamaBlueColor()
-        
+        configLabel.text = ""
+        settingsButton.tintColor = UIColor.aylaHippieGreenColor()
         // Add tap recognizer to dismiss keyboard.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
     }
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let config = AuraConfig.currentConfig()
+        if config.name != AuraConfig.ConfigNameUSDev {
+            configLabel.text = "Config: " + config.name
+        } else {
+            configLabel.text = ""
+        }
+    }
+    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -88,7 +104,7 @@ class LoginViewController: UIViewController {
                         
                     } catch {
                         let err = error as NSError
-                        print("Failed to save authorization")
+                        print("Failed to save authorization: %@", err.aylaServiceDescription)
                     }
                     // Once succeeded, present view controller in `Main` storyboard.
                     self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
@@ -125,7 +141,7 @@ class LoginViewController: UIViewController {
     @IBAction func resendConfirmation(sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
-            usernameTextField.text = "CAN NOT BE BLANK"
+            presentLoading("Please enter a username.")
         }
         else {
             
@@ -149,11 +165,12 @@ class LoginViewController: UIViewController {
     
     @IBAction func resetPassword(sender: AnyObject) {
         if (usernameTextField.text ?? "") == "" {
-            usernameTextField.text = "CAN NOT BE BLANK"
+            presentLoading("Please enter a username.")
         }
         else if usernameTextField.text == AuraOptions.EasterEgg {
+            self.easterEgg = true
             self.dismissKeyboard()
-            self.performSegueWithIdentifier("RegionOptions", sender: nil)
+            self.performSegueWithIdentifier("CustomConfigSegue", sender: nil)
         }
         else {
             
@@ -175,6 +192,9 @@ class LoginViewController: UIViewController {
         }
     }
     
+    @IBAction func settingsButtonPressed(sender: AnyObject) {
+        performSegueWithIdentifier("CustomConfigSegue", sender: self)
+    }
     /**
      Helpful method to present `loading`
      
@@ -234,6 +254,11 @@ class LoginViewController: UIViewController {
                 oAuthController.authType = (segueIdentifier == "OAuthLoginSegueFacebook") ? AylaOAuthType.Facebook : AylaOAuthType.Google
                 // pass a reference to self to continue login after a sucessful OAuthentication
                 oAuthController.mainLoginViewController = self
+            case "CustomConfigSegue":
+                let navigationViewController = segue.destinationViewController as! UINavigationController
+                let configViewController = navigationViewController.viewControllers.first! as! DeveloperOptionsViewController
+                configViewController.easterEgg = self.easterEgg ? true : false
+                configViewController.fromLoginScreen = true
             default: break
             }
         }
