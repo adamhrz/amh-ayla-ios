@@ -45,6 +45,25 @@ extension AylaServiceLocation {
     }
 }
 
+extension AylaServiceLocation {
+    func locationForName(name:String!) -> AylaServiceLocation! {
+        switch name {
+        case "China", "CN":
+            return .CN
+            
+        case "Europe", "EU":
+            return .EU
+            
+        case "United States", "US", "USA":
+            return .US
+            
+        default:
+            return .US
+        }
+    }
+}
+
+
 extension AylaSystemSettings {
     public func toConfigDictionary(name:String) -> Dictionary<String, AnyObject>?{
         guard let serviceType = self.serviceType.name()

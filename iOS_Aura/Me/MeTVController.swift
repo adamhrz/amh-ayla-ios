@@ -35,11 +35,11 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
             manager.logoutWithSuccess({ () -> Void in
                 do {
                     try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
-                    self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
-                    });
                 } catch _ {
                     print("Failed to remove cached authorization")
                 }
+                self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                });
                 }, failure: { (error) -> Void in
                     print("Log out operation failed: %@", error)
                     func alertWithLogout (message: String!, buttonTitle: String!){
@@ -47,11 +47,11 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                         let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                             do {
                                 try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
-                                self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
-                                });
                             } catch _ {
                                 print("Failed to remove cached authorization")
                             }
+                            self.navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                            });
                         })
                         alert.addAction(okAction)
                         self.presentViewController(alert, animated: true, completion: nil)
@@ -113,6 +113,14 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
+    func customOEMConfigs() {
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+        //let naviVC = UINavigationController(rootViewController: developOptionsVC)
+        developOptionsVC.currentConfig = AuraConfig.currentConfig()
+        self.navigationController?.pushViewController(developOptionsVC, animated: true)
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         guard let selection = Selection(rawValue: indexPath.section)
             else {
@@ -123,7 +131,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         case .myProfile:
             return
         case .configurationWizard:
-            return
+            customOEMConfigs()
         case .emaiLogs:
             emailLogs()
         case .logout:

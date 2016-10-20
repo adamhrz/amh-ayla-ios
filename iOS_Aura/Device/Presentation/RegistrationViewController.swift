@@ -232,7 +232,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         if latString == nil || lngString == nil || latString?.characters.count < 1 || lngString?.characters.count < 1 {
             return false
         }
-        if let latDouble = Double(latString!), lngDouble = Double(lngString!) {
+        if let latDouble = Double(latString!), let lngDouble = Double(lngString!) {
             if case (-180...180, -180...180) = (latDouble, lngDouble) {
                 return true
             }
