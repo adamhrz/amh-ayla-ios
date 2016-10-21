@@ -28,9 +28,9 @@ The following steps should be run in Terminal.
 Once the Pods have been installed correctly, Cocoapods will generate a `iOS_Aura.xcworkspace` file.
 When opening Aura in Xcode, be sure to _only open the .xcworkspace_ file.
 
-##Documentation
+##SDK Documentation
 
-The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).  To build the SDK docset, after the Pods are installed, follow the instructions located at: \<repo directory\>/Pods/iOS_AylaSDK/README.md
+The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).  To build the SDK docset, you must clone the SDK and build the docset from there, following instructions in the SDK's README.md file.
 
 ##Dependencies
 
