@@ -30,7 +30,7 @@ When opening Aura in Xcode, be sure to _only open the .xcworkspace_ file.
 
 ##SDK Documentation
 
-The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).  To build the SDK docset, you must clone the SDK and build the docset from there, following instructions in the SDK's README.md file.
+The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).  To build and install the Ayla SDK docset, you must [clone the SDK](https://github.com/AylaNetworks/iOS_AylaSDK_Public.git) and build the docset from there, following instructions in the SDK's README.md file.
 
 ##Dependencies
 
