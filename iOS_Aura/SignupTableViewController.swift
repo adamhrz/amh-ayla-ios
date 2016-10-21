@@ -101,7 +101,7 @@ class SignupTableViewController: UITableViewController {
         }) { (error) -> Void in
             self.signupButton.enabled = true
             self.signupButton.alpha = 1.0
-            UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
+            UIAlertController.alert("Error", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
         }
     }
     
@@ -131,7 +131,7 @@ class SignupTableViewController: UITableViewController {
                     }
                 })
                 }, failure: { (error) -> Void in
-                    UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
+                    UIAlertController.alert("Error", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
             })
         }
         
