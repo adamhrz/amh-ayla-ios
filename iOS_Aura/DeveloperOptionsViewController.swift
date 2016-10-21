@@ -360,7 +360,7 @@ class DeveloperOptionsViewController: UITableViewController {
                         case AylaHTTPErrorCode.LostConnectivity.rawValue:
                             alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
                         default:
-                            alertWithLogout("An error has occurred.\n" + (error.aylaServiceDescription ?? ""), buttonTitle: "Continue")
+                            alertWithLogout("An error has occurred.\n" + (error.aylaServiceDescription), buttonTitle: "Continue")
                             
                         }
                 })

@@ -61,7 +61,7 @@ class LANOTAViewController: UIViewController {
         },
         failure: { error in
             self.showAlert("Failed to fetch OTA image info", message: (error.localizedDescription))
-            self.addDescription("Failed to fetch OTA image info: \(error.aylaServiceDescription ?? String(error.userInfo))")
+            self.addDescription("Failed to fetch OTA image info: \(error.aylaServiceDescription)")
             
             sender.backgroundColor = UIColor.auraRedColor()
         })
@@ -83,7 +83,7 @@ class LANOTAViewController: UIViewController {
                 },
                 failure: { error in
                     self.progressAlert?.dismissViewControllerAnimated(false, completion: nil)
-                    let message = "Failed to download image: \(error.aylaServiceDescription ?? String(error.userInfo))"
+                    let message = "Failed to download image: \(error.aylaServiceDescription)"
                     self.showAlert("Error", message: message)
                     self.addDescription(message)
                     sender.backgroundColor = UIColor.auraRedColor()

@@ -225,7 +225,7 @@ class LoginViewController: UIViewController {
      Use to display an message.
      */
     func presentError(error: NSError) {
-        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription ?? error.description) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
         
         alert.addAction(UIAlertAction(
             title: "Got it", style: .Cancel, handler: nil))
