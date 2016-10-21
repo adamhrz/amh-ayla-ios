@@ -170,7 +170,7 @@ class ProfileTableViewController: UITableViewController {
             UIAlertController.alert("Done", message: "Profile updated", buttonTitle: "OK", fromController: self)
             }, failure: { (error) in
                 //show error message
-                UIAlertController.alert("Error", message: "An error occurred", buttonTitle: "OK", fromController: self)
+                UIAlertController.alert("Error Loading Profile", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
         })
     }
     
@@ -197,6 +197,7 @@ class ProfileTableViewController: UITableViewController {
             self.syncUI()
             }, failure: { (error) in
                 print(error)
+                UIAlertController.alert("Error", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
         })
     }
 
