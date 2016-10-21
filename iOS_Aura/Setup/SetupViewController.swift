@@ -280,15 +280,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let currentAlert = alert {
             currentAlert.dismissViewControllerAnimated(false, completion: nil)
         }
-        var message = "Unknown Error Occurred."
-        if let errorKey = error.userInfo[AylaRequestErrorResponseJsonKey] {
-            if errorKey.isKindOfClass(NSDictionary){
-                message = errorKey.description
-            } else {
-                message = errorKey as! String
-            }
-        }
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Error", message: error.aylaServiceDescription, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Got it", style: .Cancel, handler: nil))
         alert = alertController
         self.presentViewController(alertController, animated: true, completion: nil)
