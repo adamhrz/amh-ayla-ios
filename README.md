@@ -53,6 +53,26 @@ CocoaPods: 1.0.1
 
 #Release Notes
 
+v5.3.00     2016-10-21
+------
+New & Improved
+- Support for iOS_AylaSDK 5.3.00
+- New iOS 10 support
+- New 4.x to 5.x SDK transition guide
+- New API for Notification/Alert History - Retrieve all notifications sent for a given device
+- New SDK Universal static library build target
+- New API for SSO Sign-out support
+- New API WiFi Setup state listener
+- New Aura OEM Config: Just for IoT HW Engineers - Use core Aura features without knowing Objective-C, Java, or Swift!
+- New Aura Test Runner: Network Profiler - Easily monitor round-trip network times
+- Improved feedback during WiFi Setup
+
+Bug Fixes & Chores
+- Improved Discovery operation
+- More and improved unit tests
+- Improved AylaSSO support through AuthProvider Class
+- All 5.2.xx hot-fixes
+
 v5.2.00    2016-08-22
 ------
 New & Improved
