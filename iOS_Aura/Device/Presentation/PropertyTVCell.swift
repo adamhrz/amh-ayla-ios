@@ -112,6 +112,7 @@ class PropertyTVCell: UITableViewCell {
             }, failure: { (error) -> Void in
                 reenableCell()
                 print("Create Datapoint Failed.")
+                error.displayAsAlertController()
         })
     }
 }

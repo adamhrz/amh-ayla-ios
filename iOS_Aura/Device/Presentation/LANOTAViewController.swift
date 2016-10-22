@@ -18,6 +18,8 @@ class LANOTAViewController: UIViewController {
     @IBOutlet private weak var dsnField: UITextField!
     @IBOutlet private weak var lanIPField: UITextField!
     
+    var progressAlert: UIAlertController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -50,35 +52,46 @@ class LANOTAViewController: UIViewController {
             self.device = AylaLANOTADevice(sessionManager: sessionManager!, DSN: dsn, lanIP: lanIP)
         }
         
-        updatePrompt("checkOTAInfoFromCloud")
         addDescription("Checking Service for an available OTA Image for this device.")
         self.device?.fetchOTAImageInfoWithSuccess({ [weak self] imageInfo in
             self?.imageInfo = imageInfo
             self?.addDescription("OTA image information: \(imageInfo)")
+            
+            sender.backgroundColor = UIColor.auraLeafGreenColor()
         },
         failure: { error in
             self.showAlert("Failed to fetch OTA image info", message: (error.localizedDescription))
-            self.addDescription("Failed to fetch OTA image info: \(error.aylaServiceDescription ?? String(error.userInfo))")
+            self.addDescription("Failed to fetch OTA image info: \(error.aylaServiceDescription)")
+            
+            sender.backgroundColor = UIColor.auraRedColor()
         })
     }
 
     @IBAction private func downloadOTAImageAction(sender: UIButton) {
         if let _ = imageInfo {
-            updatePrompt("downloadOTAImage")
             addDescription("Attempting to download image from service.")
-            self.device?.fetchOTAImageFile(self.imageInfo!,
+            
+            let task = self.device?.fetchOTAImageFile(self.imageInfo!,
                 progress: { progress in
                     self.addDescription("Download in Progress- \(progress.completedUnitCount)/\(progress.totalUnitCount)")
                 },
                 success: {
+                    self.progressAlert?.dismissViewControllerAnimated(false, completion: nil)
                     self.showAlert("Success", message: "The image has been downloaded and can now be pushed to the device.")
                     self.addDescription("OTA Image Download Complete.")
+                    sender.backgroundColor = UIColor.auraLeafGreenColor()
                 },
                 failure: { error in
-                    let message = "Failed to download image: \(error.aylaServiceDescription ?? String(error.userInfo))"
+                    self.progressAlert?.dismissViewControllerAnimated(false, completion: nil)
+                    let message = "Failed to download image: \(error.aylaServiceDescription)"
                     self.showAlert("Error", message: message)
                     self.addDescription(message)
+                    sender.backgroundColor = UIColor.auraRedColor()
             })
+            
+            showProgressAlert {
+                task?.cancel()
+            }
         }
         else {
             self.showAlert("Error", message: "Please fetch OTA information first")
@@ -87,15 +100,22 @@ class LANOTAViewController: UIViewController {
     
     @IBAction private func pushImageToDeviceAction(sender: UIButton) {
         if self.device!.isOTAImageAvailable() {
-            updatePrompt("pushImageToDevice")
             addDescription("Attempting to push OTA image to the device.")
-            self.device?.pushOTAImageToDeviceWithSuccess({
-                self.addDescription("Success!\nDevice will now attept to apply the OTA image.")
+            
+            let task = self.device?.pushOTAImageToDeviceWithSuccess({
+                    self.addDescription("Success!\nDevice will now attempt to apply the OTA image.")
+                    sender.backgroundColor = UIColor.auraLeafGreenColor()
                 },
-                                                         failure: { error in
-                                                            self.showAlert("Error", message: error.localizedDescription)
-                                                            self.addDescription("Error: \(error.description)")
+                 failure: { error in
+                    self.progressAlert?.dismissViewControllerAnimated(false, completion: nil)
+                    self.showAlert("Error", message: error.localizedDescription)
+                    self.addDescription("Error: \(error.description)")
+                    sender.backgroundColor = UIColor.auraRedColor()
             })
+            
+            showProgressAlert {
+                task?.cancel()
+            }
         }
         else {
             addDescription("No OTA image file found, please download it first.")
@@ -109,8 +129,21 @@ class LANOTAViewController: UIViewController {
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    private func updatePrompt(prompt: String?) {
-        self.navigationController?.navigationBar.topItem?.prompt = prompt
+    private func showProgressAlert(cancelBlock : (Void) -> Void) {
+        let alert = UIAlertController(title: nil, message: "LAN OTA in progress...", preferredStyle: .Alert)
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        spinner.center = CGPointMake(130.5, 55.5)
+        spinner.color = UIColor.blackColor()
+        spinner.startAnimating()
+        alert.view.addSubview(spinner)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { action in
+            cancelBlock()
+        }
+        alert.addAction(cancelAction);
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+        self.progressAlert = alert
     }
     
     /**
@@ -121,17 +154,20 @@ class LANOTAViewController: UIViewController {
     }
 }
 
+// MARK: - AylaLANOTADeviceDelegate
 extension LANOTAViewController: AylaLANOTADeviceDelegate {
     func lanOTADevice(device: AylaLANOTADevice, didUpdateImagePushStatus status: ImagePushStatus) {
         var display = ""
         if status == ImagePushStatus.Done {
             display = "Done"
+            self.progressAlert?.dismissViewControllerAnimated(false, completion: nil)
         }
         else if status == ImagePushStatus.Initial {
             display = "Initializing"
         }
         else {
             display = "Error"
+            self.progressAlert?.dismissViewControllerAnimated(false, completion: nil)
         }
         
         self.addDescription("OTA Image Push to Device - Status:\(display)")

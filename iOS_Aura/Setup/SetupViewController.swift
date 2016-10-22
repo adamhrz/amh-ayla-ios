@@ -8,7 +8,7 @@ import UIKit
 import PDKeychainBindingsController
 import iOS_AylaSDK
 
-class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AylaDeviceWifiStateChangeListener {
 
     /// Setup cell id
     private static let CellId: String = "SetupCellId"
@@ -49,6 +49,9 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         setup = AylaSetup(SDKRoot: AylaNetworks.shared())
         
         super.init(coder: aDecoder)
+        
+        //register as WiFi State listener
+        setup.addWiFiStateListener(self)
         
         // Monitor connectivity
         monitorDeviceConnectivity()
@@ -277,15 +280,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let currentAlert = alert {
             currentAlert.dismissViewControllerAnimated(false, completion: nil)
         }
-        var message = "Unknown Error Occurred."
-        if let errorKey = error.userInfo[AylaRequestErrorResponseJsonKey] {
-            if errorKey.isKindOfClass(NSDictionary){
-                message = errorKey.description
-            } else {
-                message = errorKey as! String
-            }
-        }
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Error", message: error.aylaServiceDescription, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Got it", style: .Cancel, handler: nil))
         alert = alertController
         self.presentViewController(alertController, animated: true, completion: nil)
@@ -299,6 +294,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     deinit {
         setup.removeObserver(self, forKeyPath: "setupDevice.connected")
+        setup.removeWiFiStateListener(self)
     }
     
     // MARK: - Table view delegate
@@ -380,6 +376,13 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
+    }
+    
+    func wifiStateDidChange(state: String) {
+        let prompt = "WiFi State: \(state)"
+        print(prompt)
+        updatePrompt(prompt)
+        addDescription(prompt)
     }
 
 }

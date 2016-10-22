@@ -13,22 +13,35 @@ class AuraConfig {
     static let KeyCurrentConfig = "current_config"
     static let KeyCurrentConfigName = "current_config_name"
     
-    static let ConfigNameUSDev   = "US Development"
-    static let ConfigNameUSField = "US Field"
-    static let ConfigNameCNDev   = "CN Development"
-    static let ConfigNameCNField = "CN Field"
+    static let ConfigNameStaging  = "US Staging"
+    static let ConfigNameUSDev      = "US Development"
+    static let ConfigNameUSField    = "US Field"
+    static let ConfigNameCNDev      = "CN Development"
+    static let ConfigNameCNField    = "CN Field"
+    static let ConfigNameEUDev      = "EU Development"
+    static let ConfigNameEUField    = "EU Field"
     
+    static let configStaging = ["appId": AuraOptions.AppIdStaging, "appSecret": AuraOptions.AppSecretStaging, "serviceType": "Staging", "serviceLocation": "US"]
     static let configUSDev = ["appId": AuraOptions.AppIdUSDev, "appSecret": AuraOptions.AppSecretUSDev, "serviceType": "Development", "serviceLocation": "US"]
     static let configUSField = ["appId": AuraOptions.AppIdUSField, "appSecret": AuraOptions.AppSecretUSField, "serviceType": "Field", "serviceLocation": "US"]
     static let configCNDev = ["appId": AuraOptions.AppIdCNDev, "appSecret": AuraOptions.AppSecretCNDev, "serviceType": "Development", "serviceLocation": "CN"]
     static let configCNField = ["appId": AuraOptions.AppIdCNField, "appSecret": AuraOptions.AppSecretCNField, "serviceType": "Field", "serviceLocation": "CN"]
+    static let configEUDev = ["appId": AuraOptions.AppIdEUDev, "appSecret": AuraOptions.AppSecretEUDev, "serviceType": "Development", "serviceLocation": "EU"]
+    static let configEUField = ["appId": AuraOptions.AppIdEUField, "appSecret": AuraOptions.AppSecretEUField, "serviceType": "Field", "serviceLocation": "EU"]
     
-    static let availableConfigurations = [
+    
+    static let defaultConfigurations = [
         AuraConfig(name: ConfigNameUSDev, config: configUSDev),
         AuraConfig(name: ConfigNameUSField, config: configUSField),
         AuraConfig(name: ConfigNameCNDev, config: configCNDev),
         AuraConfig(name: ConfigNameCNField, config: configCNField),
+        AuraConfig(name: ConfigNameEUDev, config: configEUDev),
+        AuraConfig(name: ConfigNameEUField, config: configEUField),
     ]
+    
+    static let stagingConfig = AuraConfig(name: ConfigNameStaging, config: configStaging)
+
+    static let extendedDefaultConfigurations = [stagingConfig] + defaultConfigurations
     
     /**
      Save AuraConfig to UserDefaults
@@ -49,8 +62,21 @@ class AuraConfig {
             return AuraConfig(name: configName, config: savedConfig)
         }
         else {
-            return availableConfigurations[0]
+            return defaultConfigurations[0]
         }
+    }
+    
+    /**
+     Returns a boolean indicating whether a custom AuraConfig is currently in use.
+     */
+    static func usingCustomConfig() -> Bool! {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if (defaults.objectForKey(AuraConfig.KeyCurrentConfig) as? NSDictionary) != nil {
+            if defaults.stringForKey(KeyCurrentConfigName) != ConfigNameUSDev {
+                return true
+            }
+        }
+        return false
     }
     
     var name:String!
@@ -103,5 +129,19 @@ class AuraConfig {
         if let defaultNetworkTimeoutMs = config["defaultNetworkTimeoutMs"] as? Int {
             settings.defaultNetworkTimeout = Double(defaultNetworkTimeoutMs / 1000)
         }
+    }
+    
+    static func createConfig(name:String, fromSettings settings:AylaSystemSettings, devices:[[String:AnyObject]]?) throws -> NSData? {
+        guard let inmutableConfig = settings.toConfigDictionary(name)
+            else {
+                return nil
+        }
+        let config = NSMutableDictionary(dictionary: inmutableConfig)
+        
+        if devices?.count > 0 {
+            config["managedDevices"] = devices!
+        }
+        
+        return try NSJSONSerialization.dataWithJSONObject(config, options: .PrettyPrinted)
     }
 }

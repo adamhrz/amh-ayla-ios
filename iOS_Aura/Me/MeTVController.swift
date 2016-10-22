@@ -10,16 +10,16 @@ import iOS_AylaSDK
 import PDKeychainBindingsController
 import SAMKeychain
 import CoreTelephony
-import SwiftKeychainWrapper
 
 class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate {
     
     let sessionManager: AylaSessionManager?
     
-    struct Selection {
-        let myProfile = NSIndexPath(forRow: 0, inSection: 0)
-        let emaiLogs = NSIndexPath(forRow: 0, inSection: 1)
-        let logout = NSIndexPath(forRow: 0, inSection: 2)
+    enum Selection:Int {
+        case myProfile = 0
+        case emaiLogs
+        case configurationWizard
+        case logout
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,8 +32,12 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
         SAMKeychain.deletePasswordForService(settings.appId, account: username)
         if let manager = sessionManager {
-            manager.logoutWithSuccess({ () -> Void in
-                KeychainWrapper.removeObjectForKey("LANLoginAuthorization")
+            manager.shutDownWithSuccess({ () -> Void in
+                do {
+                    try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                } catch _ {
+                    print("Failed to remove cached authorization")
+                }
                 self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
                 });
                 }, failure: { (error) -> Void in
@@ -41,9 +45,12 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                     func alertWithLogout (message: String!, buttonTitle: String!){
                         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
                         let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-                            
-                            KeychainWrapper.removeObjectForKey("LANLoginAuthorization")
-                            self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                            do {
+                                try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                            } catch _ {
+                                print("Failed to remove cached authorization")
+                            }
+                            self.navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
                             });
                         })
                         alert.addAction(okAction)
@@ -53,7 +60,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                     case AylaHTTPErrorCode.LostConnectivity.rawValue:
                         alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
                     default:
-                        alertWithLogout("An error has occurred.\n" + (error.aylaServiceDescription ?? ""), buttonTitle: "Continue")
+                        alertWithLogout("An error has occurred.\n" + error.aylaServiceDescription, buttonTitle: "Continue")
 
                     }
             })
@@ -106,17 +113,29 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
+    func customOEMConfigs() {
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+        //let naviVC = UINavigationController(rootViewController: developOptionsVC)
+        developOptionsVC.currentConfig = AuraConfig.currentConfig()
+        self.navigationController?.pushViewController(developOptionsVC, animated: true)
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selection = Selection()
-        if(indexPath == selection.myProfile) {
-            
-        } else if (indexPath == selection.emaiLogs) {
-            emailLogs()
-        } else if (indexPath == selection.logout) {
-            logout()
+        guard let selection = Selection(rawValue: indexPath.section)
+            else {
+                print("Unknown indexPath in `Me`")
+                return
         }
-        else {
-            print("Unknown indexPath in `Me`")
+        switch selection {
+        case .myProfile:
+            return
+        case .configurationWizard:
+            customOEMConfigs()
+        case .emaiLogs:
+            emailLogs()
+        case .logout:
+            logout()
         }
     }
     

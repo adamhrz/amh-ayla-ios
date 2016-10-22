@@ -48,7 +48,7 @@ class PropertyModel: NSObject, UITextFieldDelegate {
                 self.property.createDatapoint(dpParams, success: { (datapoint) -> Void in
                     print("Created datapoint.")
                     }, failure: { (error) -> Void in
-                        
+                        error.displayAsAlertController()
                 })
             }
         }

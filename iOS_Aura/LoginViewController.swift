@@ -8,13 +8,14 @@ import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
 import SAMKeychain
-import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var configLabel: UILabel!
+    @IBOutlet weak var settingsButton: UIButton!
     
     /// Id of a segue which is linked to `Main` storyboard.
     let segueIdToMain :String = "toMain"
@@ -22,16 +23,30 @@ class LoginViewController: UIViewController {
     /// Current presenting alert controller.
     var alert: UIAlertController?
     
+    var easterEgg: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         logoImageView.image = logoImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
         logoImageView.tintColor = UIColor.aylaBahamaBlueColor()
-        
+        configLabel.text = ""
+        settingsButton.tintColor = UIColor.aylaHippieGreenColor()
         // Add tap recognizer to dismiss keyboard.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
     }
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let config = AuraConfig.currentConfig()
+        if config.name != AuraConfig.ConfigNameUSDev {
+            configLabel.text = "Config: " + config.name
+        } else {
+            configLabel.text = ""
+        }
+    }
+    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -43,13 +58,14 @@ class LoginViewController: UIViewController {
      */
     func autoLogin() {
         let settings = AylaNetworks.shared().systemSettings
-        let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
-        let password = SAMKeychain.passwordForService(settings.appId, account: username)
-        self.usernameTextField.text = username
-        self.passwordTextField.text = password
-        
-        if username?.characters.count > 0 && password?.characters.count > 0 {
-            login(self)
+        if let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey) {
+            let password = SAMKeychain.passwordForService(settings.appId, account: username)
+            self.usernameTextField.text = username
+            self.passwordTextField.text = password
+            
+            if username.characters.count > 0 && password?.characters.count > 0 {
+                login(self)
+            }
         }
     }
     
@@ -75,11 +91,21 @@ class LoginViewController: UIViewController {
                 PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
                 SAMKeychain.setPassword(password, forService: settings.appId, account: username)
                 
+                // Register for AylaSessionListener
+                (UIApplication.sharedApplication().delegate as! AppDelegate).auraSessionListener = AuraSessionListener.sharedListener
+                (UIApplication.sharedApplication().delegate as! AppDelegate).auraSessionListener?.initializeAuraSessionListener()
+                
                 // Reset the Contact Manager for the new user
                 ContactManager.sharedInstance.reload()
                 
                 self.dismissLoading(false, completion: { () -> Void in
-                    KeychainWrapper.setObject(authorization, forKey: "LANLoginAuthorization")
+                    do {
+                        try SAMKeychain.setObject(authorization, forService: "LANLoginAuthorization", account: username)
+                        
+                    } catch {
+                        let err = error as NSError
+                        print("Failed to save authorization: %@", err.aylaServiceDescription)
+                    }
                     // Once succeeded, present view controller in `Main` storyboard.
                     self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
                 })
@@ -91,7 +117,8 @@ class LoginViewController: UIViewController {
             let loginManager = AylaNetworks.shared().loginManager
             loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: success, failure: { [unowned loginManager] (error) -> Void in
                     if settings.allowOfflineUse {
-                        if let cachedAuth = KeychainWrapper.objectForKey("LANLoginAuthorization") as? AylaAuthorization {
+                        do {
+                        if let cachedAuth = try SAMKeychain.objectForService("LANLoginAuthorization", account: username) as? AylaAuthorization {
                             let provider = AylaCachedAuthProvider(authorization: cachedAuth)
                             loginManager.loginWithAuthProvider(provider, sessionName: AuraSessionOneName, success: success, failure: { (error) in
                                 self.dismissLoading(false, completion: { () -> Void in
@@ -99,6 +126,9 @@ class LoginViewController: UIViewController {
                                 })
                             })
                             return;
+                        }
+                        } catch _ {
+                            print("Failed to get cached authorization")
                         }
                     }
                     self.dismissLoading(false, completion: { () -> Void in
@@ -111,7 +141,7 @@ class LoginViewController: UIViewController {
     @IBAction func resendConfirmation(sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
-            usernameTextField.text = "CAN NOT BE BLANK"
+            presentLoading("Please enter a username.")
         }
         else {
             
@@ -135,11 +165,12 @@ class LoginViewController: UIViewController {
     
     @IBAction func resetPassword(sender: AnyObject) {
         if (usernameTextField.text ?? "") == "" {
-            usernameTextField.text = "CAN NOT BE BLANK"
+            presentLoading("Please enter a username.")
         }
         else if usernameTextField.text == AuraOptions.EasterEgg {
+            self.easterEgg = true
             self.dismissKeyboard()
-            self.performSegueWithIdentifier("RegionOptions", sender: nil)
+            self.performSegueWithIdentifier("CustomConfigSegue", sender: nil)
         }
         else {
             
@@ -161,6 +192,9 @@ class LoginViewController: UIViewController {
         }
     }
     
+    @IBAction func settingsButtonPressed(sender: AnyObject) {
+        performSegueWithIdentifier("CustomConfigSegue", sender: self)
+    }
     /**
      Helpful method to present `loading`
      
@@ -191,7 +225,7 @@ class LoginViewController: UIViewController {
      Use to display an message.
      */
     func presentError(error: NSError) {
-        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription ?? error.description) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
         
         alert.addAction(UIAlertAction(
             title: "Got it", style: .Cancel, handler: nil))
@@ -220,6 +254,11 @@ class LoginViewController: UIViewController {
                 oAuthController.authType = (segueIdentifier == "OAuthLoginSegueFacebook") ? AylaOAuthType.Facebook : AylaOAuthType.Google
                 // pass a reference to self to continue login after a sucessful OAuthentication
                 oAuthController.mainLoginViewController = self
+            case "CustomConfigSegue":
+                let navigationViewController = segue.destinationViewController as! UINavigationController
+                let configViewController = navigationViewController.viewControllers.first! as! DeveloperOptionsViewController
+                configViewController.easterEgg = self.easterEgg ? true : false
+                configViewController.fromLoginScreen = true
             default: break
             }
         }

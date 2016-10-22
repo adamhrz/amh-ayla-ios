@@ -56,13 +56,17 @@
 		5FDCECA51CC84CF100233D99 /* AuraLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA31CC84CF100233D99 /* AuraLabel.swift */; };
 		5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDCECA41CC84CF100233D99 /* AuraTextField.swift */; };
 		5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */; };
+		9DF37BF81D779BC4003D5929 /* AuraSessionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF37BF71D779BC4003D5929 /* AuraSessionListener.swift */; };
 		A139827A1D473F9200F823A3 /* AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13982791D473F9200F823A3 /* AuraConfig.swift */; };
 		A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */; };
 		A1D0914A1CCF0879003A4816 /* DeveloperOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
+		A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */; };
+		A57EDB821D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */; };
 		A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */; };
+		A5B641211D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */; };
 		A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */; };
 		A5E0DF3F1CE257E800D0E87F /* ScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */; };
 		A7104ACA1C757F32007B1AB3 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7104AC81C757F32007B1AB3 /* Login.storyboard */; };
@@ -155,13 +159,17 @@
 		5FDCECA41CC84CF100233D99 /* AuraTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraTextField.swift; path = UX/AuraTextField.swift; sourceTree = "<group>"; };
 		5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactNotificationButton.swift; path = Device/Presentation/ContactNotificationButton.swift; sourceTree = "<group>"; };
 		829134737FAF3C8B555560EB /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
+		9DF37BF71D779BC4003D5929 /* AuraSessionListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuraSessionListener.swift; sourceTree = "<group>"; };
 		A13982791D473F9200F823A3 /* AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConfig.swift; path = Utils/AuraConfig.swift; sourceTree = "<group>"; };
 		A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LANOTAViewController.swift; path = Device/Presentation/LANOTAViewController.swift; sourceTree = "<group>"; };
 		A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
+		A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkProfilerModel.swift; sourceTree = "<group>"; };
+		A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AylaSystemSettings+AuraConfig.swift"; path = "Utils/AylaSystemSettings+AuraConfig.swift"; sourceTree = "<group>"; };
 		A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLoginViewController.swift; sourceTree = "<group>"; };
+		A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SAMKeychain+AylaUtils.swift"; path = "Utils/SAMKeychain+AylaUtils.swift"; sourceTree = "<group>"; };
 		A5E0DF3C1CE2579000D0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Schedules.storyboard; sourceTree = "<group>"; };
 		A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleTableViewController.swift; path = Device/Presentation/ScheduleTableViewController.swift; sourceTree = "<group>"; };
 		A7104AC91C757F32007B1AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
@@ -254,6 +262,8 @@
 				0FBEB0A11CC07AE600E8EE6F /* UIColor+AuraColors.swift */,
 				0F66C9181D4ADAF200738A16 /* NSError+AylaErrorUtils.swift */,
 				A13982791D473F9200F823A3 /* AuraConfig.swift */,
+				A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */,
+				A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -310,6 +320,7 @@
 				A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */,
 				A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */,
 				A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */,
+				9DF37BF71D779BC4003D5929 /* AuraSessionListener.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -463,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				A78DC8F41CB87289002EE6B0 /* LanModeTestModel.swift */,
+				A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */,
 			);
 			name = Test;
 			path = Device/Test;
@@ -724,6 +736,7 @@
 				0F832AAE1D342733009D05E0 /* ScheduleEditorViewController.swift in Sources */,
 				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
+				9DF37BF81D779BC4003D5929 /* AuraSessionListener.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				0F660F8F1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift in Sources */,
 				5F7277F61CF4EC11009D153F /* TimeZonePickerViewController.swift in Sources */,
@@ -735,6 +748,7 @@
 				A77E234F1C935A5E00696566 /* PropertyModel.swift in Sources */,
 				0FBEB0A21CC07AE600E8EE6F /* String+Utils.swift in Sources */,
 				0F4722221CDD4F300055D6C3 /* CreateDeviceShareViewController.swift in Sources */,
+				A57EDB821D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
 				A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */,
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
@@ -747,6 +761,7 @@
 				0F6791CD1D4BF84600E83CA0 /* AuraConsoleTextView.swift in Sources */,
 				A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */,
 				5F2429E81D1B6A27003F2D40 /* ContactManager.swift in Sources */,
+				A5B641211D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift in Sources */,
 				5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */,
 				A78DC8F71CBAC42D002EE6B0 /* TestSequencer.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
@@ -757,6 +772,7 @@
 				0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */,
 				A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
+				A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */,
 				A78DC8E81CB4C130002EE6B0 /* RegistrationViewController.swift in Sources */,
 				A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */,
 				5FDCECA61CC84CF100233D99 /* AuraTextField.swift in Sources */,
@@ -914,6 +930,7 @@
 		220D147F1CBD6C77001BC00B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 27;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -921,6 +938,7 @@
 		220D14801CBD6C77001BC00B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 27;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1015,7 +1033,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1033,7 +1051,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1048,6 +1066,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CURRENT_PROJECT_VERSION = 27;
 				INFOPLIST_FILE = iOS_AuraTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraTests";
@@ -1061,6 +1080,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CURRENT_PROJECT_VERSION = 27;
 				INFOPLIST_FILE = iOS_AuraTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraTests";
@@ -1073,6 +1093,7 @@
 		A7351CB91C753C370073C73A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 27;
 				INFOPLIST_FILE = iOS_AuraUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraUITests";
@@ -1086,6 +1107,7 @@
 		A7351CBA1C753C370073C73A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 27;
 				INFOPLIST_FILE = iOS_AuraUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraUITests";
