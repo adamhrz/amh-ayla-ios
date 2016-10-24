@@ -14,12 +14,12 @@ The following steps should be run in Terminal.
 
     >```gem install cocoapods```
 
-    Note: This version of Aura now supports Cocoapods version 1.0.0 and above. If you currently have a version of Cocoapods lower than 1.0.0, it may work, but it is recommended to upgrade using the following command.
+    Note: This version of Aura now supports Cocoapods version 1.0.1 and above. If you currently have a version of Cocoapods lower than 1.0.0, it may work, but it is recommended to upgrade using the following command.
     >```gem upgrade cocoapods```
  
 3. (Optional) Set the AYLA_SDK_BRANCH environment variable to the name of the AylaSDK branch you want to include. If the variable is unset, Cocoapods will default to the latest SDK release branch.
 
-    >```export AYLA_SDK_BRANCH=release/5.2.00```
+    >```export AYLA_SDK_BRANCH=release/5.3.00```
     
 4. Install Pods by running the following command within the Aura folder:
 
@@ -30,6 +30,7 @@ When opening Aura in Xcode, be sure to _only open the .xcworkspace_ file.
 
 ##SDK Documentation
 
+The /doc folder contains documentation about Aura
 The Ayla SDK is documented using [AppleDoc](https://github.com/tomaz/appledoc/).  To build and install the Ayla SDK docset, you must [clone the SDK](https://github.com/AylaNetworks/iOS_AylaSDK_Public.git) and build the docset from there, following instructions in the SDK's README.md file.
 
 ##Dependencies
@@ -48,10 +49,23 @@ If you would like to contribute your own code change to our project, please subm
 
 ##Version of major build tools used
 ===================================
-Xcode: 7.3.1
+Xcode: 8.0
 CocoaPods: 1.0.1
 
 #Release Notes
+
+v5.3.00     2016-10-22
+------
+New & Improved
+- Support for iOS_AylaSDK 5.3.00
+- New iOS 10 support
+- New SDK Universal static library build target
+- New Aura OEM Config: Just for IoT HW Engineers - Use core Aura features without knowing Objective-C, Java, or Swift!
+- New Aura Test Runner: Network Profiler - Easily monitor round-trip network times
+- Improved feedback during WiFi Setup
+
+Bug Fixes & Chores
+- All 5.2.xx hot-fixes
 
 v5.2.00    2016-08-22
 ------
