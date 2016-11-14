@@ -54,6 +54,9 @@ CocoaPods: 1.0.1
 
 #Release Notes
 
+v5.3.01     2016-11-11
+- support iOS_AylaSDK 5.3.01
+
 v5.3.00     2016-10-22
 ------
 New & Improved
