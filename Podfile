@@ -4,7 +4,7 @@
 # AYLA_SDK_BRANCH: default to AYLA_BUILD_BRANCH
 #
 # if you want to build a branch other than your crrent branch, switch to that branch to build it;
-# for public release we set lib branch by replacing $AYLA_BUILD_BRANCH with release/4.4.00 etc because
+# for public release we set lib branch by replacing $AYLA_BUILD_BRANCH with release/x.y.zz etc because
 # their branch names are different; for internal repos, lib branches can be the same as build branch
 # such as "develop" etc
 #
