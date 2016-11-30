@@ -110,7 +110,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         updatePrompt("Connecting...")
         
-        currentTask = setup.connectToNewDevice({ (setupDevice) -> Void in
+        setup.connectToNewDevice({ (setupDevice) -> Void in
             self.addDescription("Found device: \(setupDevice.dsn)")
             
             // Start fetching AP list from module.
