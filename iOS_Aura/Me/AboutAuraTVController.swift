@@ -11,21 +11,19 @@ import SAMKeychain
 import CoreTelephony
 
 class AboutAuraTableViewController: UITableViewController {
-    var user: AylaUser?
-    let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+    private var user: AylaUser?
+    private let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
 
-    @IBOutlet weak var auraVersionLabel: UILabel!
-    @IBOutlet weak var sdkVersionLabel: UILabel!
-    @IBOutlet weak var configNameLabel: UILabel!
+    @IBOutlet private weak var auraVersionLabel: UILabel!
+    @IBOutlet private weak var sdkVersionLabel: UILabel!
+    @IBOutlet private weak var configNameLabel: UILabel!
     
-    
-    @IBOutlet weak var phoneModelLabel: UILabel!
-    @IBOutlet weak var iOSVersionLabel: UILabel!
-    @IBOutlet weak var carrierNameLabel: UILabel!
-    @IBOutlet weak var languageLabel: UILabel!
-    @IBOutlet weak var countryLabel: UILabel!
-    
-    @IBOutlet weak var timeZoneLabel: UILabel!
+    @IBOutlet private weak var phoneModelLabel: UILabel!
+    @IBOutlet private weak var iOSVersionLabel: UILabel!
+    @IBOutlet private weak var carrierNameLabel: UILabel!
+    @IBOutlet private weak var languageLabel: UILabel!
+    @IBOutlet private weak var countryLabel: UILabel!
+    @IBOutlet private weak var timeZoneLabel: UILabel!
 
     
     override func viewDidLoad() {
@@ -44,16 +42,14 @@ class AboutAuraTableViewController: UITableViewController {
         populateUI()
     }
     
-    func populateUI() {
+    private func populateUI() {
         let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
         let carrier = CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName
         let deviceModel = self.getDeviceModel()
         let osVersion = UIDevice.currentDevice().systemVersion
         let country = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as! String
         let language = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
-        
         let configName = AuraConfig.currentConfig().name
-        
         let timeZone = NSTimeZone.localTimeZone().name
         
         auraVersionLabel.text = appVersion
@@ -65,10 +61,9 @@ class AboutAuraTableViewController: UITableViewController {
         languageLabel.text = language
         countryLabel.text = country
         timeZoneLabel.text = timeZone
-        
     }
     
-    func getDeviceModel () -> String? {
+    private func getDeviceModel () -> String? {
         var systemInfo = utsname()
         uname(&systemInfo)
         let modelCode = withUnsafeMutablePointer(&systemInfo.machine) {
