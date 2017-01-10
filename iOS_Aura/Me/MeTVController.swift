@@ -15,8 +15,9 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     
     let sessionManager: AylaSessionManager?
     
-    enum Selection:Int {
-        case myProfile = 0
+    private enum Selection:Int {
+        case aboutAura = 0
+        case myProfile
         case emaiLogs
         case configurationWizard
         case logout
@@ -27,7 +28,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         super.init(coder: aDecoder)
     }
 
-    func logout() {
+    private func logout() {
         let settings = AylaNetworks.shared().systemSettings
         let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
         SAMKeychain.deletePasswordForService(settings.appId, account: username)
@@ -67,7 +68,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
-    func getDeviceModel () -> String? {
+    private func getDeviceModel () -> String? {
         var systemInfo = utsname()
         uname(&systemInfo)
         let modelCode = withUnsafeMutablePointer(&systemInfo.machine) {
@@ -75,11 +76,11 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
         return modelCode
     }
-    func removeOptionalStrings(inputText :String) -> String {
+    private func removeOptionalStrings(inputText :String) -> String {
         return inputText.stringByReplacingOccurrencesOfString("Optional(\"", withString: "").stringByReplacingOccurrencesOfString("\")", withString: "")
     }
     
-    func emailLogs() {
+    private func emailLogs() {
         let mailVC = MFMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
             if let filePath = AylaLogManager.sharedManager().getLogFilePath() {
@@ -113,7 +114,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
-    func customOEMConfigs() {
+    private func customOEMConfigs() {
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
         let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
         //let naviVC = UINavigationController(rootViewController: developOptionsVC)
@@ -128,6 +129,8 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                 return
         }
         switch selection {
+        case .aboutAura:
+            return
         case .myProfile:
             return
         case .configurationWizard:

@@ -11,6 +11,7 @@ import SAMKeychain
 
 class LoginViewController: UIViewController {
 
+    @IBOutlet weak var appVersionLabel: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logoImageView: UIImageView!
@@ -45,6 +46,8 @@ class LoginViewController: UIViewController {
         } else {
             configLabel.text = ""
         }
+        let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+        appVersionLabel.text = "v." + appVersion
     }
     
     
