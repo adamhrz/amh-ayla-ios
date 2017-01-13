@@ -37,6 +37,11 @@ class PropertyModel: NSObject, UITextFieldDelegate {
      - parameter viewController: The view controller which presents this action controller.
      */
     func presentActions(presentingViewController viewController: UIViewController){
+        
+        // Don't update file property by inputing text
+        if property.baseType == "file" {
+            return
+        }
     
         let alertController = UIAlertController(title: property.name, message: nil, preferredStyle: .Alert)
 
@@ -120,5 +125,70 @@ class PropertyModel: NSObject, UITextFieldDelegate {
         }
         
         return nil
+    }
+    
+    func previewAction(presentingViewController viewController: UIViewController) {
+        if property.datapoint is AylaDatapointBlob {
+            let blob = property.datapoint as! AylaDatapointBlob
+            let fileName = (blob.value as! NSString).lastPathComponent
+            // delete the `.json` suffix
+            let filePath = NSURL(fileURLWithPath: "\(cachePath()!)/\(fileName)").URLByDeletingPathExtension!
+            
+            if NSFileManager.defaultManager().fileExistsAtPath(filePath.path!) {
+                preview(filePath, presentingViewController: viewController)
+                return
+            }
+            
+            let alertController = UIAlertController(title: nil, message: "Please wait...\n\n", preferredStyle: UIAlertControllerStyle.Alert)
+            let spinnerIndicator: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+            spinnerIndicator.center = CGPointMake(135.0, 65.5)
+            spinnerIndicator.color = UIColor.blackColor()
+            spinnerIndicator.startAnimating()
+            alertController.view.addSubview(spinnerIndicator)
+            
+            let task = blob.downloadToFile(filePath,
+                progress: { (progress) in
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        alertController.message = "Please wait...\(progress.localizedDescription)\n\n"
+                    })
+                },
+                success: { (url) in
+                    alertController.dismissViewControllerAnimated(false, completion: nil)
+                    
+                    self.preview(url, presentingViewController: viewController)
+                },
+                failure: { (error) in
+                    spinnerIndicator.removeFromSuperview()
+                    alertController.message = error.localizedDescription
+                    print(error)
+            })
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) in
+                task.cancel()
+            })
+            alertController.addAction(cancelAction)
+            viewController.presentViewController(alertController, animated: false, completion: nil)
+        }
+        else {
+            print("preview is only for file property")
+        }
+    }
+    
+    func cachePath() -> String? {
+        if let cachePath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first {
+            var isDir: ObjCBool = false
+            let fileManager = NSFileManager.defaultManager()
+            if fileManager.fileExistsAtPath(cachePath, isDirectory: &isDir) == false && !isDir {
+                try! fileManager.createDirectoryAtPath(cachePath, withIntermediateDirectories: false, attributes: nil)
+            }
+            return cachePath
+        }
+        
+        return nil
+    }
+    
+    func preview(fileURL: NSURL, presentingViewController viewController: UIViewController) {
+        let activityController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+        viewController.presentViewController(activityController, animated: true, completion: nil)
     }
 }

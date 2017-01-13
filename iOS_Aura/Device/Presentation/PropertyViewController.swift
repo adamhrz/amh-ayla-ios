@@ -14,6 +14,7 @@ class PropertyViewController: UIViewController {
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var baseTypeLabel: UILabel!
+    @IBOutlet weak var previewButton: AuraButton!
     
     var propertyModel: PropertyModel?
 
@@ -34,7 +35,13 @@ class PropertyViewController: UIViewController {
             valueLabel.text = "\(String.stringFromStringNumberOrNil(property.value))"
             nameLabel.text = property.name
             baseTypeLabel.text = property.baseType
+            if property.baseType != "file" {
+                previewButton.removeFromSuperview()
+            }
         }
     }
     
+    @IBAction func prviewAction(sender: AnyObject) {
+        propertyModel?.previewAction(presentingViewController: self)
+    }
 }
