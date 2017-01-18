@@ -241,6 +241,10 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
     }
     
     func device(device: AylaDevice, didObserveChange change: AylaChange) {
+        // We don't update property list here since PropertyListViewModel will take care of it.
+        if let _ = change as? AylaPropertyChange {
+            return
+        }
         self.update()
     }
     
