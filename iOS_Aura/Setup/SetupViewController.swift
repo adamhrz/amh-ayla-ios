@@ -179,7 +179,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         let tokenString = String(format:"Using Setup Token %@", token!)
         addDescription(tokenString)
-        setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { () -> Void in
+        setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { (wifiStatus) -> Void in
             
             // Succeeded, go confirming.
             self.addDescription("Connected Successfully.")
