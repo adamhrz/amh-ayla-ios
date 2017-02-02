@@ -35,6 +35,16 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    /// Wi-Fi 'state' as provided by the device being set up.
+    private var moduleWiFiState: String! = "none" {
+        willSet(newState){
+            if newState != moduleWiFiState {
+                let prompt = "Module Reported WiFi State: '\(newState)'"
+                addDescription(prompt)
+            }
+        }
+    }
+    
     /// Current running connect task
     private var currentTask: AylaConnectTask?
     
@@ -43,6 +53,10 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     /// Last used token.
     private var token: String?
+    
+    /// Default timeout for device cloud connection polling
+    private let defaultCloudConfirmationTimeout = 60.0
+    
     
     required init?(coder aDecoder: NSCoder){
         // Init setup
@@ -104,25 +118,58 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     /**
+     Writes the setupDevice's registrationType string to the consoleView
+     */
+    private func logRegistrationTypeForSetupDevice(setupDevice:AylaSetupDevice){
+        let registrationType = AylaRegistration.registrationNameFromType(setupDevice.registrationType)
+        addDescription("Device will use \(registrationType ?? "Unknown") Registration Type.")
+
+    }
+    
+    /**
+     Writes the setupDevice's details to the consoleView
+     */
+    private func logDetailsForSetupDevice(setupDevice:AylaSetupDevice){
+        let indent = "    "
+        self.addDescription("Device Details:")
+        addDescription(indent + "DSN: \(setupDevice.dsn ?? "none")")
+        addDescription(indent + "FW version: \(setupDevice.version ?? "none")")
+        addDescription(indent + "FW build: \(setupDevice.build ?? "none")")
+        addDescription(indent + "LAN IP: \(setupDevice.lanIp ?? "none")")
+        addDescription(indent + "MAC: \(setupDevice.mac ?? "none")")
+        addDescription(indent + "Model: \(setupDevice.model ?? "none")")
+
+        if let features = setupDevice.features {
+            addDescription(indent + "Features:")
+            for feature in features {
+                addDescription(indent + indent + "\(feature)")
+            }
+        }
+    }
+    
+    /**
      Must use this method to start setup for a device.
      */
     private func attemptToConnect() {
 
         updatePrompt("Connecting...")
-        
+        addDescription("Looking for a device to set up.")
         setup.connectToNewDevice({ (setupDevice) -> Void in
-            self.addDescription("Found device: \(setupDevice.dsn)")
+            self.addDescription("Found Device")
+            self.logDetailsForSetupDevice(setupDevice)
             
             // Start fetching AP list from module.
             self.fetchFreshAPListWithWiFiScan()
             
             }) { (error) -> Void in
                 self.updatePrompt("")
-                self.addDescription("Unable to find device: \(error.description)")
-                let message = "Are you sure you are connected to the device's AP?\n\nIf not, please tap the button below to move to the Settings application.  Navigate to Wi-Fi settings section and select the AP/network name for your device.\n\nOnce the network is joined, you should be redirected here momentarily."
+                self.addDescription("Unable to find device: \(error.aylaServiceDescription)")
+                let message = "Are you connected to the Wi-Fi access point of the device you wish to set up?\n\nIf not, please tap the button below to move to the Settings application.  Navigate to Wi-Fi settings section and select the AP/network name for your device.\n\nOnce the network is joined, you should be redirected here momentarily."
                 let alert = UIAlertController(title: "No Device Found", message: message, preferredStyle: .Alert)
                 let settingsAction = UIAlertAction(title: "Go To Settings App", style:.Default, handler: { (action) in
-                    UIApplication.sharedApplication().openURL(NSURL(string:UIApplicationOpenSettingsURLString)!)
+                    self.dismissViewControllerAnimated(false, completion: {
+                        UIApplication.sharedApplication().openURL(NSURL(string:UIApplicationOpenSettingsURLString)!)
+                    })
                 })
                 let cancelAction = UIAlertAction(title: "Cancel", style:.Cancel, handler: { (action) in
                     self.updatePrompt("No Device Found")
@@ -137,13 +184,14 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      * Use this method to have the module scan for Wi-Fi access points, then fetch the resulting AP list from setup.
      */
     private func fetchFreshAPListWithWiFiScan() {
-        addDescription("Device Scanning for Wi-Fi APs...")
+        addDescription("Device is scanning for Wi-Fi Access Points...")
         currentTask = setup.startDeviceScanForAccessPoints({
-            self.addDescription("Scan Complete")
+            self.addDescription("Scan Complete. Fetching results.")
             self.fetchCurrentAPList()
             }) { (error) in
-                self.updatePrompt("Wi-Fi Scan Failed")
-                self.addDescription("Wi-Fi Scan Failed\n\(error.description)")
+                let message = "Wi-Fi Scan Failed"
+                self.updatePrompt(message)
+                self.displayError(error, message: message)
         }
     }
     
@@ -152,14 +200,15 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     private func fetchCurrentAPList(){
         currentTask = setup.fetchDeviceAccessPoints({ (scanResults) -> Void in
-            self.addDescription("Fetched AP list.")
+            self.addDescription("Received AP list.")
             self.updatePrompt(self.setup.setupDevice?.dsn ?? "")
             self.scanResults = scanResults
             self.tableView.reloadData()
             
             }, failure: { (error) -> Void in
-                self.updatePrompt("Failed")
-                self.addDescription("Fetch AP results: \(error.description)")
+                self.updatePrompt("Error")
+                let message = "An error occurred while trying to fetch the Wi-Fi scan results."
+                self.displayError(error, message: message)
         })
 
     }
@@ -175,21 +224,37 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         token = String.generateRandomAlphanumericToken(7)
         
         updatePrompt("Connecting device to '\(ssid)'...")
-        addDescription("Connecting device to '\(ssid)'...")
+        addDescription("Connecting device to the network '\(ssid)'...")
 
-        let tokenString = String(format:"Using Setup Token %@", token!)
+        let tokenString = String(format:"Using Setup Token %@.", token!)
         addDescription(tokenString)
         setup.connectDeviceToServiceWithSSID(ssid, password: password, setupToken: token!, latitude: 0.0, longitude: 0.0, success: { (wifiStatus) -> Void in
             
             // Succeeded, go confirming.
-            self.addDescription("Connected Successfully.")
-            
+            self.addDescription("Device reports connection to SSID.")
             // Call to confirm connection.
             self.confirmConnectionToService()
             
             }) { (error) -> Void in
-            self.updatePrompt("Failed")
-            self.displayError(error)
+            var message = ""
+            let errorCode = UInt16(error.aylaResponseErrorCode)
+
+            switch errorCode {
+            case AylaWifiConnectionError.ConnectionTimedOut.rawValue:
+                message += "Connection Timed Out"
+            case AylaWifiConnectionError.InvalidKey.rawValue:
+                message += "Invalid Wi-Fi Key Entered"
+            case AylaWifiConnectionError.NotAuthenticated.rawValue:
+                message += "Failed to Authenticate"
+            case AylaWifiConnectionError.IncorrectKey.rawValue:
+                message += "Incorrect Wi-Fi Key Entered"
+            case AylaWifiConnectionError.Disconnected.rawValue:
+                message += "Disconnected from Device"
+            default:
+                message += "AylaWifiConnectionError Code \(errorCode)"
+            }
+            self.updatePrompt("Setup Failed")
+            self.displayError(error, message: message)
         }
     }
     
@@ -203,20 +268,16 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             PDKeychainBindings.sharedKeychainBindings().setString(self.setup.setupDevice?.dsn, forKey: AuraDeviceSetupDSNKeychainKey)
         }
         
-        updatePrompt("Confirming device status ...")
-        addDescription("Confirming device connection to service")
+        updatePrompt("Confirming device connection status ...")
+        addDescription("Polling cloud service to confirm device connection.\n Timeout set to \(Int(defaultCloudConfirmationTimeout)) seconds. Please wait...")
         let deviceDSN = setup.setupDevice?.dsn
-        setup.confirmDeviceConnectedWithTimeout(60.0, dsn:(deviceDSN)!, setupToken:token!, success: { (setupDevice) -> Void in
+        
+        setup.confirmDeviceConnectedWithTimeout(defaultCloudConfirmationTimeout, dsn:(deviceDSN)!, setupToken:token!, success: { (setupDevice) -> Void in
+                self.logRegistrationTypeForSetupDevice(setupDevice)
                 self.updatePrompt("- Succeeded -")
-                self.addDescription("- Succeeded. Setup Complete. -");
+                self.addDescription("- Wi-Fi Setup Complete -")
 
                 let alertString = String(format:"Setup for device %@ completed successfully, using the setup token %@.\n\n You may wish to store this token if the device uses AP Mode registration.", (self.setup.setupDevice?.dsn)!, self.token!)
-                if let features = self.setup.setupDevice?.features {
-                    print("FEATURES")
-                    for feature in features {
-                        print(feature)
-                    }
-                }
 
                 let alert = UIAlertController(title: "Setup Successful", message: alertString, preferredStyle: .Alert)
                 let copyAction = UIAlertAction(title: "Copy Token to Clipboard", style: .Default, handler: { (action) -> Void in
@@ -259,7 +320,8 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.tableView.reloadData()
             
             }) { (error) -> Void in
-                self.displayError(error)
+                let message = "Confirmation step has failed."
+                self.displayError(error, message: message)
         }
     }
     
@@ -268,22 +330,31 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     private func addDescription(description: String) {
         consoleView.addLogLine(description)
+        print("Log: " + description)
     }
     
     /**
      Display an error with UIAlertController
      
      - parameter error: The error which is going to be displayed.
+     - parameter message: Message to be displayed along with error.
      */
-    private func displayError(error:NSError) {
-    
+    private func displayError(error:NSError, message: String?) {
+        
         if let currentAlert = alert {
             currentAlert.dismissViewControllerAnimated(false, completion: nil)
         }
-        let alertController = UIAlertController(title: "Error", message: error.aylaServiceDescription, preferredStyle: .Alert)
+        let serviceDescription = error.aylaServiceDescription
+        var errorText = ""
+        if let message = message {
+            errorText = message + "\n\nAylaError: '" + serviceDescription + "'"
+        }
+        
+        let alertController = UIAlertController(title: "Error", message: errorText, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Got it", style: .Cancel, handler: nil))
         alert = alertController
         self.presentViewController(alertController, animated: true, completion: nil)
+        addDescription("Error: \(message ?? "")\n    '\(serviceDescription)'")
     }
     
     @IBAction private func cancel(sender: AnyObject) {
@@ -305,7 +376,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             // Compose an alert controller to let user input password.
             // TODO: If password is not required, the password text field should be removed from alert.
-            let alertController = UIAlertController(title: "Password Required", message: "Please input password for \"\(result.ssid)\".", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Password Required", message: "Please input password for the network \"\(result.ssid)\".", preferredStyle: .Alert)
             
             let connect = UIAlertAction(title: "Connect", style: .Default) { (_) in
                 let password = alertController.textFields![0] as UITextField
@@ -356,7 +427,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let result = results[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier(SetupViewController.CellId)
             
-        cell?.textLabel!.text = result.ssid
+        cell?.textLabel!.text = result.ssid + "\n    \(result.security),  Signal: \(result.signal) dBm"
         cell!.selectionStyle = UITableViewCellSelectionStyle.None
             
         return cell!
@@ -379,10 +450,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func wifiStateDidChange(state: String) {
-        let prompt = "WiFi State: \(state)"
-        print(prompt)
-        updatePrompt(prompt)
-        addDescription(prompt)
+        moduleWiFiState = state
     }
 
 }

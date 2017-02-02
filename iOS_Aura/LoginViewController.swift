@@ -229,6 +229,7 @@ class LoginViewController: UIViewController {
      */
     func presentError(error: NSError) {
         let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
+        print(error)
         
         alert.addAction(UIAlertAction(
             title: "Got it", style: .Cancel, handler: nil))
