@@ -13,7 +13,17 @@ import AFNetworking
 extension NSError {
     private var responseError : String? {
         if let responseDict = self.userInfo[AylaHTTPErrorResponseJsonKey] as? [String: AnyObject] {
-            if let response = responseDict["error"] as? String{
+            print("Ayla Error")
+            for (key, value) in responseDict {
+                print("   \(key) : \(value)")
+            }
+            if let msg = responseDict["msg"] {
+                var message: String = (msg as? String) ?? ""
+                if let code = responseDict["error"] {
+                    message = message + " (\(code))"
+                }
+                return message.capitalizedString
+            } else if let response = responseDict["error"] as? String{
                 return response.capitalizedString
             } else if let response = responseDict["errors"]{
                 return response.capitalizedString
@@ -65,8 +75,24 @@ extension NSError {
         }
     }
     
+    /* If the error originated with the Ayla Cloud Service, this property will return the Ayla error code.
+     */
+    var aylaResponseErrorCode : Int! {
+        if let responseDict = self.userInfo[AylaHTTPErrorResponseJsonKey] as? [String: AnyObject] {
+            print("Ayla Error")
+            for (key, value) in responseDict {
+                print("   \(key) : \(value)")
+            }
+            if let code = responseDict["error"] as? Int {
+                    return code
+            }
+        }
+        return 0
+    }
+    
     func displayAsAlertController() {
         let message = String(format:"%@", self.aylaServiceDescription)
         (UIApplication.sharedApplication().delegate as! AppDelegate).presentAlertController("Error", message:message , withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
     }
 }
+

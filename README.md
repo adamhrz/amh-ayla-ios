@@ -14,7 +14,7 @@ The following steps should be run in Terminal.
 
     >```gem install cocoapods```
 
-    Note: This version of Aura now supports Cocoapods version 1.0.1 and above. If you currently have a version of Cocoapods lower than 1.0.0, it may work, but it is recommended to upgrade using the following command.
+    Note: This version of Aura now supports Cocoapods version 1.1.1 and above. If you currently have a version of Cocoapods lower than 1.1.1, it may work, but it is recommended to upgrade using the following command.
     >```gem upgrade cocoapods```
  
 3. (Optional) Set the AYLA_SDK_BRANCH environment variable to the name of the AylaSDK branch you want to include. If the variable is unset, Cocoapods will default to the latest SDK release branch.
@@ -26,7 +26,7 @@ The following steps should be run in Terminal.
     >```pod install```
     
 Once the Pods have been installed correctly, Cocoapods will generate a `iOS_Aura.xcworkspace` file.
-When opening Aura in Xcode, be sure to _only open the .xcworkspace_ file.
+When opening Aura in Xcode, be sure to _only open the .xcworkspace_ file. If it asks whether to convert to current Swift syntax, please answer No. If it asks whether to perform changes for watchOS 2, please answer No.
 
 ##SDK Documentation
 
@@ -49,10 +49,23 @@ If you would like to contribute your own code change to our project, please subm
 
 ##Version of major build tools used
 ===================================
-Xcode: 8.0
-CocoaPods: 1.0.1
+Xcode: 8.2.1
+CocoaPods: 1.1.1
 
 #Release Notes
+
+v5.4.00     2017-02-02
+-------
+New & Improved App
+- Support for iOS_AylaSDK 5.4.00
+- Improved WiFi Setup status
+- Support for iPhone 7 using iOS 10.2+
+- New file preview support in AylaDatapointBlob class
+- New 'About' menu with version and diagnostic information
+
+Bug Fixes & Chores
+- Built using iOS_AylaSDK_Public version 5.4.00
+- Includes are previous hot fixes
 
 v5.3.01     2016-11-11
 - support iOS_AylaSDK 5.3.01

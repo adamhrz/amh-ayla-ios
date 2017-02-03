@@ -11,6 +11,7 @@ import SAMKeychain
 
 class LoginViewController: UIViewController {
 
+    @IBOutlet weak var appVersionLabel: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logoImageView: UIImageView!
@@ -45,6 +46,8 @@ class LoginViewController: UIViewController {
         } else {
             configLabel.text = ""
         }
+        let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+        appVersionLabel.text = "v." + appVersion
     }
     
     
@@ -226,6 +229,7 @@ class LoginViewController: UIViewController {
      */
     func presentError(error: NSError) {
         let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
+        print(error)
         
         alert.addAction(UIAlertAction(
             title: "Got it", style: .Cancel, handler: nil))

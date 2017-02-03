@@ -4,7 +4,7 @@
 # AYLA_SDK_BRANCH: default to AYLA_BUILD_BRANCH
 #
 # if you want to build a branch other than your crrent branch, switch to that branch to build it;
-# for public release we set lib branch by replacing $AYLA_BUILD_BRANCH with release/4.4.00 etc because
+# for public release we set lib branch by replacing $AYLA_BUILD_BRANCH with release/x.y.zz etc because
 # their branch names are different; for internal repos, lib branches can be the same as build branch
 # such as "develop" etc
 #
@@ -16,8 +16,8 @@
 require_relative './Podhelper'
 
 #Configuration Section: you can change the following variables to configure your build
-conditional_assign("ayla_build_branch", "") #"release/4.4.0"
-conditional_assign("ayla_sdk_branch", "release/5.3.01") #or @ayla_build_branch)
+conditional_assign("ayla_build_branch", "") #"develop"
+conditional_assign("ayla_sdk_branch", "release/5.4.00") #or @ayla_build_branch)
 conditional_assign("ayla_sdk_repo", "") #"https://github.com/AylaNetworks/iOS_AylaSDK(_Public).git"
 conditional_assign("ayla_public", "")
 conditional_assign("ayla_remote", "origin")
