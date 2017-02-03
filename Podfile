@@ -17,7 +17,7 @@ require_relative './Podhelper'
 
 #Configuration Section: you can change the following variables to configure your build
 conditional_assign("ayla_build_branch", "") #"develop"
-conditional_assign("ayla_sdk_branch", "develop") #or @ayla_build_branch)
+conditional_assign("ayla_sdk_branch", "develop") #or @ayla_build_branch) 
 conditional_assign("ayla_sdk_repo", "") #"https://github.com/AylaNetworks/iOS_AylaSDK(_Public).git"
 conditional_assign("ayla_public", "")
 conditional_assign("ayla_remote", "origin")
