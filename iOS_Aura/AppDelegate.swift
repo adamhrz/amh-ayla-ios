@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Init device manager
         AylaNetworks.initializeWithSettings(settings)
         
-        AylaLogManager.sharedManager().loggingLevel = .Info
+        AylaLogManager.sharedManager().loggingLevel = .Debug
         
         AylaNetworks.enableNetworkProfiler()
         

@@ -95,7 +95,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                 let country = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as! String
                 let language = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
                 
-                var emailMessageBody = "Latest logs from Aura app attached\n\nDevice Model: \(deviceModel)\nOS Version: \(osVersion)\nCountry: \(country)\nLanguage: \(language)\nNetwork Operator: \(carrier)\nAyla SDK version: \(AYLA_SDK_VERSION)\nAura app version: \(appVersion)"
+                var emailMessageBody = "Latest logs from Aura app attached\n\nAura config name:\(AuraConfig.currentConfig().name)\nDevice Model: \(deviceModel)\nOS Version: \(osVersion)\nCountry: \(country)\nLanguage: \(language)\nNetwork Operator: \(carrier)\nAyla SDK version: \(AYLA_SDK_VERSION)\nAura app version: \(appVersion)"
                 emailMessageBody = self.removeOptionalStrings(emailMessageBody)
                 mailVC.setMessageBody(emailMessageBody, isHTML: false)
                 if data != nil {
