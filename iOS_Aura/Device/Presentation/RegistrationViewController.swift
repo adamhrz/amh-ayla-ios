@@ -8,7 +8,7 @@ import Foundation
 import PDKeychainBindingsController
 import iOS_AylaSDK
 import UIKit
-
+import Ayla_LocalDevice_SDK
 
 class RegistrationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CellButtonDelegate, CellSelectorDelegate, AylaDeviceManagerListener, AylaDeviceListener {
     
@@ -24,6 +24,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         case ButtonPush
         case GatewayNode
         case Manual
+        case LocalDevice
         case SectionCount
     }
     
@@ -50,6 +51,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     var candidateButtonPush :AylaRegistrationCandidate?
     var candidateManual :AylaRegistrationCandidate?
     var gateways : [AylaDeviceGateway?] = []
+    var discoveredLocalDevices = [AylaRegistrationCandidate]()
 
     
     let RegistrationCellId :String = "CandidateCellId"
@@ -118,16 +120,18 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     func getCandidate(indexPath:NSIndexPath) -> AylaRegistrationCandidate? {
         var candidate :AylaRegistrationCandidate?
-        switch indexPath.section {
-        case Section.SameLan.rawValue:
+        switch Section(rawValue:indexPath.section)! {
+        case .SameLan:
             candidate = candidateSameLan;
             break
-        case Section.ButtonPush.rawValue:
+        case .ButtonPush:
             candidate = candidateButtonPush;
             break
-        case Section.Manual.rawValue:
+        case .Manual:
             candidate = candidateManual;
             break
+        case .LocalDevice:
+            candidate = discoveredLocalDevices[indexPath.row]
         default:
             break
         }
@@ -135,6 +139,27 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func register(candidate :AylaRegistrationCandidate) {
+        if candidate.registrationType.rawValue == AylaRegistrationTypeLocal {
+            guard let localDeviceManager = AylaNetworks.shared().getPluginWithId(AuraLocalDeviceManager.PLUGIN_ID_LOCAL_DEVICE) as? AuraLocalDeviceManager
+                else {
+                    self.updatePrompt("No Local Device Manager found")
+                    return
+            }
+            guard let sessionManager = self.sessionManager
+                else {
+                    self.updatePrompt("No Session Manager found")
+                    return
+            }
+            updatePrompt("Registering...")
+            localDeviceManager.registerLocalDevice(candidate, sessionManager: sessionManager, success: { (localDevice) in
+                print("Registered device \(localDevice)")
+                self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                }, failure: { (error) in
+                    self.updatePrompt("Failed to register Local Device")
+                    self.addLog(error.description)
+            })
+            return
+        }
         if let reg = sessionManager?.deviceManager.registration {
             updatePrompt("Registering...")
             reg.registerCandidate(candidate, success: { (AylaDevice) in
@@ -215,6 +240,16 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             dispatch_group_notify(aGroup, dispatch_get_main_queue(), {
                 self.updatePrompt(nil)
             })
+        }
+        guard let localDeviceManager = AylaNetworks.shared().getPluginWithId(AuraLocalDeviceManager.PLUGIN_ID_LOCAL_DEVICE) as? AuraLocalDeviceManager
+            else {
+                return
+        }
+        localDeviceManager.findLocalDevicesWithHint(nil, timeout: 5000, success: { (foundDevices) in
+            self.discoveredLocalDevices = foundDevices
+            self.tableView.reloadData()
+            }) { (error) in
+                self.addLog("Error fetching local candidates: \(error)")
         }
     }
     
@@ -301,18 +336,21 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationCellId) as? RegistrationTVCell
         
             if (cell != nil) {
-                switch indexPath.section {
-                case Section.SameLan.rawValue:
+                switch Section(rawValue: indexPath.section)! {
+                case .SameLan:
                     cell?.configure(candidateSameLan)
                     break
-                case Section.ButtonPush.rawValue:
+                case .ButtonPush:
                     cell?.configure(candidateButtonPush)
                     break
-                case Section.GatewayNode.rawValue:
+                case .GatewayNode:
                     if let gateway = gateways[indexPath.row] {
                     cell?.nameLabel.text = gateway.productName
                     cell?.dsnLabel.text = gateway.dsn
                     }
+                case .LocalDevice:
+                    let registrationCandidate = discoveredLocalDevices[indexPath.row]
+                    cell?.configure(registrationCandidate)
                 default:
                     cell?.configure(nil)
                 }
@@ -324,16 +362,17 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case Section.SameLan.rawValue:
+        switch Section(rawValue: section)! {
+        case .SameLan:
             return Int(candidateSameLan != nil);
-        case Section.ButtonPush.rawValue:
+        case .ButtonPush:
             return Int(candidateButtonPush != nil);
-        case Section.GatewayNode.rawValue:
+        case .GatewayNode:
             return gateways.count
-        case Section.Manual.rawValue:
+        case .Manual:
             return 2;
-            
+        case .LocalDevice:
+            return discoveredLocalDevices.count
         default:
             return 0;
         }
@@ -355,15 +394,17 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case Section.SameLan.rawValue:
+        switch Section(rawValue: section)! {
+        case .SameLan:
             return "Same LAN Candidate"
-        case Section.ButtonPush.rawValue:
+        case .ButtonPush:
             return "Button Push Candidate"
-        case Section.GatewayNode.rawValue:
+        case .GatewayNode:
             return "Add Node to Gateway"
-        case Section.Manual.rawValue:
+        case .Manual:
             return "Enter Candidate Details Manually"
+        case .LocalDevice:
+            return "Discovered Local Devices"
         default:
             return "";
         }

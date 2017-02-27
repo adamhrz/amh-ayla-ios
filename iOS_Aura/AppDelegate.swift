@@ -42,6 +42,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Init device manager
         AylaNetworks.initializeWithSettings(settings)
         
+        let localDeviceManager = AuraLocalDeviceManager();
+        AylaLogManager.sharedManager().loggingLevel = .Debug
+        
+        AylaNetworks.shared().installPlugin(localDeviceManager, id: PLUGIN_ID_DEVICE_CLASS)
+        AylaNetworks.shared().installPlugin(localDeviceManager, id: AuraLocalDeviceManager.PLUGIN_ID_LOCAL_DEVICE)
+        AylaNetworks.shared().installPlugin(localDeviceManager, id: PLUGIN_ID_DEVICE_LIST)
+        
         AylaLogManager.sharedManager().loggingLevel = .Debug
         
         AylaNetworks.enableNetworkProfiler()

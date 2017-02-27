@@ -17,7 +17,7 @@ require_relative './Podhelper'
 
 #Configuration Section: you can change the following variables to configure your build
 conditional_assign("ayla_build_branch", "") #"develop"
-conditional_assign("ayla_sdk_branch", "develop") #or @ayla_build_branch) 
+conditional_assign("ayla_sdk_branch", "") #or @ayla_build_branch)
 conditional_assign("ayla_sdk_repo", "") #"https://github.com/AylaNetworks/iOS_AylaSDK(_Public).git"
 conditional_assign("ayla_public", "")
 conditional_assign("ayla_remote", "origin")
@@ -36,6 +36,7 @@ cur_branch=branch_string.split(' ')[-1]
 # default all branches to the current branch if they are still not set or empty
 conditional_assign("ayla_build_branch", cur_branch)
 conditional_assign("ayla_sdk_branch", cur_branch)
+conditional_assign("ayla_local_sdk_branch", cur_branch)
 
 cur_path=File.expand_path('.')
 public_repo_path_pattern=/.*_Public$/
@@ -46,6 +47,7 @@ else
     repo_type="internal"
 end
 conditional_assign "ayla_sdk_repo", "https://github.com/AylaNetworks/iOS_AylaSDK#{@ayla_public}.git"
+conditional_assign "ayla_local_sdk_repo", "https://github.com/AylaNetworks/iOS_LocalDevice_SDK#{@ayla_public}.git"
 
 puts "\n*** Building #{repo_type.try(:green)} repo on branch #{@ayla_build_branch.try(:green)} with sdk branch #{@ayla_sdk_branch.try(:green)} ***"
 puts "*** sdk repo: #{@ayla_sdk_repo.try(:green)} ***\n\n"
@@ -63,9 +65,15 @@ use_frameworks!
 target :iOS_Aura do
     pod 'iOS_AylaSDK',
     :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
-#    :path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
+    #:path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
+
+    pod 'Ayla_LocalDevice_SDK',
+    :git => "#{@ayla_local_sdk_repo}", :branch => "#{@ayla_local_sdk_branch}"
+    #:path => '../Ayla_LocalDevice_SDK', :branch => "#{@ayla_local_sdk_branch}"
+
     pod 'SAMKeychain'
     pod 'PDKeychainBindingsController'
+    pod 'ActionSheetPicker-3.0'
 end
 
 post_install do |installer|

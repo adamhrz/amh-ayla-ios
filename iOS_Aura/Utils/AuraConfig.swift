@@ -16,6 +16,7 @@ class AuraConfig {
     static let ConfigNameStaging  = "US Staging"
     static let ConfigNameUSDev      = "US Development"
     static let ConfigNameUSField    = "US Field"
+    static let ConfigNameUSDemo      = "US Demo"
     static let ConfigNameCNDev      = "CN Development"
     static let ConfigNameCNField    = "CN Field"
     static let ConfigNameEUDev      = "EU Development"
@@ -24,6 +25,7 @@ class AuraConfig {
     static let configStaging = ["appId": AuraOptions.AppIdStaging, "appSecret": AuraOptions.AppSecretStaging, "serviceType": "Staging", "serviceLocation": "US"]
     static let configUSDev = ["appId": AuraOptions.AppIdUSDev, "appSecret": AuraOptions.AppSecretUSDev, "serviceType": "Development", "serviceLocation": "US"]
     static let configUSField = ["appId": AuraOptions.AppIdUSField, "appSecret": AuraOptions.AppSecretUSField, "serviceType": "Field", "serviceLocation": "US"]
+    static let configUSDemo = ["appId": AuraOptions.AppIdDemo, "appSecret": AuraOptions.AppSecretDemo, "serviceType": "Demo", "serviceLocation": "US"]
     static let configCNDev = ["appId": AuraOptions.AppIdCNDev, "appSecret": AuraOptions.AppSecretCNDev, "serviceType": "Development", "serviceLocation": "CN"]
     static let configCNField = ["appId": AuraOptions.AppIdCNField, "appSecret": AuraOptions.AppSecretCNField, "serviceType": "Field", "serviceLocation": "CN"]
     static let configEUDev = ["appId": AuraOptions.AppIdEUDev, "appSecret": AuraOptions.AppSecretEUDev, "serviceType": "Development", "serviceLocation": "EU"]
@@ -33,6 +35,7 @@ class AuraConfig {
     static let defaultConfigurations = [
         AuraConfig(name: ConfigNameUSDev, config: configUSDev),
         AuraConfig(name: ConfigNameUSField, config: configUSField),
+        AuraConfig(name: ConfigNameUSDemo, config: configUSDemo),
         AuraConfig(name: ConfigNameCNDev, config: configCNDev),
         AuraConfig(name: ConfigNameCNField, config: configCNField),
         AuraConfig(name: ConfigNameEUDev, config: configEUDev),
@@ -101,6 +104,9 @@ class AuraConfig {
                 
             case "Staging":
                 settings.serviceType = .Staging
+                
+            case "Demo":
+                settings.serviceType = .Demo
                 
             default:
                 settings.serviceType = .Development

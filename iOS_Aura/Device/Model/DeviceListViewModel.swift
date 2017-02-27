@@ -8,6 +8,7 @@
 
 import Foundation
 import iOS_AylaSDK
+import Ayla_LocalDevice_SDK
 
 protocol DeviceListViewModelDelegate: class {
     func deviceListViewModel(viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
@@ -31,6 +32,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     weak var delegate: DeviceListViewModelDelegate?
     
     static let DeviceCellId: String = "DeviceCellId"
+    static let LocalDeviceCellId: String = "LocalDeviceCellId";
     
     required init(deviceManager: AylaDeviceManager, tableView: UITableView) {
         
@@ -71,14 +73,14 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let device = self.devices[indexPath.row]
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier(DeviceListViewModel.DeviceCellId) as? DeviceTVCell
+        let cellId = device is AylaLocalDevice ? DeviceListViewModel.LocalDeviceCellId : DeviceListViewModel.DeviceCellId
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellId) as? DeviceTVCell
         
         if (cell != nil) {
             cell!.configure(device)
         }
         else {
-            assert(false, "\(DeviceListViewModel.DeviceCellId) - reusable cell can't be dequeued'")
+            assert(false, "\(cellId) - reusable cell can't be dequeued'")
         }
         
         return cell!

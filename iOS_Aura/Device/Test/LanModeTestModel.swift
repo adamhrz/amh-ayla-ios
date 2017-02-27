@@ -214,7 +214,7 @@ class LanModeTestModel: TestModel {
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        if let curVal = property!.value.intValue {
+        if let curVal = property!.value?.intValue {
             dp.value = NSNumber(int: 1 - curVal)
         }
         else {
@@ -270,7 +270,7 @@ class LanModeTestModel: TestModel {
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        if let curVal = property!.value.intValue {
+        if let curVal = property!.value?.intValue {
             dp.value = NSNumber(int: 1 - curVal)
         }
         else {

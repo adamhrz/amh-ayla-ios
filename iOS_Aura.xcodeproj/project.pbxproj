@@ -65,9 +65,16 @@
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
+		A55E91E51E02147000DD8E7D /* GrillRightDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55E91E41E02147000DD8E7D /* GrillRightDevice.swift */; };
+		A562DBF31E147DEA007C7570 /* DeviceViews.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A562DBF11E147DEA007C7570 /* DeviceViews.storyboard */; };
+		A5712EC21E158501000675E0 /* LEDSimulator.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5712EC11E157206000675E0 /* LEDSimulator.ttf */; };
+		A5712EC41E158656000675E0 /* GrillRightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5712EC31E158656000675E0 /* GrillRightViewController.swift */; };
+		A5712EC61E1586CF000675E0 /* GrillRightSensorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5712EC51E1586CF000675E0 /* GrillRightSensorViewController.swift */; };
 		A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */; };
 		A57EDB821D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */; };
 		A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */; };
+		A5A90A001E0D7A07002C62D0 /* GrillRightCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A909FF1E0D7A07002C62D0 /* GrillRightCandidate.swift */; };
+		A5AF0A261E0B324200399BF4 /* AuraLocalDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AF0A251E0B324200399BF4 /* AuraLocalDeviceManager.swift */; };
 		A5B641211D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */; };
 		A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */; };
 		A5E0DF3F1CE257E800D0E87F /* ScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */; };
@@ -170,9 +177,16 @@
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
+		A55E91E41E02147000DD8E7D /* GrillRightDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightDevice.swift; path = Device/Model/GrillRightDevice.swift; sourceTree = "<group>"; };
+		A562DBF21E147DEA007C7570 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/DeviceViews.storyboard; sourceTree = "<group>"; };
+		A5712EC11E157206000675E0 /* LEDSimulator.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LEDSimulator.ttf; sourceTree = "<group>"; };
+		A5712EC31E158656000675E0 /* GrillRightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightViewController.swift; path = Device/Presentation/GrillRightViewController.swift; sourceTree = "<group>"; };
+		A5712EC51E1586CF000675E0 /* GrillRightSensorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightSensorViewController.swift; path = Device/Presentation/GrillRightSensorViewController.swift; sourceTree = "<group>"; };
 		A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkProfilerModel.swift; sourceTree = "<group>"; };
 		A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AylaSystemSettings+AuraConfig.swift"; path = "Utils/AylaSystemSettings+AuraConfig.swift"; sourceTree = "<group>"; };
 		A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLoginViewController.swift; sourceTree = "<group>"; };
+		A5A909FF1E0D7A07002C62D0 /* GrillRightCandidate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightCandidate.swift; path = Device/Model/GrillRightCandidate.swift; sourceTree = "<group>"; };
+		A5AF0A251E0B324200399BF4 /* AuraLocalDeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraLocalDeviceManager.swift; path = Device/Model/AuraLocalDeviceManager.swift; sourceTree = "<group>"; };
 		A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SAMKeychain+AylaUtils.swift"; path = "Utils/SAMKeychain+AylaUtils.swift"; sourceTree = "<group>"; };
 		A5E0DF3C1CE2579000D0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Schedules.storyboard; sourceTree = "<group>"; };
 		A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleTableViewController.swift; path = Device/Presentation/ScheduleTableViewController.swift; sourceTree = "<group>"; };
@@ -305,6 +319,7 @@
 				5F4632931CCAE919005580EC /* Signup.storyboard */,
 				A78DC8EB1CB8538F002EE6B0 /* Test.storyboard */,
 				5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */,
+				A562DBF11E147DEA007C7570 /* DeviceViews.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -315,6 +330,16 @@
 				5F6C38391D122108000CC897 /* AylaDevice_extensions.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		A55E91E31E02142100DD8E7D /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				A55E91E41E02147000DD8E7D /* GrillRightDevice.swift */,
+				A5AF0A251E0B324200399BF4 /* AuraLocalDeviceManager.swift */,
+				A5A909FF1E0D7A07002C62D0 /* GrillRightCandidate.swift */,
+			);
+			name = Local;
 			sourceTree = "<group>";
 		};
 		A7104ACB1C757FA7007B1AB3 /* Login */ = {
@@ -352,6 +377,7 @@
 		A7104AD71C7ABBDC007B1AB3 /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				A55E91E31E02142100DD8E7D /* Local */,
 				A78DC8F31CB87213002EE6B0 /* Test */,
 				A7104ADF1C7AD263007B1AB3 /* Model */,
 				A7104AD81C7AC290007B1AB3 /* Presentation */,
@@ -387,6 +413,8 @@
 				0F660F901D35A493000522AA /* ScheduleActionEditorViewController.swift */,
 				0F660F8E1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift */,
 				5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */,
+				A5712EC31E158656000675E0 /* GrillRightViewController.swift */,
+				A5712EC51E1586CF000675E0 /* GrillRightSensorViewController.swift */,
 			);
 			name = Presentation;
 			sourceTree = "<group>";
@@ -440,6 +468,7 @@
 				A7351C8D1C753C370073C73A /* AppDelegate.swift */,
 				5F46328F1CCAE8D1005580EC /* Storyboards */,
 				A7351C941C753C370073C73A /* Assets.xcassets */,
+				A5712EC11E157206000675E0 /* LEDSimulator.ttf */,
 				A7351C991C753C370073C73A /* Info.plist */,
 				A7104ADD1C7AD04A007B1AB3 /* Constants.swift */,
 			);
@@ -638,7 +667,9 @@
 				0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */,
 				A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */,
 				5F3CFE3C1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib in Resources */,
+				A562DBF31E147DEA007C7570 /* DeviceViews.storyboard in Resources */,
 				A78080181CBC271A00C779B5 /* Me.storyboard in Resources */,
+				A5712EC21E158501000675E0 /* LEDSimulator.ttf in Resources */,
 				5F6046D61D0B55B6007E1AE6 /* Notifications.storyboard in Resources */,
 				5F4632951CCAE919005580EC /* Signup.storyboard in Resources */,
 				A7351C931C753C370073C73A /* Main.storyboard in Resources */,
@@ -732,6 +763,7 @@
 				A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */,
 				0F47221B1CDD39800055D6C3 /* DeviceSharesModel.swift in Sources */,
 				A78DC8F01CB8547F002EE6B0 /* TestPanelViewController.swift in Sources */,
+				A5712EC41E158656000675E0 /* GrillRightViewController.swift in Sources */,
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A78DC8F21CB85702002EE6B0 /* TestModel.swift in Sources */,
 				5F6C383C1D1230A8000CC897 /* PropertyNotificationDetailsViewController.swift in Sources */,
@@ -744,6 +776,7 @@
 				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
 				0FDFDF6D1E24416C003ADEAE /* AboutAuraTVController.swift in Sources */,
+				A55E91E51E02147000DD8E7D /* GrillRightDevice.swift in Sources */,
 				9DF37BF81D779BC4003D5929 /* AuraSessionListener.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				0F660F8F1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift in Sources */,
@@ -762,8 +795,10 @@
 				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */,
 				A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */,
+				A5AF0A261E0B324200399BF4 /* AuraLocalDeviceManager.swift in Sources */,
 				0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */,
 				0F660F931D384B97000522AA /* ScheduleTableViewCell.swift in Sources */,
+				A5712EC61E1586CF000675E0 /* GrillRightSensorViewController.swift in Sources */,
 				5F6C383A1D122108000CC897 /* AylaDevice_extensions.swift in Sources */,
 				0FD5AA631CEBBAD6000931D6 /* RegistrationManualTVCell.swift in Sources */,
 				0F6791CD1D4BF84600E83CA0 /* AuraConsoleTextView.swift in Sources */,
@@ -778,6 +813,7 @@
 				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
 				A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */,
 				0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */,
+				A5A90A001E0D7A07002C62D0 /* GrillRightCandidate.swift in Sources */,
 				A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
 				A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */,
@@ -882,6 +918,14 @@
 				5F7277F31CF4EBEB009D153F /* Base */,
 			);
 			name = TimeZonePicker.storyboard;
+			sourceTree = "<group>";
+		};
+		A562DBF11E147DEA007C7570 /* DeviceViews.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A562DBF21E147DEA007C7570 /* Base */,
+			);
+			name = DeviceViews.storyboard;
 			sourceTree = "<group>";
 		};
 		A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */ = {

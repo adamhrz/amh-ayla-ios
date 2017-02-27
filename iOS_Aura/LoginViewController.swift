@@ -144,7 +144,7 @@ class LoginViewController: UIViewController {
     @IBAction func resendConfirmation(sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
-            presentLoading("Please enter a username.")
+            UIAlertController.alert(nil, message: "Please enter a username.", buttonTitle: "OK", fromController: self)
         }
         else {
             
@@ -168,7 +168,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func resetPassword(sender: AnyObject) {
         if (usernameTextField.text ?? "") == "" {
-            presentLoading("Please enter a username.")
+            UIAlertController.alert(nil, message: "Please enter a username.", buttonTitle: "OK", fromController: self)
         }
         else if usernameTextField.text == AuraOptions.EasterEgg {
             self.easterEgg = true

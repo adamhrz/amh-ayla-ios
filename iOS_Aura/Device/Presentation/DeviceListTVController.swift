@@ -8,9 +8,14 @@
 
 import UIKit
 import iOS_AylaSDK
+import Ayla_LocalDevice_SDK
+import ActionSheetPicker_3_0
 
 class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate {
-
+    
+    /// Id of a segue which is linked to GrillRight device page.
+    let segueIdToGrillRight = "GrillRightDeviceSegue"
+    
     /// Id of a segue which is linked to device page.
     let segueIdToDevice :String = "toDevicePage"
     
@@ -82,7 +87,60 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     // MARK: - Device list view delegate
 
     func deviceListViewModel(viewModel: DeviceListViewModel, didSelectDevice device: AylaDevice) {
-        // Swith to device page
+        if device.isKindOfClass(AylaBLEDevice.self) {
+            let localDevice = device as! AylaBLEDevice
+            if localDevice.requiresLocalConfiguration {
+                let alert = UIAlertController(title: "Configure Local Connection", message: "This device requires additional setup to allow your mobile device to reach it. Would you like to configure this device now?", preferredStyle: .Alert)
+                
+                let configureDeviceAction = UIAlertAction(title: "Yes", style: .Default, handler: { (alert) in
+                    if let localDeviceManager = AylaNetworks.shared().getPluginWithId(PLUGIN_ID_LOCAL_DEVICE) as? AylaLocalDeviceManager {
+                        localDeviceManager.findLocalDevicesWithHint(nil, timeout: 5000, success: { (candidates) in
+                            
+                            let connectToCandidate: (AylaBLECandidate) -> Void = { candidate in
+                                localDevice.mapToIdentifier(candidate.peripheral.identifier)
+                                localDevice.connectLocalWithSuccess({
+                                    
+                                    self.performSegueWithIdentifier(self.segueIdToGrillRight, sender: device)
+                                    }, failure: { (error) in
+                                        UIAlertController.alert("Could not connect to device", message: "Error: \(error.localizedDescription)", buttonTitle: "OK", fromController: self)
+                                })
+                            }
+                            
+                            if candidates.count == 0 {
+                                UIAlertController.alert(nil, message: "Unable to find this device. Please make sure the device is turned on and you are nearby.", buttonTitle: "OK", fromController: self)
+                            } else if candidates.count == 1 {
+                                let candidate = candidates.first! as! AylaBLECandidate
+                                connectToCandidate(candidate)
+                                
+                            } else {
+                                let strings = candidates.map({ (candidate) -> String in
+                                    let candidate = candidate as! AylaBLECandidate
+                                    
+                                    return "\(candidate.oemModel ?? "Candidate"): \(candidate.peripheral.identifier.UUIDString)"
+                                })
+                                ActionSheetStringPicker.showPickerWithTitle("Select the device", rows: strings, initialSelection: 0, doneBlock: { (picker, index, uuidString) in
+                                    let candidate = candidates[index]
+                                    connectToCandidate(candidate as! AylaBLECandidate)
+                                    }, cancelBlock: { _ in }, origin: self.view)
+                            }
+                            }, failure: { (error) in
+                                UIAlertController.alert(nil, message: "Unable to find devices: \(error.localizedDescription).", buttonTitle: "OK", fromController: self)
+                        })
+                    }
+                })
+                alert.addAction(configureDeviceAction)
+                alert.addAction(UIAlertAction(title: "No, thanks", style: .Cancel, handler: { _ in
+                    self.performSegueWithIdentifier(self.segueIdToGrillRight, sender: device)
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+                
+                return
+            }
+            
+            self.performSegueWithIdentifier(segueIdToGrillRight, sender: device)
+            return
+        }
+        
         self.performSegueWithIdentifier(segueIdToDevice, sender: device)
     }
     
@@ -107,6 +165,11 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
                 let vc = segue.destinationViewController as! DeviceViewController
                 vc.device = device
                 vc.sharesModel = self.viewModel?.sharesModel
+            }
+        } else if segue.identifier == segueIdToGrillRight {
+            if let device = sender as? GrillRightDevice {
+                let vc = segue.destinationViewController as! GrillRightViewController
+                vc.device = device
             }
         } else if segue.identifier == segueIdToRegisterView { // To registration page
         }
