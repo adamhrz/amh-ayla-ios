@@ -170,6 +170,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
             if let device = sender as? GrillRightDevice {
                 let vc = segue.destinationViewController as! GrillRightViewController
                 vc.device = device
+                vc.sharesModel = self.viewModel?.sharesModel
             }
         } else if segue.identifier == segueIdToRegisterView { // To registration page
         }

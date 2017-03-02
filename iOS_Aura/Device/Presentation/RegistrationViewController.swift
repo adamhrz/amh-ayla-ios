@@ -23,8 +23,8 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         case SameLan
         case ButtonPush
         case GatewayNode
-        case Manual
         case LocalDevice
+        case Manual
         case SectionCount
     }
     
@@ -51,9 +51,18 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     var candidateButtonPush :AylaRegistrationCandidate?
     var candidateManual :AylaRegistrationCandidate?
     var gateways : [AylaDeviceGateway?] = []
-    var discoveredLocalDevices = [AylaRegistrationCandidate]()
-
     
+    var discoveredLocalDevices = [AylaRegistrationCandidate]()
+    
+    /// True while LocalDeviceManager is scanning for devices
+    var BLEScanBool : Bool = false {
+        didSet {
+            if self.tableView != nil {
+                self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.LocalDevice.rawValue, 1)), withRowAnimation: .Automatic)
+            }
+        }
+    }
+
     let RegistrationCellId :String = "CandidateCellId"
     
     let RegistrationModeSelectorCellId :String = "ModeSelectorCellId"
@@ -181,14 +190,16 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     func refresh() {
         self.updateGatewaysList()
+        let aGroup = dispatch_group_create()
+        
+        dispatch_group_enter(aGroup)  // SameLAN
+        dispatch_group_enter(aGroup)  // PushButton
+        dispatch_group_enter(aGroup)  // LocalDevice
+
         if let reg = sessionManager?.deviceManager.registration {
         
-            let aGroup = dispatch_group_create()
-            
-            dispatch_group_enter(aGroup)
-            dispatch_group_enter(aGroup)
-            
-            updatePrompt("Refreshing...")
+            updatePrompt("Refreshing Candidate Devices...")
+            self.addLog("Fetching Same-LAN Candidate.")
             reg.fetchCandidateWithDSN(nil, registrationType: .SameLan, success: { (candidate) in
                 self.candidateSameLan = candidate
                 self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.SameLan.rawValue, 1)), withRowAnimation: .Automatic)
@@ -199,19 +210,19 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     //Skip 404 for now
                     if let httpResp = error.userInfo[AylaHTTPErrorHTTPResponseKey] as? NSHTTPURLResponse {
                         if(httpResp.statusCode != 404) {
-                            self.addLog("SameLan - " + error.description)
+                            self.addLog("Same-LAN - " + error.description)
                         }
                         else {
-                            self.addLog("No Same Lan candidate")
+                            self.addLog("No Same LAN candidate")
                         }
                     }
                     else {
-                        self.addLog("SameLan - " + error.description)
+                        self.addLog("Same-LAN - " + error.description)
                     }
                     dispatch_group_leave(aGroup)
                     
             })
-            
+            self.addLog("Fetching Button Push Candidate.")
             reg.fetchCandidateWithDSN(nil, registrationType: .ButtonPush, success: { (candidate) in
                 self.candidateButtonPush = candidate
                 self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.ButtonPush.rawValue, 1)), withRowAnimation: .Automatic)
@@ -234,23 +245,34 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     }
                     dispatch_group_leave(aGroup)
             })
+            
             self.candidateManual = AylaRegistrationCandidate()
             self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.Manual.rawValue, 1)), withRowAnimation: .Automatic)
 
-            dispatch_group_notify(aGroup, dispatch_get_main_queue(), {
-                self.updatePrompt(nil)
-            })
+
         }
+        
         guard let localDeviceManager = AylaNetworks.shared().getPluginWithId(AuraLocalDeviceManager.PLUGIN_ID_LOCAL_DEVICE) as? AuraLocalDeviceManager
             else {
                 return
         }
+        
+        self.addLog("Scanning for Local Devices.")
+        self.BLEScanBool = true
         localDeviceManager.findLocalDevicesWithHint(nil, timeout: 5000, success: { (foundDevices) in
             self.discoveredLocalDevices = foundDevices
-            self.tableView.reloadData()
+            self.addLog("Local Devices: Found \(foundDevices.count).")
+            dispatch_group_leave(aGroup)
+            self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.LocalDevice.rawValue, 1)), withRowAnimation: .Automatic)
+            self.BLEScanBool = false
             }) { (error) in
                 self.addLog("Error fetching local candidates: \(error)")
+                self.BLEScanBool = false
+                dispatch_group_leave(aGroup)
         }
+        dispatch_group_notify(aGroup, dispatch_get_main_queue(), {
+            self.updatePrompt(nil)
+        })
     }
     
     func addLog(logText: String) {
@@ -259,7 +281,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     func updatePrompt(prompt: String?) {
         self.navigationController?.navigationBar.topItem?.prompt = prompt
-        addLog(prompt ?? "done")
+        addLog(prompt ?? "Done.")
     }
     
     
@@ -281,6 +303,136 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     // MARK - Table view delegate / data source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return Section.SectionCount.rawValue
+    }
+    
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        let height : CGFloat = 40.0
+        let zeroHeight : CGFloat = 0.0001
+        if tableView.dataSource?.tableView(tableView, numberOfRowsInSection: section) == 0 ||
+            (section == Section.LocalDevice.rawValue && BLEScanBool == true) {
+            return height
+        }
+        return zeroHeight
+    }
+    
+    func statusHeaderFooterView(labelString:String, withActivityIndicator:Bool) -> UIView {
+        let view = UIView(frame: CGRect.zero)
+        let label = UILabel()
+        label.text = labelString
+        label.textAlignment = .Left
+        label.font = UIFont.systemFontOfSize(18.0)
+        label.textColor = UIColor.lightGrayColor()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(label)
+
+        if withActivityIndicator {
+            let activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+            activityIndicator.userInteractionEnabled = false;
+            activityIndicator.startAnimating()
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(activityIndicator)
+            
+            NSLayoutConstraint(
+                item: label,
+                attribute: .Trailing,
+                relatedBy: .Equal,
+                toItem: activityIndicator,
+                attribute: .Leading,
+                multiplier: 1.0,
+                constant: 8.0
+                ).active = true
+            
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .Height,
+                relatedBy: .Equal,
+                toItem: nil,
+                attribute: .NotAnAttribute,
+                multiplier: 1.0,
+                constant: 22.0
+                ).active = true
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .Width,
+                relatedBy: .Equal,
+                toItem: nil,
+                attribute: .NotAnAttribute,
+                multiplier: 1.0,
+                constant: 22.0
+                ).active = true
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .CenterY,
+                relatedBy: .Equal,
+                toItem: view,
+                attribute: .CenterY,
+                multiplier: 1.0,
+                constant: 0.0
+                ).active = true
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .Trailing,
+                relatedBy: .Equal,
+                toItem: view,
+                attribute: .Trailing,
+                multiplier: 1.0,
+                constant: -16.0
+                ).active = true
+        } else {
+            NSLayoutConstraint(
+                item: label,
+                attribute: .Trailing,
+                relatedBy: .Equal,
+                toItem: view,
+                attribute: .Trailing,
+                multiplier: 1.0,
+                constant: 8.0
+                ).active = true
+            
+        }
+
+        NSLayoutConstraint(
+            item: label,
+            attribute: .Top,
+            relatedBy: .Equal,
+            toItem: view,
+            attribute: .Top,
+            multiplier: 1.0,
+            constant: 0.0
+            ).active = true
+        
+        NSLayoutConstraint(
+            item: label,
+            attribute: .Leading,
+            relatedBy: .Equal,
+            toItem: view,
+            attribute: .Leading,
+            multiplier: 1.0,
+            constant: 36.0
+            ).active = true
+        NSLayoutConstraint(
+            item: label,
+            attribute: .Bottom,
+            relatedBy: .Equal,
+            toItem: view,
+            attribute: .Bottom,
+            multiplier: 1.0,
+            constant: 8.0
+            ).active = true
+
+        return view
+    }
+    
+    
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == Section.LocalDevice.rawValue && BLEScanBool == true {
+            return self.statusHeaderFooterView("Scanning...", withActivityIndicator:true)
+        }
+        if tableView.numberOfRowsInSection(section) == 0 {
+            return self.statusHeaderFooterView("None", withActivityIndicator:false)
+        }
+        return nil
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

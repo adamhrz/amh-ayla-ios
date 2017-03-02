@@ -8,6 +8,7 @@
 
 import UIKit
 import iOS_AylaSDK
+import Ayla_LocalDevice_SDK
 
 class DevicePanelView: UIView {
 
@@ -19,6 +20,7 @@ class DevicePanelView: UIView {
     @IBOutlet weak var macAddressLabel: UILabel!
     @IBOutlet weak var lanIPAddressLabel: UILabel!
     @IBOutlet weak var lanModeActiveLabel: UILabel!
+    @IBOutlet weak var lanModeHeaderLabel: UILabel!
     @IBOutlet weak var timeZoneLabel: UILabel!
     @IBOutlet weak var sharesLabel: UILabel!
     @IBOutlet weak var shareNamesLabel: UILabel!
@@ -34,12 +36,30 @@ class DevicePanelView: UIView {
         
         oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", String.stringFromStringNumberOrNil(device.oemModel))
         modelLabel.text = String(format: "%@ %@", "Model: ", String.stringFromStringNumberOrNil(device.model))
-        macAddressLabel.text = String(format: "%@ %@", "MAC: ", String.stringFromStringNumberOrNil(device.mac))
         lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", String.stringFromStringNumberOrNil(device.lanIp))
         
         self.lanModeActiveLabel.textColor = UIColor.lightGrayColor()
         self.lanModeActiveLabel.highlightedTextColor = UIColor.auraLeafGreenColor()
-        if device.isLanModeActive() {
+        
+        var macAddressLabelString:String
+        var lanModeHeaderLabelString:String
+        var activeLabelBool:Bool
+
+        if let bleDevice = device as? AylaBLEDevice {
+            let btID = String.stringFromStringNumberOrNil(bleDevice.bluetoothIdentifier?.UUIDString)
+            macAddressLabelString = String(format: "%@ %@", "BT ID: ", String.stringFromStringNumberOrNil(btID))
+            lanModeHeaderLabelString = "Bluetooth:"
+            activeLabelBool = bleDevice.isConnectedLocal
+            
+        } else {
+            macAddressLabelString = String(format: "%@ %@", "MAC: ", String.stringFromStringNumberOrNil(device.mac))
+            lanModeHeaderLabelString = "LAN Mode:"
+            activeLabelBool = device.isLanModeActive()
+        }
+        macAddressLabel.text = macAddressLabelString
+        lanModeHeaderLabel.text = lanModeHeaderLabelString
+        
+        if activeLabelBool {
             self.lanModeActiveLabel.highlighted = true
             self.lanModeActiveLabel.text = "Active"
         }

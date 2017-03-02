@@ -41,18 +41,55 @@ class GrillRightSensorViewController: UIViewController {
     @IBOutlet weak var temperatureButton: UIButton!
     
     var sensor: GrillRightDevice.Sensor!
+    var device: GrillRightDevice!
+
     var uiTimer: NSTimer!
     var currentTime: Int?
     var lastCurrentTimeUpdated = NSDate()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        refreshUI()
+        
+        controlsShouldEnableForDevice(self.device)
+        //refreshUI()
     }
     
+    func disableUI(){
+        rightStatusHeaderLabel.text = ""
+        rightStatusLabel.text = ""
+        cookTimeLabel.text = ""
+        cookTimeHeaderLabel.text = ""
+        currentTempLabel.text = "---ºF"
+        statusLabel.text = ""
+        
+        modeLabel.text = "Not Connected"
+        meatButton.enabled = false
+        timerButton.enabled = false
+        temperatureButton.enabled = false
+        switchButton.enabled = false
+        self.view.backgroundColor = GrillRightSensorViewController.medGrayColor
+    }
+
+    func controlsShouldEnableForDevice(_device: GrillRightDevice? = nil){
+        
+        if (_device != nil && !_device!.isConnectedLocal) || !device.isConnectedLocal  {
+            self.disableUI()
+        } else {
+            meatButton.enabled = true
+            timerButton.enabled = true
+            temperatureButton.enabled = true
+            switchButton.enabled = true
+            refreshUI()
+        }
+    }
+    
+    
     func refreshUI(change: AylaPropertyChange? = nil) {
+        if !device.isConnectedLocal {
+            disableUI()
+            return
+        }
+        
         let runningBool = (sensor.isCooking || sensor.alarmState != .None)
         
         modeLabel.text = sensor.controlMode.name
@@ -264,15 +301,4 @@ class GrillRightSensorViewController: UIViewController {
             }, origin: self.view)
 
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
