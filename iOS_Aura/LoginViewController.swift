@@ -8,6 +8,30 @@ import UIKit
 import iOS_AylaSDK
 import PDKeychainBindingsController
 import SAMKeychain
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class LoginViewController: UIViewController {
 
@@ -29,7 +53,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        logoImageView.image = logoImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+        logoImageView.image = logoImageView.image?.withRenderingMode(.alwaysTemplate)
         logoImageView.tintColor = UIColor.aylaBahamaBlueColor()
         configLabel.text = ""
         settingsButton.tintColor = UIColor.aylaHippieGreenColor()
@@ -38,7 +62,7 @@ class LoginViewController: UIViewController {
         view.addGestureRecognizer(tap)
         
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let config = AuraConfig.currentConfig()
         if config.name != AuraConfig.ConfigNameUSDev {
@@ -46,12 +70,12 @@ class LoginViewController: UIViewController {
         } else {
             configLabel.text = ""
         }
-        let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+        let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         appVersionLabel.text = "v." + appVersion
     }
     
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.autoLogin()
     }
@@ -61,8 +85,8 @@ class LoginViewController: UIViewController {
      */
     func autoLogin() {
         let settings = AylaNetworks.shared().systemSettings
-        if let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey) {
-            let password = SAMKeychain.passwordForService(settings.appId, account: username)
+        if let username = PDKeychainBindings.shared().string(forKey: AuraUsernameKeychainKey) {
+            let password = SAMKeychain.password(forService: settings.appId, account: username)
             self.usernameTextField.text = username
             self.passwordTextField.text = password
             
@@ -72,7 +96,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @IBAction func login(sender: AnyObject) {
+    @IBAction func login(_ sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
             UIAlertController.alert(nil, message: "Must supply a username", buttonTitle: "OK", fromController: self)
@@ -91,12 +115,12 @@ class LoginViewController: UIViewController {
             let auth = AylaUsernameAuthProvider(username: username, password: password)
             
             let success = { (authorization: AylaAuthorization, sessionManager: AylaSessionManager) -> Void in
-                PDKeychainBindings.sharedKeychainBindings().setString(username, forKey: AuraUsernameKeychainKey)
+                PDKeychainBindings.shared().setString(username, forKey: AuraUsernameKeychainKey)
                 SAMKeychain.setPassword(password, forService: settings.appId, account: username)
                 
                 // Register for AylaSessionListener
-                (UIApplication.sharedApplication().delegate as! AppDelegate).auraSessionListener = AuraSessionListener.sharedListener
-                (UIApplication.sharedApplication().delegate as! AppDelegate).auraSessionListener?.initializeAuraSessionListener()
+                (UIApplication.shared.delegate as! AppDelegate).auraSessionListener = AuraSessionListener.sharedListener
+                (UIApplication.shared.delegate as! AppDelegate).auraSessionListener?.initializeAuraSessionListener()
                 
                 // Reset the Contact Manager for the new user
                 ContactManager.sharedInstance.reload()
@@ -110,7 +134,7 @@ class LoginViewController: UIViewController {
                         print("Failed to save authorization: %@", err.aylaServiceDescription)
                     }
                     // Once succeeded, present view controller in `Main` storyboard.
-                    self.performSegueWithIdentifier(self.segueIdToMain, sender: sessionManager)
+                    self.performSegue(withIdentifier: self.segueIdToMain, sender: sessionManager)
                 })
 
             }
@@ -118,12 +142,12 @@ class LoginViewController: UIViewController {
             // Login with login manager
             self.presentLoading("Login...")
             let loginManager = AylaNetworks.shared().loginManager
-            loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: success, failure: { [unowned loginManager] (error) -> Void in
+            loginManager.login(with: auth, sessionName: AuraSessionOneName, success: success, failure: { [unowned loginManager] (error) -> Void in
                     if settings.allowOfflineUse {
                         do {
                         if let cachedAuth = try SAMKeychain.objectForService("LANLoginAuthorization", account: username) as? AylaAuthorization {
                             let provider = AylaCachedAuthProvider(authorization: cachedAuth)
-                            loginManager.loginWithAuthProvider(provider, sessionName: AuraSessionOneName, success: success, failure: { (error) in
+                            loginManager.login(with: provider, sessionName: AuraSessionOneName, success: success, failure: { (error) in
                                 self.dismissLoading(false, completion: { () -> Void in
                                     self.presentError(error)
                                 })
@@ -135,13 +159,13 @@ class LoginViewController: UIViewController {
                         }
                     }
                     self.dismissLoading(false, completion: { () -> Void in
-                        self.presentError(error)
+                        self.presentError(error as NSError)
                     })
             })
         }
     }
     
-    @IBAction func resendConfirmation(sender: AnyObject) {
+    @IBAction func resendConfirmation(_ sender: AnyObject) {
         
         if (usernameTextField.text ?? "") == "" {
             UIAlertController.alert(nil, message: "Please enter a username.", buttonTitle: "OK", fromController: self)
@@ -166,14 +190,14 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @IBAction func resetPassword(sender: AnyObject) {
+    @IBAction func resetPassword(_ sender: AnyObject) {
         if (usernameTextField.text ?? "") == "" {
             UIAlertController.alert(nil, message: "Please enter a username.", buttonTitle: "OK", fromController: self)
         }
         else if usernameTextField.text == AuraOptions.EasterEgg {
             self.easterEgg = true
             self.dismissKeyboard()
-            self.performSegueWithIdentifier("CustomConfigSegue", sender: nil)
+            self.performSegue(withIdentifier: "CustomConfigSegue", sender: nil)
         }
         else {
             
@@ -195,22 +219,22 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @IBAction func settingsButtonPressed(sender: AnyObject) {
-        performSegueWithIdentifier("CustomConfigSegue", sender: self)
+    @IBAction func settingsButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "CustomConfigSegue", sender: self)
     }
     /**
      Helpful method to present `loading`
      
      - parameter text: The text which shows on alert view
      */
-    func presentLoading(text: String) {
+    func presentLoading(_ text: String) {
         
         if let cur = alert {
-            cur.dismissViewControllerAnimated(true, completion: nil)
+            cur.dismiss(animated: true, completion: nil)
         }
         
-        let newAlert = UIAlertController(title: text, message: nil, preferredStyle: .Alert)
-        self.presentViewController(newAlert, animated: true, completion: nil)
+        let newAlert = UIAlertController(title: text, message: nil, preferredStyle: .alert)
+        self.present(newAlert, animated: true, completion: nil)
         self.alert = newAlert
     }
     
@@ -220,21 +244,22 @@ class LoginViewController: UIViewController {
      - parameter animated:   True if this should be animated
      - parameter completion: A block which will be called after dismissing is completed.
      */
-    func dismissLoading(animated:Bool, completion: (() -> Void)?) {
-        self.dismissViewControllerAnimated(animated, completion: completion)
+    func dismissLoading(_ animated:Bool, completion: (() -> Void)?) {
+        self.dismiss(animated: animated, completion: completion)
     }
     
     /**
      Use to display an message.
      */
-    func presentError(error: NSError) {
-        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription) \n Status: \(error.httpResponseStatus ?? (String(error.code) ?? ""))", preferredStyle: .Alert)
+    func presentError(_ swiftError: Error) {
+        let error = swiftError as NSError
+        let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription) \n Status: \(error.httpResponseStatus ?? (String(error.code)))", preferredStyle: .alert)
         print(error)
         
         alert.addAction(UIAlertAction(
-            title: "Got it", style: .Cancel, handler: nil))
+            title: "Got it", style: .cancel, handler: nil))
         
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     /**
@@ -249,17 +274,17 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let segueIdentifier = segue.identifier {
             switch segueIdentifier {
             case "OAuthLoginSegueFacebook", "OAuthLoginSegueGoogle":
-                let navigationViewController = segue.destinationViewController as! UINavigationController
+                let navigationViewController = segue.destination as! UINavigationController
                 let oAuthController = navigationViewController.viewControllers.first! as! OAuthLoginViewController
-                oAuthController.authType = (segueIdentifier == "OAuthLoginSegueFacebook") ? AylaOAuthType.Facebook : AylaOAuthType.Google
+                oAuthController.authType = (segueIdentifier == "OAuthLoginSegueFacebook") ? AylaOAuthType.facebook : AylaOAuthType.google
                 // pass a reference to self to continue login after a sucessful OAuthentication
                 oAuthController.mainLoginViewController = self
             case "CustomConfigSegue":
-                let navigationViewController = segue.destinationViewController as! UINavigationController
+                let navigationViewController = segue.destination as! UINavigationController
                 let configViewController = navigationViewController.viewControllers.first! as! DeveloperOptionsViewController
                 configViewController.easterEgg = self.easterEgg ? true : false
                 configViewController.fromLoginScreen = true

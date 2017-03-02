@@ -12,19 +12,19 @@ import Ayla_LocalDevice_SDK
 class GrillRightDevice: AylaBLEDevice {
     static let timeFormat = "%02d:%02d:%02d"
     enum ControlMode: Int {
-        case None = 0
-        case Meat
-        case Temp
-        case Time
-        static func name(mode: ControlMode) -> String {
+        case none = 0
+        case meat
+        case temp
+        case time
+        static func name(_ mode: ControlMode) -> String {
             switch mode {
-            case None:
+            case none:
                 return "None"
-            case Meat:
+            case meat:
                 return "Meat Profile"
-            case Temp:
+            case temp:
                 return "Temperature"
-            case Time:
+            case time:
                 return "Cook Timer"
             }
         }
@@ -34,39 +34,39 @@ class GrillRightDevice: AylaBLEDevice {
             }
         }
         
-        static let caseCount = ControlMode.Time.rawValue + 1
+        static let caseCount = ControlMode.time.rawValue + 1
         
     }
     
     enum MeatType: Int {
-        case None = 0
-        case Beef
-        case Veal
-        case Lamb
-        case Pork
-        case Chicken
-        case Turkey
-        case Fish
-        case Hamburger
-        static func name(type: MeatType) -> String {
+        case none = 0
+        case beef
+        case veal
+        case lamb
+        case pork
+        case chicken
+        case turkey
+        case fish
+        case hamburger
+        static func name(_ type: MeatType) -> String {
             switch type {
-            case None:
+            case none:
                 return "None"
-            case Beef:
+            case beef:
                 return "Beef"
-            case Veal:
+            case veal:
                 return "Veal"
-            case Lamb:
+            case lamb:
                 return "Lamb"
-            case Pork:
+            case pork:
                 return "Pork"
-            case Chicken:
+            case chicken:
                 return "Chicken"
-            case Turkey:
+            case turkey:
                 return "Turkey"
-            case Fish:
+            case fish:
                 return "Fish"
-            case Hamburger:
+            case hamburger:
                 return "Hamburger"
             }
         }
@@ -76,29 +76,29 @@ class GrillRightDevice: AylaBLEDevice {
             }
         }
         
-        static let caseCount = MeatType.Hamburger.rawValue + 1
+        static let caseCount = MeatType.hamburger.rawValue + 1
     }
     
     enum Doneness: Int {
-        case None = 0
-        case Rare
-        case MediumRare
-        case Medium
-        case MediumWell
-        case WellDone
-        static func name(doneness: Doneness) -> String {
+        case none = 0
+        case rare
+        case mediumRare
+        case medium
+        case mediumWell
+        case wellDone
+        static func name(_ doneness: Doneness) -> String {
             switch doneness {
-            case None:
+            case none:
                 return "None"
-            case Rare:
+            case rare:
                 return "Rare"
-            case MediumRare:
+            case mediumRare:
                 return "Medium Rare"
-            case Medium:
+            case medium:
                 return "Medium"
-            case MediumWell:
+            case mediumWell:
                 return "Medium Well"
-            case WellDone:
+            case wellDone:
                 return "Well Done"
             }
         }
@@ -108,21 +108,21 @@ class GrillRightDevice: AylaBLEDevice {
             }
         }
         
-        static let caseCount = Doneness.WellDone.rawValue + 1
+        static let caseCount = Doneness.wellDone.rawValue + 1
     }
     
     enum AlarmState: Int {
-        case None = 0
-        case AlmostDone
-        case Overdone
+        case none = 0
+        case almostDone
+        case overdone
         
-        static func name(state: AlarmState) -> String {
+        static func name(_ state: AlarmState) -> String {
             switch state {
-            case .None:
+            case .none:
                 return "None"
-            case .AlmostDone:
+            case .almostDone:
                 return "Almost Done"
-            case .Overdone:
+            case .overdone:
                 return "Overdone"
             }
         }
@@ -132,7 +132,7 @@ class GrillRightDevice: AylaBLEDevice {
             }
         }
         
-        static let caseCount = AlarmState.Overdone.rawValue + 1
+        static let caseCount = AlarmState.overdone.rawValue + 1
     }
     
     class Sensor: NSObject {
@@ -146,16 +146,16 @@ class GrillRightDevice: AylaBLEDevice {
         var currentTemp: Int? {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TEMP : GrillRightDevice.PROP_SENSOR2_TEMP)
-                return device.valueForProperty(property as! AylaLocalProperty) as? Int
+                return device.value(for: property as! AylaLocalProperty) as? Int
             }
         }
         
         var alarmState: AlarmState {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_ALARM : GrillRightDevice.PROP_SENSOR2_ALARM) as! AylaLocalProperty
-                let value = device.valueForProperty(property)
+                let value = device.value(for: property)
                 guard let intValue = value as? Int, let state = AlarmState(rawValue: intValue) else {
-                    return AlarmState.None
+                    return AlarmState.none
                 }
                 return state
             }
@@ -164,9 +164,9 @@ class GrillRightDevice: AylaBLEDevice {
         var meatType: MeatType {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_MEAT : GrillRightDevice.PROP_SENSOR2_MEAT) as! AylaLocalProperty
-                let value = device.valueForProperty(property)
+                let value = device.value(for: property)
                 guard let intValue = value as? Int, let meatType = MeatType(rawValue: intValue) else {
-                    return MeatType.None
+                    return MeatType.none
                 }
                 return meatType
             }
@@ -174,13 +174,12 @@ class GrillRightDevice: AylaBLEDevice {
         var doneness: Doneness {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_DONENESS : GrillRightDevice.PROP_SENSOR2_DONENESS)  as! AylaLocalProperty
-                let value = device.valueForProperty(property)
-                
-                guard let intValue = value as? Int else {
-                    return Doneness.None
+                let value = device.value(for: property)
+                guard let intValue64 = value as? Int64 else {
+                    return Doneness.none
                 }
-                guard let doneness = Doneness(rawValue: Int(intValue)) else {
-                    return Doneness.None
+                guard let doneness = Doneness(rawValue: Int(intValue64)) else {
+                    return Doneness.none
                 }
                 return doneness
             }
@@ -189,8 +188,8 @@ class GrillRightDevice: AylaBLEDevice {
             get {
                 
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_CONTROL_MODE : GrillRightDevice.PROP_SENSOR2_CONTROL_MODE)  as! AylaLocalProperty
-                guard let intValue =  device.valueForProperty(property) as? Int, let mode = ControlMode(rawValue: intValue) else {
-                    return ControlMode.None
+                guard let intValue =  device.value(for: property) as? Int, let mode = ControlMode(rawValue: intValue) else {
+                    return ControlMode.none
                 }
                 return mode
             }
@@ -198,7 +197,7 @@ class GrillRightDevice: AylaBLEDevice {
         var isCooking: Bool {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING)
-                guard let isCooking = device.valueForProperty(property as! AylaLocalProperty) as? Bool else {
+                guard let isCooking = device.value(for: property as! AylaLocalProperty) as? Bool else {
                     return false
                 }
                 return isCooking
@@ -207,18 +206,18 @@ class GrillRightDevice: AylaBLEDevice {
         var targetTime: String {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TIME : GrillRightDevice.PROP_SENSOR2_TARGET_TIME)
-                return device.valueForProperty(property as! AylaLocalProperty) as! String
+                return device.value(for: property as! AylaLocalProperty) as! String
             }
         }
         var currentTime: String {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TIME : GrillRightDevice.PROP_SENSOR2_TIME)
-                return device.valueForProperty(property as! AylaLocalProperty) as! String
+                return device.value(for: property as! AylaLocalProperty) as! String
             }
         }
         var currentHours:Int? {
             get {
-                let components = self.currentTime.componentsSeparatedByString(":")
+                let components = self.currentTime.components(separatedBy: ":")
                 if components.count != 3 {
                     return 0
                 }
@@ -228,7 +227,7 @@ class GrillRightDevice: AylaBLEDevice {
         
         var currentMinutes:Int? {
             get {
-                let components = self.currentTime.componentsSeparatedByString(":")
+                let components = self.currentTime.components(separatedBy: ":")
                 if components.count != 3 {
                     return 0
                 }
@@ -238,7 +237,7 @@ class GrillRightDevice: AylaBLEDevice {
         
         var currentSeconds:Int? {
             get {
-                let components = self.currentTime.componentsSeparatedByString(":")
+                let components = self.currentTime.components(separatedBy: ":")
                 if components.count != 3 {
                     return 0
                 }
@@ -248,13 +247,13 @@ class GrillRightDevice: AylaBLEDevice {
         var targetTemp: Int {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TEMP : GrillRightDevice.PROP_SENSOR2_TARGET_TEMP)
-                return device.valueForProperty(property as! AylaLocalProperty) as! Int
+                return device.value(for: property as! AylaLocalProperty) as! Int
             }
         }
         var pctDone: Int {
             get {
                 let property = device.getProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_PCT_DONE : GrillRightDevice.PROP_SENSOR2_PCT_DONE)
-                guard let pctDone = device.valueForProperty(property as! AylaLocalProperty) as? Int else {
+                guard let pctDone = device.value(for: property as! AylaLocalProperty) as? Int else {
                     return 0
                 }
                 return pctDone
@@ -274,7 +273,7 @@ class GrillRightDevice: AylaBLEDevice {
         }
     }
     
-    private class InternalSensor: NSObject {
+    fileprivate class InternalSensor: NSObject {
         init (sensor: InternalSensor) {
             super.init()
             self.device = sensor.device
@@ -303,13 +302,13 @@ class GrillRightDevice: AylaBLEDevice {
             super.init()
         }
         weak var device: GrillRightDevice!
-        var currentValue: NSData!
+        var currentValue: Data!
         
         var currentTemp: Int?
-        var alarmState = AlarmState.None
-        var meatType = MeatType.None
-        var doneness = Doneness.None
-        var controlMode = ControlMode.None
+        var alarmState = AlarmState.none
+        var meatType = MeatType.none
+        var doneness = Doneness.none
+        var controlMode = ControlMode.none
         
         var isCooking : Bool {
             get {
@@ -322,7 +321,7 @@ class GrillRightDevice: AylaBLEDevice {
                 return String(format: GrillRightDevice.timeFormat, self.targetHours ?? 0, self.targetMinutes ?? 0, self.targetSeconds ?? 0)
             }
             set {
-                let components = newValue.componentsSeparatedByString(":")
+                let components = newValue.components(separatedBy: ":")
                 if components.count != 3 {
                     return
                 }
@@ -352,28 +351,28 @@ class GrillRightDevice: AylaBLEDevice {
         var index: Int!
         var cooking: Int?
         
-        func updateProperty(propertyName: String, withValue value:AnyObject) -> AylaPropertyChange? {
+        func updateProperty(_ propertyName: String, withValue value:AnyObject) -> AylaPropertyChange? {
             let newDatapoint = AylaDatapoint(value: value)
-            newDatapoint.dataSource = .Cloud
-            newDatapoint.createdAt = NSDate()
+            newDatapoint.dataSource = .cloud
+            newDatapoint.createdAt = Date()
             newDatapoint.updatedAt = newDatapoint.createdAt
             let property = device.getProperty(propertyName) as? AylaLocalProperty
             property?.originalProperty.datapoint = newDatapoint
-            let change = property?.updateFromDatapoint(newDatapoint)
+            let change = property?.update(from: newDatapoint)
             print("Updated property \(property?.name) with value:\(value), updated value \(property?.value), original property value: \(property?.originalProperty.value)")
             if let property = property {
-                property.pushUpdateToCloudWithSuccess(nil, failure: nil)
+                property.pushUpdateToCloud(success: nil, failure: nil)
             }
             
             return change
         }
         
-        func update(fromData data: NSData) -> [AylaChange]? {
+        func update(fromData data: Data) -> [AylaChange]? {
             var changes = [AylaChange]()
             
             //Current temperature
             var temp16: UInt16 = 0
-            data.getBytes(&temp16, range: NSRange(location: 12, length: 2))
+            (data as NSData).getBytes(&temp16, range: NSRange(location: 12, length: 2))
             var temp = -1
             if temp16 != 0x8FFF { //0x8FFF = no sensor
                 temp = Int(temp16)
@@ -381,7 +380,7 @@ class GrillRightDevice: AylaBLEDevice {
             
             if currentTemp == nil || temp != currentTemp! {
                 self.currentTemp = temp
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TEMP : GrillRightDevice.PROP_SENSOR2_TEMP, withValue: temp) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TEMP : GrillRightDevice.PROP_SENSOR2_TEMP, withValue: temp as AnyObject) {
                     changes.append(change)
                 }
             }
@@ -389,133 +388,133 @@ class GrillRightDevice: AylaBLEDevice {
             
             //isCooking
             var isCookingByte: Int8 = 0
-            data.getBytes(&isCookingByte, range: NSRange(location: 0, length: 1))
+            (data as NSData).getBytes(&isCookingByte, range: NSRange(location: 0, length: 1))
             isCookingByte = isCookingByte & 0x0F
             
-            let alarmState = isCookingByte == 0x0B ? AlarmState.AlmostDone : isCookingByte == 0x0F ? AlarmState.Overdone : AlarmState.None
+            let alarmState = isCookingByte == 0x0B ? AlarmState.almostDone : isCookingByte == 0x0F ? AlarmState.overdone : AlarmState.none
             if alarmState != self.alarmState {
                 self.alarmState = alarmState
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_ALARM : GrillRightDevice.PROP_SENSOR2_ALARM, withValue: alarmState.rawValue) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_ALARM : GrillRightDevice.PROP_SENSOR2_ALARM, withValue: alarmState.rawValue as AnyObject) {
                     changes.append(change)
                 }
             }
             
             var isCooking = isCookingByte & 0x04 == 0x04 ? 1 : 0
-            if alarmState != .None {
+            if alarmState != .none {
                 isCooking = 1
             }
             if self.cooking == nil || isCooking != self.cooking! {
                 self.cooking = isCooking
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING, withValue: isCooking) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING, withValue: isCooking as AnyObject) {
                     changes.append(change)
                 }
             }
             
             //Control Mode
             var controlModeByte: Int8 = 0
-            data.getBytes(&controlModeByte, range: NSRange(location: 0, length: 1))
+            (data as NSData).getBytes(&controlModeByte, range: NSRange(location: 0, length: 1))
             controlModeByte = controlModeByte & 0x03
             let controlMode = ControlMode(rawValue: Int(controlModeByte))
             if controlMode != self.controlMode {
                 self.controlMode = controlMode!
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_CONTROL_MODE : GrillRightDevice.PROP_SENSOR2_CONTROL_MODE, withValue: controlMode!.rawValue) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_CONTROL_MODE : GrillRightDevice.PROP_SENSOR2_CONTROL_MODE, withValue: controlMode!.rawValue as AnyObject) {
                     changes.append(change)
                 }
             }
             
             //target temperature
             var targetTemp16: UInt16 = 0
-            data.getBytes(&targetTemp16, range: NSRange(location: 10, length: 2))
+            (data as NSData).getBytes(&targetTemp16, range: NSRange(location: 10, length: 2))
             var targetTemp = -1
             if targetTemp16 != 0x8FFF { //0x8FFF = no sensor
                 targetTemp = Int(targetTemp16)
             }
             if self.targetTemp != targetTemp {
                 self.targetTemp = targetTemp
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TEMP : GrillRightDevice.PROP_SENSOR2_TARGET_TEMP, withValue: targetTemp) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TEMP : GrillRightDevice.PROP_SENSOR2_TARGET_TEMP, withValue: targetTemp as AnyObject) {
                     changes.append(change)
                 }
             }
             
             //Meat Type
             var meatByte: Int8 = 0
-            data.getBytes(&meatByte, range: NSRange(location: 1, length: 1))
+            (data as NSData).getBytes(&meatByte, range: NSRange(location: 1, length: 1))
             let meat = MeatType(rawValue: Int(meatByte))
             if meat != nil && meat != self.meatType {
                 self.meatType = meat!
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_MEAT : GrillRightDevice.PROP_SENSOR2_MEAT, withValue: meat!.rawValue) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_MEAT : GrillRightDevice.PROP_SENSOR2_MEAT, withValue: meat!.rawValue as AnyObject) {
                     changes.append(change)
                 }
             }
             
             //Doneness
             var donenessByte: Int8 = 0
-            data.getBytes(&donenessByte, range: NSRange(location: 2, length: 1))
+            (data as NSData).getBytes(&donenessByte, range: NSRange(location: 2, length: 1))
             let doneness = Doneness(rawValue: Int(donenessByte))
             if doneness != nil && doneness != self.doneness {
                 self.doneness = doneness!
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_DONENESS : GrillRightDevice.PROP_SENSOR2_DONENESS, withValue: doneness!.rawValue) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_DONENESS : GrillRightDevice.PROP_SENSOR2_DONENESS, withValue: doneness!.rawValue as AnyObject) {
                     changes.append(change)
                 }
             }
             
             var timeChanged = false
             var targetHours = 0
-            data.getBytes(&targetHours, range: NSRange(location: 3, length: 1))
+            (data as NSData).getBytes(&targetHours, range: NSRange(location: 3, length: 1))
             if self.targetHours == nil || targetHours != self.targetHours {
                 self.targetHours = targetHours
                 timeChanged = true
             }
             var targetMinutes = 0
-            data.getBytes(&targetMinutes, range: NSRange(location: 4, length: 1))
+            (data as NSData).getBytes(&targetMinutes, range: NSRange(location: 4, length: 1))
             if self.targetMinutes == nil || targetMinutes != self.targetMinutes {
                 self.targetMinutes = targetMinutes
                 timeChanged = true
             }
             var targetSeconds = 0
-            data.getBytes(&targetSeconds, range: NSRange(location: 5, length: 1))
+            (data as NSData).getBytes(&targetSeconds, range: NSRange(location: 5, length: 1))
             if self.targetSeconds == nil || targetSeconds != self.targetSeconds {
                 self.targetSeconds = targetSeconds
                 timeChanged = true
             }
             if timeChanged {
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TIME : GrillRightDevice.PROP_SENSOR2_TARGET_TIME, withValue: self.targetTime) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TIME : GrillRightDevice.PROP_SENSOR2_TARGET_TIME, withValue: self.targetTime as AnyObject) {
                     changes.append(change)
                 }
             }
             
             timeChanged = false
             var currentHours = 0
-            data.getBytes(&currentHours, range: NSRange(location: 6, length: 1))
+            (data as NSData).getBytes(&currentHours, range: NSRange(location: 6, length: 1))
             if self.currentHours == nil || currentHours != self.currentHours {
                 self.currentHours = currentHours
                 timeChanged = true
             }
             var currentMinutes = 0
-            data.getBytes(&currentMinutes, range: NSRange(location: 7, length: 1))
+            (data as NSData).getBytes(&currentMinutes, range: NSRange(location: 7, length: 1))
             if self.currentMinutes == nil || currentMinutes != self.currentMinutes {
                 self.currentMinutes = currentMinutes
                 timeChanged = true
             }
             var currentSeconds = 0
-            data.getBytes(&currentSeconds, range: NSRange(location: 8, length: 1))
+            (data as NSData).getBytes(&currentSeconds, range: NSRange(location: 8, length: 1))
             if self.currentSeconds == nil || currentSeconds != self.currentSeconds {
                 self.currentSeconds = currentSeconds
                 timeChanged = true
             }
             if timeChanged {
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TIME : GrillRightDevice.PROP_SENSOR2_TIME, withValue: self.currentTime) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_TIME : GrillRightDevice.PROP_SENSOR2_TIME, withValue: self.currentTime as AnyObject) {
                     changes.append(change)
                 }
             }
             
             //Percentage Done
             var pctDone16: UInt16 = 0
-            data.getBytes(&pctDone16, range: NSRange(location: 14, length: 2))
+            (data as NSData).getBytes(&pctDone16, range: NSRange(location: 14, length: 2))
             let pctDone = Int(pctDone16)
             if self.pctDone != pctDone {
                 self.pctDone = pctDone
-                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_PCT_DONE : GrillRightDevice.PROP_SENSOR2_PCT_DONE, withValue: pctDone) {
+                if let change = updateProperty(index == 1 ? GrillRightDevice.PROP_SENSOR1_PCT_DONE : GrillRightDevice.PROP_SENSOR2_PCT_DONE, withValue: pctDone as AnyObject) {
                     changes.append(change)
                 }
             }
@@ -526,14 +525,14 @@ class GrillRightDevice: AylaBLEDevice {
     }
     
     class Command: NSObject {
-        static func startCookingCommand(index: Int, mode: ControlMode) -> NSMutableData {
+        static func startCookingCommand(_ index: Int, mode: ControlMode) -> NSMutableData {
             return NSMutableData(bytes: [UInt8(0x83), UInt8(index), UInt8(mode.rawValue)], length: 3)
         }
-        static func stopCookingCommand(index: Int) -> NSMutableData {
+        static func stopCookingCommand(_ index: Int) -> NSMutableData {
             return NSMutableData(bytes: [UInt8(0x84), UInt8(index), UInt8(0x00)], length: 3)
         }
-        private static func setFields(sensor: InternalSensor) -> NSMutableData {
-            var command = [UInt8](count:13, repeatedValue: 0)
+        fileprivate static func setFields(_ sensor: InternalSensor) -> NSMutableData {
+            var command = [UInt8](repeating: 0, count: 13)
             command[0] = UInt8(0x82)
             command[1] = UInt8(sensor.index)
             command[2] = UInt8(sensor.meatType.rawValue)
@@ -551,7 +550,7 @@ class GrillRightDevice: AylaBLEDevice {
         }
     }
     
-    private lazy var sensor1: InternalSensor = {
+    fileprivate lazy var sensor1: InternalSensor = {
         [unowned self] in
         let sensor = InternalSensor()
         sensor.device = self
@@ -559,7 +558,7 @@ class GrillRightDevice: AylaBLEDevice {
         return sensor
         }()
     
-    private lazy var sensor2: InternalSensor = {
+    fileprivate lazy var sensor2: InternalSensor = {
         [unowned self] in
         let sensor = InternalSensor()
         sensor.device = self
@@ -635,7 +634,7 @@ class GrillRightDevice: AylaBLEDevice {
     
     override var isConnectedLocal: Bool {
         get {
-            return peripheral.state == .Connected
+            return peripheral.state == .connected
         }
     }
     
@@ -644,17 +643,17 @@ class GrillRightDevice: AylaBLEDevice {
     }
     
     var controlCharacteristic: CBCharacteristic?
-    override func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    override func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         for characteristic in service.characteristics! {
-            switch characteristic.UUID {
+            switch characteristic.uuid {
             case GrillRightDevice.CHARACTERISTIC_ID_CONTROL:
-                peripheral.setNotifyValue(true, forCharacteristic: characteristic)
+                peripheral.setNotifyValue(true, for: characteristic)
                 controlCharacteristic = characteristic
             case GrillRightDevice.CHARACTERISTIC_ID_SENSOR1:
                 fallthrough
             case GrillRightDevice.CHARACTERISTIC_ID_SENSOR2:
-                peripheral.readValueForCharacteristic(characteristic)
-                peripheral.setNotifyValue(true, forCharacteristic: characteristic)
+                peripheral.readValue(for: characteristic)
+                peripheral.setNotifyValue(true, for: characteristic)
             default:
                 break;
             }
@@ -665,14 +664,14 @@ class GrillRightDevice: AylaBLEDevice {
         return [CBUUID(string: GrillRightDevice.SERVICE_GRILL_RIGHT)]
     }
     
-    override func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    override func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         print("Updated characteristic value: \(characteristic)")
         guard  let value = characteristic.value else {
             print("Characteristic contais no value")
             return
         }
         var changes: [AylaChange]?
-        switch characteristic.UUID {
+        switch characteristic.uuid {
         case GrillRightDevice.CHARACTERISTIC_ID_SENSOR1:
             changes = sensor1.update(fromData: value)
         case GrillRightDevice.CHARACTERISTIC_ID_SENSOR2:
@@ -681,81 +680,81 @@ class GrillRightDevice: AylaBLEDevice {
             break
         }
         if let changes = changes {
-            self.notifyChangesToListeners(changes)
+            self.notifyChanges(toListeners: changes)
         }
     }
-    override func valueForProperty(property: AylaLocalProperty) -> AnyObject? {
+    override func value(for property: AylaLocalProperty) -> Any? {
         if !isConnectedLocal {
-            return property.originalProperty.value
+            return property.originalProperty.value as AnyObject?
         }
         switch property.name {
         case GrillRightDevice.PROP_SENSOR1_TEMP:
-            return sensor1.currentTemp ?? 0
+            return sensor1.currentTemp as AnyObject?? ?? 0 as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_MEAT:
-            return sensor1.meatType.rawValue
+            return sensor1.meatType.rawValue as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_DONENESS:
-            return sensor1.doneness.rawValue
+            return sensor1.doneness.rawValue as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_TARGET_TEMP:
-            return sensor1.targetTemp ?? 0
+            return sensor1.targetTemp as AnyObject?? ?? 0 as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_PCT_DONE:
-            return sensor1.pctDone
+            return sensor1.pctDone as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_COOKING:
-            return sensor1.cooking ?? false
+            return sensor1.cooking as AnyObject?? ?? false as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_TARGET_TIME:
-            return sensor1.targetTime
+            return sensor1.targetTime as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_TIME:
-            return sensor1.currentTime
+            return sensor1.currentTime as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_CONTROL_MODE:
-            return sensor1.controlMode.rawValue
+            return sensor1.controlMode.rawValue as AnyObject?
         case GrillRightDevice.PROP_SENSOR1_ALARM:
-            return sensor1.alarmState.rawValue
+            return sensor1.alarmState.rawValue as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_TEMP:
-            return sensor2.currentTemp ?? 0
+            return sensor2.currentTemp as AnyObject?? ?? 0 as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_MEAT:
-            return sensor2.meatType.rawValue
+            return sensor2.meatType.rawValue as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_DONENESS:
-            return sensor2.doneness.rawValue
+            return sensor2.doneness.rawValue as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_TARGET_TEMP:
-            return sensor2.targetTemp ?? 0
+            return sensor2.targetTemp as AnyObject?? ?? 0 as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_PCT_DONE:
-            return sensor2.pctDone
+            return sensor2.pctDone as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_COOKING:
-            return sensor2.cooking ?? false
+            return sensor2.cooking as AnyObject?? ?? false as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_TARGET_TIME:
-            return sensor2.targetTime
+            return sensor2.targetTime as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_TIME:
-            return sensor2.currentTime
+            return sensor2.currentTime as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_CONTROL_MODE:
-            return sensor2.controlMode.rawValue
+            return sensor2.controlMode.rawValue as AnyObject?
         case GrillRightDevice.PROP_SENSOR2_ALARM:
-            return sensor2.alarmState.rawValue
+            return sensor2.alarmState.rawValue as AnyObject?
         default:
-            return property.baseType.compare("string") == .OrderedSame ? "" : 0
+            return property.baseType.compare("string") == .orderedSame ? "" : 0
         }
     }
     
     class WriteCommandDescriptor: NSObject {
         var update: (() -> ())
         var success: (() -> ())?
-        var failure: ((NSError) -> ())?
-        init(update: (() ->()), success: (() -> ())?, failure: ((NSError) -> ())?) {
+        var failure: ((Error) -> ())?
+        init(update: @escaping (() ->()), success: (() -> ())?, failure: ((Error) -> ())?) {
             self.update = update
             self.success = success
             self.failure = failure
         }
     }
-    private var writeCharacteristicDescriptors = [WriteCommandDescriptor]()
+    fileprivate var writeCharacteristicDescriptors = [WriteCommandDescriptor]()
     
-    override func setValue(value: AnyObject, forProperty property: AylaLocalProperty, success successBlock: (() -> Void)?, failure failureBlock: ((NSError) -> Void)?) -> AylaGenericTask? {
+    override func setValue(_ value: Any, for property: AylaLocalProperty, success successBlock: (() -> Void)?, failure failureBlock: ((Error) -> Void)?) -> AylaGenericTask? {
         guard let controlCharacteristic = controlCharacteristic else {
             if let failureBlock = failureBlock {
-                failureBlock(AylaErrorUtils.errorWithDomain(AylaRequestErrorDomain, code: AylaRequestErrorCode.PreconditionFailure.rawValue, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("Control characteristic was not discovered", comment: "")]))
+                failureBlock(AylaErrorUtils.error(withDomain: AylaRequestErrorDomain, code: AylaRequestErrorCode.preconditionFailure.rawValue, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("Control characteristic was not discovered", comment: "")]) as Error)
             }
             return nil
         }
         if !isConnectedLocal {
             if let failureBlock = failureBlock {
-                failureBlock(AylaErrorUtils.errorWithDomain(AylaRequestErrorDomain, code: AylaRequestErrorCode.PreconditionFailure.rawValue, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("Properties are read-only unless the device is connected locally", comment: "")]))
+                failureBlock(AylaErrorUtils.error(withDomain: AylaRequestErrorDomain, code: AylaRequestErrorCode.preconditionFailure.rawValue, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("Properties are read-only unless the device is connected locally", comment: "")]))
             }
             return nil
         }
@@ -764,7 +763,7 @@ class GrillRightDevice: AylaBLEDevice {
         var index: Int
         var sensor: InternalSensor
         var update: (() -> ())?
-        if property.name.containsString("00:") {
+        if property.name.contains("00:") {
             sensor = sensor1
             sensorCopy = InternalSensor(sensor: sensor1)
             index = 1
@@ -775,11 +774,11 @@ class GrillRightDevice: AylaBLEDevice {
         }
         
         //cooking command has a different structure, so consider its case in a separate if instead of inside switch
-        if  property.name.containsString("COOKING") {
+        if  property.name.contains("COOKING") {
             guard let mode = ControlMode(rawValue: value as! Int) else {
                 return nil
             }
-            if mode == .None {
+            if mode == .none {
                 command = Command.stopCookingCommand(index)
             } else {
                 command = Command.startCookingCommand(index, mode: mode)
@@ -789,7 +788,7 @@ class GrillRightDevice: AylaBLEDevice {
             }
         } else {
             switch property.name {
-            case (let p) where p.containsString("MEAT"):
+            case (let p) where p.contains("MEAT"):
                 guard let meatType = MeatType(rawValue: value as! Int) else {
                     return nil
                 }
@@ -798,7 +797,7 @@ class GrillRightDevice: AylaBLEDevice {
                     sensor.meatType = meatType
                 }
                 
-            case (let p) where p.containsString("DONENESS"):
+            case (let p) where p.contains("DONENESS"):
                 guard let doneness = Doneness(rawValue: value as! Int) else {
                     return nil
                 }
@@ -807,7 +806,7 @@ class GrillRightDevice: AylaBLEDevice {
                     sensor.doneness = doneness
                 }
                 
-            case (let p) where p.containsString("TARGET_TEMP"):
+            case (let p) where p.contains("TARGET_TEMP"):
                 guard let targetTemp = value as? Int else {
                     return nil
                 }
@@ -816,7 +815,7 @@ class GrillRightDevice: AylaBLEDevice {
                     sensor.targetTemp = targetTemp
                 }
                 
-            case (let p) where p.containsString("TARGET_TIME"):
+            case (let p) where p.contains("TARGET_TIME"):
                 guard let targetTime = value as? String else {
                     return nil
                 }
@@ -834,15 +833,15 @@ class GrillRightDevice: AylaBLEDevice {
         
         writeCharacteristicDescriptors.append(WriteCommandDescriptor(update: update!, success: successBlock, failure: failureBlock))
         let writeTask = AylaGenericTask(task: { () -> Bool in
-            self.peripheral.writeValue(command, forCharacteristic: controlCharacteristic, type: CBCharacteristicWriteType.WithResponse)
+            self.peripheral.writeValue(command as Data, for: controlCharacteristic, type: CBCharacteristicWriteType.withResponse)
             return true
             }, cancel: nil)
-        dispatch_async(self.serialQueue) {
-            writeTask.start()
+        self.serialQueue.async {
+            writeTask?.start()
         }
         return writeTask
     }
-    override func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    override func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         guard let writeCharacteristicDescriptor = self.writeCharacteristicDescriptors.first else {
             return
         }

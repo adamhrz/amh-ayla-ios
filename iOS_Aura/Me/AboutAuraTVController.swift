@@ -11,24 +11,24 @@ import SAMKeychain
 import CoreTelephony
 
 class AboutAuraTableViewController: UITableViewController {
-    private var user: AylaUser?
-    private let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+    fileprivate var user: AylaUser?
+    fileprivate let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
 
-    @IBOutlet private weak var auraVersionLabel: UILabel!
-    @IBOutlet private weak var sdkVersionLabel: UILabel!
-    @IBOutlet private weak var configNameLabel: UILabel!
+    @IBOutlet fileprivate weak var auraVersionLabel: UILabel!
+    @IBOutlet fileprivate weak var sdkVersionLabel: UILabel!
+    @IBOutlet fileprivate weak var configNameLabel: UILabel!
     
-    @IBOutlet private weak var phoneModelLabel: UILabel!
-    @IBOutlet private weak var iOSVersionLabel: UILabel!
-    @IBOutlet private weak var carrierNameLabel: UILabel!
-    @IBOutlet private weak var languageLabel: UILabel!
-    @IBOutlet private weak var countryLabel: UILabel!
-    @IBOutlet private weak var timeZoneLabel: UILabel!
+    @IBOutlet fileprivate weak var phoneModelLabel: UILabel!
+    @IBOutlet fileprivate weak var iOSVersionLabel: UILabel!
+    @IBOutlet fileprivate weak var carrierNameLabel: UILabel!
+    @IBOutlet fileprivate weak var languageLabel: UILabel!
+    @IBOutlet fileprivate weak var countryLabel: UILabel!
+    @IBOutlet fileprivate weak var timeZoneLabel: UILabel!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sessionManager?.fetchUserProfile({ (user) in
+        _ = sessionManager?.fetchUserProfile({ (user) in
             self.user = user
             
             }, failure: { (error) in
@@ -37,20 +37,20 @@ class AboutAuraTableViewController: UITableViewController {
         })
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         populateUI()
     }
     
-    private func populateUI() {
-        let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+    fileprivate func populateUI() {
+        let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let carrier = CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName
         let deviceModel = self.getDeviceModel()
-        let osVersion = UIDevice.currentDevice().systemVersion
-        let country = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as! String
-        let language = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
+        let osVersion = UIDevice.current.systemVersion
+        let country = (Locale.current as NSLocale).object(forKey: NSLocale.Key.countryCode) as! String
+        let language = (Locale.current as NSLocale).object(forKey: NSLocale.Key.languageCode) as! String
         let configName = AuraConfig.currentConfig().name
-        let timeZone = NSTimeZone.localTimeZone().name
+        let timeZone = TimeZone.autoupdatingCurrent.identifier
         
         auraVersionLabel.text = appVersion
         sdkVersionLabel.text = AYLA_SDK_VERSION
@@ -63,29 +63,29 @@ class AboutAuraTableViewController: UITableViewController {
         timeZoneLabel.text = timeZone
     }
     
-    private func getDeviceModel () -> String? {
+    fileprivate func getDeviceModel () -> String? {
         var systemInfo = utsname()
         uname(&systemInfo)
-        let modelCode = withUnsafeMutablePointer(&systemInfo.machine) {
-            ptr in String.fromCString(UnsafePointer<CChar>(ptr))
+        let modelCode = withUnsafeMutablePointer(to: &systemInfo.machine) {
+            ptr in String(cString: UnsafeRawPointer(ptr).assumingMemoryBound(to: CChar.self))
         }
         return modelCode
     }
     
-    private func customOEMConfigs() {
+    fileprivate func customOEMConfigs() {
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+        let developOptionsVC = storyboard.instantiateViewController(withIdentifier: "DeveloperOptionsViewController") as! DeveloperOptionsViewController
         //let naviVC = UINavigationController(rootViewController: developOptionsVC)
         developOptionsVC.currentConfig = AuraConfig.currentConfig()
         self.navigationController?.pushViewController(developOptionsVC, animated: true)
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let configIndexPath = NSIndexPath(forRow: 2, inSection: 0)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let configIndexPath = IndexPath(row: 2, section: 0)
         if indexPath == configIndexPath {
             customOEMConfigs()
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     override func didReceiveMemoryWarning() {

@@ -10,7 +10,7 @@ import UIKit
 import iOS_AylaSDK
 
 protocol CellButtonDelegate {
-    func cellButtonPressed(cell: UITableViewCell)
+    func cellButtonPressed(_ cell: UITableViewCell)
 }
 
 class RegistrationManualTVCell : UITableViewCell {
@@ -21,18 +21,18 @@ class RegistrationManualTVCell : UITableViewCell {
     @IBOutlet weak var regTokenField: UITextField?
     @IBOutlet weak var registerButton: UIButton!
     
-    func configure(candidate: AylaRegistrationCandidate?) {
+    func configure(_ candidate: AylaRegistrationCandidate?) {
 
     }
     
     
-    @IBAction func registerButtonPressed(sender: UIButton) {
+    @IBAction func registerButtonPressed(_ sender: UIButton) {
         if let delegate = buttonDelegate {
             delegate.cellButtonPressed(self)
         }
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state

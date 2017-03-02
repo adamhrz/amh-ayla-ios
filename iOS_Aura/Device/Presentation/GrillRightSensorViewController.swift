@@ -43,9 +43,9 @@ class GrillRightSensorViewController: UIViewController {
     var sensor: GrillRightDevice.Sensor!
     var device: GrillRightDevice!
 
-    var uiTimer: NSTimer!
+    var uiTimer: Timer!
     var currentTime: Int?
-    var lastCurrentTimeUpdated = NSDate()
+    var lastCurrentTimeUpdated = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,34 +63,34 @@ class GrillRightSensorViewController: UIViewController {
         statusLabel.text = ""
         
         modeLabel.text = "Not Connected"
-        meatButton.enabled = false
-        timerButton.enabled = false
-        temperatureButton.enabled = false
-        switchButton.enabled = false
+        meatButton.isEnabled = false
+        timerButton.isEnabled = false
+        temperatureButton.isEnabled = false
+        switchButton.isEnabled = false
         self.view.backgroundColor = GrillRightSensorViewController.medGrayColor
     }
 
-    func controlsShouldEnableForDevice(_device: GrillRightDevice? = nil){
+    func controlsShouldEnableForDevice(_ _device: GrillRightDevice? = nil){
         
         if (_device != nil && !_device!.isConnectedLocal) || !device.isConnectedLocal  {
             self.disableUI()
         } else {
-            meatButton.enabled = true
-            timerButton.enabled = true
-            temperatureButton.enabled = true
-            switchButton.enabled = true
+            meatButton.isEnabled = true
+            timerButton.isEnabled = true
+            temperatureButton.isEnabled = true
+            switchButton.isEnabled = true
             refreshUI()
         }
     }
     
     
-    func refreshUI(change: AylaPropertyChange? = nil) {
+    func refreshUI(_ change: AylaPropertyChange? = nil) {
         if !device.isConnectedLocal {
             disableUI()
             return
         }
         
-        let runningBool = (sensor.isCooking || sensor.alarmState != .None)
+        let runningBool = (sensor.isCooking || sensor.alarmState != .none)
         
         modeLabel.text = sensor.controlMode.name
         if let currentTemp = sensor.currentTemp {
@@ -113,54 +113,54 @@ class GrillRightSensorViewController: UIViewController {
             
             statusLabel.text = ""
         }
-        switchButton.enabled = true
+        switchButton.isEnabled = true
         switch sensor.controlMode {
-        case .Meat:
+        case .meat:
             cookTimeHeaderLabel.text = "Meat"
             cookTimeLabel.text = sensor.meatType.name
             rightStatusHeaderLabel.text = "Doneness"
             rightStatusLabel.text = sensor.doneness.name
             meatButton.imageView?.tintColor = GrillRightSensorViewController.selectedModeColor
-            switchButton.enabled = !(sensor.meatType == .None || sensor.doneness == .None)
-        case .Temp:
+            switchButton.isEnabled = !(sensor.meatType == .none || sensor.doneness == .none)
+        case .temp:
             rightStatusHeaderLabel.text = "Target Temperature"
             rightStatusLabel.text = "\(Double(sensor.targetTemp)/10.0)º F"
             temperatureButton.imageView?.tintColor = GrillRightSensorViewController.selectedModeColor
-        case .Time:
+        case .time:
             cookTimeHeaderLabel.text = "Set Cook Time"
             cookTimeLabel.text = sensor.targetTime
             rightStatusHeaderLabel.text = "Time Remaining"
             rightStatusLabel.text = runningBool ? sensor.currentTime : "--:--:--"
-            if let change = change, lastPropertyUpdate = change.property.dataUpdatedAt {
-                if change.property.name.containsString(":TIME") && lastPropertyUpdate.compare(lastCurrentTimeUpdated) == .OrderedDescending {
+            if let change = change, let lastPropertyUpdate = change.property.dataUpdatedAt {
+                if change.property.name.contains(":TIME") && lastPropertyUpdate.compare(lastCurrentTimeUpdated) == .orderedDescending {
                     self.currentTime = sensor.currentHours! * 3600 + sensor.currentMinutes! * 60 + sensor.currentSeconds!
                     lastCurrentTimeUpdated = lastPropertyUpdate
                 }
             }
             statusLabel.text = ""
             timerButton.imageView?.tintColor = GrillRightSensorViewController.selectedModeColor
-        case .None:
+        case .none:
             statusLabel.text = ""
         }
-        switchButton.setTitle(runningBool ? "Stop" : "Start", forState: .Normal)
-        switchButton.layer.backgroundColor = runningBool ? GrillRightSensorViewController.inactiveModeColor.CGColor : UIColor.aylaHippieGreenColor().CGColor
+        switchButton.setTitle(runningBool ? "Stop" : "Start", for: UIControlState())
+        switchButton.layer.backgroundColor = runningBool ? GrillRightSensorViewController.inactiveModeColor.cgColor : UIColor.aylaHippieGreenColor().cgColor
 
         
         var bgColor: UIColor
         var labelColor: UIColor
         switch sensor.alarmState {
-        case .None:
+        case .none:
             if sensor.isCooking {
                 bgColor = GrillRightSensorViewController.medGrayGreenColor
-                labelColor = UIColor.darkTextColor()
+                labelColor = UIColor.darkText
             } else {
                 bgColor = GrillRightSensorViewController.medGrayColor
-                labelColor = UIColor.darkGrayColor()
+                labelColor = UIColor.darkGray
             }
-        case .AlmostDone:
+        case .almostDone:
             bgColor = GrillRightSensorViewController.medGrayAmberColor
             labelColor = GrillRightSensorViewController.medAmberColor
-        case .Overdone:
+        case .overdone:
             bgColor = GrillRightSensorViewController.medGrayRedColor
             labelColor = GrillRightSensorViewController.medRedColor
         }
@@ -173,7 +173,7 @@ class GrillRightSensorViewController: UIViewController {
         
         uiTimer?.invalidate()
         if runningBool {
-            uiTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(refreshTimer), userInfo: nil, repeats:true)
+            uiTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refreshTimer), userInfo: nil, repeats:true)
         } else {
             currentTime = nil
         }
@@ -184,7 +184,7 @@ class GrillRightSensorViewController: UIViewController {
         if self.currentTime == nil {
             return
         }
-        self.currentTime = self.currentTime! + (sensor.alarmState == .Overdone ? 1 : -1)
+        self.currentTime = self.currentTime! + (sensor.alarmState == .overdone ? 1 : -1)
         let currentTime = self.currentTime!
         let seconds = currentTime % 60
         let minutes = (currentTime / 60) % 60
@@ -197,11 +197,11 @@ class GrillRightSensorViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func switchAction(sender: AuraProgressButton) {
+    @IBAction func switchAction(_ sender: AuraProgressButton) {
         sender.startActivityIndicator()
         self.uiTimer?.invalidate()
         self.uiTimer = nil
-        writeValue(sensor.isCooking ? 0 : sensor.controlMode.rawValue, toProperty: sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING, success: { (datapoint) in
+        writeValue(sensor.isCooking ? 0 : sensor.controlMode.rawValue as AnyObject, toProperty: sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING, success: { (datapoint) in
             sender.stopActivityIndicator()
             self.refreshUI()
         }) { (error) in
@@ -212,9 +212,9 @@ class GrillRightSensorViewController: UIViewController {
 
     }
     
-    func writeValue(value: AnyObject, toProperty property:String, success successBlock: ((AylaDatapoint) -> Void)? = nil, failure failureBlock: ((NSError) -> Void)? = nil) {
+    func writeValue(_ value: Any, toProperty property:String, success successBlock: ((AylaDatapoint) -> Void)? = nil, failure failureBlock: ((Error) -> Void)? = nil) {
         let device = sensor.device
-        if let property = device.getProperty(property) {
+        if let property = device?.getProperty(property) {
             let parameters = AylaDatapointParams()
             
             
@@ -233,24 +233,24 @@ class GrillRightSensorViewController: UIViewController {
 
     }
     
-    @IBAction func temperatureAction(sender: AnyObject) {
-        if sensor.controlMode == .Temp && sensor.isCooking {
+    @IBAction func temperatureAction(_ sender: AnyObject) {
+        if sensor.controlMode == .temp && sensor.isCooking {
             return
         }
         let tempRange = [Int](100...572).map { String($0) }
         
-        ActionSheetStringPicker.showPickerWithTitle("Select Target Temp.", rows: tempRange, initialSelection: 0, doneBlock: { (picker, index, value) in
+        ActionSheetStringPicker.show(withTitle: "Select Target Temp.", rows: tempRange, initialSelection: 0, doneBlock: { (picker, index, value) in
             self.switchButton.startActivityIndicator()
             self.writeValue(Int(value as! String)! * 10, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TEMP : GrillRightDevice.PROP_SENSOR2_TARGET_TEMP)
             
-            self.writeValue(GrillRightDevice.ControlMode.Temp.rawValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING)
-            }, cancelBlock: { (picker) in
+            self.writeValue(GrillRightDevice.ControlMode.temp.rawValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING)
+            }, cancel: { (picker) in
                 
             }, origin: sender)
     }
 
-    @IBAction func meatAction(sender: AnyObject) {
-        if sensor.controlMode == .Meat && sensor.isCooking {
+    @IBAction func meatAction(_ sender: AnyObject) {
+        if sensor.controlMode == .meat && sensor.isCooking {
             return
         }
         
@@ -258,45 +258,45 @@ class GrillRightSensorViewController: UIViewController {
         
         let donenessArray = [Int](1...GrillRightDevice.Doneness.caseCount-1).map { GrillRightDevice.Doneness.name(GrillRightDevice.Doneness(rawValue: $0)!) }
         
-        ActionSheetMultipleStringPicker.showPickerWithTitle("Select Profile", rows: [meatArray, donenessArray], initialSelection: [0,0], doneBlock: { (picker, indexes, value) in
+        ActionSheetMultipleStringPicker.show(withTitle: "Select Profile", rows: [meatArray, donenessArray], initialSelection: [0,0], doneBlock: { (picker, indexes, value) in
             self.switchButton.startActivityIndicator()
             self.writeValue((indexes as! [Int])[0] + 1, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_MEAT : GrillRightDevice.PROP_SENSOR2_MEAT, success:{ (datapoint) in
                 self.switchButton.stopActivityIndicator()
                 self.writeValue((indexes as! [Int])[1] + 1, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_DONENESS : GrillRightDevice.PROP_SENSOR2_DONENESS)
                 
-                self.writeValue(GrillRightDevice.ControlMode.Meat.rawValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING)
+                self.writeValue(GrillRightDevice.ControlMode.meat.rawValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING)
                 
                 })
-            }, cancelBlock: { (picker) in
+            }, cancel: { (picker) in
                 
             }, origin: sender)
     }
     
-    @IBAction func timerAction(sender: AnyObject) {
-        if sensor.controlMode == .Time && sensor.isCooking {
+    @IBAction func timerAction(_ sender: AnyObject) {
+        if sensor.controlMode == .time && sensor.isCooking {
             return
         }
-        let interval = NSTimeInterval(600)
-        let date = NSDate(timeIntervalSinceReferenceDate:interval)
-        ActionSheetDatePicker.showPickerWithTitle("Set Timer", datePickerMode: .CountDownTimer, selectedDate: date, doneBlock: { (picker, index, value) in
+        let interval = TimeInterval(600)
+        let date = Date(timeIntervalSinceReferenceDate:interval)
+        ActionSheetDatePicker.show(withTitle: "Set Timer", datePickerMode: .countDownTimer, selectedDate: date, doneBlock: { (picker, index, value) in
             self.switchButton.startActivityIndicator()
-            let durationInSeconds = picker.countDownDuration
-            let hours = Int(durationInSeconds / 3600)
-            let minutes = Int((durationInSeconds / 60) % 60)
-            let seconds = Int(durationInSeconds % 60)
+            let durationInSeconds = picker?.countDownDuration
+            let hours = Int(durationInSeconds! / 3600)
+            let minutes = Int((durationInSeconds! / 60).truncatingRemainder(dividingBy: 60))
+            let seconds = Int((durationInSeconds?.truncatingRemainder(dividingBy: 60))!)
             var propValue = "\(hours):\(minutes):\(seconds)"
             if propValue == "0:0:0" {
                 propValue = "0:1:0"  // Special case for bug in UIDatePicker
             }
             print("Timer String:%@", propValue)
-            self.writeValue(propValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TIME : GrillRightDevice.PROP_SENSOR2_TARGET_TIME)
+            self.writeValue(propValue as AnyObject, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TIME : GrillRightDevice.PROP_SENSOR2_TARGET_TIME)
             
-            self.writeValue(GrillRightDevice.ControlMode.Time.rawValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING, success: { (datapoint) in
+            self.writeValue(GrillRightDevice.ControlMode.time.rawValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING, success: { (datapoint) in
                 self.switchButton.stopActivityIndicator()
                 }, failure: { (error) in
                     error.displayAsAlertController()
             })
-            }, cancelBlock: { (picker) in
+            }, cancel: { (picker) in
                 
             }, origin: self.view)
 

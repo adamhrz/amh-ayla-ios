@@ -9,6 +9,19 @@ import PDKeychainBindingsController
 import iOS_AylaSDK
 import UIKit
 import Ayla_LocalDevice_SDK
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 class RegistrationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CellButtonDelegate, CellSelectorDelegate, AylaDeviceManagerListener, AylaDeviceListener {
     
@@ -20,20 +33,20 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     let segueIdToNodeRegistrationView :String = "toNodeRegistrationPage"
     
     enum Section :Int {
-        case SameLan
-        case ButtonPush
-        case GatewayNode
-        case LocalDevice
-        case Manual
-        case SectionCount
+        case sameLan
+        case buttonPush
+        case gatewayNode
+        case localDevice
+        case manual
+        case sectionCount
     }
     
     enum SelectorMode :Int {
-        case Display
-        case DSN
-        case APMode
-        case Manual
-        case SectionCount
+        case display
+        case dsn
+        case apMode
+        case manual
+        case sectionCount
     }
     
     var selectorIndex : Int!
@@ -58,7 +71,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     var BLEScanBool : Bool = false {
         didSet {
             if self.tableView != nil {
-                self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.LocalDevice.rawValue, 1)), withRowAnimation: .Automatic)
+                self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.localDevice.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
             }
         }
     }
@@ -76,11 +89,11 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
+        if let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName) {
             self.sessionManager = sessionManager
             self.deviceManager = sessionManager.deviceManager
             // Add self as device manager listener
-            self.deviceManager!.addListener(self)
+            self.deviceManager!.add(self)
         }
         else {
             print("- WARNING - session manager can't be found")
@@ -89,10 +102,10 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        let cancel = UIBarButtonItem(barButtonSystemItem:.Cancel, target: self, action: #selector(RegistrationViewController.cancel))
+        let cancel = UIBarButtonItem(barButtonSystemItem:.cancel, target: self, action: #selector(RegistrationViewController.cancel))
         self.navigationItem.leftBarButtonItem = cancel
         
-        let refresh = UIBarButtonItem(barButtonSystemItem:.Refresh, target: self, action: #selector(RegistrationViewController.refresh))
+        let refresh = UIBarButtonItem(barButtonSystemItem:.refresh, target: self, action: #selector(RegistrationViewController.refresh))
         self.navigationItem.rightBarButtonItem = refresh
         self.selectorIndex = 0
         
@@ -100,7 +113,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-        self.logTextView.backgroundColor = UIColor.whiteColor()
+        self.logTextView.backgroundColor = UIColor.white
     }
     
     func updateGatewaysList() {
@@ -110,36 +123,36 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         gateways = []
         if self.devices.count > 0 {
             for device in self.devices {
-                if device.isKindOfClass(AylaDeviceGateway) {
+                if device.isKind(of: AylaDeviceGateway.self) {
                     gateways.append((device as! AylaDeviceGateway))
                 }
             }
         }
-        self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.GatewayNode.rawValue, 1)), withRowAnimation: .Automatic)
+        self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.gatewayNode.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refresh()
     }
 
     func cancel() {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func getCandidate(indexPath:NSIndexPath) -> AylaRegistrationCandidate? {
+    func getCandidate(_ indexPath:IndexPath) -> AylaRegistrationCandidate? {
         var candidate :AylaRegistrationCandidate?
         switch Section(rawValue:indexPath.section)! {
-        case .SameLan:
+        case .sameLan:
             candidate = candidateSameLan;
             break
-        case .ButtonPush:
+        case .buttonPush:
             candidate = candidateButtonPush;
             break
-        case .Manual:
+        case .manual:
             candidate = candidateManual;
             break
-        case .LocalDevice:
+        case .localDevice:
             candidate = discoveredLocalDevices[indexPath.row]
         default:
             break
@@ -147,7 +160,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         return candidate
     }
     
-    func register(candidate :AylaRegistrationCandidate) {
+    func register(_ candidate :AylaRegistrationCandidate) {
         if candidate.registrationType.rawValue == AylaRegistrationTypeLocal {
             guard let localDeviceManager = AylaNetworks.shared().getPluginWithId(AuraLocalDeviceManager.PLUGIN_ID_LOCAL_DEVICE) as? AuraLocalDeviceManager
                 else {
@@ -162,7 +175,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             updatePrompt("Registering...")
             localDeviceManager.registerLocalDevice(candidate, sessionManager: sessionManager, success: { (localDevice) in
                 print("Registered device \(localDevice)")
-                self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                self.navigationController?.dismiss(animated: true, completion: nil)
                 }, failure: { (error) in
                     self.updatePrompt("Failed to register Local Device")
                     self.addLog(error.description)
@@ -171,13 +184,13 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         }
         if let reg = sessionManager?.deviceManager.registration {
             updatePrompt("Registering...")
-            reg.registerCandidate(candidate, success: { (AylaDevice) in
-                if candidate.registrationType == AylaRegistrationType.APMode {
-                    PDKeychainBindings.sharedKeychainBindings().removeObjectForKey(AuraDeviceSetupTokenKeychainKey)
-                    PDKeychainBindings.sharedKeychainBindings().removeObjectForKey(AuraDeviceSetupDSNKeychainKey)
+            reg.register(candidate, success: { (AylaDevice) in
+                if candidate.registrationType == AylaRegistrationType.apMode {
+                    PDKeychainBindings.shared().removeObject(forKey: AuraDeviceSetupTokenKeychainKey)
+                    PDKeychainBindings.shared().removeObject(forKey: AuraDeviceSetupDSNKeychainKey)
                     print("Removing AP Mode Device details from storage")
                 }
-                    self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                    self.navigationController?.dismiss(animated: true, completion: nil)
                 }, failure: { (error) in
                     self.updatePrompt("Failed")
                     self.addLog(error.description)
@@ -190,25 +203,25 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     func refresh() {
         self.updateGatewaysList()
-        let aGroup = dispatch_group_create()
+        let aGroup = DispatchGroup()
         
-        dispatch_group_enter(aGroup)  // SameLAN
-        dispatch_group_enter(aGroup)  // PushButton
-        dispatch_group_enter(aGroup)  // LocalDevice
+        aGroup.enter()  // SameLAN
+        aGroup.enter()  // PushButton
+        aGroup.enter()  // LocalDevice
 
         if let reg = sessionManager?.deviceManager.registration {
         
             updatePrompt("Refreshing Candidate Devices...")
             self.addLog("Fetching Same-LAN Candidate.")
-            reg.fetchCandidateWithDSN(nil, registrationType: .SameLan, success: { (candidate) in
+            reg.fetchCandidate(withDSN: nil, registrationType: .sameLan, success: { (candidate) in
                 self.candidateSameLan = candidate
-                self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.SameLan.rawValue, 1)), withRowAnimation: .Automatic)
-                dispatch_group_leave(aGroup)
+                self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.sameLan.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
+                aGroup.leave()
                 }, failure: { (error) in
                     self.candidateSameLan = nil;
-                    self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.SameLan.rawValue, 1)), withRowAnimation: .Automatic)
+                    self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.sameLan.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
                     //Skip 404 for now
-                    if let httpResp = error.userInfo[AylaHTTPErrorHTTPResponseKey] as? NSHTTPURLResponse {
+                    if let httpResp = (error as NSError).userInfo[AylaHTTPErrorHTTPResponseKey] as? HTTPURLResponse {
                         if(httpResp.statusCode != 404) {
                             self.addLog("Same-LAN - " + error.description)
                         }
@@ -219,20 +232,20 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     else {
                         self.addLog("Same-LAN - " + error.description)
                     }
-                    dispatch_group_leave(aGroup)
+                    aGroup.leave()
                     
             })
             self.addLog("Fetching Button Push Candidate.")
-            reg.fetchCandidateWithDSN(nil, registrationType: .ButtonPush, success: { (candidate) in
+            reg.fetchCandidate(withDSN: nil, registrationType: .buttonPush, success: { (candidate) in
                 self.candidateButtonPush = candidate
-                self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.ButtonPush.rawValue, 1)), withRowAnimation: .Automatic)
-                dispatch_group_leave(aGroup)
+                self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.buttonPush.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
+                aGroup.leave()
                 }, failure: { (error) in
                     self.candidateButtonPush = nil;
-                    self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.ButtonPush.rawValue, 1)), withRowAnimation: .Automatic)
+                    self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.buttonPush.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
                     
                     //Skip 404 for now
-                    if let httpResp = error.userInfo[AylaHTTPErrorHTTPResponseKey] as? NSHTTPURLResponse {
+                    if let httpResp = (error as NSError).userInfo[AylaHTTPErrorHTTPResponseKey] as? HTTPURLResponse {
                         if(httpResp.statusCode != 404) {
                             self.addLog("ButtonPush - " + error.description)
                         }
@@ -243,13 +256,15 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     else {
                         self.addLog("ButtonPush - " + error.description)
                     }
-                    dispatch_group_leave(aGroup)
+                    aGroup.leave()
             })
             
             self.candidateManual = AylaRegistrationCandidate()
-            self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.Manual.rawValue, 1)), withRowAnimation: .Automatic)
+            self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.manual.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
 
-
+            aGroup.notify(queue: DispatchQueue.main, execute: {
+                self.updatePrompt(nil)
+            })
         }
         
         guard let localDeviceManager = AylaNetworks.shared().getPluginWithId(AuraLocalDeviceManager.PLUGIN_ID_LOCAL_DEVICE) as? AuraLocalDeviceManager
@@ -259,33 +274,33 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         
         self.addLog("Scanning for Local Devices.")
         self.BLEScanBool = true
-        localDeviceManager.findLocalDevicesWithHint(nil, timeout: 5000, success: { (foundDevices) in
+        localDeviceManager.findLocalDevices(withHint: nil, timeout: 5000, success: { (foundDevices) in
             self.discoveredLocalDevices = foundDevices
             self.addLog("Local Devices: Found \(foundDevices.count).")
-            dispatch_group_leave(aGroup)
-            self.tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(Section.LocalDevice.rawValue, 1)), withRowAnimation: .Automatic)
+            aGroup.leave()
+            self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.localDevice.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
             self.BLEScanBool = false
             }) { (error) in
                 self.addLog("Error fetching local candidates: \(error)")
                 self.BLEScanBool = false
-                dispatch_group_leave(aGroup)
+                aGroup.leave()
         }
-        dispatch_group_notify(aGroup, dispatch_get_main_queue(), {
+        aGroup.notify(queue: DispatchQueue.main, execute: {
             self.updatePrompt(nil)
         })
     }
     
-    func addLog(logText: String) {
+    func addLog(_ logText: String) {
         logTextView.text = logTextView.text + "\n" + logText
     }
     
-    func updatePrompt(prompt: String?) {
+    func updatePrompt(_ prompt: String?) {
         self.navigationController?.navigationBar.topItem?.prompt = prompt
         addLog(prompt ?? "Done.")
     }
     
     
-    func verifyCoordinateStringsValid(latString: String?, lngString: String?) -> Bool {
+    func verifyCoordinateStringsValid(_ latString: String?, lngString: String?) -> Bool {
         if latString == nil || lngString == nil || latString?.characters.count < 1 || lngString?.characters.count < 1 {
             return false
         }
@@ -301,145 +316,145 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     // MARK - Table view delegate / data source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Section.SectionCount.rawValue
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return Section.sectionCount.rawValue
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let height : CGFloat = 40.0
         let zeroHeight : CGFloat = 0.0001
         if tableView.dataSource?.tableView(tableView, numberOfRowsInSection: section) == 0 ||
-            (section == Section.LocalDevice.rawValue && BLEScanBool == true) {
+            (section == Section.localDevice.rawValue && BLEScanBool == true) {
             return height
         }
         return zeroHeight
     }
     
-    func statusHeaderFooterView(labelString:String, withActivityIndicator:Bool) -> UIView {
+    func statusHeaderFooterView(_ labelString:String, withActivityIndicator:Bool) -> UIView {
         let view = UIView(frame: CGRect.zero)
         let label = UILabel()
         label.text = labelString
-        label.textAlignment = .Left
-        label.font = UIFont.systemFontOfSize(18.0)
-        label.textColor = UIColor.lightGrayColor()
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 18.0)
+        label.textColor = UIColor.lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(label)
 
         if withActivityIndicator {
-            let activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-            activityIndicator.userInteractionEnabled = false;
+            let activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            activityIndicator.isUserInteractionEnabled = false;
             activityIndicator.startAnimating()
             activityIndicator.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(activityIndicator)
             
             NSLayoutConstraint(
                 item: label,
-                attribute: .Trailing,
-                relatedBy: .Equal,
+                attribute: .trailing,
+                relatedBy: .equal,
                 toItem: activityIndicator,
-                attribute: .Leading,
+                attribute: .leading,
                 multiplier: 1.0,
                 constant: 8.0
-                ).active = true
+                ).isActive = true
             
             NSLayoutConstraint(
                 item: activityIndicator,
-                attribute: .Height,
-                relatedBy: .Equal,
+                attribute: .height,
+                relatedBy: .equal,
                 toItem: nil,
-                attribute: .NotAnAttribute,
+                attribute: .notAnAttribute,
                 multiplier: 1.0,
                 constant: 22.0
-                ).active = true
+                ).isActive = true
             NSLayoutConstraint(
                 item: activityIndicator,
-                attribute: .Width,
-                relatedBy: .Equal,
+                attribute: .width,
+                relatedBy: .equal,
                 toItem: nil,
-                attribute: .NotAnAttribute,
+                attribute: .notAnAttribute,
                 multiplier: 1.0,
                 constant: 22.0
-                ).active = true
+                ).isActive = true
             NSLayoutConstraint(
                 item: activityIndicator,
-                attribute: .CenterY,
-                relatedBy: .Equal,
+                attribute: .centerY,
+                relatedBy: .equal,
                 toItem: view,
-                attribute: .CenterY,
+                attribute: .centerY,
                 multiplier: 1.0,
                 constant: 0.0
-                ).active = true
+                ).isActive = true
             NSLayoutConstraint(
                 item: activityIndicator,
-                attribute: .Trailing,
-                relatedBy: .Equal,
+                attribute: .trailing,
+                relatedBy: .equal,
                 toItem: view,
-                attribute: .Trailing,
+                attribute: .trailing,
                 multiplier: 1.0,
                 constant: -16.0
-                ).active = true
+                ).isActive = true
         } else {
             NSLayoutConstraint(
                 item: label,
-                attribute: .Trailing,
-                relatedBy: .Equal,
+                attribute: .trailing,
+                relatedBy: .equal,
                 toItem: view,
-                attribute: .Trailing,
+                attribute: .trailing,
                 multiplier: 1.0,
                 constant: 8.0
-                ).active = true
+                ).isActive = true
             
         }
 
         NSLayoutConstraint(
             item: label,
-            attribute: .Top,
-            relatedBy: .Equal,
+            attribute: .top,
+            relatedBy: .equal,
             toItem: view,
-            attribute: .Top,
+            attribute: .top,
             multiplier: 1.0,
             constant: 0.0
-            ).active = true
+            ).isActive = true
         
         NSLayoutConstraint(
             item: label,
-            attribute: .Leading,
-            relatedBy: .Equal,
+            attribute: .leading,
+            relatedBy: .equal,
             toItem: view,
-            attribute: .Leading,
+            attribute: .leading,
             multiplier: 1.0,
             constant: 36.0
-            ).active = true
+            ).isActive = true
         NSLayoutConstraint(
             item: label,
-            attribute: .Bottom,
-            relatedBy: .Equal,
+            attribute: .bottom,
+            relatedBy: .equal,
             toItem: view,
-            attribute: .Bottom,
+            attribute: .bottom,
             multiplier: 1.0,
             constant: 8.0
-            ).active = true
+            ).isActive = true
 
         return view
     }
     
     
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == Section.LocalDevice.rawValue && BLEScanBool == true {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == Section.localDevice.rawValue && BLEScanBool == true {
             return self.statusHeaderFooterView("Scanning...", withActivityIndicator:true)
         }
-        if tableView.numberOfRowsInSection(section) == 0 {
+        if tableView.numberOfRows(inSection: section) == 0 {
             return self.statusHeaderFooterView("None", withActivityIndicator:false)
         }
         return nil
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == Section.Manual.rawValue{
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == Section.manual.rawValue{
             switch indexPath.row {
             case 0:
-                let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationModeSelectorCellId) as? RegistrationModeSelectorTVCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: RegistrationModeSelectorCellId) as? RegistrationModeSelectorTVCell
                 if (cell != nil) {
                     cell?.selectorDelegate = self
                     cell?.modeSelector.tintColor = UIColor.auraLeafGreenColor()
@@ -450,32 +465,32 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             case 1:
                 
                 switch self.selectorIndex!{
-                case SelectorMode.Display.rawValue:
-                    let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationDisplayCellId) as? RegistrationManualTVCell
+                case SelectorMode.display.rawValue:
+                    let cell = tableView.dequeueReusableCell(withIdentifier: RegistrationDisplayCellId) as? RegistrationManualTVCell
                     cell?.buttonDelegate = self
                     return cell!;
-                case SelectorMode.DSN.rawValue:
-                    let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationDSNCellId) as? RegistrationManualTVCell
+                case SelectorMode.dsn.rawValue:
+                    let cell = tableView.dequeueReusableCell(withIdentifier: RegistrationDSNCellId) as? RegistrationManualTVCell
                     cell?.buttonDelegate = self
                     return cell!;
-                case SelectorMode.APMode.rawValue:
-                    let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationAPModeCellId) as? RegistrationManualTVCell
+                case SelectorMode.apMode.rawValue:
+                    let cell = tableView.dequeueReusableCell(withIdentifier: RegistrationAPModeCellId) as? RegistrationManualTVCell
                     cell?.buttonDelegate = self
                     
-                    if let dsn = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraDeviceSetupDSNKeychainKey) {
+                    if let dsn = PDKeychainBindings.shared().string(forKey: AuraDeviceSetupDSNKeychainKey) {
                         cell?.dsnField!.text = dsn
                     }
-                    if let token = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraDeviceSetupTokenKeychainKey) {
+                    if let token = PDKeychainBindings.shared().string(forKey: AuraDeviceSetupTokenKeychainKey) {
                         cell?.regTokenField!.text = token
                     }
  
                     return cell!;
-                case SelectorMode.Manual.rawValue:
-                    let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationManualCellId) as? RegistrationManualTVCell
+                case SelectorMode.manual.rawValue:
+                    let cell = tableView.dequeueReusableCell(withIdentifier: RegistrationManualCellId) as? RegistrationManualTVCell
                     cell?.buttonDelegate = self
                     return cell!;
                 default:
-                    let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationManualCellId) as? RegistrationManualTVCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: RegistrationManualCellId) as? RegistrationManualTVCell
                     cell?.buttonDelegate = self
                     return cell!;
                 }
@@ -485,22 +500,22 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 return cell
             }
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(RegistrationCellId) as? RegistrationTVCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: RegistrationCellId) as? RegistrationTVCell
         
             if (cell != nil) {
                 switch Section(rawValue: indexPath.section)! {
-                case .SameLan:
+                case .sameLan:
                     cell?.configure(candidateSameLan)
                     break
-                case .ButtonPush:
+                case .buttonPush:
                     cell?.configure(candidateButtonPush)
                     break
-                case .GatewayNode:
+                case .gatewayNode:
                     if let gateway = gateways[indexPath.row] {
                     cell?.nameLabel.text = gateway.productName
                     cell?.dsnLabel.text = gateway.dsn
                     }
-                case .LocalDevice:
+                case .localDevice:
                     let registrationCandidate = discoveredLocalDevices[indexPath.row]
                     cell?.configure(registrationCandidate)
                 default:
@@ -513,25 +528,25 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
-        case .SameLan:
-            return Int(candidateSameLan != nil);
-        case .ButtonPush:
-            return Int(candidateButtonPush != nil);
-        case .GatewayNode:
+        case .sameLan:
+            return candidateSameLan != nil ? 1 : 0;
+        case .buttonPush:
+            return candidateButtonPush != nil ? 1 : 0;
+        case .gatewayNode:
             return gateways.count
-        case .Manual:
+        case .manual:
             return 2;
-        case .LocalDevice:
+        case .localDevice:
             return discoveredLocalDevices.count
         default:
             return 0;
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == Section.Manual.rawValue {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == Section.manual.rawValue {
             switch indexPath.row{
             case 0:
                 return 65.0
@@ -545,42 +560,42 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
 
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
-        case .SameLan:
+        case .sameLan:
             return "Same LAN Candidate"
-        case .ButtonPush:
+        case .buttonPush:
             return "Button Push Candidate"
-        case .GatewayNode:
+        case .gatewayNode:
             return "Add Node to Gateway"
-        case .Manual:
+        case .manual:
             return "Enter Candidate Details Manually"
-        case .LocalDevice:
+        case .localDevice:
             return "Discovered Local Devices"
         default:
             return "";
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == Section.Manual.rawValue{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == Section.manual.rawValue{
             
-        } else if indexPath.section == Section.GatewayNode.rawValue {
-            self.performSegueWithIdentifier(segueIdToNodeRegistrationView, sender: gateways[indexPath.row])
+        } else if indexPath.section == Section.gatewayNode.rawValue {
+            self.performSegue(withIdentifier: segueIdToNodeRegistrationView, sender: gateways[indexPath.row])
         } else {
             self.registerAlertForIndexPath(indexPath)
         }
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func registerAlertForIndexPath(indexPath: NSIndexPath){
+    func registerAlertForIndexPath(_ indexPath: IndexPath){
         //var tokenTextField = UITextField()
         var latitudeTextField = UITextField()
         var longitudeTextField = UITextField()
         
-        let message = selectorIndex == SelectorMode.Display.rawValue ? "" : "You may manually set the coordinates for the device's location here if you wish."
-        let alert = UIAlertController(title: "Register this device?", message: message, preferredStyle: .Alert)
-        let registerAction = UIAlertAction(title: "Register", style: .Default) { (action) in
+        let message = selectorIndex == SelectorMode.display.rawValue ? "" : "You may manually set the coordinates for the device's location here if you wish."
+        let alert = UIAlertController(title: "Register this device?", message: message, preferredStyle: .alert)
+        let registerAction = UIAlertAction(title: "Register", style: .default) { (action) in
             
             if let candidate = self.getCandidate(indexPath) {
                 let valid = self.verifyCoordinateStringsValid(latitudeTextField.text, lngString: longitudeTextField.text)
@@ -597,32 +612,32 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 self.updatePrompt("Internal error")
             }
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-            self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            self.tableView.deselectRow(at: indexPath, animated: true)
         }
-        if selectorIndex != SelectorMode.Display.rawValue {
-            alert.addTextFieldWithConfigurationHandler({ (textField) in
+        if selectorIndex != SelectorMode.display.rawValue {
+            alert.addTextField(configurationHandler: { (textField) in
                 textField.placeholder = "Latitude (optional)"
                 textField.tintColor = UIColor.auraLeafGreenColor()
-                textField.keyboardType = UIKeyboardType.DecimalPad
+                textField.keyboardType = UIKeyboardType.decimalPad
                 latitudeTextField = textField
             })
-            alert.addTextFieldWithConfigurationHandler({ (textField) in
+            alert.addTextField(configurationHandler: { (textField) in
                 textField.placeholder = "Longitude (optional)"
                 textField.tintColor = UIColor.auraLeafGreenColor()
-                textField.keyboardType = UIKeyboardType.DecimalPad
+                textField.keyboardType = UIKeyboardType.decimalPad
                 longitudeTextField = textField
             })
         }
         alert.addAction(cancelAction)
         alert.addAction(registerAction)
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - CellButtonDelegate
-    func cellButtonPressed(cell: UITableViewCell){
+    func cellButtonPressed(_ cell: UITableViewCell){
         switch selectorIndex {
-        case SelectorMode.Display.rawValue:
+        case SelectorMode.display.rawValue:
             let regCell = cell as! RegistrationManualTVCell
             let regToken = regCell.regTokenField!.text
             if regToken == nil || regToken!.characters.count < 1 {
@@ -630,10 +645,10 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 return
             }
             let newCandidate = AylaRegistrationCandidate()
-            newCandidate.registrationType = AylaRegistrationType.Display
+            newCandidate.registrationType = AylaRegistrationType.display
             newCandidate.registrationToken = regToken
             candidateManual = newCandidate
-        case SelectorMode.DSN.rawValue:
+        case SelectorMode.dsn.rawValue:
             let regCell = cell as! RegistrationManualTVCell
             let dsn = regCell.dsnField!.text
             if dsn == nil || dsn!.characters.count < 1 {
@@ -642,10 +657,10 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             }
             let deviceDict = ["device":["dsn":dsn!]]
             let newCandidate = AylaRegistrationCandidate(dictionary: deviceDict)
-            print("Candidate DSN: %@", newCandidate.dsn)
-            newCandidate.registrationType = AylaRegistrationType.Dsn
+            print("Candidate DSN: %@", newCandidate.dsn ?? "nil")
+            newCandidate.registrationType = AylaRegistrationType.dsn
             candidateManual = newCandidate
-        case SelectorMode.APMode.rawValue:
+        case SelectorMode.apMode.rawValue:
             let regCell = cell as! RegistrationManualTVCell
             let setupToken = regCell.regTokenField!.text
             if setupToken == nil || setupToken!.characters.count < 1 {
@@ -660,11 +675,11 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             let deviceDict = ["device":["dsn":dsn!]]
             let newCandidate = AylaRegistrationCandidate(dictionary: deviceDict)
             newCandidate.setupToken = setupToken
-            print("Candidate setupToken: %@", newCandidate.setupToken)
-            newCandidate.registrationType = AylaRegistrationType.APMode
+            print("Candidate setupToken: %@", newCandidate.setupToken ?? "nil")
+            newCandidate.registrationType = AylaRegistrationType.apMode
             candidateManual = newCandidate
 
-        case SelectorMode.Manual.rawValue:
+        case SelectorMode.manual.rawValue:
             let regCell = cell as! RegistrationManualTVCell
             let dsn = regCell.dsnField!.text
             if dsn == nil || dsn!.characters.count < 1 {
@@ -679,9 +694,9 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             }
             
             if let reg = sessionManager?.deviceManager.registration {
-                let aGroup = dispatch_group_create()
-                dispatch_group_enter(aGroup)
-                reg.fetchCandidateWithDSN(dsn, registrationType: .SameLan, success: { (candidate) in
+                let aGroup = DispatchGroup()
+                aGroup.enter()
+                reg.fetchCandidate(withDSN: dsn, registrationType: .sameLan, success: { (candidate) in
                     
                     candidate.registrationToken = regToken
                     self.candidateManual = candidate
@@ -690,7 +705,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                         self.candidateManual = nil;
                         UIAlertController.alert("Error", message: "Could not find a candidate device with that DSN.", buttonTitle: "OK",fromController: self)
                         //Skip 404 for now
-                        if let httpResp = error.userInfo[AylaHTTPErrorHTTPResponseKey] as? NSHTTPURLResponse {
+                        if let httpResp = (error as NSError).userInfo[AylaHTTPErrorHTTPResponseKey] as? HTTPURLResponse {
                             if(httpResp.statusCode != 404) {
                                 self.addLog("SameLan - " + error.description)
                             }
@@ -701,21 +716,21 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                         else {
                             self.addLog("SameLan - " + error.description)
                         }
-                        dispatch_group_leave(aGroup)
+                        aGroup.leave()
                 })
-                dispatch_group_notify(aGroup, dispatch_get_main_queue(), {
+                aGroup.notify(queue: DispatchQueue.main, execute: {
                     self.updatePrompt(nil)
                 })
             }
         default:
             return
         }
-        self.registerAlertForIndexPath(self.tableView.indexPathForCell(cell)!)
+        self.registerAlertForIndexPath(self.tableView.indexPath(for: cell)!)
     }
     // MARK: - CellSelectorDelegate
-    func cellSelectorPressed(cell: UITableViewCell, control:UISegmentedControl){
+    func cellSelectorPressed(_ cell: UITableViewCell, control:UISegmentedControl){
         self.selectorIndex = control.selectedSegmentIndex
-        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: Section.Manual.rawValue)], withRowAnimation: .None)
+        self.tableView.reloadRows(at: [IndexPath(row: 1, section: Section.manual.rawValue)], with: .none)
     }
     
     /**
@@ -730,28 +745,28 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdToNodeRegistrationView {
-            let vc = segue.destinationViewController as! NodeRegistrationViewController
+            let vc = segue.destination as! NodeRegistrationViewController
             vc.targetGateway = (sender as! AylaDeviceGateway)
         }
     }
     
     // MARK - device manager listener
-    func deviceManager(deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : NSError]) {
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
         print("Init complete")
         self.updateGatewaysList()
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didInitFailure error: NSError) {
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
         print("Failed to init: \(error)")
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didObserveDeviceListChange change: AylaDeviceListChange) {
+    func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
         print("Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
-                device.addListener(self)
+                device.add(self)
             }
         }
         else {
@@ -761,18 +776,18 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         self.updateGatewaysList()
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
+    func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
         print("Change in deviceManager state: new state \(newState), was \(oldState)")
     }
     
-    func device(device: AylaDevice, didObserveChange change: AylaChange) {
-        if change.isKindOfClass(AylaDeviceChange) {
+    func device(_ device: AylaDevice, didObserve change: AylaChange) {
+        if change.isKind(of: AylaDeviceChange.self) {
             // Not a good long term update strategy
             self.updateGatewaysList()
         }
     }
     
-    func device(device: AylaDevice, didFail error: NSError) {
+    func device(_ device: AylaDevice, didFail error: Error) {
         // Device errors are not handled here.
     }
 }

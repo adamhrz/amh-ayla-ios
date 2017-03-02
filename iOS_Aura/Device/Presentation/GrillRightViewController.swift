@@ -20,7 +20,7 @@ class GrillRightViewController: UIViewController, AylaDeviceListener {
     
     var device: GrillRightDevice! {
         didSet {
-            self.device.addListener(self)
+            self.device.add(self)
         }
     }
     var sharesModel: DeviceSharesModel!
@@ -29,12 +29,12 @@ class GrillRightViewController: UIViewController, AylaDeviceListener {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let info = UIBarButtonItem(barButtonSystemItem:.Action, target: self, action: #selector(GrillRightViewController.showDeviceDetails))
+        let info = UIBarButtonItem(barButtonSystemItem:.action, target: self, action: #selector(GrillRightViewController.showDeviceDetails))
         self.navigationItem.rightBarButtonItem = info
     }
     
     func showDeviceDetails(){
-        performSegueWithIdentifier(GrillRightViewController.segueIdToDevice, sender: self.device)
+        performSegue(withIdentifier: GrillRightViewController.segueIdToDevice, sender: self.device)
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,22 +42,22 @@ class GrillRightViewController: UIViewController, AylaDeviceListener {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier {
             switch identifier {
             case GrillRightViewController.sensor1Segue:
-                let sensorController = segue.destinationViewController as! GrillRightSensorViewController
+                let sensorController = segue.destination as! GrillRightSensorViewController
                 sensorController.sensor = device.channel1
                 sensorController.device = device
                 sensor1VC = sensorController
             case GrillRightViewController.sensor2Segue:
-                let sensorController = segue.destinationViewController as! GrillRightSensorViewController
+                let sensorController = segue.destination as! GrillRightSensorViewController
                 sensorController.sensor = device.channel2
                 sensorController.device = device
                 sensor2VC = sensorController
             case GrillRightViewController.segueIdToDevice: // To device page
                 if let device = sender as? AylaDevice {
-                    let detailsController = segue.destinationViewController as! DeviceViewController
+                    let detailsController = segue.destination as! DeviceViewController
                     detailsController.device = device
                     detailsController.sharesModel = self.sharesModel
                 }
@@ -67,23 +67,23 @@ class GrillRightViewController: UIViewController, AylaDeviceListener {
         }
     }
     
-    func device(device: AylaDevice, didObserveChange change: AylaChange) {
+    func device(_ device: AylaDevice, didObserve change: AylaChange) {
         if let change = change as? AylaPropertyChange {
             switch change.property.name {
-            case (let n) where n.containsString("00:"):
+            case (let n) where n.contains("00:"):
                 sensor1VC.refreshUI(change)
-            case (let n) where n.containsString("01:"):
+            case (let n) where n.contains("01:"):
                 sensor2VC.refreshUI(change)
             default:
                 break;
             }
-        } else if let change = change as? AylaDeviceChange, device = change.device as? GrillRightDevice {
+        } else if let change = change as? AylaDeviceChange, let device = change.device as? GrillRightDevice {
             sensor1VC.controlsShouldEnableForDevice(device)
             sensor2VC.controlsShouldEnableForDevice(device)
         }
     }
     
-    func device(device: AylaDevice, didFail error: NSError) {
+    func device(_ device: AylaDevice, didFail error: Error) {
         print(error)
     }
 

@@ -15,19 +15,19 @@ class AuraLocalDeviceManager: AylaBLEDeviceManager {
         super.init(services: [AuraLocalDeviceManager.SERVICE_GRILL_RIGHT, CBUUID(string: SERVICE_AYLA_BLE)])
     }
     static let PLUGIN_ID_LOCAL_DEVICE = "com.aylanetworks.aylasdk.localdevice"
-    enum DeviceManagerError: ErrorType {
-        case EmptyServiceArray
+    enum DeviceManagerError: Error {
+        case emptyServiceArray
     }
     static let SERVICE_GRILL_RIGHT = CBUUID(string: GrillRightDevice.SERVICE_GRILL_RIGHT)
     
-    override func deviceClassForModel(model: String, oemModel: String, uniqueId: String) -> AnyClass? {
-        if model.compare(GrillRightDevice.GRILL_RIGHT_MODEL) == .OrderedSame {
+    override func deviceClass(forModel model: String, oemModel: String, uniqueId: String) -> AnyClass? {
+        if model.compare(GrillRightDevice.GRILL_RIGHT_MODEL) == .orderedSame {
             return GrillRightDevice.self
         }
-        return super.deviceClassForModel(model, oemModel: oemModel, uniqueId: uniqueId)
+        return super.deviceClass(forModel: model, oemModel: oemModel, uniqueId: uniqueId)
     }
     
-    override func createLocalCandidate(peripheral: CBPeripheral, advertisementData: [String : AnyObject], rssi: Int) -> AylaBLECandidate {
+    override func createLocalCandidate(_ peripheral: CBPeripheral, advertisementData: [String : Any], rssi: Int) -> AylaBLECandidate {
         let serviceUUIDs = advertisementData["kCBAdvDataServiceUUIDs"] as! [CBUUID];
         for service in serviceUUIDs {
             if service.isEqual(AuraLocalDeviceManager.SERVICE_GRILL_RIGHT) {

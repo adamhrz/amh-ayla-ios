@@ -26,19 +26,19 @@ class DevicePanelView: UIView {
     @IBOutlet weak var shareNamesLabel: UILabel!
     @IBOutlet weak var sharingNamesView: UIView!
     
-    func configure(device:AylaDevice, sharesModel: DeviceSharesModel?) {
+    func configure(_ device:AylaDevice, sharesModel: DeviceSharesModel?) {
         nameLabel.text = String(format: "%@", device.productName!)
         dsnLabel.text = String(format: "%@ %@", "DSN: ", device.dsn!)
         
-        let connStatus = String.stringFromStringNumberOrNil(device.connectionStatus)
-        connectivityLabel.text = String(format: "%@", String.stringFromStringNumberOrNil(connStatus))
+        let connStatus = String.stringFromStringNumberOrNil(device.connectionStatus as AnyObject?)
+        connectivityLabel.text = String(format: "%@", String.stringFromStringNumberOrNil(connStatus as AnyObject?))
         connectivityLabel.textColor = connStatus == "Online" ? UIColor.auraLeafGreenColor() : UIColor.auraRedColor()
         
-        oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", String.stringFromStringNumberOrNil(device.oemModel))
-        modelLabel.text = String(format: "%@ %@", "Model: ", String.stringFromStringNumberOrNil(device.model))
-        lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", String.stringFromStringNumberOrNil(device.lanIp))
+        oemModelLabel.text = String(format: "%@ %@", "OEM Model: ", String.stringFromStringNumberOrNil(device.oemModel as AnyObject?))
+        modelLabel.text = String(format: "%@ %@", "Model: ", String.stringFromStringNumberOrNil(device.model as AnyObject?))
+        lanIPAddressLabel.text = String(format: "%@ %@", "LAN IP: ", String.stringFromStringNumberOrNil(device.lanIp as AnyObject?))
         
-        self.lanModeActiveLabel.textColor = UIColor.lightGrayColor()
+        self.lanModeActiveLabel.textColor = UIColor.lightGray
         self.lanModeActiveLabel.highlightedTextColor = UIColor.auraLeafGreenColor()
         
         var macAddressLabelString:String
@@ -46,13 +46,13 @@ class DevicePanelView: UIView {
         var activeLabelBool:Bool
 
         if let bleDevice = device as? AylaBLEDevice {
-            let btID = String.stringFromStringNumberOrNil(bleDevice.bluetoothIdentifier?.UUIDString)
-            macAddressLabelString = String(format: "%@ %@", "BT ID: ", String.stringFromStringNumberOrNil(btID))
+            let btID = String.stringFromStringNumberOrNil(bleDevice.bluetoothIdentifier?.uuidString as AnyObject?)
+            macAddressLabelString = String(format: "%@ %@", "BT ID: ", String.stringFromStringNumberOrNil(btID as AnyObject?))
             lanModeHeaderLabelString = "Bluetooth:"
             activeLabelBool = bleDevice.isConnectedLocal
             
         } else {
-            macAddressLabelString = String(format: "%@ %@", "MAC: ", String.stringFromStringNumberOrNil(device.mac))
+            macAddressLabelString = String(format: "%@ %@", "MAC: ", String.stringFromStringNumberOrNil(device.mac as AnyObject?))
             lanModeHeaderLabelString = "LAN Mode:"
             activeLabelBool = device.isLanModeActive()
         }
@@ -60,11 +60,11 @@ class DevicePanelView: UIView {
         lanModeHeaderLabel.text = lanModeHeaderLabelString
         
         if activeLabelBool {
-            self.lanModeActiveLabel.highlighted = true
+            self.lanModeActiveLabel.isHighlighted = true
             self.lanModeActiveLabel.text = "Active"
         }
         else {
-            self.lanModeActiveLabel.highlighted = false
+            self.lanModeActiveLabel.isHighlighted = false
             self.lanModeActiveLabel.text = "Inactive"
         }
         
@@ -72,8 +72,8 @@ class DevicePanelView: UIView {
         if (self.timeZoneLabel == nil) {
             self.timeZoneLabel.text = timeZoneBase
         }
-        device.fetchTimeZoneWithSuccess({ (timeZone) in
-            self.timeZoneLabel.text = timeZoneBase + String.stringFromStringNumberOrNil(timeZone.tzID)
+        device.fetchTimeZone(success: { (timeZone) in
+            self.timeZoneLabel.text = timeZoneBase + String.stringFromStringNumberOrNil(timeZone.tzID as AnyObject?)
         }) { (error) in
             self.timeZoneLabel.text = timeZoneBase + "Unknown"
         }
@@ -93,13 +93,13 @@ class DevicePanelView: UIView {
                                 shareNamesText = share.userEmail
                             }
                         }
-                        UIView.animateWithDuration(0.2, animations: {
+                        UIView.animate(withDuration: 0.2, animations: {
                             self.shareNamesLabel.text = shareNamesText
-                            self.sharingNamesView.hidden = false
+                            self.sharingNamesView.isHidden = false
                         })
                     } else {
-                        UIView.animateWithDuration(0.2, animations: {
-                            self.sharingNamesView.hidden = true
+                        UIView.animate(withDuration: 0.2, animations: {
+                            self.sharingNamesView.isHidden = true
                         })
                     }
                 }
@@ -117,6 +117,6 @@ class DevicePanelView: UIView {
         }
         
         self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.darkGrayColor().CGColor
+        self.layer.borderColor = UIColor.darkGray.cgColor
     }
 }

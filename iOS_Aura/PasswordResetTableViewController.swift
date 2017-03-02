@@ -26,10 +26,10 @@ class PasswordResetTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-    @IBAction func cancel(sender: AnyObject) {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancel(_ sender: AnyObject) {
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
-    @IBAction func resetPassword(sender: AnyObject) {
+    @IBAction func resetPassword(_ sender: AnyObject) {
         let password = passwordTextField.text!
         let passwordConfirmation = passwordConfirmationTextField.text!
         if password.characters.count == 0 || passwordConfirmation.characters.count == 0 {
@@ -40,9 +40,9 @@ class PasswordResetTableViewController: UITableViewController {
             return
         }
         let loginManager = AylaNetworks.shared().loginManager
-        loginManager.resetPasswordTo(passwordTextField.text!, token: passwordResetToken, success: {
+        loginManager.resetPassword(to: passwordTextField.text!, token: passwordResetToken, success: {
             let presentingController = self.presentingViewController
-            self.dismissViewControllerAnimated(true, completion: {
+            self.dismiss(animated: true, completion: {
                 UIAlertController.alert("Done", message: "Password has been changed, please login", buttonTitle: "OK", fromController: presentingController!)
                 return
             })

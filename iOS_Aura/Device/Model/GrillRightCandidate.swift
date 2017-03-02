@@ -37,7 +37,7 @@ class GrillRightCandidate: AylaBLECandidate {
     
     override var hardwareAddress: String? {
         get {
-            return peripheral.identifier.UUIDString
+            return peripheral.identifier.uuidString
         }
         set {
         }

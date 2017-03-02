@@ -13,15 +13,15 @@ import SAMKeychain
 
 class ConfigDetailCell: UITableViewCell {
     
-    @IBOutlet private weak var appIdLabel: UILabel!
-    @IBOutlet private weak var appSecretLabel: UILabel!
-    @IBOutlet private weak var serviceTypeLabel: UILabel!
-    @IBOutlet private weak var serviceLocationLabel: UILabel!
-    @IBOutlet private weak var allowDSSLabel: UILabel!
-    @IBOutlet private weak var allowOfflineLabel: UILabel!
-    @IBOutlet private weak var networkTimeoutLabel: UILabel!
+    @IBOutlet fileprivate weak var appIdLabel: UILabel!
+    @IBOutlet fileprivate weak var appSecretLabel: UILabel!
+    @IBOutlet fileprivate weak var serviceTypeLabel: UILabel!
+    @IBOutlet fileprivate weak var serviceLocationLabel: UILabel!
+    @IBOutlet fileprivate weak var allowDSSLabel: UILabel!
+    @IBOutlet fileprivate weak var allowOfflineLabel: UILabel!
+    @IBOutlet fileprivate weak var networkTimeoutLabel: UILabel!
     
-    func configCell(config: NSDictionary, showSecret: Bool) {
+    func configCell(_ config: NSDictionary, showSecret: Bool) {
         appIdLabel.text = config["appId"] as? String
         if showSecret {
             appSecretLabel.text = config["appSecret"] as? String
@@ -32,7 +32,7 @@ class ConfigDetailCell: UITableViewCell {
         serviceTypeLabel.text = config["serviceType"] as? String
         serviceLocationLabel.text = config["serviceLocation"] as? String
         
-        let settings = AylaSystemSettings.defaultSystemSettings()
+        let settings = AylaSystemSettings.default()
         
         if let allowDSS = config["allowDSS"] as? Bool {
             allowDSSLabel.text = allowDSS ? "YES" : "NO"
@@ -56,8 +56,8 @@ class ConfigDetailCell: UITableViewCell {
 
 class DeveloperOptionsViewController: UITableViewController {
     
-    private let IdentifyAvailableCell = "AvailableConfig"
-    private let IdentifyConfigItemCell = "ConfigDetail"
+    fileprivate let IdentifyAvailableCell = "AvailableConfig"
+    fileprivate let IdentifyConfigItemCell = "ConfigDetail"
     
     var currentConfig: AuraConfig! {
         didSet {
@@ -67,7 +67,7 @@ class DeveloperOptionsViewController: UITableViewController {
         }
     }
 
-    private var currentConfigIndexPath: NSIndexPath!
+    fileprivate var currentConfigIndexPath: IndexPath!
     
     var easterEgg: Bool = false {
         didSet {
@@ -81,54 +81,54 @@ class DeveloperOptionsViewController: UITableViewController {
     var fromLoginScreen: Bool = false
     var newConfigImport: Bool = false
     
-    private var defaultConfigurations: [AuraConfig] = AuraConfig.defaultConfigurations
+    fileprivate var defaultConfigurations: [AuraConfig] = AuraConfig.defaultConfigurations
     
-    private enum Section :Int {
-        case Header
-        case Defaults
-        case Custom
-        case Details
-        case SectionCount
+    fileprivate enum Section :Int {
+        case header
+        case defaults
+        case custom
+        case details
+        case sectionCount
     }
     
-    private var configURLList = [NSURL]()
+    fileprivate var configURLList = [URL]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.currentConfig == nil {
             self.currentConfig = AuraConfig.currentConfig()
-            self.navigationItem.rightBarButtonItem?.enabled = false
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
         }
         if let fileList = self.fetchConfigFileURLs() {
             configURLList = fileList
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tableView.reloadData()
         if newConfigImport {
             let message = String(format:"New configuration '%@' has been imported.", self.currentConfig.name)
             UIAlertController.alert("Success", message: message, buttonTitle: "OK", fromController: self, okHandler: { (action) in
-                let path = NSIndexPath(forRow: 0, inSection: Section.Custom.rawValue)
-                self.tableView.scrollToRowAtIndexPath(path, atScrollPosition: .Top, animated: true)
+                let path = IndexPath(row: 0, section: Section.custom.rawValue)
+                self.tableView.scrollToRow(at: path, at: .top, animated: true)
             })
         }
     }
     
-    private func fetchConfigFileURLs() -> [NSURL]? {
-        let fileManager = NSFileManager.defaultManager()
+    fileprivate func fetchConfigFileURLs() -> [URL]? {
+        let fileManager = FileManager.default
         
-        let paths = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let paths = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         
         do {
-            let allContents = try fileManager.contentsOfDirectoryAtURL(documentsDirectory, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants, .SkipsPackageDescendants])
-            var filesOnly = [NSURL]()
+            let allContents = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants, .skipsPackageDescendants])
+            var filesOnly = [URL]()
             for item in allContents {
                 var isDirectory : ObjCBool = ObjCBool(false)
                 
-                if fileManager.fileExistsAtPath(item.path!, isDirectory: &isDirectory) && isDirectory {
+                if fileManager.fileExists(atPath: item.path, isDirectory: &isDirectory) && isDirectory.boolValue {
                     continue
                 }
                 filesOnly.append(item)
@@ -146,19 +146,19 @@ class DeveloperOptionsViewController: UITableViewController {
     }
     
     // MARK: - DataSource & Delegate
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Section.SectionCount.rawValue
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return Section.sectionCount.rawValue
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case Section.Header.rawValue:
+        case Section.header.rawValue:
             return 0
-        case Section.Defaults.rawValue:
+        case Section.defaults.rawValue:
             return self.defaultConfigurations.count
-        case Section.Custom.rawValue:
+        case Section.custom.rawValue:
             return configURLList.count
-        case Section.Details.rawValue:
+        case Section.details.rawValue:
             return 1
         default:
             return 0
@@ -166,45 +166,45 @@ class DeveloperOptionsViewController: UITableViewController {
         
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == Section.Details.rawValue {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == Section.details.rawValue {
             return 217.0
         }
         return UITableViewAutomaticDimension
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == Section.Details.rawValue {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == Section.details.rawValue {
             return 217.0
         }
         return UITableViewAutomaticDimension
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         
-        if indexPath.section == Section.Details.rawValue {
-            cell = tableView.dequeueReusableCellWithIdentifier(IdentifyConfigItemCell)!
+        if indexPath.section == Section.details.rawValue {
+            cell = tableView.dequeueReusableCell(withIdentifier: IdentifyConfigItemCell)!
             (cell as! ConfigDetailCell).configCell(self.currentConfig.config, showSecret:easterEgg)
-        } else if indexPath.section == Section.Defaults.rawValue {
-            cell = tableView.dequeueReusableCellWithIdentifier(IdentifyAvailableCell)!
+        } else if indexPath.section == Section.defaults.rawValue {
+            cell = tableView.dequeueReusableCell(withIdentifier: IdentifyAvailableCell)!
             let name = self.defaultConfigurations[indexPath.row].name
             cell.textLabel?.text = name
             if name == currentConfig.name {
-                cell.accessoryType = .Checkmark
+                cell.accessoryType = .checkmark
                 currentConfigIndexPath = indexPath
             } else {
-                cell.accessoryType = .None
+                cell.accessoryType = .none
             }
-        } else if indexPath.section == Section.Custom.rawValue {
-            cell = tableView.dequeueReusableCellWithIdentifier(IdentifyAvailableCell)!
+        } else if indexPath.section == Section.custom.rawValue {
+            cell = tableView.dequeueReusableCell(withIdentifier: IdentifyAvailableCell)!
             let url = configURLList[indexPath.row]
             cell.textLabel?.text = url.lastPathComponent
             if url.lastPathComponent == String(format:"%@.auraconfig", currentConfig.name) {
-                cell.accessoryType = .Checkmark
+                cell.accessoryType = .checkmark
                 currentConfigIndexPath = indexPath
             } else {
-                cell.accessoryType = .None
+                cell.accessoryType = .none
             }
         } else {
             cell = UITableViewCell()
@@ -213,15 +213,15 @@ class DeveloperOptionsViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case Section.Header.rawValue:
+        case Section.header.rawValue:
             return "Choose a configuration from the list below. Additional configurations may be added via email attachments or launching a local .auraconfig file with the Aura application."
-        case Section.Defaults.rawValue:
+        case Section.defaults.rawValue:
             return "Default Configurations"
-        case Section.Custom.rawValue:
+        case Section.custom.rawValue:
             return "Saved Custom Configurations"
-        case Section.Details.rawValue:
+        case Section.details.rawValue:
             return "Details"
         default:
             return nil
@@ -229,32 +229,32 @@ class DeveloperOptionsViewController: UITableViewController {
         
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == Section.Defaults.rawValue {
+        if indexPath.section == Section.defaults.rawValue {
             self.currentConfig = self.defaultConfigurations[indexPath.row]
             tableView.reloadData()
-        } else if indexPath.section == Section.Custom.rawValue {
+        } else if indexPath.section == Section.custom.rawValue {
             let url = configURLList[indexPath.row]
-            if let config = (UIApplication.sharedApplication().delegate as? AppDelegate)?.loadConfigAtURL(url) {
+            if let config = (UIApplication.shared.delegate as? AppDelegate)?.loadConfigAtURL(url) {
                 self.currentConfig = config
                 tableView.reloadData()
             }
         }
         
         if self.currentConfig.name != AuraConfig.currentConfig().name {
-            self.navigationItem.rightBarButtonItem?.enabled = true
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
-            self.navigationItem.rightBarButtonItem?.enabled = false
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
         }
     }
 
     // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         switch indexPath.section {
-        case Section.Custom.rawValue:
+        case Section.custom.rawValue:
             return true
         default:
             return false
@@ -262,102 +262,102 @@ class DeveloperOptionsViewController: UITableViewController {
     }
     
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             if indexPath == currentConfigIndexPath {
                 UIAlertController.alert("Error.", message: "Can't delete the currently selected configuration.  Please pick another before deleting this one.", buttonTitle: "Ok", fromController: self)
             } else {
                 do {
-                    try NSFileManager.defaultManager().removeItemAtURL(configURLList[indexPath.row])
+                    try FileManager.default.removeItem(at: configURLList[indexPath.row])
                 } catch {
                     print("Failed to delete file")
                 }
                 
-                configURLList.removeAtIndex(indexPath.row)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                configURLList.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
             }
         }
     }
     
     
-    @IBAction private func savePressed(sender: AnyObject) {
+    @IBAction fileprivate func savePressed(_ sender: AnyObject) {
         var message = "Please log in using an account for the configuration selected, or create a new account for this configuration."
         if !fromLoginScreen {
             message = "You will now be logged out.  " + message
         }
         
-        let alert = UIAlertController(title:"New Configuration Selected.", message:message, preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+        let alert = UIAlertController(title:"New Configuration Selected.", message:message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: { (action) -> Void in
             self.saveConfigs()
         })
-        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.cancel, handler: { (action) -> Void in
         })
         alert.addAction(okAction)
         alert.addAction(cancelAction)
 
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 
-    @IBAction private func cancelPressed(sender: AnyObject) {
+    @IBAction fileprivate func cancelPressed(_ sender: AnyObject) {
         if fromLoginScreen || newConfigImport {
-            self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+            self.navigationController?.dismiss(animated: true, completion: nil)
         } else {
-            self.navigationController?.popViewControllerAnimated(true)
+            let _ = self.navigationController?.popViewController(animated: true)
         }
     }
     
-    private func saveConfigs() {
-        let settings = AylaSystemSettings.defaultSystemSettings()
-        let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+    fileprivate func saveConfigs() {
+        let settings = AylaSystemSettings.default()
+        let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
         
         if fromLoginScreen || newConfigImport {
-            if let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey) {
-                SAMKeychain.deletePasswordForService(settings.appId, account: username)
+            if let username = PDKeychainBindings.shared().string(forKey: AuraUsernameKeychainKey) {
+                SAMKeychain.deletePassword(forService: settings.appId, account: username)
             }
             AuraConfig.saveConfig(self.currentConfig)
             self.currentConfig.applyTo(settings)
-            AylaNetworks.initializeWithSettings(settings)
-            self.dismissViewControllerAnimated(true, completion: nil)
+            AylaNetworks.initialize(with: settings)
+            self.dismiss(animated: true, completion: nil)
             
         } else {
     
             // Apply after logging out.
-            let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
-            SAMKeychain.deletePasswordForService(settings.appId, account: username)
+            let username = PDKeychainBindings.shared().string(forKey: AuraUsernameKeychainKey)
+            SAMKeychain.deletePassword(forService: settings.appId, account: username!)
             
             if let manager = sessionManager {
-                manager.shutDownWithSuccess({ () -> Void in
+                manager.shutDown(success: { () -> Void in
                     do {
-                        try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                        try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                     } catch _ {
                         print("Failed to remove cached authorization")
                     }
                     AuraConfig.saveConfig(self.currentConfig)
                     self.currentConfig.applyTo(settings)
-                    AylaNetworks.initializeWithSettings(settings)
-                    self.navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                    AylaNetworks.initialize(with: settings)
+                    self.navigationController?.dismiss(animated: true, completion: { () -> Void in
                     });
                     }, failure: { (error) -> Void in
                         print("Log out operation failed: %@", error)
-                        func alertWithLogout (message: String!, buttonTitle: String!){
-                            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                            let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                        func alertWithLogout (_ message: String!, buttonTitle: String!){
+                            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+                            let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.default, handler: { (action) -> Void in
                                 do {
-                                    try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                                    try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                                 } catch _ {
                                     print("Failed to remove cached authorization")
                                 }
                                 AuraConfig.saveConfig(self.currentConfig)
                                 self.currentConfig.applyTo(settings)
-                                AylaNetworks.initializeWithSettings(settings)
-                                self.navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                                AylaNetworks.initialize(with: settings)
+                                self.navigationController?.dismiss(animated: true, completion: { () -> Void in
                                 });
                             })
                             alert.addAction(okAction)
-                            self.presentViewController(alert, animated: true, completion: nil)
+                            self.present(alert, animated: true, completion: nil)
                         }
-                        switch error.code {
-                        case AylaHTTPErrorCode.LostConnectivity.rawValue:
+                        switch (error as NSError).code {
+                        case AylaHTTPErrorCode.lostConnectivity.rawValue:
                             alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
                         default:
                             alertWithLogout("An error has occurred.\n" + (error.aylaServiceDescription), buttonTitle: "Continue")

@@ -20,7 +20,7 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+        sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
         
         if (sessionManager != nil) {
             viewModel = DeviceSharesListViewModel(deviceManager: sessionManager!.deviceManager, tableView: tableView)
@@ -33,11 +33,11 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
             // TODO: present a warning and give fresh option
         }
         
-        let cancel = UIBarButtonItem(barButtonSystemItem:.Cancel, target: self, action: #selector(DeviceSharesTableViewController.cancel))
+        let cancel = UIBarButtonItem(barButtonSystemItem:.cancel, target: self, action: #selector(DeviceSharesTableViewController.cancel))
         self.navigationItem.leftBarButtonItem = cancel
-        self.navigationController?.navigationBar.translucent = false;
+        self.navigationController?.navigationBar.isTranslucent = false;
         self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh shares")
-        self.refreshControl?.addTarget(self, action: #selector(DeviceSharesTableViewController.refreshShareData), forControlEvents: .ValueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(DeviceSharesTableViewController.refreshShareData), for: .valueChanged)
     }
     
     override func didReceiveMemoryWarning() {
@@ -46,7 +46,7 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
     }
     
     func cancel() {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
     func reloadTableData(){
@@ -65,29 +65,29 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
     }
     
     // MARK: - DeviceSharesListViewModelDelegate
-    func deviceSharesListViewModel(viewModel:DeviceSharesListViewModel, didDeleteShare share:AylaShare) {
+    func deviceSharesListViewModel(_ viewModel:DeviceSharesListViewModel, didDeleteShare share:AylaShare) {
         let model = ShareViewModel(share: share)
         model.deleteShare(self, successHandler: {
             self.viewModel!.sharesModel?.updateSharesList({ (shares) in
                     self.reloadTableData()
                 }, failureHandler: { (error) in
-                    let alert = UIAlertController(title: "Failed to Update Shares List.", message: error.description, preferredStyle: .Alert)
-                    let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
+                    let alert = UIAlertController(title: "Failed to Update Shares List.", message: error.description, preferredStyle: .alert)
+                    let gotIt = UIAlertAction(title: "Got it", style: .cancel, handler: nil)
                     alert.addAction(gotIt)
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.present(alert, animated: true, completion: nil)
                     self.reloadTableData()
             })
             }) { (error) in }
     }
-    func deviceSharesListViewModel(viewModel:DeviceSharesListViewModel, didSelectShare share:AylaShare) {
+    func deviceSharesListViewModel(_ viewModel:DeviceSharesListViewModel, didSelectShare share:AylaShare) {
 
     }
     
     // MARK: DeviceSharesModelDelegate
-    func deviceSharesModel(model: DeviceSharesModel, ownedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
+    func deviceSharesModel(_ model: DeviceSharesModel, ownedSharesListDidUpdate: ((_ shares: [AylaShare]) -> Void)?) {
         self.reloadTableData()
     }
-    func deviceSharesModel(model: DeviceSharesModel, receivedSharesListDidUpdate: ((shares: [AylaShare]) -> Void)?) {
+    func deviceSharesModel(_ model: DeviceSharesModel, receivedSharesListDidUpdate: ((_ shares: [AylaShare]) -> Void)?) {
         self.reloadTableData()
     }
     

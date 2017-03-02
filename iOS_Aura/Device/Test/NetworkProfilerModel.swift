@@ -25,44 +25,44 @@ class NetworkProfilerModel: TestModel, AylaLanTaskProfilerListener, AylaCloudTas
     var totalTimes = ( lan:  Array<CFTimeInterval>(), cloud : Array<CFTimeInterval>())
     var networkTimes = ( lan:  Array<CFTimeInterval>(), cloud : Array<CFTimeInterval>())
     
-    func didStartLANTask(task: AylaConnectTask!) {
+    func didStartLANTask(_ task: AylaConnectTask!) {
         
     }
     
-    func didFailLANTask(task: AylaConnectTask!, duration: CFTimeInterval) {
+    func didFailLANTask(_ task: AylaConnectTask!, duration: CFTimeInterval) {
         networkDuration = duration
     }
     
-    func didSucceedLANTask(task: AylaConnectTask!, duration: CFTimeInterval) {
+    func didSucceedLANTask(_ task: AylaConnectTask!, duration: CFTimeInterval) {
         networkDuration = duration
     }
     
-    func didStartTask(task: NSURLSessionDataTask!) {
+    func didStart(_ task: URLSessionDataTask!) {
         
     }
     
-    func didFailTask(task: NSURLSessionDataTask!, duration: CFTimeInterval) {
+    func didFail(_ task: URLSessionDataTask!, duration: CFTimeInterval) {
         networkDuration = duration
     }
     
-    func didSucceedTask(task: NSURLSessionDataTask!, duration: CFTimeInterval) {
+    func didSucceed(_ task: URLSessionDataTask!, duration: CFTimeInterval) {
         networkDuration = duration
     }
     override func testPanelIsReady() {
         testPanelVC?.title = "Network Profiler"
-        testPanelVC?.tf1.hidden = false
-        testPanelVC?.tf1Label.hidden = false
+        testPanelVC?.tf1.isHidden = false
+        testPanelVC?.tf1Label.isHidden = false
         testPanelVC?.tf1Label.text = "Iters"
-        testPanelVC?.tf1.keyboardType = .NumberPad
+        testPanelVC?.tf1.keyboardType = .numberPad
         
-        testPanelVC?.tf2.hidden = false
-        testPanelVC?.tf2Label.hidden = false
+        testPanelVC?.tf2.isHidden = false
+        testPanelVC?.tf2Label.isHidden = false
         testPanelVC?.tf2Label.text = "LAN Mode"
-        testPanelVC?.tf2.keyboardType = .NumberPad
-        testPanelVC?.tf2.enabled = false
+        testPanelVC?.tf2.keyboardType = .numberPad
+        testPanelVC?.tf2.isEnabled = false
         testPanelVC?.tf2.text = (device != nil && device!.isLanModeActive() ? "Enabled" : "Unavailable")
         
-        testPanelVC?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: #selector(clearConsole))
+        testPanelVC?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(clearConsole))
         
     }
     
@@ -72,21 +72,21 @@ class NetworkProfilerModel: TestModel, AylaLanTaskProfilerListener, AylaCloudTas
         networkTimes = ( lan:  Array<CFTimeInterval>(), cloud : Array<CFTimeInterval>())
     }
     
-    func testTurnBlueLEDOnViaCloud(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
+    func testTurnBlueLEDOnViaCloud(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
         let blueLEDProperty = device?.getProperty("Blue_LED")
         let turnOffDatapoint = AylaDatapointParams ()
         turnOffDatapoint.value = 0
         
-        addLog(.Info, log: "Turning blue LED on via Cloud")
+        addLog(.info, log: "Turning blue LED on via Cloud")
         let startTime = CACurrentMediaTime()
-        blueLEDProperty?.createDatapointCloud(turnOffDatapoint, success: { (createdDatapoint) in
+        _ = blueLEDProperty?.createDatapointCloud(turnOffDatapoint, success: { (createdDatapoint) in
             
             let endTime = CACurrentMediaTime();
             let totalTime = endTime-startTime
             self.totalTimes.cloud.append(totalTime)
             self.networkTimes.cloud.append(self.networkDuration)
-            self.addLog(.Info, log: self.timeResultsDescription("Cloud", totalTime: totalTime, networkTime: self.networkDuration))
+            self.addLog(.info, log: self.timeResultsDescription("Cloud", totalTime: totalTime, networkTime: self.networkDuration))
             
             self.passTestCase(tc)
             }, failure: { (error) in
@@ -94,25 +94,25 @@ class NetworkProfilerModel: TestModel, AylaLanTaskProfilerListener, AylaCloudTas
         })
     }
     
-    func timeResultsDescription(operationType:String, totalTime:CFTimeInterval, networkTime:CFTimeInterval) -> String {
+    func timeResultsDescription(_ operationType:String, totalTime:CFTimeInterval, networkTime:CFTimeInterval) -> String {
         return "\(operationType) Operation Total: \(String(format: "%.0f",totalTime*1000))ms, Network Total: \(String(format: "%.0f",networkTime*1000))ms, \(String(format: "%.2f%%",networkTime/totalTime*100))"
     }
     
-    func testTurnBlueLEDOffViaCloud(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
+    func testTurnBlueLEDOffViaCloud(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
         let blueLEDProperty = device?.getProperty("Blue_LED")
         let turnOffDatapoint = AylaDatapointParams ()
         turnOffDatapoint.value = 0
         
-        addLog(.Info, log: "Turning blue LED off via Cloud")
+        addLog(.info, log: "Turning blue LED off via Cloud")
         let startTime = CACurrentMediaTime()
-        blueLEDProperty?.createDatapointCloud(turnOffDatapoint, success: { (createdDatapoint) in
+        _ = blueLEDProperty?.createDatapointCloud(turnOffDatapoint, success: { (createdDatapoint) in
             
             let endTime = CACurrentMediaTime();
             let totalTime = endTime-startTime
             self.totalTimes.cloud.append(totalTime)
             self.networkTimes.cloud.append(self.networkDuration)
-            self.addLog(.Info, log: self.timeResultsDescription("Cloud", totalTime: totalTime, networkTime: self.networkDuration))
+            self.addLog(.info, log: self.timeResultsDescription("Cloud", totalTime: totalTime, networkTime: self.networkDuration))
             
             self.passTestCase(tc)
             }, failure: { (error) in
@@ -120,21 +120,21 @@ class NetworkProfilerModel: TestModel, AylaLanTaskProfilerListener, AylaCloudTas
         })
     }
     
-    func testTurnBlueLEDOnViaLAN(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
+    func testTurnBlueLEDOnViaLAN(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
         let blueLEDProperty = device?.getProperty("Blue_LED")
         let turnOffDatapoint = AylaDatapointParams ()
         turnOffDatapoint.value = 0
         
-        addLog(.Info, log: "Turning blue LED on via LAN")
+        addLog(.info, log: "Turning blue LED on via LAN")
         let startTime = CACurrentMediaTime()
-        blueLEDProperty?.createDatapointLAN(turnOffDatapoint, success: { (createdDatapoint) in
+        _ = blueLEDProperty?.createDatapointLAN(turnOffDatapoint, success: { (createdDatapoint) in
             
             let endTime = CACurrentMediaTime();
             let totalTime = endTime-startTime
             self.totalTimes.lan.append(totalTime)
             self.networkTimes.lan.append(self.networkDuration)
-            self.addLog(.Info, log: self.timeResultsDescription("LAN", totalTime: totalTime, networkTime: self.networkDuration))
+            self.addLog(.info, log: self.timeResultsDescription("LAN", totalTime: totalTime, networkTime: self.networkDuration))
             
             self.passTestCase(tc)
             }, failure: { (error) in
@@ -142,21 +142,21 @@ class NetworkProfilerModel: TestModel, AylaLanTaskProfilerListener, AylaCloudTas
         })
     }
     
-    func testTurnBlueLEDOffViaLAN(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
+    func testTurnBlueLEDOffViaLAN(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
         let blueLEDProperty = device?.getProperty("Blue_LED")
         let turnOffDatapoint = AylaDatapointParams ()
         turnOffDatapoint.value = 0
         
-        addLog(.Info, log: "Turning blue LED off via LAN")
+        addLog(.info, log: "Turning blue LED off via LAN")
         let startTime = CACurrentMediaTime()
-        blueLEDProperty?.createDatapointLAN(turnOffDatapoint, success: { (createdDatapoint) in
+        _ = blueLEDProperty?.createDatapointLAN(turnOffDatapoint, success: { (createdDatapoint) in
             
             let endTime = CACurrentMediaTime();
             let totalTime = endTime-startTime
             self.totalTimes.lan.append(totalTime)
             self.networkTimes.lan.append(self.networkDuration)
-            self.addLog(.Info, log: self.timeResultsDescription("LAN", totalTime: totalTime, networkTime: self.networkDuration))
+            self.addLog(.info, log: self.timeResultsDescription("LAN", totalTime: totalTime, networkTime: self.networkDuration))
             
             self.passTestCase(tc)
             }, failure: { (error) in
@@ -188,20 +188,20 @@ class NetworkProfilerModel: TestModel, AylaLanTaskProfilerListener, AylaCloudTas
             .addTest(NSStringFromSelector(#selector(testTurnBlueLEDOnViaCloud)), testBlock: { [weak self] (testCase) in self?.testTurnBlueLEDOffViaCloud(testCase) })
             .addTest(NSStringFromSelector(#selector(testTurnBlueLEDOffViaCloud)), testBlock: { [weak self] (testCase) in self?.testTurnBlueLEDOffViaCloud(testCase) })
         if device.isLanModeActive() {
-            sequencer
+            _ = sequencer
                 .addTest(NSStringFromSelector(#selector(testTurnBlueLEDOnViaLAN)), testBlock: { [weak self] (testCase) in self?.testTurnBlueLEDOnViaLAN(testCase) })
                 .addTest(NSStringFromSelector(#selector(testTurnBlueLEDOffViaLAN)), testBlock: { [weak self] (testCase) in self?.testTurnBlueLEDOffViaLAN(testCase) })
         }
         
         testSequencer = sequencer
     }
-    override func finishedOnTestSequencer(testSequencer: TestSequencer) {
+    override func finishedOnTestSequencer(_ testSequencer: TestSequencer) {
         super.finishedOnTestSequencer(testSequencer)
-        addLog(.Info, log: "Results: \(timeResultsDescription("Cloud", totalTime: totalTimes.cloud.reduce(0,combine: { $0 + $1 }), networkTime: networkTimes.cloud.reduce(0,combine: { $0 + $1 })))")
-        addLog(.Info, log: "Average Results: \(timeResultsDescription("Cloud", totalTime: totalTimes.cloud.reduce(0,combine: { $0 + $1 })/Double(self.totalTimes.cloud.count), networkTime: networkTimes.cloud.reduce(0,combine: { $0 + $1 })/Double(self.networkTimes.cloud.count)))")
+        addLog(.info, log: "Results: \(timeResultsDescription("Cloud", totalTime: totalTimes.cloud.reduce(0,{ $0 + $1 }), networkTime: networkTimes.cloud.reduce(0,{ $0 + $1 })))")
+        addLog(.info, log: "Average Results: \(timeResultsDescription("Cloud", totalTime: totalTimes.cloud.reduce(0,{ $0 + $1 })/Double(self.totalTimes.cloud.count), networkTime: networkTimes.cloud.reduce(0,{ $0 + $1 })/Double(self.networkTimes.cloud.count)))")
         
         
-        addLog(.Info, log: "Results: \(timeResultsDescription("LAN", totalTime: totalTimes.lan.reduce(0,combine: { $0 + $1 }), networkTime: networkTimes.lan.reduce(0,combine: { $0 + $1 })))")
-        addLog(.Info, log: "Average Results: \(timeResultsDescription("LAN", totalTime: totalTimes.lan.reduce(0,combine: { $0 + $1 })/Double(self.totalTimes.lan.count), networkTime: networkTimes.lan.reduce(0,combine: { $0 + $1 })/Double(self.networkTimes.lan.count)))")
+        addLog(.info, log: "Results: \(timeResultsDescription("LAN", totalTime: totalTimes.lan.reduce(0,{ $0 + $1 }), networkTime: networkTimes.lan.reduce(0,{ $0 + $1 })))")
+        addLog(.info, log: "Average Results: \(timeResultsDescription("LAN", totalTime: totalTimes.lan.reduce(0,{ $0 + $1 })/Double(self.totalTimes.lan.count), networkTime: networkTimes.lan.reduce(0,{ $0 + $1 })/Double(self.networkTimes.lan.count)))")
     }
 }

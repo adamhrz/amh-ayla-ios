@@ -32,7 +32,7 @@ class PropertyViewController: UIViewController {
     func refresh() {
         if let property = propertyModel?.property {
             displayNameLabel.text = property.displayName
-            valueLabel.text = "\(String.stringFromStringNumberOrNil(property.value))"
+            valueLabel.text = "\(String.stringFromStringNumberOrNil(property.value as AnyObject?))"
             nameLabel.text = property.name
             baseTypeLabel.text = property.baseType
             if property.baseType != "file" {
@@ -41,7 +41,7 @@ class PropertyViewController: UIViewController {
         }
     }
     
-    @IBAction func prviewAction(sender: AnyObject) {
+    @IBAction func prviewAction(_ sender: AnyObject) {
         propertyModel?.previewAction(presentingViewController: self)
     }
 }

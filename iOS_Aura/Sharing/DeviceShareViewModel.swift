@@ -25,7 +25,7 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
     
     required init(share:AylaShare) {
         self.share = share
-        if let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
+        if let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName) {
             self.sessionManager = sessionManager
             
             var devices : [AylaDevice]
@@ -49,29 +49,29 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
     
     
     
-    func deleteShare(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
+    func deleteShare(_ presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((_ error: Error) -> Void)?) {
         if let sessionManager = sessionManager {
-            let confirmation = UIAlertController(title: "Delete this Share?", message: "Are you sure you want to unshare this device?", preferredStyle: .Alert)
-            let delete = UIAlertAction(title: "Delete Share", style: .Destructive, handler:{(action) -> Void in
-                sessionManager.deleteShare(self.share, success: {
-                    NSNotificationCenter.defaultCenter().postNotificationName(AuraNotifications.SharesChanged, object:self)
+            let confirmation = UIAlertController(title: "Delete this Share?", message: "Are you sure you want to unshare this device?", preferredStyle: .alert)
+            let delete = UIAlertAction(title: "Delete Share", style: .destructive, handler:{(action) -> Void in
+                sessionManager.delete(self.share, success: {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: AuraNotifications.SharesChanged), object:self)
                     if let successHandler = successHandler {
                         successHandler()
                     }
                     }, failure: { (error) in
-                        let alert = UIAlertController(title: "Error. Failed to Delete Share.", message: error.description, preferredStyle: .Alert)
-                        let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
+                        let alert = UIAlertController(title: "Error. Failed to Delete Share.", message: error.description, preferredStyle: .alert)
+                        let gotIt = UIAlertAction(title: "Got it", style: .cancel, handler: nil)
                         alert.addAction(gotIt)
-                        presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                        presentingViewController.present(alert, animated: true, completion: nil)
                         if let failureHandler = failureHandler {
-                            failureHandler(error: error)
+                            failureHandler(error)
                         }
                 })
             })
-            let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             confirmation.addAction(delete)
             confirmation.addAction(cancel)
-            presentingViewController.presentViewController(confirmation, animated: true, completion: nil)
+            presentingViewController.present(confirmation, animated: true, completion: nil)
             
         }
         else {
@@ -80,20 +80,20 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
         
     }
     
-    func deleteShareWithoutConfirmation(presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
+    func deleteShareWithoutConfirmation(_ presentingViewController:UIViewController, successHandler: (() -> Void)?, failureHandler: ((_ error: Error) -> Void)?) {
         if let sessionManager = sessionManager {
-            sessionManager.deleteShare(self.share, success: {
-                NSNotificationCenter.defaultCenter().postNotificationName(AuraNotifications.SharesChanged, object:self)
+            sessionManager.delete(self.share, success: {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: AuraNotifications.SharesChanged), object:self)
                 if let successHandler = successHandler {
                     successHandler()
                 }
                 }, failure: { (error) in
-                    let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .Alert)
-                    let gotIt = UIAlertAction(title: "Got it", style: .Cancel, handler: nil)
+                    let alert = UIAlertController(title: "Error", message: error.description, preferredStyle: .alert)
+                    let gotIt = UIAlertAction(title: "Got it", style: .cancel, handler: nil)
                     alert.addAction(gotIt)
-                    presentingViewController.presentViewController(alert, animated: true, completion: nil)
+                    presentingViewController.present(alert, animated: true, completion: nil)
                     if let failureHandler = failureHandler {
-                        failureHandler(error: error)
+                        failureHandler(error)
                     }
             })
         } else {
@@ -101,17 +101,17 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
         }
     }
     
-    func valueFromString(str:String?) -> AnyObject? {
+    func valueFromString(_ str:String?) -> AnyObject? {
         
         if str == nil {
             return nil;
         }
         else if self.share.userEmail == "string" {
-            return str;
+            return str as AnyObject?;
         }
         else {
             if let doubleValue = Double(str!) {
-                return NSNumber(double: doubleValue)
+                return NSNumber(value: doubleValue as Double)
             }
         }
         
@@ -120,19 +120,19 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
     
     
     // MARK - device manager listener
-    func deviceManager(deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : NSError]) {
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
         print("Init complete")
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didInitFailure error: NSError) {
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
         print("Failed to init: \(error)")
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didObserveDeviceListChange change: AylaDeviceListChange) {
+    func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
         print("Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
-                device.addListener(self)
+                device.add(self)
             }
         }
         else {
@@ -140,17 +140,17 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
         }
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
+    func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
         
     }
     
-    func device(device: AylaDevice, didObserveChange change: AylaChange) {
-        if change.isKindOfClass(AylaDeviceChange) {
+    func device(_ device: AylaDevice, didObserve change: AylaChange) {
+        if change.isKind(of: AylaDeviceChange.self) {
             // Not a good udpate strategy
         }
     }
     
-    func device(device: AylaDevice, didFail error: NSError) {
+    func device(_ device: AylaDevice, didFail error: Error) {
         // Device errors are not handled here.
     }
 }

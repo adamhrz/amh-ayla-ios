@@ -7,6 +7,30 @@
 
 import Foundation
 import iOS_AylaSDK
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class AuraConfig {
     
@@ -33,35 +57,35 @@ class AuraConfig {
     
     
     static let defaultConfigurations = [
-        AuraConfig(name: ConfigNameUSDev, config: configUSDev),
-        AuraConfig(name: ConfigNameUSField, config: configUSField),
-        AuraConfig(name: ConfigNameUSDemo, config: configUSDemo),
-        AuraConfig(name: ConfigNameCNDev, config: configCNDev),
-        AuraConfig(name: ConfigNameCNField, config: configCNField),
-        AuraConfig(name: ConfigNameEUDev, config: configEUDev),
-        AuraConfig(name: ConfigNameEUField, config: configEUField),
+        AuraConfig(name: ConfigNameUSDev, config: configUSDev as NSDictionary),
+        AuraConfig(name: ConfigNameUSField, config: configUSField as NSDictionary),
+        AuraConfig(name: ConfigNameUSDemo, config: configUSDemo as NSDictionary),
+        AuraConfig(name: ConfigNameCNDev, config: configCNDev as NSDictionary),
+        AuraConfig(name: ConfigNameCNField, config: configCNField as NSDictionary),
+        AuraConfig(name: ConfigNameEUDev, config: configEUDev as NSDictionary),
+        AuraConfig(name: ConfigNameEUField, config: configEUField as NSDictionary),
     ]
     
-    static let stagingConfig = AuraConfig(name: ConfigNameStaging, config: configStaging)
+    static let stagingConfig = AuraConfig(name: ConfigNameStaging, config: configStaging as NSDictionary)
 
     static let extendedDefaultConfigurations = [stagingConfig] + defaultConfigurations
     
     /**
      Save AuraConfig to UserDefaults
      */
-    static func saveConfig(config: AuraConfig) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(config.name, forKey: KeyCurrentConfigName)
-        defaults.setObject(config.config, forKey: KeyCurrentConfig)
+    static func saveConfig(_ config: AuraConfig) {
+        let defaults = UserDefaults.standard
+        defaults.set(config.name, forKey: KeyCurrentConfigName)
+        defaults.set(config.config, forKey: KeyCurrentConfig)
     }
     
     /**
      Get current saved Aura Config. If no configs saved, return US Development Config.
      */
     static func currentConfig() -> AuraConfig {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if let savedConfig = defaults.objectForKey(KeyCurrentConfig) as? NSDictionary,
-            let configName = defaults.stringForKey(KeyCurrentConfigName) {
+        let defaults = UserDefaults.standard
+        if let savedConfig = defaults.object(forKey: KeyCurrentConfig) as? NSDictionary,
+            let configName = defaults.string(forKey: KeyCurrentConfigName) {
             return AuraConfig(name: configName, config: savedConfig)
         }
         else {
@@ -73,9 +97,9 @@ class AuraConfig {
      Returns a boolean indicating whether a custom AuraConfig is currently in use.
      */
     static func usingCustomConfig() -> Bool! {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if (defaults.objectForKey(AuraConfig.KeyCurrentConfig) as? NSDictionary) != nil {
-            if defaults.stringForKey(KeyCurrentConfigName) != ConfigNameUSDev {
+        let defaults = UserDefaults.standard
+        if (defaults.object(forKey: AuraConfig.KeyCurrentConfig) as? NSDictionary) != nil {
+            if defaults.string(forKey: KeyCurrentConfigName) != ConfigNameUSDev {
                 return true
             }
         }
@@ -90,26 +114,26 @@ class AuraConfig {
         self.config = config
     }
     
-    func applyTo(settings: AylaSystemSettings) {
+    func applyTo(_ settings: AylaSystemSettings) {
         settings.appId = config["appId"] as! String
         settings.appSecret = config["appSecret"] as! String
         
         if let type = config["serviceType"] as? String {
             switch type {
             case "Dynamic":
-                settings.serviceType = .Dynamic
+                settings.serviceType = .dynamic
                 
             case "Field":
-                settings.serviceType = .Field
+                settings.serviceType = .field
                 
             case "Staging":
-                settings.serviceType = .Staging
+                settings.serviceType = .staging
                 
             case "Demo":
-                settings.serviceType = .Demo
+                settings.serviceType = .demo
                 
             default:
-                settings.serviceType = .Development
+                settings.serviceType = .development
             }
         }
         
@@ -137,7 +161,7 @@ class AuraConfig {
         }
     }
     
-    static func createConfig(name:String, fromSettings settings:AylaSystemSettings, devices:[[String:AnyObject]]?) throws -> NSData? {
+    static func createConfig(_ name:String, fromSettings settings:AylaSystemSettings, devices:[[String:AnyObject]]?) throws -> Data? {
         guard let inmutableConfig = settings.toConfigDictionary(name)
             else {
                 return nil
@@ -148,6 +172,6 @@ class AuraConfig {
             config["managedDevices"] = devices!
         }
         
-        return try NSJSONSerialization.dataWithJSONObject(config, options: .PrettyPrinted)
+        return try JSONSerialization.data(withJSONObject: config, options: .prettyPrinted)
     }
 }
