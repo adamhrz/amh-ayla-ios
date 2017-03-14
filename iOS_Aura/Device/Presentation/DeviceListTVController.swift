@@ -11,7 +11,7 @@ import iOS_AylaSDK
 import Ayla_LocalDevice_SDK
 import ActionSheetPicker_3_0
 
-class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate {
+class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate, AylaDeviceManagerListener {
     private let logTag = "DeviceListTVController"
     
     /// Id of a segue which is linked to GrillRight device page.
@@ -39,6 +39,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         super.viewDidLoad()
 
         sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
+        sessionManager?.deviceManager.add(self)
         
         if let sessionManager = sessionManager {
             viewModel = DeviceListViewModel(deviceManager: sessionManager.deviceManager, tableView: tableView)
@@ -52,13 +53,13 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
             // TODO: present a warning and give fresh option
         }
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(initDeviceManager), for: UIControlEvents.valueChanged)
     }
 
+    func initDeviceManager() {
+        self.sessionManager?.resume()
+    }
     @IBAction func rightBarButtonTapped(_ sender: AnyObject) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: "Register a Device", style: .default, handler: { (action) -> Void in
@@ -184,4 +185,29 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        endRefreshing()
+    }
+    
+    func endRefreshing() {
+        guard let isRefreshing = self.refreshControl?.isRefreshing, isRefreshing else {
+            return
+        }
+        self.refreshControl?.endRefreshing()
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
+        endRefreshing()
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
+        endRefreshing()
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
+    }
 }
