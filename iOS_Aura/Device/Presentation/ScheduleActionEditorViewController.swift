@@ -10,7 +10,7 @@ import UIKit
 import iOS_AylaSDK
 
 class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate{
-    
+    private let logTag = "ScheduleActionEditorViewController"
     fileprivate var sessionManager : AylaSessionManager?
     
     @IBOutlet fileprivate weak var titleLabel: UILabel!
@@ -66,7 +66,7 @@ class ScheduleActionEditorViewController: UIViewController, UITextFieldDelegate,
             self.sessionManager = sessionManager
         }
         else {
-            print("- WARNING - session manager can't be found")
+            AylaLogW(tag: logTag, flag: 0, message:"session manager can't be found")
         }
         
         let cancelButton = UIBarButtonItem(barButtonSystemItem:.cancel, target: self, action:#selector(cancel))

@@ -10,7 +10,7 @@ import Foundation
 import iOS_AylaSDK
 
 class DeviceViewModel:NSObject, AylaDeviceListener {
-    
+    private let logTag = "DeviceViewModel"
     /// Device panel, refer to DevicePanelView for details
     weak var devicePanel: DevicePanelView?
     
@@ -237,7 +237,7 @@ class DeviceViewModel:NSObject, AylaDeviceListener {
     
     // MARK - device manager listener
     func device(_ device: AylaDevice, didFail error: Error) {
-        print("- WARNING - an error happened on device \(error)")
+        AylaLogW(tag: logTag, flag: 0, message:"an error happened on device \(error)")
     }
     
     func device(_ device: AylaDevice, didObserve change: AylaChange) {

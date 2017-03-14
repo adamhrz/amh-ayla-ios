@@ -11,6 +11,8 @@ import iOS_AylaSDK
 class ContactManager {
     static let sharedInstance = ContactManager()
     
+    private let logTag = "ContactManager"
+    
     fileprivate(set) var contacts: [AylaContact]?
 
     fileprivate var sessionManager: AylaSessionManager?
@@ -37,7 +39,7 @@ class ContactManager {
         _ = sessionManager?.fetchContacts({ (contacts: [AylaContact]) in
             self.contacts = contacts
             }, failure: { (error) in
-                print("- WARNING - Failed to fetch contacts! (\(error))")
+                AylaLogW(tag: self.logTag, flag: 0, message:"Failed to fetch contacts! (\(error))")
         })
     }
 }

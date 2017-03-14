@@ -16,7 +16,7 @@ protocol PropertyNotificationDetailsViewControllerDelegate: class {
 // MARK: -
 
 class PropertyNotificationDetailsViewController: UITableViewController, PropertyNotificationDetailsContactTableViewCellDelegate, UIPickerViewDataSource {
-
+    private let logTag = "PropertyNotificationDetailsViewController"
     weak var delegate:PropertyNotificationDetailsViewControllerDelegate?
 
     var device: AylaDevice!
@@ -175,7 +175,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
                     self.propertyTrigger = nil
                     notifyDelegateForSave()
                     }, failure: { (error) in
-                        print("Failed to delete orginal trigger: \(error.description)")
+                        AylaLogE(tag: self.logTag, flag: 0, message:"Failed to delete orginal trigger: \(error.description)")
                         notifyDelegateForSave()
                 })
             } else {
@@ -202,7 +202,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
             trigger.createApp(triggerApp, success: { (triggerApp) in
                 // Nothing to do
                 }, failure: { (error) in
-                    print("failed to add emailTriggerApp: \(error.description)")
+                    AylaLogE(tag: self.logTag, flag: 0, message:"failed to add emailTriggerApp: \(error.description)")
             })
         }
         
@@ -214,7 +214,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
             trigger.createApp(triggerApp, success: { (triggerApp) in
                 // Nothing to do
                 }, failure: { (error) in
-                    print("failed to add smsTriggerApp: \(error.description)")
+                    AylaLogE(tag: self.logTag, flag: 0, message:"failed to add smsTriggerApp: \(error.description)")
             })
         }
         

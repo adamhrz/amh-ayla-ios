@@ -10,6 +10,7 @@ import UIKit
 import Ayla_LocalDevice_SDK
 
 class GrillRightDevice: AylaBLEDevice {
+    private let logTag = "GrillRightDevice"
     static let timeFormat = "%02d:%02d:%02d"
     enum ControlMode: Int {
         case none = 0
@@ -274,6 +275,7 @@ class GrillRightDevice: AylaBLEDevice {
     }
     
     fileprivate class InternalSensor: NSObject {
+        private let logTag = "InternalSensor"
         init (sensor: InternalSensor) {
             super.init()
             self.device = sensor.device
@@ -359,7 +361,7 @@ class GrillRightDevice: AylaBLEDevice {
             let property = device.getProperty(propertyName) as? AylaLocalProperty
             property?.originalProperty.datapoint = newDatapoint
             let change = property?.update(from: newDatapoint)
-            print("Updated property \(property?.name) with value:\(value), updated value \(property?.value), original property value: \(property?.originalProperty.value)")
+            AylaLogD(tag: logTag, flag: 0, message:"Updated property \(property?.name) with value:\(value), updated value \(property?.value), original property value: \(property?.originalProperty.value)")
             if let property = property {
                 property.pushUpdateToCloud(success: nil, failure: nil)
             }
@@ -384,7 +386,7 @@ class GrillRightDevice: AylaBLEDevice {
                     changes.append(change)
                 }
             }
-            print("Current temperature: \(currentTemp)")
+            AylaLogD(tag: logTag, flag: 0, message:"Current temperature: \(currentTemp)")
             
             //isCooking
             var isCookingByte: Int8 = 0
@@ -665,9 +667,9 @@ class GrillRightDevice: AylaBLEDevice {
     }
     
     override func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("Updated characteristic value: \(characteristic)")
+        AylaLogI(tag: logTag, flag: 0, message:"Updated characteristic value: \(characteristic)")
         guard  let value = characteristic.value else {
-            print("Characteristic contais no value")
+            AylaLogE(tag: logTag, flag: 0, message:"Characteristic contais no value")
             return
         }
         var changes: [AylaChange]?
@@ -825,7 +827,7 @@ class GrillRightDevice: AylaBLEDevice {
                 }
                 
             default:
-                print("Unknown property \(property.name)")
+                AylaLogD(tag: logTag, flag: 0, message:"Unknown property \(property.name)")
                 return nil
             }
             command = Command.setFields(sensorCopy)

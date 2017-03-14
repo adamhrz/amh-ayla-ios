@@ -15,12 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var auraSessionListener : AuraSessionListener?
+    private let logTag = "AppDelegate"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         if let url = launchOptions?[UIApplicationLaunchOptionsKey.url] as? URL {
             if url.isFileURL {
-                print("Aura config file opened.")
+                AylaLogI(tag: logTag, flag: 0, message:"Aura config file opened.")
             }
         }
 
@@ -110,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Pull DSN from URL
             let dsnParam = queryitems?.filter({$0.name == "dsn"}).first
             let dsn = dsnParam?.value
-            print("Will Setup Wi-Fi for DSN: \(dsn)")
+            AylaLogD(tag: logTag, flag: 0, message:"Will Setup Wi-Fi for DSN: \(dsn)")
             
             // Instantiate and Push SetupViewController
             let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
@@ -123,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Pull Token from URL
             let tokenParam = queryitems?.filter({$0.name == "token"}).first;
             let token = tokenParam?.value;
-            print("Will Confirm Sign Up with Token: \(token)")
+            AylaLogD(tag: logTag, flag: 0, message:"Will Confirm Sign Up with Token: \(token)")
             
             presentAlertController("Account Confirmation",
                                    message: "Would you like to confirm to this account?",
@@ -195,13 +196,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 presentAlertController("Invalid config file", message: nil, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
                 return nil
             }
-            print("Aura Config: \(configDict)")
+            AylaLogD(tag: logTag, flag: 0, message:"Aura Config: \(configDict)")
             
             let configName = configDict["name"] as! String
             return AuraConfig(name: configName, config: configDict)
         }
         catch let error as NSError {
-            print(error)
+            AylaLogE(tag: logTag, flag: 0, message:"Error: \(error)")
             let message = String(format: "Something went wrong with the config file: \n%@", error.description)
             presentAlertController("Error", message: message, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
             return nil

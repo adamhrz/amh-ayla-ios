@@ -156,8 +156,10 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
     func device(_ device: AylaDevice, didObserve change: AylaChange) {
         // Not a smart way to update.
         if(change.isKind(of: AylaPropertyChange.self)) {
-            log("Obverse changes: \(change)", isWarning: false)
+            AylaLogD(tag: logTag, flag: 0, message:"Obverse changes: \(change)")
             self.updatePropertyListFromDevice()
         }
     }
+    
+    private let logTag = "PropertyListViewModel"
 }

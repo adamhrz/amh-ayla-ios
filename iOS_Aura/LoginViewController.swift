@@ -34,7 +34,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 class LoginViewController: UIViewController {
-
+    private let logTag = "LoginViewController"
     @IBOutlet weak var appVersionLabel: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -131,7 +131,7 @@ class LoginViewController: UIViewController {
                         
                     } catch {
                         let err = error as NSError
-                        print("Failed to save authorization: %@", err.aylaServiceDescription)
+                        AylaLogE(tag: self.logTag, flag: 0, message:"Failed to save authorization: \(err.aylaServiceDescription)")
                     }
                     // Once succeeded, present view controller in `Main` storyboard.
                     self.performSegue(withIdentifier: self.segueIdToMain, sender: sessionManager)
@@ -155,7 +155,7 @@ class LoginViewController: UIViewController {
                             return;
                         }
                         } catch _ {
-                            print("Failed to get cached authorization")
+                            AylaLogE(tag: self.logTag, flag: 0, message:"Failed to get cached authorization")
                         }
                     }
                     self.dismissLoading(false, completion: { () -> Void in
@@ -254,7 +254,7 @@ class LoginViewController: UIViewController {
     func presentError(_ swiftError: Error) {
         let error = swiftError as NSError
         let alert = UIAlertController(title: "Error", message: "\(error.aylaServiceDescription) \n Status: \(error.httpResponseStatus ?? (String(error.code)))", preferredStyle: .alert)
-        print(error)
+        AylaLogD(tag: logTag, flag: 0, message:"Error :\(error)")
         
         alert.addAction(UIAlertAction(
             title: "Got it", style: .cancel, handler: nil))

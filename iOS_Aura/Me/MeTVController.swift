@@ -12,7 +12,7 @@ import SAMKeychain
 import CoreTelephony
 
 class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate {
-    
+    private let logTag = "MeTVController"
     let sessionManager: AylaSessionManager?
     
     fileprivate enum Selection:Int {
@@ -37,19 +37,19 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                 do {
                     try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                 } catch _ {
-                    print("Failed to remove cached authorization")
+                    AylaLogE(tag: self.logTag, flag: 0, message:"Failed to remove cached authorization")
                 }
                 self.navigationController?.tabBarController?.dismiss(animated: true, completion: { () -> Void in
                 });
                 }, failure: { (error) -> Void in
-                    print("Log out operation failed: %@", error)
+                    AylaLogE(tag: self.logTag, flag: 0, message:"Log out operation failed: \(error)")
                     func alertWithLogout (_ message: String!, buttonTitle: String!){
                         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
                         let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.default, handler: { (action) -> Void in
                             do {
                                 try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                             } catch _ {
-                                print("Failed to remove cached authorization")
+                                AylaLogE(tag: self.logTag, flag: 0, message:"Failed to remove cached authorization")
                             }
                             self.navigationController?.dismiss(animated: true, completion: { () -> Void in
                             });
@@ -125,7 +125,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let selection = Selection(rawValue: indexPath.section)
             else {
-                print("Unknown indexPath in `Me`")
+                AylaLogD(tag: logTag, flag: 0, message:"Unknown indexPath in `Me`")
                 return
         }
         switch selection {

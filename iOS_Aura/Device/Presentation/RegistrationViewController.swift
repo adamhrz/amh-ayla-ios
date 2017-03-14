@@ -24,7 +24,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 class RegistrationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CellButtonDelegate, CellSelectorDelegate, AylaDeviceManagerListener, AylaDeviceListener {
-    
+    private let logTag = "RegistrationViewController"
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var logTextView: AuraConsoleTextView!
@@ -96,7 +96,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             self.deviceManager!.add(self)
         }
         else {
-            print("- WARNING - session manager can't be found")
+            AylaLogW(tag: logTag, flag: 0, message:"session manager can't be found")
         }
         
         self.tableView.delegate = self
@@ -174,7 +174,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             }
             updatePrompt("Registering...")
             localDeviceManager.registerLocalDevice(candidate, sessionManager: sessionManager, success: { (localDevice) in
-                print("Registered device \(localDevice)")
+                AylaLogI(tag: self.logTag, flag: 0, message:"Registered device \(localDevice)")
                 self.navigationController?.dismiss(animated: true, completion: nil)
                 }, failure: { (error) in
                     self.updatePrompt("Failed to register Local Device")
@@ -188,7 +188,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 if candidate.registrationType == AylaRegistrationType.apMode {
                     PDKeychainBindings.shared().removeObject(forKey: AuraDeviceSetupTokenKeychainKey)
                     PDKeychainBindings.shared().removeObject(forKey: AuraDeviceSetupDSNKeychainKey)
-                    print("Removing AP Mode Device details from storage")
+                    AylaLogI(tag: self.logTag, flag: 0, message:"Removing AP Mode Device details from storage")
                 }
                     self.navigationController?.dismiss(animated: true, completion: nil)
                 }, failure: { (error) in
@@ -603,7 +603,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     candidate.lat = latitudeTextField.text
                     candidate.lng = longitudeTextField.text
                     let message = String(format:"Adding Latitude: %@ and longitude: %@ to registration candidate", candidate.lat!, candidate.lng!)
-                    print(message)
+                    AylaLogD(tag: self.logTag, flag: 0, message:message)
                     self.addLog(message)
                 }
                 self.register(candidate)
@@ -657,7 +657,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             }
             let deviceDict = ["device":["dsn":dsn!]]
             let newCandidate = AylaRegistrationCandidate(dictionary: deviceDict)
-            print("Candidate DSN: %@", newCandidate.dsn ?? "nil")
+            AylaLogD(tag: logTag, flag: 0, message:"Candidate DSN: \(newCandidate.dsn ?? "nil")")
             newCandidate.registrationType = AylaRegistrationType.dsn
             candidateManual = newCandidate
         case SelectorMode.apMode.rawValue:
@@ -675,7 +675,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
             let deviceDict = ["device":["dsn":dsn!]]
             let newCandidate = AylaRegistrationCandidate(dictionary: deviceDict)
             newCandidate.setupToken = setupToken
-            print("Candidate setupToken: %@", newCandidate.setupToken ?? "nil")
+            AylaLogD(tag: logTag, flag: 0, message:"Candidate setupToken: \(newCandidate.setupToken ?? "nil")")
             newCandidate.registrationType = AylaRegistrationType.apMode
             candidateManual = newCandidate
 
@@ -754,16 +754,16 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     // MARK - device manager listener
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
-        print("Init complete")
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
         self.updateGatewaysList()
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
-        print("Failed to init: \(error)")
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
-        print("Observe device list change")
+        AylaLogI(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
                 device.add(self)
@@ -777,7 +777,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
-        print("Change in deviceManager state: new state \(newState), was \(oldState)")
+        AylaLogD(tag: logTag, flag: 0, message:"Change in deviceManager state: new state \(newState), was \(oldState)")
     }
     
     func device(_ device: AylaDevice, didObserve change: AylaChange) {

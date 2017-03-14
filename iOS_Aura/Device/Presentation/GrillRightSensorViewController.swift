@@ -11,6 +11,7 @@ import iOS_AylaSDK
 import ActionSheetPicker_3_0
 
 class GrillRightSensorViewController: UIViewController {
+    private let logTag = "GrillRightSensorViewControler"
     static let medGrayColor = UIColor(hexRGB: 0xc9c9c9)
     static let medGrayGreenColor = UIColor(hexRGB: 0xbfd190)
     static let medGrayYellowColor = UIColor(hexRGB: 0xede39a)
@@ -224,7 +225,7 @@ class GrillRightSensorViewController: UIViewController {
                     successBlock(datapoint)
                 }
                 }, failure: { (error) in
-                    print("Failed to create datapoint \(error)")
+                    AylaLogE(tag: self.logTag, flag: 0, message:"Failed to create datapoint \(error)")
                 if let failureBlock = failureBlock {
                     failureBlock(error)
                 }
@@ -288,7 +289,7 @@ class GrillRightSensorViewController: UIViewController {
             if propValue == "0:0:0" {
                 propValue = "0:1:0"  // Special case for bug in UIDatePicker
             }
-            print("Timer String:%@", propValue)
+            AylaLogD(tag: self.logTag, flag: 0, message:"Timer String: \(propValue)")
             self.writeValue(propValue as AnyObject, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_TARGET_TIME : GrillRightDevice.PROP_SENSOR2_TARGET_TIME)
             
             self.writeValue(GrillRightDevice.ControlMode.time.rawValue, toProperty: self.sensor.index == 1 ? GrillRightDevice.PROP_SENSOR1_COOKING : GrillRightDevice.PROP_SENSOR2_COOKING, success: { (datapoint) in

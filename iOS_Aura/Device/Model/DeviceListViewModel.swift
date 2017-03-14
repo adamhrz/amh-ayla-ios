@@ -17,7 +17,7 @@ protocol DeviceListViewModelDelegate: class {
 }
 
 class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
-
+    private let logTag = "DeviceListViewModel"
     /// Device manager where deivce list belongs
     let deviceManager: AylaDeviceManager
     
@@ -118,16 +118,16 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     
     // MARK - device manager listener
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
-        print("Init complete")
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
         self.updateDeviceListFromDeviceManager()
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
-        print("Failed to init: \(error)")
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
 
     func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
-        print("Observe device list change")
+        AylaLogI(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
                 device.add(self)
@@ -141,7 +141,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
-        print("Change in deviceManager state: new state \(newState), was \(oldState)")
+        AylaLogI(tag: logTag, flag: 0, message:"Change in deviceManager state: new state \(newState), was \(oldState)")
     }
     
     func device(_ device: AylaDevice, didObserve change: AylaChange) {

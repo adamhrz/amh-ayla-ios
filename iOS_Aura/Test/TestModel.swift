@@ -170,7 +170,7 @@ class TestModel : NSObject, TestPanelVCDelegate {
         do {
             string = try NSAttributedString(data: data, options: attributedOptions, documentAttributes: nil)
         } catch _ {
-            print("Cannot create attributed String")
+            AylaLogD(tag: logTag, flag: 0, message:"Cannot create attributed String")
         }
         
         return string

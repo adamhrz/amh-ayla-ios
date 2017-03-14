@@ -10,7 +10,7 @@ import UIKit
 import iOS_AylaSDK
 
 class PropertyTVCell: UITableViewCell {
-    
+    private let logTag = "PropertyTVCell"
     @IBOutlet weak var valueView: UIView!
     @IBOutlet weak var nameView: UIView!
     @IBOutlet weak var propertySwitch: UISwitch!
@@ -86,7 +86,7 @@ class PropertyTVCell: UITableViewCell {
     @IBAction func switchTapped(_ sender: UISwitch) {
         sender.isEnabled = false
         valueTapRecognizer.isEnabled = false
-        print(sender.isOn ? "Switch turned on" : "Switch turned Off")
+        AylaLogD(tag: logTag, flag: 0, message:sender.isOn ? "Switch turned on" : "Switch turned Off")
         
         // Code to reenable cell after datapoint call completes.
         func reenableCell() {
@@ -107,11 +107,11 @@ class PropertyTVCell: UITableViewCell {
         
         // Create Datapoint
         self.property!.createDatapoint(dpParams, success: { (datapoint) -> Void in
-            print("Created datapoint.")
+            AylaLogI(tag: self.logTag, flag: 0, message:"Created datapoint.")
             reenableCell()
             }, failure: { (error) -> Void in
                 reenableCell()
-                print("Create Datapoint Failed.")
+                AylaLogE(tag: self.logTag, flag: 0, message:"Create Datapoint Failed. \(error)")
                 error.displayAsAlertController()
         })
     }

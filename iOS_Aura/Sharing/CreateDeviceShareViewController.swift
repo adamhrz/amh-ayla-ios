@@ -11,7 +11,7 @@ import iOS_AylaSDK
 import UIKit
 
 class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
-    
+    private let logTag = "CreateDeviceShareViewController"
     /// Device model used by view controller to present this device.
     var sessionManager : AylaSessionManager?
     var deviceViewModel : DeviceViewModel!
@@ -36,7 +36,7 @@ class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
             self.sessionManager = sessionManager
         }
         else {
-            print("- WARNING - session manager can't be found")
+            AylaLogW(tag: logTag, flag: 0, message:"session manager can't be found")
         }
 
         let cancel = UIBarButtonItem(barButtonSystemItem:.cancel, target: self, action: #selector(RegistrationViewController.cancel))

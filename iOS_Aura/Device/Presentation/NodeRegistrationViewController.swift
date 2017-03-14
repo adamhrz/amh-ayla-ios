@@ -26,7 +26,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 class NodeRegistrationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
+    private let logTag = "NodeRegistrationViewController"
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var logTextView: AuraConsoleTextView!
     
@@ -51,7 +51,7 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
             self.sessionManager = sessionManager
         }
         else {
-            print("- WARNING - session manager can't be found")
+            AylaLogW(tag: logTag, flag: 0, message:"session manager can't be found")
         }
         
         self.tableView.delegate = self

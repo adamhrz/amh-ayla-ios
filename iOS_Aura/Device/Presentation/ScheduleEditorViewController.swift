@@ -10,7 +10,7 @@ import UIKit
 import iOS_AylaSDK
 
 class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate{
-    
+    private let logTag = "ScheduleEditorViewController"
     fileprivate var sessionManager : AylaSessionManager?
     
     fileprivate enum RepeatType: Int {
@@ -89,7 +89,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
             self.sessionManager = sessionManager
         }
         else {
-            print("- WARNING - session manager can't be found")
+            AylaLogD(tag: logTag, flag: 0, message:"- WARNING - session manager can't be found")
         }
         
         displayNameTextField.delegate = self
@@ -130,7 +130,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
         } else {
             // Fetch and refresh actions fresh every time page is displayed.
             fetchActions({
-                print("Fetched Actions.  Total count \(self.actions!.count)")
+                AylaLogD(tag: self.self.logTag, flag: 0, message:"Fetched Actions.  Total count \(self.actions!.count)")
                 if let table = self.actionsTableView {
                     table.reloadData()
                     self.autoResizeActionsTable()
@@ -350,11 +350,11 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
                     UIAlertController.alert("Success", message: "Deleted all schedule actions", buttonTitle: "OK", fromController: self)
                     }, failure: { (error) in
                         UIAlertController.alert("Error", message: "Could not update action status\n\n\(error.description)", buttonTitle: "OK", fromController: self)
-                        print("Failed to update actions, status: \(error)")
+                        AylaLogD(tag: self.logTag, flag: 0, message:"Failed to update actions, status: \(error)")
                 })
             }) { (error) in
                 UIAlertController.alert("Error", message: "Could not delete actions\n\n\(error.description)", buttonTitle: "OK", fromController: self)
-                print("Failed to delete actions \(error)")
+                AylaLogD(tag: self.logTag, flag: 0, message:"Failed to delete actions \(error)")
             }
         }
         confirmationAlert.addAction(confirmAction)
@@ -418,7 +418,7 @@ class ScheduleEditorViewController: UIViewController, UITextFieldDelegate, UITab
                         }) { (error) -> Void in
                 self.saveScheduleButton.isEnabled = true
                 UIAlertController.alert("Error", message: "Failed to Save Schedule.\n\n\(error.description)", buttonTitle: "OK", fromController: self)
-                print("Failed to update schedule \(error)")
+                AylaLogD(tag: self.logTag, flag: 0, message:"Failed to update schedule \(error)")
                 }
         } else {
 

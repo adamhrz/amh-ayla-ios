@@ -10,6 +10,7 @@ import UIKit
 import iOS_AylaSDK
 
 class GrillRightViewController: UIViewController, AylaDeviceListener {
+    private let logTag = "GrillRightViewController"
     static let sensor1Segue = "Sensor1Segue"
     static let sensor2Segue = "Sensor2Segue"
     /// Id of a segue which is linked to device page.
@@ -84,7 +85,7 @@ class GrillRightViewController: UIViewController, AylaDeviceListener {
     }
     
     func device(_ device: AylaDevice, didFail error: Error) {
-        print(error)
+        AylaLogE(tag: logTag, flag: 0, message:"Error: \(error)")
     }
 
 }

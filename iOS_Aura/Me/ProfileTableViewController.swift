@@ -12,6 +12,7 @@ import PDKeychainBindingsController
 import SAMKeychain
 
 class ProfileTableViewController: UITableViewController {
+    private let logTag = "ProfileTableViewController"
     var user: AylaUser!
     let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
     
@@ -196,7 +197,7 @@ class ProfileTableViewController: UITableViewController {
             
             self.syncUI()
             }, failure: { (error) in
-                print(error)
+                AylaLogE(tag: self.logTag, flag: 0, message:"Error :\(error)")
                 UIAlertController.alert("Error", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
         })
     }

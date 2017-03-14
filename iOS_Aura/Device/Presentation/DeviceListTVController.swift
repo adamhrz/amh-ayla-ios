@@ -12,6 +12,7 @@ import Ayla_LocalDevice_SDK
 import ActionSheetPicker_3_0
 
 class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate {
+    private let logTag = "DeviceListTVController"
     
     /// Id of a segue which is linked to GrillRight device page.
     let segueIdToGrillRight = "GrillRightDeviceSegue"
@@ -47,7 +48,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
             }
         }
         else {
-            print(" - WARNING - device list with a nil session manager")
+            AylaLogW(tag: logTag, flag: 0, message:"device list with a nil session manager")
             // TODO: present a warning and give fresh option
         }
         

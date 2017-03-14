@@ -11,7 +11,7 @@ import iOS_AylaSDK
 import Ayla_LocalDevice_SDK
 
 class DevicePanelView: UIView {
-
+    private let logTag = "DevicePanelView"
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dsnLabel: UILabel!
     @IBOutlet weak var connectivityLabel: UILabel!
@@ -112,7 +112,7 @@ class DevicePanelView: UIView {
             }
             self.sharesLabel.text = sharesText
         } else {
-            print("Panel View Shares Model is NIL")
+            AylaLogD(tag: logTag, flag: 0, message:"Panel View Shares Model is NIL")
             self.sharesLabel.text = "Unknown"
         }
         

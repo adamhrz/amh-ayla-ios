@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class AuraConsoleTextView : UITextView {
+    private let logTag = "AuraConsoleTextView"
     
     enum ConsoleLoggingLevel {
         case pass, fail, warning, error, info, debug
@@ -79,7 +80,7 @@ class AuraConsoleTextView : UITextView {
         do {
             string = try NSAttributedString(data: data, options: attributedOptions, documentAttributes: nil)
         } catch _ {
-            print("Cannot create attributed String")
+            AylaLogD(tag: logTag, flag: 0, message:"Cannot create attributed String")
         }
         
         return string

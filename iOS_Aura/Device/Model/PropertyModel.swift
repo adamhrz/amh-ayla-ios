@@ -17,7 +17,7 @@ public enum PropertyModelAction : Int {
 }
 
 class PropertyModel: NSObject, UITextFieldDelegate {
-    
+    private let logTag = "PropertyModel"
     /// Property presented by this model
     var property: AylaProperty
     
@@ -51,7 +51,7 @@ class PropertyModel: NSObject, UITextFieldDelegate {
             if let val = self.valueFromString(textField.text!) {
                 dpParams.value = val
                 self.property.createDatapoint(dpParams, success: { (datapoint) -> Void in
-                    print("Created datapoint.")
+                    AylaLogD(tag: self.logTag, flag: 0, message:"Created datapoint.")
                     }, failure: { (error) -> Void in
                         error.displayAsAlertController()
                 })
@@ -160,7 +160,7 @@ class PropertyModel: NSObject, UITextFieldDelegate {
                 failure: { (error) in
                     spinnerIndicator.removeFromSuperview()
                     alertController.message = error.localizedDescription
-                    print(error)
+                    AylaLogD(tag: self.logTag, flag: 0, message:"Error: \(error)")
             })
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
@@ -170,7 +170,7 @@ class PropertyModel: NSObject, UITextFieldDelegate {
             viewController.present(alertController, animated: false, completion: nil)
         }
         else {
-            print("preview is only for file property")
+            AylaLogD(tag: self.logTag, flag: 0, message:"preview is only for file property")
         }
     }
     

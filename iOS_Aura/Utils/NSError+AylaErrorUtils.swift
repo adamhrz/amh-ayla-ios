@@ -13,9 +13,8 @@ import AFNetworking
 extension Error {
     fileprivate var responseError : String? {
         if let responseDict = (self as NSError).userInfo[AylaHTTPErrorResponseJsonKey] as? [String: AnyObject] {
-            print("Ayla Error")
             for (key, value) in responseDict {
-                print("   \(key) : \(value)")
+                AylaLogD(tag: "Error extension", flag: 0, message:"   \(key) : \(value)")
             }
             if let msg = responseDict["msg"] {
                 var message: String = (msg as? String) ?? ""
@@ -70,7 +69,7 @@ extension Error {
         if let responseError = self.responseError {
             return responseError
         } else {
-            print((self as NSError).userInfo)
+            AylaLogD(tag: "Error extension", flag: 0, message:"userInfo :\((self as NSError).userInfo)")
             return "Unknown Error"
         }
     }
@@ -79,9 +78,8 @@ extension Error {
      */
     var aylaResponseErrorCode : Int! {
         if let responseDict = (self as NSError).userInfo[AylaHTTPErrorResponseJsonKey] as? [String: AnyObject] {
-            print("Ayla Error")
             for (key, value) in responseDict {
-                print("   \(key) : \(value)")
+                AylaLogD(tag: "Error Extension", flag: 0, message:"   \(key) : \(value)")
             }
             if let code = responseDict["error"] as? Int {
                     return code

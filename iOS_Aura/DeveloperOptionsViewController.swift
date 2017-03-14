@@ -55,7 +55,7 @@ class ConfigDetailCell: UITableViewCell {
 }
 
 class DeveloperOptionsViewController: UITableViewController {
-    
+    private let logTag = "DeveloperOptionsViewController"
     fileprivate let IdentifyAvailableCell = "AvailableConfig"
     fileprivate let IdentifyConfigItemCell = "ConfigDetail"
     
@@ -270,7 +270,7 @@ class DeveloperOptionsViewController: UITableViewController {
                 do {
                     try FileManager.default.removeItem(at: configURLList[indexPath.row])
                 } catch {
-                    print("Failed to delete file")
+                    AylaLogE(tag: logTag, flag: 0, message:"Failed to delete file")
                 }
                 
                 configURLList.remove(at: indexPath.row)
@@ -330,7 +330,7 @@ class DeveloperOptionsViewController: UITableViewController {
                     do {
                         try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                     } catch _ {
-                        print("Failed to remove cached authorization")
+                        AylaLogE(tag: self.logTag, flag: 0, message:"Failed to remove cached authorization")
                     }
                     AuraConfig.saveConfig(self.currentConfig)
                     self.currentConfig.applyTo(settings)
@@ -338,14 +338,14 @@ class DeveloperOptionsViewController: UITableViewController {
                     self.navigationController?.dismiss(animated: true, completion: { () -> Void in
                     });
                     }, failure: { (error) -> Void in
-                        print("Log out operation failed: %@", error)
+                        AylaLogE(tag: self.logTag, flag: 0, message:"Log out operation failed: \(error)")
                         func alertWithLogout (_ message: String!, buttonTitle: String!){
                             let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
                             let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.default, handler: { (action) -> Void in
                                 do {
                                     try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                                 } catch _ {
-                                    print("Failed to remove cached authorization")
+                                    AylaLogE(tag: self.logTag, flag: 0, message:"Failed to remove cached authorization")
                                 }
                                 AuraConfig.saveConfig(self.currentConfig)
                                 self.currentConfig.applyTo(settings)

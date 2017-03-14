@@ -10,7 +10,7 @@ import UIKit
 import iOS_AylaSDK
 
 class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelDelegate, DeviceSharesListViewModelDelegate {
-    
+    private let logTag = "DeviceSharesTableViewController"
     /// The current session manager which retains the device manager.
     var sessionManager :AylaSessionManager?
     
@@ -29,7 +29,7 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
 
         }
         else {
-            print(" - WARNING - device list with a nil session manager")
+            AylaLogW(tag: logTag, flag: 0, message:"device list with a nil session manager")
             // TODO: present a warning and give fresh option
         }
         
@@ -54,7 +54,7 @@ class DeviceSharesTableViewController: UITableViewController, DeviceSharesModelD
     }
     
     func refreshShareData(){
-        print("Manually Refreshing Share Data.")
+        AylaLogI(tag: logTag, flag: 0, message:"Manually Refreshing Share Data.")
         self.viewModel!.sharesModel!.updateSharesList({ (shares) in
             self.reloadTableData()
             self.refreshControl?.endRefreshing()

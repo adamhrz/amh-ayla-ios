@@ -11,7 +11,7 @@ import iOS_AylaSDK
 
 
 class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, AylaDeviceListener {
-    
+    private let logTag = "ShareViewModel"
     /// Share presented by this model
     var share: AylaShare
     
@@ -42,7 +42,7 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
             super.init()
         }
         else {
-            print("No Session manager present")
+            AylaLogD(tag: logTag, flag: 0, message:"No Session manager present")
             super.init()
         }
     }
@@ -75,7 +75,7 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
             
         }
         else {
-            print("No Session Manager found!")
+            AylaLogD(tag: logTag, flag: 0, message:"No Session Manager found!")
         }
         
     }
@@ -97,7 +97,7 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
                     }
             })
         } else {
-            print("No Session Manager found!")
+            AylaLogD(tag: logTag, flag: 0, message:"No Session Manager found!")
         }
     }
     
@@ -121,15 +121,18 @@ class ShareViewModel: NSObject, UITextFieldDelegate, AylaDeviceManagerListener, 
     
     // MARK - device manager listener
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
-        print("Init complete")
+        if deviceFailures.count > 0 {
+            AylaLogE(tag: logTag, flag: 0, message: "device failures: \(deviceFailures)")
+        }
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
-        print("Failed to init: \(error)")
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
-        print("Observe device list change")
+        AylaLogD(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
                 device.add(self)

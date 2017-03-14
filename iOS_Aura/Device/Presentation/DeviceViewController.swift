@@ -10,7 +10,7 @@ import UIKit
 import iOS_AylaSDK
 
 class DeviceViewController: UIViewController, PropertyListViewModelDelegate, PropertyModelDelegate, DeviceSharesModelDelegate, TimeZonePickerViewControllerDelegate {
-
+    private let logTag = "DeviceViewController"
     @IBOutlet weak var panelView: DevicePanelView!
     @IBOutlet weak var tableView: UITableView!
     
@@ -56,7 +56,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
             self.navigationItem.rightBarButtonItem = options
         }
         else {
-            print("- WARNING - a device view with no device")
+            AylaLogW(tag: logTag, flag: 0, message:"a device view with no device")
         }
         
         // Uncomment the following line to preserve selection between presentations
@@ -74,7 +74,7 @@ class DeviceViewController: UIViewController, PropertyListViewModelDelegate, Pro
     
     @IBAction func fetchAllPropertiesAction(_ sender: AnyObject) {
         let _ = self.device?.fetchPropertiesCloud(nil, success: { (properties) in
-            print("Fetched properties")
+            AylaLogI(tag: self.logTag, flag: 0, message:"Fetched properties")
             }, failure: { (error) in
                 UIAlertController.alert("Error", message: "Failed to fetch all properties", buttonTitle: "OK", fromController: self)
         })

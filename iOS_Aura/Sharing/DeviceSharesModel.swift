@@ -17,7 +17,7 @@ protocol DeviceSharesModelDelegate: class {
 }
 
 class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener {
-    
+    private let logTag = "DeviceSharesModel"
     /// Device manager where device list belongs
     let deviceManager: AylaDeviceManager
 
@@ -93,7 +93,7 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
                 self.delegate?.deviceSharesModel(self, receivedSharesListDidUpdate: { (shares) in })
                 if let successHandler = successHandler { successHandler(shares) }
             }, failure: { (error :Error) in
-                print("Failure to receive shares: $@", error.localizedDescription)
+                AylaLogE(tag: self.logTag, flag: 0, message:"Failure to receive shares: \(error.localizedDescription)")
                 if let failureHandler = failureHandler { failureHandler(error) }
             } 
         )
@@ -102,7 +102,7 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
                 self.delegate?.deviceSharesModel(self, ownedSharesListDidUpdate: { (shares) in })
                 if let successHandler = successHandler { successHandler(shares) }
             }, failure: { (error :Error) in
-                print("Failure to receive shares: $@", error.localizedDescription)
+                AylaLogE(tag: self.logTag, flag: 0, message:"Failure to receive shares: \(error.localizedDescription)")
                 if let failureHandler = failureHandler { failureHandler(error) }
             }
         )
@@ -110,17 +110,17 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
     
     // MARK - device manager listener
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
-        print("Init complete")
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
         self.updateSharesList(nil, failureHandler: nil)
         self.refreshDeviceList()
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
-        print("Failed to init: \(error)")
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
-        print("Observe device list change")
+        AylaLogI(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
                 device.add(self)

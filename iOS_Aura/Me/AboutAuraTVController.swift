@@ -11,6 +11,7 @@ import SAMKeychain
 import CoreTelephony
 
 class AboutAuraTableViewController: UITableViewController {
+    private let logTag = "AboutAuraTableViewContoller"
     fileprivate var user: AylaUser?
     fileprivate let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
 
@@ -24,7 +25,6 @@ class AboutAuraTableViewController: UITableViewController {
     @IBOutlet fileprivate weak var languageLabel: UILabel!
     @IBOutlet fileprivate weak var countryLabel: UILabel!
     @IBOutlet fileprivate weak var timeZoneLabel: UILabel!
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class AboutAuraTableViewController: UITableViewController {
             self.user = user
             
             }, failure: { (error) in
-                print(error)
+                AylaLogE(tag: self.logTag, flag: 0, message:"Error : \(error)")
                 UIAlertController.alert("Error", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
         })
     }

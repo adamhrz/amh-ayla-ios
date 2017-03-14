@@ -121,7 +121,8 @@ class TestPanelViewController: UIViewController {
                 }
             }
         } else {
-            log("No test model found for this test panel.", isWarning: false)
+            
+            AylaLogD(tag: logTag, flag: 0, message: "No test model found for this test panel.")
         }
     }
     
@@ -145,4 +146,5 @@ class TestPanelViewController: UIViewController {
         consoleView.addAttributedLogline(attributedText)
     }
     
+    private let logTag = "PropertyListViewModel"
 }

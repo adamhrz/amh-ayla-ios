@@ -9,7 +9,7 @@ import PDKeychainBindingsController
 import iOS_AylaSDK
 
 class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AylaDeviceWifiStateChangeListener {
-
+    private let logTag = "SetupViewController"
     /// Setup cell id
     fileprivate static let CellId: String = "SetupCellId"
     
@@ -332,7 +332,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     fileprivate func addDescription(_ description: String) {
         consoleView.addLogLine(description)
-        print("Log: " + description)
+        AylaLogD(tag: logTag, flag: 0, message:"Log: \(description)")
     }
     
     /**

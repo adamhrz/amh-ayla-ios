@@ -15,7 +15,7 @@ protocol DeviceSharesListViewModelDelegate: class {
 }
 
 class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
-    
+    private let logTag = "DeviceSharsListViewModel"
     /// Device manager where device list belongs
     let deviceManager: AylaDeviceManager
     
@@ -174,18 +174,18 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
     
     // MARK - Device Manager Listener
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
-        print("Init complete")
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
         self.sharesModel!.updateSharesList({ (shares) in
             self.tableView?.reloadData()
         }) { (error) in }
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
-        print("Failed to init: \(error)")
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
     
     func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
-        print("Observe device list change")
+        AylaLogI(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
                 device.add(self)

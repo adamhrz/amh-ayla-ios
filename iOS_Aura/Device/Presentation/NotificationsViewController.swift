@@ -9,7 +9,7 @@ import iOS_AylaSDK
 import UIKit
 
 class NotificationsViewController: UIViewController, PropertyNotificationDetailsViewControllerDelegate {
-
+    private let logTag = "NotificationViewController"
     var device: AylaDevice!
     
     var propertyTriggers = [AylaPropertyTrigger]()
@@ -72,7 +72,7 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
         
         fetchTriggersGroup.notify(queue: DispatchQueue.main) {
             if !fetchErrors.isEmpty {
-                print("Failed to fetch \(fetchErrors.count) Property Triggers: \(fetchErrors)")
+                AylaLogE(tag: self.logTag, flag: 0, message:"Failed to fetch \(fetchErrors.count) Property Triggers: \(fetchErrors)")
                 UIAlertController.alert("Failed to fetch \(fetchErrors.count) Property Triggers", message: "First error: \(fetchErrors.first?.description)", buttonTitle: "OK", fromController: self)
             }
             
