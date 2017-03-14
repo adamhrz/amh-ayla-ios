@@ -62,7 +62,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
         
         tableView.delegate = self
         tableView.dataSource = self
-        self.updatePropertyListFromDevice(userSearchText: nil)
+        self.updatePropertyListFromDevice()
     }
     
      /**
@@ -70,15 +70,16 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
      
      - parameter searchText: User input search text, when set as nil, this api will only call tableview.reloadData()
      */
-    func updatePropertyListFromDevice(userSearchText searchText:String?) {
+    func updatePropertyListFromDevice() {
         
         if let knownProperties = self.device.properties {
             // Only refresh properties list when there is a user search or property list is still empty.
-            if searchText != nil || self.properties.count == 0 || self.properties.count != knownProperties.count {
+            let search = searchController?.searchBar.text
+            if search != nil || self.properties.count == 0 || self.properties.count != knownProperties.count {
                 self.properties = knownProperties.values.map({ (property) -> AylaProperty in
                     return property as! AylaProperty
                 }).filter({ (property) -> Bool in
-                    return searchText ?? "" != "" ? property.name.lowercased().contains(searchText!.lowercased()) : true
+                    return search ?? "" != "" ? property.name.lowercased().contains(search!.lowercased()) : true
                 }).sorted(by: { (prop1, prop2) -> Bool in
                     // Do a sort to the property list based on property names.
                     return prop1.name < prop2.name
@@ -143,9 +144,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
     // MARK - search controller
 
     func updateSearchResults(for searchController: UISearchController) {
-        if let search = searchController.searchBar.text {
-           self.updatePropertyListFromDevice(userSearchText: search)
-        }
+       self.updatePropertyListFromDevice()
     }
     
     // MARK - device listener
@@ -158,7 +157,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
         // Not a smart way to update.
         if(change.isKind(of: AylaPropertyChange.self)) {
             log("Obverse changes: \(change)", isWarning: false)
-            self.updatePropertyListFromDevice(userSearchText: nil)
+            self.updatePropertyListFromDevice()
         }
     }
 }
