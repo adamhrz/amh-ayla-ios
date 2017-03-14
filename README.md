@@ -54,6 +54,10 @@ CocoaPods: 1.1.1
 
 #Release Notes
 
+v5.4.01     2017-03-14
+-------
+- Fix pod install bug
+
 v5.4.00     2017-02-02
 -------
 New & Improved App

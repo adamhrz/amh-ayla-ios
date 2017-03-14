@@ -46,9 +46,10 @@ else
     repo_type="internal"
 end
 conditional_assign "ayla_sdk_repo", "https://github.com/AylaNetworks/iOS_AylaSDK#{@ayla_public}.git"
+sdk_pod="iOS_AylaSDK#{@ayla_public}"
 
 puts "\n*** Building #{repo_type.try(:green)} repo on branch #{@ayla_build_branch.try(:green)} with sdk branch #{@ayla_sdk_branch.try(:green)} ***"
-puts "*** sdk repo: #{@ayla_sdk_repo.try(:green)} ***\n\n"
+puts "*** sdk pod: #{sdk_pod.try(:green)} sdk repo: #{@ayla_sdk_repo.try(:green)} ***\n\n"
 
 build_var_array.each do |v|
     puts "now #{v} = " + instance_variable_get("@#{v.downcase}").to_s
@@ -61,7 +62,7 @@ platform :ios, '8.4'
 use_frameworks!
 
 target :iOS_Aura do
-    pod 'iOS_AylaSDK',
+    pod sdk_pod,
     :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
 #    :path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
     pod 'SAMKeychain'
