@@ -10,8 +10,8 @@ import UIKit
 import iOS_AylaSDK
 
 protocol PropertyListViewModelDelegate: class {
-    func propertyListViewModel(viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
-    func propertyListViewModel(viewModel:PropertyListViewModel, displayPropertyDetails property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
+    func propertyListViewModel(_ viewModel:PropertyListViewModel, didSelectProperty property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
+    func propertyListViewModel(_ viewModel:PropertyListViewModel, displayPropertyDetails property:AylaProperty, assignedPropertyModel propertyModel:PropertyModel)
 }
 
 class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, AylaDeviceListener {
@@ -47,7 +47,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
         super.init()
         
         // Add self as device listener
-        device.addListener(self)
+        device.add(self)
         
         // Set search controller
         self.searchController?.searchResultsUpdater = self
@@ -58,11 +58,11 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
         
         // Set a content offset to hide search bar.
         let barHeight = self.searchController?.searchBar.frame.size.height ?? 0
-        self.tableView.contentOffset = CGPointMake(0, barHeight)
+        self.tableView.contentOffset = CGPoint(x: 0, y: barHeight)
         
         tableView.delegate = self
         tableView.dataSource = self
-        self.updatePropertyListFromDevice(userSearchText: nil)
+        self.updatePropertyListFromDevice()
     }
     
      /**
@@ -70,16 +70,17 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
      
      - parameter searchText: User input search text, when set as nil, this api will only call tableview.reloadData()
      */
-    func updatePropertyListFromDevice(userSearchText searchText:String?) {
+    func updatePropertyListFromDevice() {
         
         if let knownProperties = self.device.properties {
             // Only refresh properties list when there is a user search or property list is still empty.
-            if searchText != nil || self.properties.count == 0 || self.properties.count != knownProperties.count {
+            let search = searchController?.searchBar.text
+            if search != nil || self.properties.count == 0 || self.properties.count != knownProperties.count {
                 self.properties = knownProperties.values.map({ (property) -> AylaProperty in
                     return property as! AylaProperty
                 }).filter({ (property) -> Bool in
-                    return searchText ?? "" != "" ? property.name.lowercaseString.containsString(searchText!.lowercaseString) : true
-                }).sort({ (prop1, prop2) -> Bool in
+                    return search ?? "" != "" ? property.name.lowercased().contains(search!.lowercased()) : true
+                }).sorted(by: { (prop1, prop2) -> Bool in
                     // Do a sort to the property list based on property names.
                     return prop1.name < prop2.name
                 })
@@ -99,7 +100,7 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
      - parameter sender: UITapGestureRecognizer
      - parameter property: the AylaProperty to create datapoints for
      */
-    func showValueAlertForProperty(sender: UITapGestureRecognizer, property: AylaProperty){
+    func showValueAlertForProperty(_ sender: UITapGestureRecognizer, property: AylaProperty){
         self.delegate?.propertyListViewModel(self, didSelectProperty: property, assignedPropertyModel: PropertyModel(property: property, presentingViewController: nil))
     }
     
@@ -109,22 +110,22 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
      - parameter sender: UITapGestureRecognizer
      - parameter property: the AylaProperty to create datapoints for
      */
-    func showDetailsForProperty(sender: UITapGestureRecognizer, property: AylaProperty){
+    func showDetailsForProperty(_ sender: UITapGestureRecognizer, property: AylaProperty){
         self.delegate?.propertyListViewModel(self, displayPropertyDetails: property, assignedPropertyModel: PropertyModel(property: property, presentingViewController: nil))
     }
     
     // MARK: Table View Data Source
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.properties.count;
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cellId = PropertyListViewModel.ExpandedPropertyCellId
         let item = self.properties[indexPath.row] as AylaProperty
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellId) as? PropertyTVCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId) as? PropertyTVCell
         
         if (cell != nil) {
             cell?.configure(item)
@@ -137,28 +138,28 @@ class PropertyListViewModel: NSObject, UITableViewDataSource, UITableViewDelegat
     }
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     
     // MARK - search controller
 
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        if let search = searchController.searchBar.text {
-           self.updatePropertyListFromDevice(userSearchText: search)
-        }
+    func updateSearchResults(for searchController: UISearchController) {
+       self.updatePropertyListFromDevice()
     }
     
     // MARK - device listener
     
-    func device(device: AylaDevice, didFail error: NSError) {
+    func device(_ device: AylaDevice, didFail error: Error) {
         // We do nothing to handle device errors here.
     }
     
-    func device(device: AylaDevice, didObserveChange change: AylaChange) {
+    func device(_ device: AylaDevice, didObserve change: AylaChange) {
         // Not a smart way to update.
-        if(change.isKindOfClass(AylaPropertyChange)) {
-            log("Obverse changes: \(change)", isWarning: false)
-            self.updatePropertyListFromDevice(userSearchText: nil)
+        if(change.isKind(of: AylaPropertyChange.self)) {
+            AylaLogD(tag: logTag, flag: 0, message:"Obverse changes: \(change)")
+            self.updatePropertyListFromDevice()
         }
     }
+    
+    private let logTag = "PropertyListViewModel"
 }

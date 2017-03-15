@@ -11,7 +11,7 @@ import UIKit
 import iOS_AylaSDK
 
 protocol CellSelectorDelegate {
-    func cellSelectorPressed(cell: UITableViewCell, control:UISegmentedControl)
+    func cellSelectorPressed(_ cell: UITableViewCell, control:UISegmentedControl)
 }
 
 class RegistrationModeSelectorTVCell : UITableViewCell {
@@ -20,12 +20,12 @@ class RegistrationModeSelectorTVCell : UITableViewCell {
     
     @IBOutlet weak var modeSelector: UISegmentedControl!
     
-    @IBAction func segmentedControlChanged(sender: AnyObject){
+    @IBAction func segmentedControlChanged(_ sender: AnyObject){
         selectorDelegate?.cellSelectorPressed(self, control: sender as! UISegmentedControl)
     }
     
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state

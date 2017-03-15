@@ -9,14 +9,14 @@ import iOS_AylaSDK
 import UIKit
 
 protocol PropertyNotificationDetailsViewControllerDelegate: class {
-    func propertyNotificationDetailsDidCancel(controller: PropertyNotificationDetailsViewController)
-    func propertyNotificationDetailsDidSave(controller: PropertyNotificationDetailsViewController)
+    func propertyNotificationDetailsDidCancel(_ controller: PropertyNotificationDetailsViewController)
+    func propertyNotificationDetailsDidSave(_ controller: PropertyNotificationDetailsViewController)
 }
 
 // MARK: -
 
 class PropertyNotificationDetailsViewController: UITableViewController, PropertyNotificationDetailsContactTableViewCellDelegate, UIPickerViewDataSource {
-
+    private let logTag = "PropertyNotificationDetailsViewController"
     weak var delegate:PropertyNotificationDetailsViewControllerDelegate?
 
     var device: AylaDevice!
@@ -25,7 +25,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
     var propertyTrigger: AylaPropertyTrigger? {
         didSet {
             if propertyTrigger != nil {
-                propertyTrigger?.fetchApps({ (triggerApps) in
+                _ = propertyTrigger?.fetchApps({ (triggerApps) in
                     self.triggerApps = triggerApps
                     }, failure: { (error) in
                         UIAlertController.alert("Failed to fetch Trigger Apps", message: error.description, buttonTitle: "OK", fromController: self)
@@ -37,7 +37,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         }
     }
     
-    private var triggerApps: [AylaPropertyTriggerApp] = [] {
+    fileprivate var triggerApps: [AylaPropertyTriggerApp] = [] {
         didSet {
             // reset contacts
             emailContacts = []
@@ -49,9 +49,9 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
                 if let contactID = triggerApp.contactId {
                     if let contact = ContactManager.sharedInstance.contactWithID(contactID) {
                         switch triggerApp.type {
-                        case .Email:
+                        case .email:
                             emailContacts.append(contact)
-                        case .Push:
+                        case .push:
                             pushContacts.append(contact)
                         case .SMS:
                             smsContacts.append(contact)
@@ -68,45 +68,45 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         }
     }
 
-    private let allContacts = ContactManager.sharedInstance.contacts
-    private var emailContacts: [AylaContact] = []
-    private var pushContacts: [AylaContact] = []
-    private var smsContacts: [AylaContact] = []
+    fileprivate let allContacts = ContactManager.sharedInstance.contacts
+    fileprivate var emailContacts: [AylaContact] = []
+    fileprivate var pushContacts: [AylaContact] = []
+    fileprivate var smsContacts: [AylaContact] = []
     
-    private lazy var propertyNames: [String] = self.device.managedPropertyNames() ?? []
+    fileprivate lazy var propertyNames: [String] = self.device.managedPropertyNames() ?? []
     
-    @IBOutlet private weak var notificationNameField: UITextField!
-    @IBOutlet private weak var triggerCompareField: UITextField!
+    @IBOutlet fileprivate weak var notificationNameField: UITextField!
+    @IBOutlet fileprivate weak var triggerCompareField: UITextField!
 
-    @IBOutlet private weak var triggerTypeSegmentedControl: UISegmentedControl!
-    @IBOutlet private weak var triggerCompareSegmentedControl: UISegmentedControl!
+    @IBOutlet fileprivate weak var triggerTypeSegmentedControl: UISegmentedControl!
+    @IBOutlet fileprivate weak var triggerCompareSegmentedControl: UISegmentedControl!
     
-    @IBOutlet private weak var propertyPickerView: UIPickerView!
+    @IBOutlet fileprivate weak var propertyPickerView: UIPickerView!
 
-    private enum PropertyNotificationDetailsSection: Int {
-        case Name = 0, Condition, Contacts, Count
+    fileprivate enum PropertyNotificationDetailsSection: Int {
+        case name = 0, condition, contacts, count
     }
 
-    private enum PropertyNotificationDetailsSectionConditionRow: Int {
-        case When, Has, Compare, Count
+    fileprivate enum PropertyNotificationDetailsSectionConditionRow: Int {
+        case when, has, compare, count
     }
     
-    private enum PropertyNotificationDetailsTriggerTypeSegment: Int {
-        case OnChange = 0, Compare, Any, Count
+    fileprivate enum PropertyNotificationDetailsTriggerTypeSegment: Int {
+        case onChange = 0, compare, any, count
     }
 
-    private enum PropertyNotificationDetailsTriggerCompareSegment: Int {
-        case Equal = 0, GreaterThan, LessThan, GreaterThanOrEqual, LessThanOrEqual, Count
+    fileprivate enum PropertyNotificationDetailsTriggerCompareSegment: Int {
+        case equal = 0, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual, count
     }
 
-    private enum PropertyNotificationDetailsPropertyPickerComponent: Int {
-        case PropertyName = 0, Count
+    fileprivate enum PropertyNotificationDetailsPropertyPickerComponent: Int {
+        case propertyName = 0, count
     }
 
-    private let propertyNotificationDetailsContactCellReuseIdentifier = "PropertyNotificationDetailsContactCell"
+    fileprivate let propertyNotificationDetailsContactCellReuseIdentifier = "PropertyNotificationDetailsContactCell"
     
     // TODO: present in UI for editing
-    private let notficationMessage = "[[property_name]] [[property_value]]"
+    fileprivate let notficationMessage = "[[property_name]] [[property_value]]"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,7 +114,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         triggerTypeSegmentedControl.tintColor = UIColor.auraTintColor()
         triggerCompareSegmentedControl.tintColor = UIColor.auraTintColor()
         
-        tableView.registerNib(PropertyNotificationDetailsContactTableViewCell.nib, forCellReuseIdentifier: propertyNotificationDetailsContactCellReuseIdentifier)
+        tableView.register(PropertyNotificationDetailsContactTableViewCell.nib, forCellReuseIdentifier: propertyNotificationDetailsContactCellReuseIdentifier)
         
         if (propertyTrigger != nil) {
             updateViewsFromPropertyTrigger(propertyTrigger!)
@@ -123,11 +123,11 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
 
     // MARK: - Actions
     
-    @IBAction private func cancel(sender: AnyObject) {
+    @IBAction fileprivate func cancel(_ sender: AnyObject) {
         delegate?.propertyNotificationDetailsDidCancel(self)
     }
 
-    @IBAction private func save(sender: AnyObject) {
+    @IBAction fileprivate func save(_ sender: AnyObject) {
         let name = notificationNameField?.text ?? ""
         
         if name.isEmpty {
@@ -135,7 +135,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
             return
         }
         
-        let property = device.getProperty(propertyNames[propertyPickerView.selectedRowInComponent(PropertyNotificationDetailsPropertyPickerComponent.PropertyName.rawValue)])
+        let property = device.getProperty(propertyNames[propertyPickerView.selectedRow(inComponent: PropertyNotificationDetailsPropertyPickerComponent.propertyName.rawValue)])
         
         if (property == nil) {
             UIAlertController.alert("You cannot create a notification without first selecting a property", message: nil, buttonTitle: "OK", fromController: self)
@@ -150,7 +150,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         trigger.active = true
         trigger.triggerType = triggerTypeForSegmentIndex(triggerTypeSegment)
         
-        if triggerTypeSegment == .Compare {
+        if triggerTypeSegment == .compare {
             let compareValue = triggerCompareField.text ?? ""
             
             if compareValue.isEmpty {
@@ -162,7 +162,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
             trigger.value = compareValue
         }
         
-        property?.createTrigger(trigger, success: { (createdTrigger) in
+        _ = property?.createTrigger(trigger, success: { (createdTrigger) in
             self.createTriggerAppsForProperty(property!, trigger: createdTrigger)
             
             let notifyDelegateForSave = {
@@ -171,11 +171,11 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
             
             // Delete the original trigger, if there was one
             if self.propertyTrigger != nil {
-                property?.deleteTrigger(self.propertyTrigger!, success: {
+                _ = property?.delete(self.propertyTrigger!, success: {
                     self.propertyTrigger = nil
                     notifyDelegateForSave()
                     }, failure: { (error) in
-                        print("Failed to delete orginal trigger: \(error.description)")
+                        AylaLogE(tag: self.logTag, flag: 0, message:"Failed to delete orginal trigger: \(error.description)")
                         notifyDelegateForSave()
                 })
             } else {
@@ -186,35 +186,35 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         })
     }
 
-    @IBAction private func triggerTypeChanged(sender: UISegmentedControl) {
+    @IBAction fileprivate func triggerTypeChanged(_ sender: UISegmentedControl) {
         tableView.reloadData()
     }
 
     // MARK: - Utilities
 
-    private func createTriggerAppsForProperty(property: AylaProperty, trigger: AylaPropertyTrigger) {
+    fileprivate func createTriggerAppsForProperty(_ property: AylaProperty, trigger: AylaPropertyTrigger) {
         
         for emailContact in emailContacts {
             let triggerApp = AylaPropertyTriggerApp()
             
-            triggerApp.configureAsEmailfor(emailContact, message: notficationMessage, username: nil, template: nil)
+            triggerApp.configure(asEmailfor: emailContact, message: notficationMessage, username: nil, template: nil)
             
             trigger.createApp(triggerApp, success: { (triggerApp) in
                 // Nothing to do
                 }, failure: { (error) in
-                    print("failed to add emailTriggerApp: \(error.description)")
+                    AylaLogE(tag: self.logTag, flag: 0, message:"failed to add emailTriggerApp: \(error.description)")
             })
         }
         
         for smsContact in smsContacts {
             let triggerApp = AylaPropertyTriggerApp()
             
-            triggerApp.configureAsSMSFor(smsContact, message: notficationMessage)
+            triggerApp.configureAsSMS(for: smsContact, message: notficationMessage)
             
             trigger.createApp(triggerApp, success: { (triggerApp) in
                 // Nothing to do
                 }, failure: { (error) in
-                    print("failed to add smsTriggerApp: \(error.description)")
+                    AylaLogE(tag: self.logTag, flag: 0, message:"failed to add smsTriggerApp: \(error.description)")
             })
         }
         
@@ -226,9 +226,9 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
 //        }
     }
     
-    private func updateViewsFromPropertyTrigger (propertyTrigger: AylaPropertyTrigger) {
+    fileprivate func updateViewsFromPropertyTrigger (_ propertyTrigger: AylaPropertyTrigger) {
         notificationNameField.text = propertyTrigger.deviceNickname
-        triggerCompareField.text = propertyTrigger.value ?? ""
+        triggerCompareField.text = propertyTrigger.value 
         
         triggerTypeSegmentedControl.selectedSegmentIndex = segmentIndexForAylaPropertyTriggerType(propertyTrigger.triggerType).rawValue
         triggerCompareSegmentedControl.selectedSegmentIndex = segmentIndexForAylaPropertyTriggerCompare(propertyTrigger.compareType).rawValue
@@ -236,63 +236,63 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         let propertyName = propertyTrigger.property?.name
         
         if propertyName != nil {
-            if let propertyIndex = propertyNames.indexOf(propertyName!) {
-                propertyPickerView.selectRow(propertyIndex, inComponent: PropertyNotificationDetailsPropertyPickerComponent.PropertyName.rawValue, animated: true)
+            if let propertyIndex = propertyNames.index(of: propertyName!) {
+                propertyPickerView.selectRow(propertyIndex, inComponent: PropertyNotificationDetailsPropertyPickerComponent.propertyName.rawValue, animated: true)
             }
         }
     }
     
-    private func segmentIndexForAylaPropertyTriggerType(triggerType: AylaPropertyTriggerType) -> PropertyNotificationDetailsTriggerTypeSegment {
+    fileprivate func segmentIndexForAylaPropertyTriggerType(_ triggerType: AylaPropertyTriggerType) -> PropertyNotificationDetailsTriggerTypeSegment {
         var index: PropertyNotificationDetailsTriggerTypeSegment
         
         switch triggerType {
-        case .Always: index = .Any
-        case .CompareAbsolute: index = .Compare
-        case .OnChange: index = .OnChange
-        default: index = .OnChange; assert(false, "Unexpected triggerType!")
+        case .always: index = .any
+        case .compareAbsolute: index = .compare
+        case .onChange: index = .onChange
+        default: index = .onChange; assert(false, "Unexpected triggerType!")
         }
         
         return index
     }
     
-    private func triggerTypeForSegmentIndex(index: PropertyNotificationDetailsTriggerTypeSegment) -> AylaPropertyTriggerType {
+    fileprivate func triggerTypeForSegmentIndex(_ index: PropertyNotificationDetailsTriggerTypeSegment) -> AylaPropertyTriggerType {
         var triggerType: AylaPropertyTriggerType
         
         switch index {
-        case .Any: triggerType = .Always
-        case .Compare: triggerType = .CompareAbsolute
-        case .OnChange: triggerType = .OnChange
-        default: triggerType = .Unknown; assert(false, "Unexpected index!")
+        case .any: triggerType = .always
+        case .compare: triggerType = .compareAbsolute
+        case .onChange: triggerType = .onChange
+        default: triggerType = .unknown; assert(false, "Unexpected index!")
         }
         
         return triggerType
     }
     
-    private func segmentIndexForAylaPropertyTriggerCompare(triggerCompare: AylaPropertyTriggerCompare) -> PropertyNotificationDetailsTriggerCompareSegment {
+    fileprivate func segmentIndexForAylaPropertyTriggerCompare(_ triggerCompare: AylaPropertyTriggerCompare) -> PropertyNotificationDetailsTriggerCompareSegment {
         var index: PropertyNotificationDetailsTriggerCompareSegment
         
         switch triggerCompare {
-        case .EqualTo: index = .Equal
-        case .GreaterThan: index = .GreaterThan
-        case .GreaterThanOrEqualTo: index = .GreaterThanOrEqual
-        case .LessThan: index = .LessThan
-        case .LessThanOrEqualTo: index = .LessThanOrEqual
-        default: index = .Equal; assert(false, "Unexpected triggerCompare!")
+        case .equalTo: index = .equal
+        case .greaterThan: index = .greaterThan
+        case .greaterThanOrEqualTo: index = .greaterThanOrEqual
+        case .lessThan: index = .lessThan
+        case .lessThanOrEqualTo: index = .lessThanOrEqual
+        default: index = .equal; assert(false, "Unexpected triggerCompare!")
         }
         
         return index
     }
     
-    private func triggerCompareForSegmentIndex(index: PropertyNotificationDetailsTriggerCompareSegment) -> AylaPropertyTriggerCompare {
+    fileprivate func triggerCompareForSegmentIndex(_ index: PropertyNotificationDetailsTriggerCompareSegment) -> AylaPropertyTriggerCompare {
         var triggerCompare: AylaPropertyTriggerCompare
         
         switch index {
-        case .Equal: triggerCompare = .EqualTo
-        case .GreaterThan: triggerCompare = .GreaterThan
-        case .GreaterThanOrEqual: triggerCompare = .GreaterThanOrEqualTo
-        case .LessThan: triggerCompare = .LessThan
-        case .LessThanOrEqual: triggerCompare = .LessThanOrEqualTo
-        default: triggerCompare = .EqualTo; assert(false, "Unexpected index!")
+        case .equal: triggerCompare = .equalTo
+        case .greaterThan: triggerCompare = .greaterThan
+        case .greaterThanOrEqual: triggerCompare = .greaterThanOrEqualTo
+        case .lessThan: triggerCompare = .lessThan
+        case .lessThanOrEqual: triggerCompare = .lessThanOrEqualTo
+        default: triggerCompare = .equalTo; assert(false, "Unexpected index!")
         }
         
         return triggerCompare
@@ -300,15 +300,15 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
 
     // MARK: - PropertyNotificationDetailsContactTableViewCellDelegate
 
-    func enabledAppsForContact(contact: AylaContact) -> [AylaServiceAppType] {
+    func enabledAppsForContact(_ contact: AylaContact) -> [AylaServiceAppType] {
         var enabledApps: [AylaServiceAppType] = []
         
         if emailContacts.contains(contact) {
-            enabledApps.append(.Email)
+            enabledApps.append(.email)
         }
         
         if pushContacts.contains(contact) {
-            enabledApps.append(.Push)
+            enabledApps.append(.push)
         }
         
         if smsContacts.contains(contact) {
@@ -318,30 +318,30 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         return enabledApps
     }
     
-    func didToggleEmail(cell: PropertyNotificationDetailsContactTableViewCell) {
+    func didToggleEmail(_ cell: PropertyNotificationDetailsContactTableViewCell) {
         if let contact = cell.contact {
             if (emailContacts.contains(contact)) {
-                emailContacts.removeAtIndex(emailContacts.indexOf(contact)!)
+                emailContacts.remove(at: emailContacts.index(of: contact)!)
             } else {
                 emailContacts.append(contact)
             }
         }
     }
     
-    func didTogglePush(cell: PropertyNotificationDetailsContactTableViewCell) {
+    func didTogglePush(_ cell: PropertyNotificationDetailsContactTableViewCell) {
         if let contact = cell.contact {
             if (pushContacts.contains(contact)) {
-                pushContacts.removeAtIndex(pushContacts.indexOf(contact)!)
+                pushContacts.remove(at: pushContacts.index(of: contact)!)
             } else {
                 pushContacts.append(contact)
             }
         }
     }
     
-    func didToggleSMS(cell: PropertyNotificationDetailsContactTableViewCell) {
+    func didToggleSMS(_ cell: PropertyNotificationDetailsContactTableViewCell) {
         if let contact = cell.contact {
             if (smsContacts.contains(contact)) {
-                smsContacts.removeAtIndex(smsContacts.indexOf(contact)!)
+                smsContacts.remove(at: smsContacts.index(of: contact)!)
             } else {
                 smsContacts.append(contact)
             }
@@ -350,19 +350,19 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
 
     // MARK: - UIPickerViewDataSource
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         assert(pickerView == propertyPickerView, "Unexpected picker!")
         
-        return PropertyNotificationDetailsPropertyPickerComponent.Count.rawValue
+        return PropertyNotificationDetailsPropertyPickerComponent.count.rawValue
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         assert(pickerView == propertyPickerView, "Unexpected picker!")
 
         var numRows = 0
         
         switch PropertyNotificationDetailsPropertyPickerComponent(rawValue: component)! {
-        case .PropertyName:
+        case .propertyName:
             numRows = propertyNames.count
         default:
             assert(false, "unexpected picker component!")
@@ -374,13 +374,13 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
     
     // MARK: - UIPickerViewDelegate
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         assert(pickerView == propertyPickerView, "Unexpected picker!")
 
         var title = ""
         
         switch PropertyNotificationDetailsPropertyPickerComponent(rawValue: component)! {
-        case .PropertyName:
+        case .propertyName:
             title = propertyNames[row]
         default:
             assert(false, "unexpected picker component!")
@@ -392,12 +392,12 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
 
     // MARK: - UITableViewDataSource
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numRows:Int = 0
         
         if let propertyNotificationDetailsSection = PropertyNotificationDetailsSection(rawValue: section) {
             switch propertyNotificationDetailsSection {
-            case .Contacts:
+            case .contacts:
                 if allContacts != nil {
                     numRows = allContacts!.count
                 }
@@ -409,13 +409,13 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
         return numRows
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         
         if let propertyNotificationDetailsSection = PropertyNotificationDetailsSection(rawValue: indexPath.section) {
             switch propertyNotificationDetailsSection {
-            case .Contacts:
-                let contactCell = tableView.dequeueReusableCellWithIdentifier(propertyNotificationDetailsContactCellReuseIdentifier, forIndexPath: indexPath) as! PropertyNotificationDetailsContactTableViewCell
+            case .contacts:
+                let contactCell = tableView.dequeueReusableCell(withIdentifier: propertyNotificationDetailsContactCellReuseIdentifier, for: indexPath) as! PropertyNotificationDetailsContactTableViewCell
                 
                 // Must set delegate before setting contact
                 contactCell.delegate = self
@@ -425,7 +425,7 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
                 cell = contactCell
                 
             default:
-                cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+                cell = super.tableView(tableView, cellForRowAt: indexPath)
             }
         }
         
@@ -434,26 +434,26 @@ class PropertyNotificationDetailsViewController: UITableViewController, Property
 
     // MARK: - UITableViewDelegate
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let propertyNotificationDetailsSection = PropertyNotificationDetailsSection(rawValue: indexPath.section)
         
-        if (propertyNotificationDetailsSection == .Contacts) {
+        if (propertyNotificationDetailsSection == .contacts) {
             return 44.0
         }
         
-        if (propertyNotificationDetailsSection == .Condition) {
+        if (propertyNotificationDetailsSection == .condition) {
             let conditionRow = PropertyNotificationDetailsSectionConditionRow(rawValue: indexPath.row)
             
-            if (conditionRow == .Compare) && (PropertyNotificationDetailsTriggerTypeSegment(rawValue: triggerTypeSegmentedControl.selectedSegmentIndex) != .Compare) {
+            if (conditionRow == .compare) && (PropertyNotificationDetailsTriggerTypeSegment(rawValue: triggerTypeSegmentedControl.selectedSegmentIndex) != .compare) {
                 return 0.0
             }
         }
         
-        return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+        return super.tableView(tableView, heightForRowAt: indexPath)
     }
     
     // Need to override this or we get out of index crashes with the dynamic section
-    override func tableView(tableView: UITableView, indentationLevelForRowAtIndexPath indexPath: NSIndexPath) -> Int {
+    override func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
         return 0
     }
 }

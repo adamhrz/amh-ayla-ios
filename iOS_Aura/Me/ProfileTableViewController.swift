@@ -12,8 +12,9 @@ import PDKeychainBindingsController
 import SAMKeychain
 
 class ProfileTableViewController: UITableViewController {
+    private let logTag = "ProfileTableViewController"
     var user: AylaUser!
-    let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+    let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var newEmailTextField: UITextField!
@@ -34,22 +35,22 @@ class ProfileTableViewController: UITableViewController {
     @IBOutlet weak var countryTextField: UITextField!
     @IBOutlet weak var devKitNumTextField: UITextField!
     
-    @IBAction func updateEmailAction(sender: AnyObject) {
+    @IBAction func updateEmailAction(_ sender: AnyObject) {
         if let newEmail = newEmailTextField.text {
             if newEmail.isEmail {
-                sessionManager?.updateUserEmailAddress(newEmail,
+                _ = sessionManager?.updateUserEmailAddress(newEmail,
                 success: {
                     let successAlert = UIAlertController(title: "Success",
                         message: "Your email address has been changed.  The new email address will be required to log in.",
-                        preferredStyle: UIAlertControllerStyle.Alert)
-                    let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+                        preferredStyle: UIAlertControllerStyle.alert)
+                    let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler:{(action) -> Void in
                         
-                        PDKeychainBindings.sharedKeychainBindings().setString(newEmail, forKey: AuraUsernameKeychainKey)
+                        PDKeychainBindings.shared().setString(newEmail, forKey: AuraUsernameKeychainKey)
                         
                         self.backOutToLoginScreen()
                     })
                     successAlert.addAction(successOkAction)
-                    self.presentViewController(successAlert, animated: true, completion: nil)
+                    self.present(successAlert, animated: true, completion: nil)
                 },
                 failure: { error in
                     UIAlertController.alert("Error", message: error.localizedDescription, buttonTitle: "OK", fromController: self)
@@ -62,7 +63,7 @@ class ProfileTableViewController: UITableViewController {
         UIAlertController.alert("Error", message: "Please input a valid email address", buttonTitle: "OK", fromController: self)
     }
     
-    @IBAction func updatePasswordAction(sender: AnyObject) {
+    @IBAction func updatePasswordAction(_ sender: AnyObject) {
         if self.currentPasswordTextField.text?.characters.count == 0 || self.passwordTextField.text?.characters.count == 0 || self.confirmPasswordTextField.text?.characters.count == 0 {
             // show error
             UIAlertController.alert("Error", message: "All three password fields are required", buttonTitle: "OK", fromController: self)
@@ -73,7 +74,7 @@ class ProfileTableViewController: UITableViewController {
             return
         }
         // call update password
-        sessionManager?.updatePassword(self.currentPasswordTextField.text!, newPassword: self.passwordTextField.text!, success: {
+        _ = sessionManager?.updatePassword(self.currentPasswordTextField.text!, newPassword: self.passwordTextField.text!, success: {
             //display success message
             UIAlertController.alert("Done", message: "Password has been updated", buttonTitle: "OK", fromController: self)
             }, failure: { (error) in
@@ -84,30 +85,30 @@ class ProfileTableViewController: UITableViewController {
     }
     
     func backOutToLoginScreen() {
-        self.navigationController?.popToRootViewControllerAnimated(true)
-        UIApplication.sharedApplication().keyWindow?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+        _ = self.navigationController?.popToRootViewController(animated: true)
+        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
 
     }
     
-    @IBAction func deleteAccountAction(sender:AnyObject){
-        let alert = UIAlertController(title: "Permanently Delete Account?", message: "This operation cannot be undone and all devices registered to you must also be unregistered.  The process may take some time to complete.\n\nAre you sure you want to continue?", preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+    @IBAction func deleteAccountAction(_ sender:AnyObject){
+        let alert = UIAlertController(title: "Permanently Delete Account?", message: "This operation cannot be undone and all devices registered to you must also be unregistered.  The process may take some time to complete.\n\nAre you sure you want to continue?", preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler:{(action) -> Void in
             
             self.deleteAccount({
                 let settings = AylaNetworks.shared().systemSettings
-                let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
-                PDKeychainBindings.sharedKeychainBindings().removeObjectForKey(AuraUsernameKeychainKey)
-                SAMKeychain.deletePasswordForService(settings.appId, account: username)
+                let username = PDKeychainBindings.shared().string(forKey: AuraUsernameKeychainKey)
+                PDKeychainBindings.shared().removeObject(forKey: AuraUsernameKeychainKey)
+                SAMKeychain.deletePassword(forService: settings.appId, account: username!)
                 
                 let successAlert = UIAlertController(title: "Success",
                     message: "Your account has been deleted.  A new account will be required to log in again.",
-                    preferredStyle: UIAlertControllerStyle.Alert)
-                let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+                    preferredStyle: UIAlertControllerStyle.alert)
+                let successOkAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler:{(action) -> Void in
 
                     self.backOutToLoginScreen()
                 })
                 successAlert.addAction(successOkAction)
-                self.presentViewController(successAlert, animated: true, completion: nil)
+                self.present(successAlert, animated: true, completion: nil)
                 
                 
                 }, failure: {(NSError) -> Void in
@@ -117,22 +118,22 @@ class ProfileTableViewController: UITableViewController {
             })
         })
         alert.addAction(okAction)
-        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{(action) -> Void in })
+        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.cancel, handler:{(action) -> Void in })
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
     
-    func deleteAccount(success: (() -> Void)?, failure: ((NSError) -> Void)?){
+    func deleteAccount(_ success: (() -> Void)?, failure: ((NSError) -> Void)?){
         if let manager = sessionManager {
-            manager.deleteAccountWithSuccess({
+            manager.deleteAccount(success: {
                 if let success = success{
                     success()
                 }
                 }, failure: {(NSError) -> Void in
                     if let failure = failure {
-                        failure(NSError)
+                        failure(NSError as NSError)
                     }
                     
             })
@@ -140,7 +141,7 @@ class ProfileTableViewController: UITableViewController {
         
     }
     
-    @IBAction func updateProfileAction(sender: AnyObject) {
+    @IBAction func updateProfileAction(_ sender: AnyObject) {
         //Validate required fields
         if self.emailTextField.text!.characters.count == 0 {
             return
@@ -162,10 +163,10 @@ class ProfileTableViewController: UITableViewController {
         self.user.state = self.stateTextField.text
         self.user.zip = self.zipTextField.text
         self.user.country = self.countryTextField.text
-        self.user.devKitNum = NSNumberFormatter().numberFromString(self.devKitNumTextField.text!)
+        self.user.devKitNum = NumberFormatter().number(from: self.devKitNumTextField.text!)
         
         // call update profile
-        sessionManager?.updateUserProfile(user, success: { 
+        _ = sessionManager?.updateUserProfile(user, success: {
             // show success message
             UIAlertController.alert("Done", message: "Profile updated", buttonTitle: "OK", fromController: self)
             }, failure: { (error) in
@@ -191,12 +192,12 @@ class ProfileTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sessionManager?.fetchUserProfile({ (user) in
+        _ = sessionManager?.fetchUserProfile({ (user) in
             self.user = user
             
             self.syncUI()
             }, failure: { (error) in
-                print(error)
+                AylaLogE(tag: self.logTag, flag: 0, message:"Error :\(error)")
                 UIAlertController.alert("Error", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
         })
     }

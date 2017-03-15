@@ -12,10 +12,10 @@ extension String {
     // These two convenience methods take an input that may be a number, a String or nil.
     
     // This method returns the String from the parameter customValueIfNil if the input is nil
-    static func stringFromStringNumberOrNil(input: AnyObject?, customValueIfNil: String!) -> String{
+    static func stringFromStringNumberOrNil(_ input: AnyObject?, customValueIfNil: String!) -> String{
         var checkedString = String()
-        if input != nil && input!.isKindOfClass(NSNumber){
-            checkedString = String(input!)
+        if input != nil && input!.isKind(of: NSNumber.self){
+            checkedString = String(describing: input!)
         }
         else {
             checkedString = (input as! String?) ?? customValueIfNil
@@ -24,10 +24,10 @@ extension String {
     }
     
     // This method always returns the string "(null)" if the input is nil
-    static func stringFromStringNumberOrNil(input: AnyObject?) -> String{
+    static func stringFromStringNumberOrNil(_ input: AnyObject?) -> String{
         var checkedString = String()
-        if input != nil && input!.isKindOfClass(NSNumber){
-            checkedString = String(input!)
+        if input != nil && input!.isKind(of: NSNumber.self){
+            checkedString = String(describing: input!)
         }
         else {
             checkedString = (input as! String?) ?? "(null)"
@@ -36,14 +36,14 @@ extension String {
     }
     
     //  This method is used to generate a random alphanumeric sequence of specified length
-    static func generateRandomAlphanumericToken(length:Int) -> String {
+    static func generateRandomAlphanumericToken(_ length:Int) -> String {
         let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let allowedCharsCount = UInt32(allowedChars.characters.count)
         var token = ""
         
         for _ in (0..<length) {
             let randomNum = Int(arc4random_uniform(allowedCharsCount))
-            let newCharacter = allowedChars[allowedChars.startIndex.advancedBy(randomNum)]
+            let newCharacter = allowedChars[allowedChars.characters.index(allowedChars.startIndex, offsetBy: randomNum)]
             token += String(newCharacter)
         }
         return token
@@ -55,7 +55,7 @@ extension String {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(self)
+        return emailTest.evaluate(with: self)
     }
     
  }

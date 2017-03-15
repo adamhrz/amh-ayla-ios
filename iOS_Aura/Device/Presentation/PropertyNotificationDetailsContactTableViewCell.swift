@@ -10,10 +10,10 @@ import UIKit
 
 class PropertyNotificationDetailsContactTableViewCell: UITableViewCell {
     
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var emailButton: UIButton!
-    @IBOutlet private weak var pushButton: UIButton!
-    @IBOutlet private weak var smsButton: UIButton!
+    @IBOutlet fileprivate weak var nameLabel: UILabel!
+    @IBOutlet fileprivate weak var emailButton: UIButton!
+    @IBOutlet fileprivate weak var pushButton: UIButton!
+    @IBOutlet fileprivate weak var smsButton: UIButton!
     
     weak var delegate:PropertyNotificationDetailsContactTableViewCellDelegate?
     
@@ -28,10 +28,10 @@ class PropertyNotificationDetailsContactTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
@@ -39,24 +39,24 @@ class PropertyNotificationDetailsContactTableViewCell: UITableViewCell {
 
     // MARK: - Actions
 
-    @IBAction private func email(button: UIButton) {
-        button.selected = !button.selected;
+    @IBAction fileprivate func email(_ button: UIButton) {
+        button.isSelected = !button.isSelected;
         delegate?.didToggleEmail(self)
     }
 
-    @IBAction private func push(button: UIButton) {
-        button.selected = !button.selected;
+    @IBAction fileprivate func push(_ button: UIButton) {
+        button.isSelected = !button.isSelected;
         delegate?.didTogglePush(self)
     }
 
-    @IBAction private func sms(button: UIButton) {
-        button.selected = !button.selected;
+    @IBAction fileprivate func sms(_ button: UIButton) {
+        button.isSelected = !button.isSelected;
         delegate?.didToggleSMS(self)
     }
 
     // MARK: - Utilities
     
-    func configureForContact(contact: AylaContact?) {
+    func configureForContact(_ contact: AylaContact?) {
         nameLabel.text = contact?.displayName
         
         var enabledApps:[AylaServiceAppType] = []
@@ -65,15 +65,15 @@ class PropertyNotificationDetailsContactTableViewCell: UITableViewCell {
             enabledApps = delegate?.enabledAppsForContact(contact!) ?? []
         }
         
-        emailButton.hidden = (contact?.email ?? "").isEmpty
-        smsButton.hidden = (contact?.phoneNumber ?? "").isEmpty
+        emailButton.isHidden = (contact?.email ?? "").isEmpty
+        smsButton.isHidden = (contact?.phoneNumber ?? "").isEmpty
         
         // TODO: Unhide for owner
-        pushButton.hidden = true
+        pushButton.isHidden = true
         
-        emailButton.selected = enabledApps.contains(AylaServiceAppType.Email)
-        pushButton.selected = enabledApps.contains(AylaServiceAppType.Push)
-        smsButton.selected = enabledApps.contains(AylaServiceAppType.SMS)
+        emailButton.isSelected = enabledApps.contains(AylaServiceAppType.email)
+        pushButton.isSelected = enabledApps.contains(AylaServiceAppType.push)
+        smsButton.isSelected = enabledApps.contains(AylaServiceAppType.SMS)
     }
 }
 
@@ -83,14 +83,14 @@ protocol PropertyNotificationDetailsContactTableViewCellDelegate: class {
     
     // Client should return an array of the enabled apps for the specified contact.
     // The array can contain zero or more of the following constants: AylaServiceAppTypeEmail, AylaServiceAppTypePush, AylaServiceAppTypeSMS
-    func enabledAppsForContact(contact: AylaContact) -> [AylaServiceAppType]
+    func enabledAppsForContact(_ contact: AylaContact) -> [AylaServiceAppType]
     
     // Client should enable or disable the email app for the associated contact
-    func didToggleEmail(cell: PropertyNotificationDetailsContactTableViewCell)
+    func didToggleEmail(_ cell: PropertyNotificationDetailsContactTableViewCell)
 
     // Client should enable or disable the push notification app for the associated contact
-    func didTogglePush(cell: PropertyNotificationDetailsContactTableViewCell)
+    func didTogglePush(_ cell: PropertyNotificationDetailsContactTableViewCell)
     
     // Client should enable or disable the SMS app for the associated contact
-    func didToggleSMS(cell: PropertyNotificationDetailsContactTableViewCell)
+    func didToggleSMS(_ cell: PropertyNotificationDetailsContactTableViewCell)
 }

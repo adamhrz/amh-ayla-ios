@@ -69,14 +69,14 @@ class TestModel : NSObject, TestPanelVCDelegate {
         return true
     }
     
-    func finishedOnTestSequencer(testSequencer : TestSequencer) {
+    func finishedOnTestSequencer(_ testSequencer : TestSequencer) {
         if self.testSequencer == testSequencer {
             self.testPanelVC?.statusTF.text = testSequencer.errCount == 0 ? TestModelTestState.Success.rawValue : TestModelTestState.Failure.rawValue
             self.testPanelVC?.resetStartButton()
         }
     }
     
-    func trackIterationProgress(testSequencer : TestSequencer, total: UInt, completed: UInt) -> Bool{
+    func trackIterationProgress(_ testSequencer : TestSequencer, total: UInt, completed: UInt) -> Bool{
         if self.testSequencer == testSequencer {
             let showComplete = completed == total ? total : completed+1
             self.testPanelVC?.iterCountLabel.text = "\(showComplete)/\(total)"
@@ -91,8 +91,8 @@ class TestModel : NSObject, TestPanelVCDelegate {
      Call this method when input test case is passed.
      - parameter tc: Test case which is passed.
      */
-    func passTestCase(tc: TestCase) {
-        addLog(.Pass, log: tc.description)
+    func passTestCase(_ tc: TestCase) {
+        addLog(.pass, log: tc.description)
         tc.pass()
     }
     
@@ -101,13 +101,13 @@ class TestModel : NSObject, TestPanelVCDelegate {
      - parameter tc:    Test case which is passed.
      - parameter error: Generated error.
      */
-    func failTestCase(tc: TestCase, error: NSError?) {
+    func failTestCase(_ tc: TestCase, error: Error?) {
         if let errText = self.testPanelVC?.errCountLabel.text {
             let errCount = Int(errText) ?? 0
             self.testPanelVC?.errCountLabel.text = "\(errCount+1)"
         }
         
-        addLog(.Fail, log: "\(tc.description) err: \(error?.description)")
+        addLog(.fail, log: "\(tc.description) err: \(error?.description)")
         tc.fail()
     }
     
@@ -116,7 +116,7 @@ class TestModel : NSObject, TestPanelVCDelegate {
      - parameter level: Logging level of this message.
      - parameter log:   Log text.
      */
-    func addLog(level: AuraConsoleTextView.ConsoleLoggingLevel, log: String) {
+    func addLog(_ level: AuraConsoleTextView.ConsoleLoggingLevel, log: String) {
         testPanelVC?.consoleView.addLogLine(level, log: log)
     }
     /*
@@ -170,30 +170,30 @@ class TestModel : NSObject, TestPanelVCDelegate {
         do {
             string = try NSAttributedString(data: data, options: attributedOptions, documentAttributes: nil)
         } catch _ {
-            print("Cannot create attributed String")
+            AylaLogD(tag: logTag, flag: 0, message:"Cannot create attributed String")
         }
         
         return string
     }*/
     
     // MARK: Test panel delegate
-    func testPanelVC(viewController: TestPanelViewController, didTapOnStartButton startButton: UIButton) -> Bool {
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnStartButton startButton: UIButton) -> Bool {
     return start()
     }
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnStopButton stopButton: UIButton) -> Bool {
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnStopButton stopButton: UIButton) -> Bool {
     return stop()
     }
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnButton1 button1: UIButton) -> Bool {
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnButton1 button1: UIButton) -> Bool {
     return false
     }
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnButton2 button2: UIButton) -> Bool {
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnButton2 button2: UIButton) -> Bool {
     return false
     }
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnButton3 button1: UIButton) -> Bool {
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnButton3 button1: UIButton) -> Bool {
     return false
     }
     

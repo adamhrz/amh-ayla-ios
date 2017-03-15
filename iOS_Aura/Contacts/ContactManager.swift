@@ -11,33 +11,35 @@ import iOS_AylaSDK
 class ContactManager {
     static let sharedInstance = ContactManager()
     
-    private(set) var contacts: [AylaContact]?
-
-    private var sessionManager: AylaSessionManager?
+    private let logTag = "ContactManager"
     
-    private init() {
+    fileprivate(set) var contacts: [AylaContact]?
+
+    fileprivate var sessionManager: AylaSessionManager?
+    
+    fileprivate init() {
 
     }
     
     func reload() {
-        sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+        sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
         contacts = nil
         fetchContacts()
     }
     
-    func contactWithID(contactID: NSNumber) -> AylaContact? {
-        if let index = contacts?.indexOf({$0.id == contactID}) {
+    func contactWithID(_ contactID: NSNumber) -> AylaContact? {
+        if let index = contacts?.index(where: {$0.id == contactID}) {
             return contacts![index]
         }
         
         return nil
     }
 
-    private func fetchContacts() {
-        sessionManager?.fetchContacts({ (contacts: [AylaContact]) in
+    fileprivate func fetchContacts() {
+        _ = sessionManager?.fetchContacts({ (contacts: [AylaContact]) in
             self.contacts = contacts
             }, failure: { (error) in
-                print("- WARNING - Failed to fetch contacts! (\(error))")
+                AylaLogW(tag: self.logTag, flag: 0, message:"Failed to fetch contacts! (\(error))")
         })
     }
 }

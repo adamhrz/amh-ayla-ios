@@ -19,18 +19,18 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
     weak var mainLoginViewController : LoginViewController!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(cancelAuth))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelAuth))
         
         // WKWebView cannot be added through storyboards as of today. If possible in the future, this view could be added in the storyboard
         let webView = WKWebView()
         self.webView = webView
         self.view.addSubview(self.webView)
         self.webView.translatesAutoresizingMaskIntoConstraints = false;
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[webView]-0-|", options: NSLayoutFormatOptions.DirectionLeadingToTrailing, metrics: nil, views: ["webView" : self.webView]))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[webView]-0-|", options: NSLayoutFormatOptions.DirectionLeadingToTrailing, metrics: nil, views: ["webView" : self.webView]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[webView]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["webView" : self.webView]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[webView]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["webView" : self.webView]))
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if authType == nil {
             askForAuthType()
@@ -40,23 +40,23 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
     }
     
     func askForAuthType() {
-        let menuSheet = UIAlertController(title: "Login with", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        menuSheet.addAction(UIAlertAction(title: "Facebook", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            self.authType = AylaOAuthType.Facebook
+        let menuSheet = UIAlertController(title: "Login with", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        menuSheet.addAction(UIAlertAction(title: "Facebook", style: UIAlertActionStyle.default, handler: { (action) -> Void in
+            self.authType = AylaOAuthType.facebook
             self.startOAuth()
         }))
-        menuSheet.addAction(UIAlertAction(title: "Google", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            self.authType = AylaOAuthType.Google
+        menuSheet.addAction(UIAlertAction(title: "Google", style: UIAlertActionStyle.default, handler: { (action) -> Void in
+            self.authType = AylaOAuthType.google
             self.startOAuth()
         }))
-        menuSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+        menuSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: { (action) -> Void in
             self.cancelAuth()
         }))
-        self.presentViewController(menuSheet, animated: true, completion: nil)
+        self.present(menuSheet, animated: true, completion: nil)
     }
     
     func cancelAuth() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func startOAuth() {
@@ -64,10 +64,10 @@ class OAuthLoginViewController: UIViewController, UIActionSheetDelegate {
         let auth = AylaOAuthProvider(webView: self.webView, type: self.authType)
         
         let loginManager = AylaNetworks.shared().loginManager
-        loginManager.loginWithAuthProvider(auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
-            self.dismissViewControllerAnimated(true, completion: { () -> Void in
+        loginManager.login(with: auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
+            self.dismiss(animated: true, completion: { () -> Void in
                 
-                self.mainLoginViewController.performSegueWithIdentifier(self.mainLoginViewController.segueIdToMain, sender: sessionManager)
+                self.mainLoginViewController.performSegue(withIdentifier: self.mainLoginViewController.segueIdToMain, sender: sessionManager)
             })
             
             }, failure: { (error) -> Void in

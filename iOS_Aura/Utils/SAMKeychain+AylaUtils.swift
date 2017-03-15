@@ -9,25 +9,25 @@
 import Foundation
 import SAMKeychain
 extension SAMKeychain {
-    public static func setObject(object:NSCoding?, forService serviceName: String, account: String) throws {
+    public static func setObject(_ object:NSCoding?, forService serviceName: String, account: String) throws {
         let query = SAMKeychainQuery();
         query.service = serviceName;
         query.account = account;
         if let object = object {
-            query.passwordData = NSKeyedArchiver.archivedDataWithRootObject(object);
+            query.passwordData = NSKeyedArchiver.archivedData(withRootObject: object);
             try query.save()
         } else {
             try query.deleteItem()
         }
     }
     
-    public static func objectForService(serviceName: String, account:String) throws -> AnyObject? {
+    public static func objectForService(_ serviceName: String, account:String) throws -> AnyObject? {
         let query = SAMKeychainQuery()
         query.service = serviceName
         query.account = account
         try query.fetch()
         if let data = query.passwordData {
-            return NSKeyedUnarchiver.unarchiveObjectWithData(data)
+            return NSKeyedUnarchiver.unarchiveObject(with: data) as AnyObject?
         }
         return nil
     }

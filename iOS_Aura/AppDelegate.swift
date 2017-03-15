@@ -15,17 +15,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var auraSessionListener : AuraSessionListener?
+    private let logTag = "AppDelegate"
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        if let url = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
-            if url.fileURL {
-                print("Aura config file opened.")
+        if let url = launchOptions?[UIApplicationLaunchOptionsKey.url] as? URL {
+            if url.isFileURL {
+                AylaLogI(tag: logTag, flag: 0, message:"Aura config file opened.")
             }
         }
 
         // Setup core manager
-        let settings = AylaSystemSettings.defaultSystemSettings()
+        let settings = AylaSystemSettings.default()
         
         // settings from AuraConfig
         AuraConfig.currentConfig().applyTo(settings)
@@ -40,9 +41,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //settings.allowOfflineUse = true
         
         // Init device manager
-        AylaNetworks.initializeWithSettings(settings)
+        AylaNetworks.initialize(with: settings)
         
-        AylaLogManager.sharedManager().loggingLevel = .Info
+        let localDeviceManager = AuraLocalDeviceManager();
+        AylaLogManager.shared().loggingLevel = .debug
+        
+        AylaNetworks.shared().installPlugin(localDeviceManager, id: PLUGIN_ID_DEVICE_CLASS)
+        AylaNetworks.shared().installPlugin(localDeviceManager, id: AuraLocalDeviceManager.PLUGIN_ID_LOCAL_DEVICE)
+        AylaNetworks.shared().installPlugin(localDeviceManager, id: PLUGIN_ID_DEVICE_LIST)
+        
+        AylaLogManager.shared().loggingLevel = .debug
         
         AylaNetworks.enableNetworkProfiler()
         
@@ -53,17 +61,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // Instantiate and display a UIAlertViewController as needed
-    func presentAlertController(title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?){
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+    func presentAlertController(_ title: String?, message: String?, withOkayButton: Bool, withCancelButton: Bool, okayHandler: (() -> Void)?, cancelHandler: (() -> Void)?){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         if withOkayButton {
-            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:{(action) -> Void in
+            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler:{(action) -> Void in
                 if let okayHandler = okayHandler{
                     okayHandler()
                 }
             })
             alert.addAction(okAction)
             if withCancelButton {
-                let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{(action) -> Void in
+                let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.cancel, handler:{(action) -> Void in
                     if let cancelHandler = cancelHandler{
                         cancelHandler()
                     }
@@ -74,27 +82,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
         
         // Aura Config
-        if url.fileURL && url.pathExtension == "auraconfig" {
-            let fileManager = NSFileManager.defaultManager()
+        if url.isFileURL && url.pathExtension == "auraconfig" {
+            let fileManager = FileManager.default
             
-            let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-            let filePath = paths[0].URLByAppendingPathComponent(url.lastPathComponent!)
+            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let filePath = paths[0].appendingPathComponent(url.lastPathComponent)
             do {
-                try fileManager.moveItemAtURL(url, toURL: filePath!)
+                try fileManager.moveItem(at: url, to: filePath)
             } catch _ {
                 UIAlertController.alert("Error", message: "Failed to import file, it won't be available later from configurations list", buttonTitle: "OK", fromController: (self.window?.rootViewController)!)
             }
             
-            openConfigAtURL(filePath!)
+            openConfigAtURL(filePath)
             
             return true
         }
         
         // Parse URL app was launched with
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         let queryitems = components?.queryItems
         
         // If URL is sent from WI-Fi Setup Screen
@@ -103,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Pull DSN from URL
             let dsnParam = queryitems?.filter({$0.name == "dsn"}).first
             let dsn = dsnParam?.value
-            print("Will Setup Wi-Fi for DSN: \(dsn)")
+            AylaLogD(tag: logTag, flag: 0, message:"Will Setup Wi-Fi for DSN: \(dsn)")
             
             // Instantiate and Push SetupViewController
             let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
@@ -116,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Pull Token from URL
             let tokenParam = queryitems?.filter({$0.name == "token"}).first;
             let token = tokenParam?.value;
-            print("Will Confirm Sign Up with Token: \(token)")
+            AylaLogD(tag: logTag, flag: 0, message:"Will Confirm Sign Up with Token: \(token)")
             
             presentAlertController("Account Confirmation",
                                    message: "Would you like to confirm to this account?",
@@ -126,7 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     
                                     // Get LoginManager and send account confirmation token
                                     let loginManager = AylaNetworks.shared().loginManager
-                                    loginManager.confirmAccountWithToken((token)!, success: { () -> Void in
+                                    loginManager.confirmAccount(withToken: (token)!, success: { () -> Void in
                                         self.presentAlertController("Account Confirmed",
                                             message: "Enter your credentials to log in",
                                             withOkayButton: true,
@@ -168,10 +176,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func openConfigAtURL(filePath :NSURL) {
+    func openConfigAtURL(_ filePath :URL) {
         if let loadedConfig = loadConfigAtURL(filePath) {
             let storyboard = UIStoryboard(name: "Login", bundle: nil)
-            let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+            let developOptionsVC = storyboard.instantiateViewController(withIdentifier: "DeveloperOptionsViewController") as! DeveloperOptionsViewController
             let naviVC = UINavigationController(rootViewController: developOptionsVC)
             developOptionsVC.currentConfig = loadedConfig
             developOptionsVC.newConfigImport = true
@@ -180,44 +188,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     }
     
-    func loadConfigAtURL(filePath :NSURL) -> AuraConfig? {
-        let configData = NSData(contentsOfURL: filePath)
+    func loadConfigAtURL(_ filePath :URL) -> AuraConfig? {
+        let configData = try? Data(contentsOf: filePath)
         do {
-            let configJSON = try NSJSONSerialization.JSONObjectWithData(configData!, options: .AllowFragments)
+            let configJSON = try JSONSerialization.jsonObject(with: configData!, options: .allowFragments)
             guard let configDict: NSDictionary = configJSON as? NSDictionary else {
                 presentAlertController("Invalid config file", message: nil, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
                 return nil
             }
-            print("Aura Config: \(configDict)")
+            AylaLogD(tag: logTag, flag: 0, message:"Aura Config: \(configDict)")
             
             let configName = configDict["name"] as! String
             return AuraConfig(name: configName, config: configDict)
         }
         catch let error as NSError {
-            print(error)
-            let message = String(format: "Something went wrong with the config file: \n%@", error.localizedDescription)
+            AylaLogE(tag: logTag, flag: 0, message:"Error: \(error)")
+            let message = String(format: "Something went wrong with the config file: \n%@", error.description)
             presentAlertController("Error", message: message, withOkayButton: true, withCancelButton: false, okayHandler: nil, cancelHandler: nil)
             return nil
         }
     }
     
-    func displayViewController(controller: UIViewController){
+    func displayViewController(_ controller: UIViewController){
         //  VC hierarchy is different if we are logged in than if we are not.
         //  This will ensure the VC is displayed.
         let topController = topViewController()
-        topController.presentViewController(controller, animated: true, completion: nil)
+        topController.present(controller, animated: true, completion: nil)
     }
     
     func topViewController() -> UIViewController {
-        let rootController = UIApplication.sharedApplication().keyWindow?.rootViewController
+        let rootController = UIApplication.shared.keyWindow?.rootViewController
         return topViewControllerFromRoot(rootController!)
     }
     
-    func topViewControllerFromRoot(rootVC:UIViewController) ->UIViewController{
-        if rootVC.isKindOfClass(UITabBarController) {
+    func topViewControllerFromRoot(_ rootVC:UIViewController) ->UIViewController{
+        if rootVC.isKind(of: UITabBarController.self) {
             let tabVC = rootVC as! UITabBarController
             return topViewControllerFromRoot(tabVC.selectedViewController!)
-        } else if rootVC.isKindOfClass(UINavigationController) {
+        } else if rootVC.isKind(of: UINavigationController.self) {
             let navC = rootVC as! UINavigationController
             return topViewControllerFromRoot(navC.visibleViewController!)
         } else if let presentedVC = rootVC.presentedViewController {
@@ -232,36 +240,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // If topVC is already login VC, do nothing
         let topVC = topViewController()
-        if topVC.isKindOfClass(LoginViewController)  {
+        if topVC.isKind(of: LoginViewController.self)  {
             return;
         }
         
         // Pop all existing VCs to root. Root is Login VC
-        let rootVC = UIApplication.sharedApplication().keyWindow?.rootViewController
-        rootVC?.dismissViewControllerAnimated(true, completion: nil)
+        let rootVC = UIApplication.shared.keyWindow?.rootViewController
+        rootVC?.dismiss(animated: true, completion: nil)
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
         AylaNetworks.shared().pause()
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         AylaNetworks.shared().resume()
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 
     }

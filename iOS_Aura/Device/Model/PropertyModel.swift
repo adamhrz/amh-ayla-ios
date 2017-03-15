@@ -9,15 +9,15 @@
 import iOS_AylaSDK
 
 protocol PropertyModelDelegate: class {
-    func propertyModel(model:PropertyModel, didSelectAction action:PropertyModelAction)
+    func propertyModel(_ model:PropertyModel, didSelectAction action:PropertyModelAction)
 }
 
 public enum PropertyModelAction : Int {
-    case Details // details
+    case details // details
 }
 
 class PropertyModel: NSObject, UITextFieldDelegate {
-    
+    private let logTag = "PropertyModel"
     /// Property presented by this model
     var property: AylaProperty
     
@@ -43,43 +43,43 @@ class PropertyModel: NSObject, UITextFieldDelegate {
             return
         }
     
-        let alertController = UIAlertController(title: property.name, message: nil, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: property.name, message: nil, preferredStyle: .alert)
 
-        let updateAction = UIAlertAction(title: "Update Value", style: .Default) { (_) in
+        let updateAction = UIAlertAction(title: "Update Value", style: .default) { (_) in
             let textField = alertController.textFields![0] as UITextField
             let dpParams = AylaDatapointParams()
             if let val = self.valueFromString(textField.text!) {
                 dpParams.value = val
                 self.property.createDatapoint(dpParams, success: { (datapoint) -> Void in
-                    print("Created datapoint.")
+                    AylaLogD(tag: self.logTag, flag: 0, message:"Created datapoint.")
                     }, failure: { (error) -> Void in
                         error.displayAsAlertController()
                 })
             }
         }
-        updateAction.enabled = false
+        updateAction.isEnabled = false
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (alertAction) -> Void in
-            NSNotificationCenter.defaultCenter().removeObserver(alertController.textFields![0])
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) -> Void in
+            NotificationCenter.default.removeObserver(alertController.textFields![0])
             alertController.textFields![0].resignFirstResponder()
         }
         
-        alertController.addTextFieldWithConfigurationHandler { (textField) in
+        alertController.addTextField { (textField) in
 
             textField.placeholder = "baseType: \(self.property.baseType)"
-            NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
+            NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextFieldTextDidChange, object: textField, queue: OperationQueue.main) { (notification) in
                 if self.valueFromString(textField.text) != nil {
-                    updateAction.enabled = true
+                    updateAction.isEnabled = true
                 }
                 else {
-                    updateAction.enabled = false
+                    updateAction.isEnabled = false
                 }
             }
         }
         alertController.addAction(updateAction)
         alertController.addAction(cancelAction)
         
-        viewController.presentViewController(alertController, animated: true, completion: { () -> Void in
+        viewController.present(alertController, animated: true, completion: { () -> Void in
             
         })
     }
@@ -89,7 +89,7 @@ class PropertyModel: NSObject, UITextFieldDelegate {
      
      - parameter action: A PropertyModelAction sent to the delegate
     */
-    func chosenAction(action: PropertyModelAction){
+    func chosenAction(_ action: PropertyModelAction){
         self.delegate?.propertyModel(self, didSelectAction: action)
     }
     
@@ -100,27 +100,27 @@ class PropertyModel: NSObject, UITextFieldDelegate {
      
      - returns: Value in right type. Returns nil if input value is invalid.
      */
-    func valueFromString(str:String?) -> AnyObject? {
+    func valueFromString(_ str:String?) -> AnyObject? {
     
         if str == nil {
             return nil;
         }
         else if self.property.baseType == "string" || self.property.baseType == "file" {
-            return str;
+            return str as AnyObject?;
         }
         else if self.property.baseType == "integer" {
             if let intValue = Int(str!) {
-                return NSNumber(integer: intValue)
+                return NSNumber(value: intValue as Int)
             }
         }
         else if self.property.baseType == "boolean" {
-            if str == "1" { return NSNumber(int: 1) }
-            if str == "0" { return NSNumber(int: 0) }
+            if str == "1" { return NSNumber(value: 1 as Int32) }
+            if str == "0" { return NSNumber(value: 0 as Int32) }
             return nil
         }
         else {
             if let doubleValue = Double(str!) {
-                return NSNumber(double: doubleValue)
+                return NSNumber(value: doubleValue as Double)
             }
         }
         
@@ -132,54 +132,54 @@ class PropertyModel: NSObject, UITextFieldDelegate {
             let blob = property.datapoint as! AylaDatapointBlob
             let fileName = (blob.value as! NSString).lastPathComponent
             // delete the `.json` suffix
-            let filePath = NSURL(fileURLWithPath: "\(cachePath()!)/\(fileName)").URLByDeletingPathExtension!
+            let filePath = NSURL(fileURLWithPath: "\(cachePath()!)/\(fileName)").deletingPathExtension!
             
-            if NSFileManager.defaultManager().fileExistsAtPath(filePath.path!) {
+            if FileManager.default.fileExists(atPath: filePath.path) {
                 preview(filePath, presentingViewController: viewController)
                 return
             }
             
-            let alertController = UIAlertController(title: nil, message: "Please wait...\n\n", preferredStyle: UIAlertControllerStyle.Alert)
-            let spinnerIndicator: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
-            spinnerIndicator.center = CGPointMake(135.0, 65.5)
-            spinnerIndicator.color = UIColor.blackColor()
+            let alertController = UIAlertController(title: nil, message: "Please wait...\n\n", preferredStyle: UIAlertControllerStyle.alert)
+            let spinnerIndicator: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+            spinnerIndicator.center = CGPoint(x: 135.0, y: 65.5)
+            spinnerIndicator.color = UIColor.black
             spinnerIndicator.startAnimating()
             alertController.view.addSubview(spinnerIndicator)
             
-            let task = blob.downloadToFile(filePath,
+            let task = blob.download(toFile: filePath,
                 progress: { (progress) in
-                    dispatch_async(dispatch_get_main_queue(), { 
+                    DispatchQueue.main.async(execute: { 
                         alertController.message = "Please wait...\(progress.localizedDescription)\n\n"
                     })
                 },
                 success: { (url) in
-                    alertController.dismissViewControllerAnimated(false, completion: nil)
+                    alertController.dismiss(animated: false, completion: nil)
                     
                     self.preview(url, presentingViewController: viewController)
                 },
                 failure: { (error) in
                     spinnerIndicator.removeFromSuperview()
                     alertController.message = error.localizedDescription
-                    print(error)
+                    AylaLogD(tag: self.logTag, flag: 0, message:"Error: \(error)")
             })
             
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) in
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                 task.cancel()
             })
             alertController.addAction(cancelAction)
-            viewController.presentViewController(alertController, animated: false, completion: nil)
+            viewController.present(alertController, animated: false, completion: nil)
         }
         else {
-            print("preview is only for file property")
+            AylaLogD(tag: self.logTag, flag: 0, message:"preview is only for file property")
         }
     }
     
     func cachePath() -> String? {
-        if let cachePath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first {
+        if let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
             var isDir: ObjCBool = false
-            let fileManager = NSFileManager.defaultManager()
-            if fileManager.fileExistsAtPath(cachePath, isDirectory: &isDir) == false && !isDir {
-                try! fileManager.createDirectoryAtPath(cachePath, withIntermediateDirectories: false, attributes: nil)
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: cachePath, isDirectory: &isDir) == false && !isDir.boolValue {
+                try! fileManager.createDirectory(atPath: cachePath, withIntermediateDirectories: false, attributes: nil)
             }
             return cachePath
         }
@@ -187,8 +187,8 @@ class PropertyModel: NSObject, UITextFieldDelegate {
         return nil
     }
     
-    func preview(fileURL: NSURL, presentingViewController viewController: UIViewController) {
+    func preview(_ fileURL: URL, presentingViewController viewController: UIViewController) {
         let activityController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
-        viewController.presentViewController(activityController, animated: true, completion: nil)
+        viewController.present(activityController, animated: true, completion: nil)
     }
 }

@@ -18,27 +18,27 @@ class AuraSessionListener : NSObject, AylaSessionManagerListener {
     
     func initializeAuraSessionListener() {
         
-        self.sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
-        self.sessionManager?.addListener(self)
+        self.sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
+        self.sessionManager?.add(self)
     }
     
     deinit {
         
         // Remove yourself from session listener list
         if let sessionMgr = self.sessionManager {
-            sessionMgr.removeListener(self)
+            sessionMgr.remove(self)
         }
     }
 
-    func sessionManager(sessionManager: AylaSessionManager, didRefreshAuthorization authorization: AylaAuthorization) {
+    func sessionManager(_ sessionManager: AylaSessionManager, didRefreshAuthorization authorization: AylaAuthorization) {
         // Do nothing
     }
 
-    func sessionManager(sessionManager: AylaSessionManager, didCloseSession error: NSError?) {
+    func sessionManager(_ sessionManager: AylaSessionManager, didCloseSession error: Error?) {
         
         // On session close event, just remove the session listener
         if let sessionMgr = self.sessionManager {
-            sessionMgr.removeListener(self)
+            sessionMgr.remove(self)
         }
         
         // If no error, user signed out. No need to re-login.
@@ -49,15 +49,15 @@ class AuraSessionListener : NSObject, AylaSessionManagerListener {
         // On session close event (if due to error), go to login page to restart the app flow.
         // This method is invoked if auth token refresh fails, in which case,
         // any other call to cloud service would fail.
-        guard (NSThread.isMainThread()) else {
+        guard (Thread.isMainThread) else {
             
-            dispatch_async(dispatch_get_main_queue()) {
-                (UIApplication.sharedApplication().delegate as! AppDelegate).displayLoginView()
+            DispatchQueue.main.async {
+                (UIApplication.shared.delegate as! AppDelegate).displayLoginView()
             }
             return
         }
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).displayLoginView()
+        (UIApplication.shared.delegate as! AppDelegate).displayLoginView()
 
     }
 }

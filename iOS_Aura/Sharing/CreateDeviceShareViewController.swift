@@ -11,13 +11,13 @@ import iOS_AylaSDK
 import UIKit
 
 class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
-    
+    private let logTag = "CreateDeviceShareViewController"
     /// Device model used by view controller to present this device.
     var sessionManager : AylaSessionManager?
     var deviceViewModel : DeviceViewModel!
     
-    var startDate : NSDate?
-    var expiryDate : NSDate?
+    var startDate : Date?
+    var expiryDate : Date?
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
@@ -32,14 +32,14 @@ class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
+        if let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName) {
             self.sessionManager = sessionManager
         }
         else {
-            print("- WARNING - session manager can't be found")
+            AylaLogW(tag: logTag, flag: 0, message:"session manager can't be found")
         }
 
-        let cancel = UIBarButtonItem(barButtonSystemItem:.Cancel, target: self, action: #selector(RegistrationViewController.cancel))
+        let cancel = UIBarButtonItem(barButtonSystemItem:.cancel, target: self, action: #selector(RegistrationViewController.cancel))
         self.navigationItem.leftBarButtonItem = cancel
         self.emailTextField.delegate = self
         self.roleNameTextField.delegate = self
@@ -57,7 +57,7 @@ class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         titleLabel.text = String(format:"Share %@", deviceViewModel.device.productName!)
         super.viewWillAppear(animated)
     }
@@ -68,44 +68,44 @@ class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
     }
     
     func cancel() {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func toggleViewVisibilityAnimated(view: UIView){
-        dispatch_async(dispatch_get_main_queue()) { 
-            UIView.animateWithDuration(0.33) {
-                view.hidden = !(view.hidden)
-            }
+    func toggleViewVisibilityAnimated(_ view: UIView){
+        DispatchQueue.main.async { 
+            UIView.animate(withDuration: 0.33, animations: {
+                view.isHidden = !(view.isHidden)
+            }) 
         }
     }
     
-    func setDateTextFieldValue(date: NSDate, field: UITextField) {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .MediumStyle
-        dateFormatter.timeStyle = .NoStyle
-        field.text = dateFormatter.stringFromDate(date)
+    func setDateTextFieldValue(_ date: Date, field: UITextField) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        field.text = dateFormatter.string(from: date)
     }
     
-    @IBAction func startDateFieldTapped(sender:AnyObject){
+    @IBAction func startDateFieldTapped(_ sender:AnyObject){
         toggleViewVisibilityAnimated(self.startDatePicker)
     }
     
-    @IBAction func expiryDateFieldTapped(sender:AnyObject){
+    @IBAction func expiryDateFieldTapped(_ sender:AnyObject){
         toggleViewVisibilityAnimated(self.expiryDatePicker)
     }
 
-    @IBAction func startPickerChanged(sender: UIDatePicker) {
+    @IBAction func startPickerChanged(_ sender: UIDatePicker) {
         startDate = sender.date
         setDateTextFieldValue(startDate!, field:startDateTextField)
     }
     
-    @IBAction func expiryPickerChanged(sender: UIDatePicker) {
+    @IBAction func expiryPickerChanged(_ sender: UIDatePicker) {
         expiryDate = sender.date
         setDateTextFieldValue(expiryDate!, field:expiryDateTextField)
     }
     
-    @IBAction func createButtonPressed(sender: AnyObject) {
-        self.createShareButton.enabled = false
+    @IBAction func createButtonPressed(_ sender: AnyObject) {
+        self.createShareButton.isEnabled = false
         let email = emailTextField.text
         if email == nil || email!.characters.count < 1 {
             UIAlertController.alert("Error", message: "Please provide an email", buttonTitle: "OK",fromController: self)
@@ -114,19 +114,19 @@ class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
         let roleName = roleNameTextField.text == "" ? nil : roleNameTextField.text
         var operation : AylaShareOperation
         if roleName != nil {
-            operation = AylaShareOperation.None
+            operation = AylaShareOperation.none
         }
         else {
             let operationIndex = capabilitySelector.selectedSegmentIndex
             switch operationIndex {
             case 0:
-                operation = AylaShareOperation.ReadAndWrite
+                operation = AylaShareOperation.readAndWrite
             case 1:
-                operation = AylaShareOperation.ReadOnly
+                operation = AylaShareOperation.readOnly
             case 2:
-                operation = AylaShareOperation.None
+                operation = AylaShareOperation.none
             default:
-                operation = AylaShareOperation.ReadAndWrite
+                operation = AylaShareOperation.readAndWrite
             }
         }
         let newShare = AylaShare(email: email!,
@@ -138,14 +138,14 @@ class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
                                  endAt: expiryDate)
         deviceViewModel.shareDevice(self, withShare: newShare, successHandler: { (share) in
             self.cancel()
-            self.createShareButton.enabled = true
+            self.createShareButton.isEnabled = true
             }) { (error) in
-                UIAlertController.alert("Error", message:error.localizedDescription , buttonTitle: "OK",fromController: self)
-                self.createShareButton.enabled = true
+                UIAlertController.alert("Error", message:error.description , buttonTitle: "OK",fromController: self)
+                self.createShareButton.isEnabled = true
         }
     }
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == self.startDateTextField {
             toggleViewVisibilityAnimated(startDatePicker)
             return false
@@ -157,11 +157,11 @@ class CreateDeviceShareViewController: UIViewController, UITextFieldDelegate{
         }
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
 
     }
     
-    func textFieldShouldClear(textField: UITextField) -> Bool {
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
         if textField == self.startDateTextField {
             startDatePicker.reloadInputViews()
             startDate = nil

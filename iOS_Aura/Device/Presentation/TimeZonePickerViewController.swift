@@ -11,8 +11,8 @@ import iOS_AylaSDK
 /// TimeZonePickerViewControllerDelegate
 
 protocol TimeZonePickerViewControllerDelegate: class {
-    func timeZonePickerDidCancel(picker: TimeZonePickerViewController)
-    func timeZonePicker(picker: TimeZonePickerViewController, didSelectTimeZoneID timeZoneID:String)
+    func timeZonePickerDidCancel(_ picker: TimeZonePickerViewController)
+    func timeZonePicker(_ picker: TimeZonePickerViewController, didSelectTimeZoneID timeZoneID:String)
 }
 
 // MARK: -
@@ -33,15 +33,15 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
         }
     }
     
-    private var privateTimeZoneID:String? = nil
+    fileprivate var privateTimeZoneID:String? = nil
     
-    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet fileprivate weak var tableView: UITableView!
     
-    private let cellReuseIdentifier = "TimeZonePickerCell"
-    private let timeZones = NSTimeZone.knownTimeZoneNames()
+    fileprivate let cellReuseIdentifier = "TimeZonePickerCell"
+    fileprivate let timeZones = TimeZone.knownTimeZoneIdentifiers
     
-    private enum TimeZonePickerViewControllerSection: Int {
-        case TimeZonePickerViewControllerSectionTimeZones = 0, TimeZonePickerViewControllerSectionCount
+    fileprivate enum TimeZonePickerViewControllerSection: Int {
+        case timeZonePickerViewControllerSectionTimeZones = 0, timeZonePickerViewControllerSectionCount
     }
 
     override func viewDidLoad() {
@@ -49,64 +49,64 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
         
         self.tableView.tintColor = UIColor.auraTintColor()
         self.tableView.allowsMultipleSelection = false;
-        self.tableView.registerClass(TimeZonePickerTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        self.tableView.register(TimeZonePickerTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.selectTimeZone(self.timeZoneID)
     }
     
     // MARK: - Actions
 
-    @IBAction private func cancel(sender: AnyObject) {
+    @IBAction fileprivate func cancel(_ sender: AnyObject) {
         self.delegate?.timeZonePickerDidCancel(self)
     }
 
-    @IBAction private func save(sender: AnyObject) {
+    @IBAction fileprivate func save(_ sender: AnyObject) {
         if (self.timeZoneID != nil) {
             self.delegate?.timeZonePicker(self, didSelectTimeZoneID: self.timeZoneID!)
         } else {
-            let alert = UIAlertController(title: "Please select a time zone", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+            let alert = UIAlertController(title: "Please select a time zone", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+            let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler:nil)
             alert.addAction(okAction)
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
     }
 
     // MARK: - Utilities
     
-    private func selectTimeZone(timeZone: String?) {
+    fileprivate func selectTimeZone(_ timeZone: String?) {
         if (self.tableView == nil) {
             return;
         }
         
         // Deselect the current selection, if there is one
         if let currentSelectionIndexPath = self.tableView?.indexPathForSelectedRow {
-            self.tableView.deselectRowAtIndexPath(currentSelectionIndexPath, animated: true)
+            self.tableView.deselectRow(at: currentSelectionIndexPath, animated: true)
         }
         
         // Select the specificed timeZone, if provided and it exists
         if timeZone != nil {
-            if let index = self.timeZones.indexOf(timeZone!) {
-                let indexPath = NSIndexPath.init(forRow: index, inSection: 0)
-                self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: UITableViewScrollPosition.Middle)
+            if let index = self.timeZones.index(of: timeZone!) {
+                let indexPath = IndexPath.init(row: index, section: 0)
+                self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition.middle)
             }
         }
     }
 
     // MARK: - UITableViewDataSource
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return TimeZonePickerViewControllerSection.TimeZonePickerViewControllerSectionCount.rawValue
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return TimeZonePickerViewControllerSection.timeZonePickerViewControllerSectionCount.rawValue
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numRows:Int = 0
         
         if let timeZonePickerSection = TimeZonePickerViewControllerSection(rawValue: section) {
             switch timeZonePickerSection {
-                case .TimeZonePickerViewControllerSectionTimeZones:
+                case .timeZonePickerViewControllerSectionTimeZones:
                     numRows = self.timeZones.count
                 default:
                     assert(true, "Unexpected section!")
@@ -116,8 +116,8 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
         return numRows
     }
        
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as UITableViewCell
         
         cell.textLabel!.text = self.timeZones[indexPath.row]
         
@@ -126,7 +126,7 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
     
     // MARK: - UITableViewDelegate
     
-    func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         var highlight = true
         
         // Don't highlight the selected cell
@@ -137,8 +137,8 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
         return highlight
     }
     
-    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        var pathToSelect:NSIndexPath? = nil
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        var pathToSelect:IndexPath? = nil
         
         // Don't allow additional selections of the currently selected cell
         if (indexPath != tableView.indexPathForSelectedRow) {
@@ -148,11 +148,11 @@ class TimeZonePickerViewController : UIViewController, UITableViewDelegate, UITa
         return pathToSelect
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         if let timeZonePickerSection = TimeZonePickerViewControllerSection(rawValue: indexPath.section) {
             switch timeZonePickerSection {
-                case .TimeZonePickerViewControllerSectionTimeZones:
+                case .timeZonePickerViewControllerSectionTimeZones:
                     self.privateTimeZoneID = self.timeZones[indexPath.row]
                 break
                 default:
@@ -172,26 +172,26 @@ private class TimeZonePickerTableViewCell : UITableViewCell {
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.Default, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
         self.commonInit()
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         
         // Update the background color to profide a visual affordance on touch down, but not have a highlight after touch up
         self.contentView.backgroundColor = highlighted ? UIColor.auraTintColor() : nil;
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        self.accessoryType = selected ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
-        self.textLabel?.textColor = selected ? UIColor.auraTintColor() : UIColor.blackColor()
+        self.accessoryType = selected ? UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+        self.textLabel?.textColor = selected ? UIColor.auraTintColor() : UIColor.black
     }
     
     func commonInit() {
-        self.selectionStyle = UITableViewCellSelectionStyle.None
-        self.textLabel?.backgroundColor = UIColor.clearColor()
+        self.selectionStyle = UITableViewCellSelectionStyle.none
+        self.textLabel?.backgroundColor = UIColor.clear
     }
 }

@@ -9,13 +9,13 @@
 import iOS_AylaSDK
 
 protocol DeviceSharesListViewModelDelegate: class {
-    func deviceSharesListViewModel(viewModel:DeviceSharesListViewModel, didDeleteShare share:AylaShare)
-    func deviceSharesListViewModel(viewModel:DeviceSharesListViewModel, didSelectShare share:AylaShare)
+    func deviceSharesListViewModel(_ viewModel:DeviceSharesListViewModel, didDeleteShare share:AylaShare)
+    func deviceSharesListViewModel(_ viewModel:DeviceSharesListViewModel, didSelectShare share:AylaShare)
 
 }
 
 class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
-    
+    private let logTag = "DeviceSharsListViewModel"
     /// Device manager where device list belongs
     let deviceManager: AylaDeviceManager
     
@@ -24,13 +24,13 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
     
     var sharesModel: DeviceSharesModel?
     
-    var expandedRow: NSIndexPath?
+    var expandedRow: IndexPath?
     
     static let DeviceShareCellId: String = "DeviceShareCellId"
     
     enum SharesTableSection: Int {
-        case OwnedShares = 0
-        case ReceivedShares
+        case ownedShares = 0
+        case receivedShares
     }
     
     weak var delegate: DeviceSharesListViewModelDelegate?
@@ -50,7 +50,7 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
             }) { (error) in
         }
         // Add self as device manager listener
-        deviceManager.addListener(self)
+        deviceManager.add(self)
         
         // Add self as delegate and datasource of input table view.
         tableView.dataSource = self
@@ -60,41 +60,41 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
     }
     
     // MARK: Table View Data Source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == SharesTableSection.OwnedShares.rawValue{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == SharesTableSection.ownedShares.rawValue{
             return self.sharesModel!.ownedShares.count
-        } else if section == SharesTableSection.ReceivedShares.rawValue {
+        } else if section == SharesTableSection.receivedShares.rawValue {
             return self.sharesModel!.receivedShares.count
         } else {
             return 0
         }
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == SharesTableSection.OwnedShares.rawValue{
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == SharesTableSection.ownedShares.rawValue{
             return "Devices You Own"
-        } else if section == SharesTableSection.ReceivedShares.rawValue {
+        } else if section == SharesTableSection.receivedShares.rawValue {
             return "Devices Shared to You"
         } else {
             return nil
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var share: AylaShare?
-        if indexPath.section == SharesTableSection.OwnedShares.rawValue {
+        if indexPath.section == SharesTableSection.ownedShares.rawValue {
             share = self.sharesModel!.ownedShares[indexPath.row]
-        } else if indexPath.section == SharesTableSection.ReceivedShares.rawValue {
+        } else if indexPath.section == SharesTableSection.receivedShares.rawValue {
             share = self.sharesModel!.receivedShares[indexPath.row]
         } else {
             assert(false, "Share for section \(indexPath.section), row \(indexPath.row) does not exist")
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(DeviceSharesListViewModel.DeviceShareCellId) as? DeviceShareTVCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: DeviceSharesListViewModel.DeviceShareCellId) as? DeviceShareTVCell
         
         if (cell != nil) {
             let expand : Bool
@@ -112,7 +112,7 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
         return cell!
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if let cellPath = self.expandedRow {
             if cellPath == indexPath{
                 return DeviceShareTVCell.expandedRowHeight
@@ -123,19 +123,19 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
     
     
     // MARK: Table View Delegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var share: AylaShare?
-        if indexPath.section == SharesTableSection.OwnedShares.rawValue {
+        if indexPath.section == SharesTableSection.ownedShares.rawValue {
             share = self.sharesModel!.ownedShares[indexPath.row]
-        } else if indexPath.section == SharesTableSection.ReceivedShares.rawValue {
+        } else if indexPath.section == SharesTableSection.receivedShares.rawValue {
             share = self.sharesModel!.receivedShares[indexPath.row]
         } else {
             assert(false, "Share for section \(indexPath.section), row \(indexPath.row) does not exist")
         }
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
         
-        var rowsToReload : [NSIndexPath]
+        var rowsToReload : [IndexPath]
         if self.expandedRow == nil {
             self.expandedRow = indexPath
             rowsToReload = [self.expandedRow!]
@@ -147,20 +147,20 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
             self.expandedRow = indexPath
         }
         
-        tableView.reloadRowsAtIndexPaths(rowsToReload, withRowAnimation: UITableViewRowAnimation.Fade)
+        tableView.reloadRows(at: rowsToReload, with: UITableViewRowAnimation.fade)
         self.delegate?.deviceSharesListViewModel(self, didSelectShare: share!)
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let unshareAction = UITableViewRowAction(style: .Default, title: "Unshare") { (action, indexPath) in
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let unshareAction = UITableViewRowAction(style: .default, title: "Unshare") { (action, indexPath) in
             var share: AylaShare?
-            if indexPath.section == SharesTableSection.OwnedShares.rawValue {
+            if indexPath.section == SharesTableSection.ownedShares.rawValue {
                 share = self.sharesModel!.ownedShares[indexPath.row]
-            } else if indexPath.section == SharesTableSection.ReceivedShares.rawValue {
+            } else if indexPath.section == SharesTableSection.receivedShares.rawValue {
                 share = self.sharesModel!.receivedShares[indexPath.row]
             }
             self.delegate?.deviceSharesListViewModel(self, didDeleteShare: share!)
@@ -173,22 +173,22 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
     
     
     // MARK - Device Manager Listener
-    func deviceManager(deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : NSError]) {
-        print("Init complete")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
         self.sharesModel!.updateSharesList({ (shares) in
             self.tableView?.reloadData()
         }) { (error) in }
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didInitFailure error: NSError) {
-        print("Failed to init: \(error)")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didObserveDeviceListChange change: AylaDeviceListChange) {
-        print("Observe device list change")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
+        AylaLogI(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
-                device.addListener(self)
+                device.add(self)
             }
         }
         else {
@@ -200,12 +200,12 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
         }) { (error) in }
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
+    func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
         
     }
     
-    func device(device: AylaDevice, didObserveChange change: AylaChange) {
-        if change.isKindOfClass(AylaDeviceChange) || change.isKindOfClass(AylaDeviceListChange) {
+    func device(_ device: AylaDevice, didObserve change: AylaChange) {
+        if change.isKind(of: AylaDeviceChange.self) || change.isKind(of: AylaDeviceListChange.self) {
             // Not a good long term update strategy
             
             self.sharesModel!.updateSharesList({ (shares) in
@@ -215,7 +215,7 @@ class DeviceSharesListViewModel:NSObject, UITableViewDataSource, UITableViewDele
         
     }
     
-    func device(device: AylaDevice, didFail error: NSError) {
+    func device(_ device: AylaDevice, didFail error: Error) {
         // Device errors are not currently handled here.
     }
 }
