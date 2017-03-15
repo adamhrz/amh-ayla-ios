@@ -122,7 +122,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     fileprivate func logRegistrationTypeForSetupDevice(_ setupDevice:AylaSetupDevice){
         let registrationType = AylaRegistration.registrationName(from: setupDevice.registrationType)
-        addDescription("Device will use \(registrationType ?? "Unknown") Registration Type.")
+        addDescription("Device will use \(registrationType) Registration Type.")
 
     }
     

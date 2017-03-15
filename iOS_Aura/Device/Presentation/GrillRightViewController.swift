@@ -79,8 +79,10 @@ class GrillRightViewController: UIViewController, AylaDeviceListener {
                 break;
             }
         } else if let change = change as? AylaDeviceChange, let device = change.device as? GrillRightDevice {
-            sensor1VC.controlsShouldEnableForDevice(device)
-            sensor2VC.controlsShouldEnableForDevice(device)
+            if device.dsn == self.device.dsn {
+                sensor1VC.controlsShouldEnable(forDevice: device)
+                sensor2VC.controlsShouldEnable(forDevice: device)
+            }
         }
     }
     

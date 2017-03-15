@@ -56,22 +56,52 @@ class AuraProgressButton: UIButton {
     
     func startActivityIndicator(){
         let indicatorHeight = self.frame.height - 8
-    
-        let cgX = self.frame.width / 2 - indicatorHeight / 2
-        let cgY = self.frame.height / 2 - indicatorHeight / 2
-        let cgWidth = indicatorHeight
-        let cgHeight = indicatorHeight
-        let activityIndicatorFrame:CGRect = self.convert(CGRect(x: cgX, y: cgY, width: cgWidth, height: cgHeight), to: self.superview)
         if self.activityIndicator == nil {
-            let activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView.init(frame: activityIndicatorFrame)
+            let activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
             self.activityIndicator = activityIndicator;
         }
-    
         self.activityIndicator?.isUserInteractionEnabled = false;
+        self.activityIndicator?.translatesAutoresizingMaskIntoConstraints = false
         self.activityIndicator?.color = self.activityIndicatorColor
-        self.activityIndicator?.frame = activityIndicatorFrame;
         self.superview?.addSubview(self.activityIndicator!)
         self.activityIndicator?.startAnimating()
+        
+        NSLayoutConstraint(
+            item: self.activityIndicator!,
+            attribute: .height,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .notAnAttribute,
+            multiplier: 1.0,
+            constant: indicatorHeight
+            ).isActive = true
+        NSLayoutConstraint(
+            item: self.activityIndicator!,
+            attribute: .width,
+            relatedBy: .equal,
+            toItem: self.activityIndicator!,
+            attribute: .height,
+            multiplier: 1.0,
+            constant: 0.0
+            ).isActive = true
+        NSLayoutConstraint(
+            item: self.activityIndicator!,
+            attribute: .centerY,
+            relatedBy: .equal,
+            toItem: self,
+            attribute: .centerY,
+            multiplier: 1.0,
+            constant: 0.0
+            ).isActive = true
+        NSLayoutConstraint(
+            item: self.activityIndicator!,
+            attribute: .centerX,
+            relatedBy: .equal,
+            toItem: self,
+            attribute: .centerX,
+            multiplier: 1.0,
+            constant: 0.0
+            ).isActive = true
         self.isEnabled = false
     }
     

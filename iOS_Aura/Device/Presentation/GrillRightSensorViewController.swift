@@ -50,47 +50,100 @@ class GrillRightSensorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        controlsShouldEnableForDevice(self.device)
-        //refreshUI()
+        initializeUI()
+        controlsShouldEnable(forDevice: self.device)
     }
     
-    func disableUI(){
+    func initializeUI() {
+        self.clearLabelText()
+        self.clearViewColors()
+        self.disableAllButtons()
+    }
+    
+    func clearLabelText() {
         rightStatusHeaderLabel.text = ""
         rightStatusLabel.text = ""
+        currentTempLabel.text = "---.-ºF"
         cookTimeLabel.text = ""
         cookTimeHeaderLabel.text = ""
-        currentTempLabel.text = "---ºF"
         statusLabel.text = ""
-        
+        self.switchButton.setTitle("", for: UIControlState())
+        self.switchButton.startActivityIndicator()
         modeLabel.text = "Not Connected"
+    }
+    
+    func clearViewColors() {
+        let labelColor = UIColor.darkGray
+        let bgColor = GrillRightSensorViewController.medGrayColor
+        self.view.backgroundColor = bgColor
+        
+        self.currentTempLabel.textColor = labelColor
+        self.cookTimeHeaderLabel.textColor = labelColor
+        self.cookTimeLabel.textColor = labelColor
+        self.rightStatusHeaderLabel.textColor = labelColor
+        self.rightStatusLabel.textColor = labelColor
+        
+        timerButton.imageView?.tintColor = GrillRightSensorViewController.inactiveModeColor
+        meatButton.imageView?.tintColor = GrillRightSensorViewController.inactiveModeColor
+        temperatureButton.imageView?.tintColor = GrillRightSensorViewController.inactiveModeColor
+        self.view.backgroundColor = GrillRightSensorViewController.medGrayColor
+    }
+    
+    func disableAllButtons() {
         meatButton.isEnabled = false
         timerButton.isEnabled = false
         temperatureButton.isEnabled = false
         switchButton.isEnabled = false
+    }
+    func enableAllButtons() {
+        meatButton.isEnabled = true
+        timerButton.isEnabled = true
+        temperatureButton.isEnabled = true
+        switchButton.isEnabled = switchButton.activityIndicator?.isAnimating ?? true
+    }
+    
+    func didDisconnect() {
+        self.disableAllButtons()
+        modeLabel.text = "Not Connected"
         self.view.backgroundColor = GrillRightSensorViewController.medGrayColor
     }
-
-    func controlsShouldEnableForDevice(_ _device: GrillRightDevice? = nil){
+    
+    func setColors(forAlarmState _alarmState:GrillRightDevice.AlarmState){
+        var bgColor: UIColor
+        var labelColor: UIColor
+        switch _alarmState {
+        case .none:
+            if sensor.isCooking {
+                bgColor = GrillRightSensorViewController.medGrayGreenColor
+                labelColor = UIColor.darkText
+            } else {
+                bgColor = GrillRightSensorViewController.medGrayColor
+                labelColor = UIColor.darkGray
+            }
+        case .almostDone:
+            bgColor = GrillRightSensorViewController.medGrayAmberColor
+            labelColor = GrillRightSensorViewController.medAmberColor
+        case .overdone:
+            bgColor = GrillRightSensorViewController.medGrayRedColor
+            labelColor = GrillRightSensorViewController.medRedColor
+        }
+        self.view.backgroundColor = bgColor
         
+        self.currentTempLabel.textColor = labelColor
+        self.cookTimeLabel.textColor = labelColor
+        self.rightStatusLabel.textColor = labelColor
+    }
+
+    func controlsShouldEnable(forDevice _device: GrillRightDevice? = nil) {
         if (_device != nil && !_device!.isConnectedLocal) || !device.isConnectedLocal  {
-            self.disableUI()
+            self.didDisconnect()
         } else {
-            meatButton.isEnabled = true
-            timerButton.isEnabled = true
-            temperatureButton.isEnabled = true
-            switchButton.isEnabled = true
+            self.enableAllButtons()
             refreshUI()
         }
     }
     
-    
     func refreshUI(_ change: AylaPropertyChange? = nil) {
-        if !device.isConnectedLocal {
-            disableUI()
-            return
-        }
-        
         let runningBool = (sensor.isCooking || sensor.alarmState != .none)
         
         modeLabel.text = sensor.controlMode.name
@@ -100,10 +153,8 @@ class GrillRightSensorViewController: UIViewController {
         
         rightStatusHeaderLabel.text = ""
         rightStatusLabel.text = ""
-        
         cookTimeLabel.text = ""
         cookTimeHeaderLabel.text = ""
-        
         timerButton.imageView?.tintColor = GrillRightSensorViewController.inactiveModeColor
         meatButton.imageView?.tintColor = GrillRightSensorViewController.inactiveModeColor
         temperatureButton.imageView?.tintColor = GrillRightSensorViewController.inactiveModeColor
@@ -111,10 +162,9 @@ class GrillRightSensorViewController: UIViewController {
         if sensor.pctDone <= 100 {
             statusLabel.text = "\(sensor.pctDone)%"
         } else {
-            
             statusLabel.text = ""
         }
-        switchButton.isEnabled = true
+        
         switch sensor.controlMode {
         case .meat:
             cookTimeHeaderLabel.text = "Meat"
@@ -143,34 +193,24 @@ class GrillRightSensorViewController: UIViewController {
         case .none:
             statusLabel.text = ""
         }
-        switchButton.setTitle(runningBool ? "Stop" : "Start", for: UIControlState())
-        switchButton.layer.backgroundColor = runningBool ? GrillRightSensorViewController.inactiveModeColor.cgColor : UIColor.aylaHippieGreenColor().cgColor
 
+        setColors(forAlarmState: sensor.alarmState)
         
-        var bgColor: UIColor
-        var labelColor: UIColor
-        switch sensor.alarmState {
-        case .none:
-            if sensor.isCooking {
-                bgColor = GrillRightSensorViewController.medGrayGreenColor
-                labelColor = UIColor.darkText
+        if device.isConnectedLocal {
+            if runningBool{
+                switchButton.setTitle("Stop", for: UIControlState())
+                switchButton.layer.backgroundColor = GrillRightSensorViewController.inactiveModeColor.cgColor
             } else {
-                bgColor = GrillRightSensorViewController.medGrayColor
-                labelColor = UIColor.darkGray
+                switchButton.setTitle("Start", for: UIControlState())
+                switchButton.layer.backgroundColor = UIColor.aylaHippieGreenColor().cgColor
             }
-        case .almostDone:
-            bgColor = GrillRightSensorViewController.medGrayAmberColor
-            labelColor = GrillRightSensorViewController.medAmberColor
-        case .overdone:
-            bgColor = GrillRightSensorViewController.medGrayRedColor
-            labelColor = GrillRightSensorViewController.medRedColor
+            enableAllButtons()
+
+        } else {
+            switchButton.setTitle("Start", for: UIControlState())
+            switchButton.layer.backgroundColor = GrillRightSensorViewController.inactiveModeColor.cgColor
+            didDisconnect()
         }
-        
-        self.view.backgroundColor = bgColor
-        
-        self.currentTempLabel.textColor = labelColor
-        self.cookTimeLabel.textColor = labelColor
-        self.rightStatusLabel.textColor = labelColor
         
         uiTimer?.invalidate()
         if runningBool {
@@ -178,8 +218,8 @@ class GrillRightSensorViewController: UIViewController {
         } else {
             currentTime = nil
         }
-            
     }
+
     
     func refreshTimer() {
         if self.currentTime == nil {
@@ -218,7 +258,6 @@ class GrillRightSensorViewController: UIViewController {
         if let property = device?.getProperty(property) {
             let parameters = AylaDatapointParams()
             
-            
             parameters.value = value
             property.createDatapoint(parameters, success:{ (datapoint) in
                 if let successBlock = successBlock {
@@ -238,7 +277,7 @@ class GrillRightSensorViewController: UIViewController {
         if sensor.controlMode == .temp && sensor.isCooking {
             return
         }
-        let tempRange = [Int](100...572).map { String($0) }
+        let tempRange = [Int](110...572).map { String($0) }
         
         ActionSheetStringPicker.show(withTitle: "Select Target Temp.", rows: tempRange, initialSelection: 0, doneBlock: { (picker, index, value) in
             self.switchButton.startActivityIndicator()
@@ -300,6 +339,5 @@ class GrillRightSensorViewController: UIViewController {
             }, cancel: { (picker) in
                 
             }, origin: self.view)
-
     }
 }
