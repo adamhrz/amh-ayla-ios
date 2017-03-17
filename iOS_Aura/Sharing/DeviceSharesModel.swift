@@ -11,13 +11,13 @@ import iOS_AylaSDK
 
 
 protocol DeviceSharesModelDelegate: class {
-    func deviceSharesModel(model:DeviceSharesModel, receivedSharesListDidUpdate: ((shares :[AylaShare]) -> Void)?)
-    func deviceSharesModel(model:DeviceSharesModel, ownedSharesListDidUpdate: ((shares :[AylaShare]) -> Void)?)
+    func deviceSharesModel(_ model:DeviceSharesModel, receivedSharesListDidUpdate: ((_ shares :[AylaShare]) -> Void)?)
+    func deviceSharesModel(_ model:DeviceSharesModel, ownedSharesListDidUpdate: ((_ shares :[AylaShare]) -> Void)?)
     
 }
 
 class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener {
-    
+    private let logTag = "DeviceSharesModel"
     /// Device manager where device list belongs
     let deviceManager: AylaDeviceManager
 
@@ -39,16 +39,16 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
         self.updateSharesList(nil, failureHandler: nil)
         
         // Add self as device manager listener
-        deviceManager.addListener(self)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(DeviceSharesModel.refreshShares), name: AuraNotifications.SharesChanged, object: nil)
+        deviceManager.add(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(DeviceSharesModel.refreshShares), name: NSNotification.Name(rawValue: AuraNotifications.SharesChanged), object: nil)
         self.refreshDeviceList()
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    func deviceForShare(share: AylaShare) -> AylaDevice? {
+    func deviceForShare(_ share: AylaShare) -> AylaDevice? {
         for device in devices {
             if share.resourceId == device.dsn {
                 return device
@@ -57,7 +57,7 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
         return nil
     }
     
-    func ownedSharesForDevice(device: AylaDevice) -> [AylaShare]? {
+    func ownedSharesForDevice(_ device: AylaDevice) -> [AylaShare]? {
         var sharesArray = [AylaShare]()
         for share in self.ownedShares {
             if device.dsn == share.resourceId {
@@ -67,7 +67,7 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
         return sharesArray
     }
     
-    func receivedShareForDevice(device: AylaDevice) -> AylaShare? {
+    func receivedShareForDevice(_ device: AylaDevice) -> AylaShare? {
         for share in self.receivedShares {
             if device.dsn == share.resourceId {
                 return share
@@ -87,43 +87,43 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
         self.updateSharesList({ (shares) in }) { (error) in }
     }
     
-    func updateSharesList(successHandler: ((shares :[AylaShare]) -> Void)?, failureHandler: ((error: NSError) -> Void)?) {
-        deviceManager.sessionManager?.fetchReceivedSharesWithResourceName(AylaShareResourceNameDevice, resourceId: nil, expired: false, accepted: true, success: { (shares: [AylaShare]) in
+    func updateSharesList(_ successHandler: ((_ shares :[AylaShare]) -> Void)?, failureHandler: ((_ error: Error) -> Void)?) {
+        let _ = deviceManager.sessionManager?.fetchReceivedShares(withResourceName: AylaShareResourceNameDevice, resourceId: nil, expired: false, accepted: true, success: { (shares: [AylaShare]) in
                 self.receivedShares = shares
                 self.delegate?.deviceSharesModel(self, receivedSharesListDidUpdate: { (shares) in })
-                if let successHandler = successHandler { successHandler(shares: shares) }
-            }, failure: { (error :NSError) in
-                print("Failure to receive shares: $@", error.description)
-                if let failureHandler = failureHandler { failureHandler(error: error) }
-            }
+                if let successHandler = successHandler { successHandler(shares) }
+            }, failure: { (error :Error) in
+                AylaLogE(tag: self.logTag, flag: 0, message:"Failure to receive shares: \(error.localizedDescription)")
+                if let failureHandler = failureHandler { failureHandler(error) }
+            } 
         )
-        deviceManager.sessionManager?.fetchOwnedSharesWithResourceName(AylaShareResourceNameDevice, resourceId: nil, expired: false, accepted: true, success: { (shares: [AylaShare]) in
+        let _ = deviceManager.sessionManager?.fetchOwnedShares(withResourceName: AylaShareResourceNameDevice, resourceId: nil, expired: false, accepted: true, success: { (shares: [AylaShare]) in
                 self.ownedShares = shares
                 self.delegate?.deviceSharesModel(self, ownedSharesListDidUpdate: { (shares) in })
-                if let successHandler = successHandler { successHandler(shares: shares) }
-            }, failure: { (error :NSError) in
-                print("Failure to receive shares: $@", error.description)
-                if let failureHandler = failureHandler { failureHandler(error: error) }
+                if let successHandler = successHandler { successHandler(shares) }
+            }, failure: { (error :Error) in
+                AylaLogE(tag: self.logTag, flag: 0, message:"Failure to receive shares: \(error.localizedDescription)")
+                if let failureHandler = failureHandler { failureHandler(error) }
             }
         )
     }
     
     // MARK - device manager listener
-    func deviceManager(deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : NSError]) {
-        print("Init complete")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
         self.updateSharesList(nil, failureHandler: nil)
         self.refreshDeviceList()
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didInitFailure error: NSError) {
-        print("Failed to init: \(error)")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didObserveDeviceListChange change: AylaDeviceListChange) {
-        print("Observe device list change")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
+        AylaLogI(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
-                device.addListener(self)
+                device.add(self)
             }
         }
         else {
@@ -132,19 +132,19 @@ class DeviceSharesModel:NSObject, AylaDeviceManagerListener, AylaDeviceListener 
         self.refreshDeviceList()
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
+    func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState){
         
     }
     
-    func device(device: AylaDevice, didObserveChange change: AylaChange) {
-        if change.isKindOfClass(AylaDeviceChange) || change.isKindOfClass(AylaDeviceListChange) {
+    func device(_ device: AylaDevice, didObserve change: AylaChange) {
+        if change.isKind(of: AylaDeviceChange.self) || change.isKind(of: AylaDeviceListChange.self) {
             // Not a good udpate strategy
             self.updateSharesList(nil, failureHandler: nil)
             self.refreshDeviceList()
         }
     }
     
-    func device(device: AylaDevice, didFail error: NSError) {
+    func device(_ device: AylaDevice, didFail error: Error) {
         // Device errors are not handled here.
     }
 }

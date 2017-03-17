@@ -12,13 +12,13 @@ class RegistrationTVCell : UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dsnLabel: UILabel!
 
-    func configure(candidate: AylaRegistrationCandidate?) {
+    func configure(_ candidate: AylaRegistrationCandidate?) {
         nameLabel.text = candidate?.productName ?? ""
         let oem = " (" + (candidate?.oemModel ?? "") + ")"
         dsnLabel.text = (candidate?.dsn ?? "") + oem
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state

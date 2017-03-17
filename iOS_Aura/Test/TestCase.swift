@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias TestBlock = TestCase -> Void
+typealias TestBlock = (TestCase) -> Void
 
 /**
  A TestCase represents an unit in test flow.
@@ -23,11 +23,11 @@ class TestCase : NSObject {
     
     weak var sequencer: TestSequencer?
 
-    private(set) var PASSED :Bool = false
-    private(set) var FAILED :Bool = false
-    private(set) var FINISHED : Bool = false
+    fileprivate(set) var PASSED :Bool = false
+    fileprivate(set) var FAILED :Bool = false
+    fileprivate(set) var FINISHED : Bool = false
     
-    init(description: String?, testBlock: TestBlock) {
+    init(description: String?, testBlock: @escaping TestBlock) {
         self.testBlock = testBlock
         self.description_ = description
     }

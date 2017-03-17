@@ -12,19 +12,19 @@ import iOS_AylaSDK
 extension AylaServiceType {
     func name() -> String? {
         switch self {
-        case .Dynamic:
+        case .dynamic:
             return "Dynamic"
             
-        case .Field:
+        case .field:
             return "Field"
             
-        case .Staging:
+        case .staging:
             return "Staging"
             
-        case .Development:
+        case .development:
             return "Development"
             
-        case .Demo:
+        case .demo:
             return "Demo"
         }
     }
@@ -46,7 +46,7 @@ extension AylaServiceLocation {
 }
 
 extension AylaServiceLocation {
-    func locationForName(name:String!) -> AylaServiceLocation! {
+    func locationForName(_ name:String!) -> AylaServiceLocation! {
         switch name {
         case "China", "CN":
             return .CN
@@ -65,7 +65,7 @@ extension AylaServiceLocation {
 
 
 extension AylaSystemSettings {
-    public func toConfigDictionary(name:String) -> Dictionary<String, AnyObject>?{
+    public func toConfigDictionary(_ name:String) -> Dictionary<String, AnyObject>?{
         guard let serviceType = self.serviceType.name()
             else {
                 return nil
@@ -87,8 +87,8 @@ extension AylaSystemSettings {
             "name": name,
             "serviceLocation": serviceLocation,
             "serviceType": serviceType
-        ]
-        return dictionary as? Dictionary<String, AnyObject>
+        ] as [String : Any]
+        return dictionary as Dictionary<String, AnyObject>
     }
     
     public func aura_copy () -> AylaSystemSettings {

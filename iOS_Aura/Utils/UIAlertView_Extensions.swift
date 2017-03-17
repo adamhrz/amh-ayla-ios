@@ -8,10 +8,10 @@
 
 import UIKit
 extension UIAlertController {
-    class func alert(title: String?, message: String?, buttonTitle: String?, fromController controller: UIViewController, okHandler: (UIAlertAction)->Void = { _ in }) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler:okHandler)
+    class func alert(_ title: String?, message: String?, buttonTitle: String?, fromController controller: UIViewController, okHandler: @escaping (UIAlertAction)->Void = { _ in }) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.default, handler:okHandler)
         alert.addAction(okAction)
-        controller.presentViewController(alert, animated: true, completion: nil)
+        controller.present(alert, animated: true, completion: nil)
     }
 }

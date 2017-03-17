@@ -11,40 +11,40 @@ import iOS_AylaSDK
 
 class ScheduleEditorActionTableViewCell : UITableViewCell {
     
-    @IBOutlet private weak var mainLabel: UILabel!
-    @IBOutlet private weak var infoLabel: UILabel!
-    @IBOutlet private weak var actionActiveLabel: UILabel!
+    @IBOutlet fileprivate weak var mainLabel: UILabel!
+    @IBOutlet fileprivate weak var infoLabel: UILabel!
+    @IBOutlet fileprivate weak var actionActiveLabel: UILabel!
 
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    private func mainLabelTextFromScheduleAction (action: AylaScheduleAction) -> String {
-        let text = "Set " + action.name + " to " + String(action.value)
+    fileprivate func mainLabelTextFromScheduleAction (_ action: AylaScheduleAction) -> String {
+        let text = "Set " + action.name + " to " + String(describing: action.value as AnyObject)
         return text
     }
     
-    private func infoLabelTextFromScheduleAction (action: AylaScheduleAction) -> String {
+    fileprivate func infoLabelTextFromScheduleAction (_ action: AylaScheduleAction) -> String {
         var firepointString = ""
         switch action.firePoint{
-        case .AtEnd:
+        case .atEnd:
             firepointString = "At End of schedule"
-        case .AtStart:
+        case .atStart:
             firepointString = "At Start of schedule"
-        case .InRange:
+        case .inRange:
             firepointString = "During schedule (In Range)"
-        case .Unspecified:
+        case .unspecified:
             firepointString = "At Unspecified point"
         }
         let text = "Fires " + firepointString
         return text
     }
     
-    func configure(scheduleAction: AylaScheduleAction) {
+    func configure(_ scheduleAction: AylaScheduleAction) {
         mainLabel.text = mainLabelTextFromScheduleAction(scheduleAction)
         infoLabel.text = infoLabelTextFromScheduleAction(scheduleAction)
-        if scheduleAction.active {
+        if scheduleAction.isActive {
             actionActiveLabel.text = "Active"
             actionActiveLabel.textColor = UIColor.auraLeafGreenColor()
         } else {

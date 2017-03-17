@@ -42,11 +42,11 @@ class SignupTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func cancelAction(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelAction(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func signUpAction(sender: AnyObject) {
+    @IBAction func signUpAction(_ sender: AnyObject) {
         self.view.endEditing(true)
         var errorMessage: String?
         if emailTextField.text == nil || emailTextField.text!.characters.count < 1 {
@@ -85,34 +85,34 @@ class SignupTableViewController: UITableViewController {
         user.country = countryTextField.text
         if devKitNumTextField.text != nil {
             let devKitNumber = Int(devKitNumTextField.text!)
-            user.devKitNum = devKitNumber
+            user.devKitNum = devKitNumber as NSNumber?
         }
         
         let emailTemplate = AylaEmailTemplate(id: "aura_confirmation_template_01", subject: "Aura Signup", bodyHTML: nil)
         
-        signupButton.enabled = false
+        signupButton.isEnabled = false
         signupButton.alpha = 0.6
         let loginManager = AylaNetworks.shared().loginManager
-        loginManager.signUpWithUser(user, emailTemplate: emailTemplate, success: { () -> Void in
+        loginManager.signUp(with: user, emailTemplate: emailTemplate, success: { () -> Void in
             let presentingController = self.presentingViewController
-            self.dismissViewControllerAnimated(true, completion: {
+            self.dismiss(animated: true, completion: {
                 UIAlertController.alert( "Account created", message: "Please check your email for a confirmation",buttonTitle: "OK",fromController: presentingController!)
             })
         }) { (error) -> Void in
-            self.signupButton.enabled = true
+            self.signupButton.isEnabled = true
             self.signupButton.alpha = 1.0
             UIAlertController.alert("Error", message: error.aylaServiceDescription, buttonTitle: "OK", fromController: self)
         }
     }
     
-    @IBAction func enterTokenAction(sender: AnyObject) {
-        let alert = UIAlertController(title: "Enter your confirmation token", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+    @IBAction func enterTokenAction(_ sender: AnyObject) {
+        let alert = UIAlertController(title: "Enter your confirmation token", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField) -> Void in
             textField.placeholder = "Confirmation Token"
             textField.tintColor = UIColor(red: 93.0/255.0, green: 203/255.0, blue: 152/255.0, alpha: 1.0)
             self.tokenTextField = textField
         }
-        let okAction = UIAlertAction (title: "Confirm", style: UIAlertActionStyle.Default) { (action) -> Void in
+        let okAction = UIAlertAction (title: "Confirm", style: UIAlertActionStyle.default) { (action) -> Void in
             let token = self.tokenTextField!.text
             if token == nil || token!.characters.count < 1 {
                 
@@ -120,14 +120,14 @@ class SignupTableViewController: UITableViewController {
                 return;
             }
             let loginManager = AylaNetworks.shared().loginManager
-            loginManager.confirmAccountWithToken(token!, success: { () -> Void in
+            loginManager.confirmAccount(withToken: token!, success: { () -> Void in
                 let parentController = self.presentingViewController
-                self.dismissViewControllerAnimated(true, completion: { () -> Void in
-                    let alert = UIAlertController(title: "Account confirmed", message: "Enter your credentials to log in", preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler:nil)
+                self.dismiss(animated: true, completion: { () -> Void in
+                    let alert = UIAlertController(title: "Account confirmed", message: "Enter your credentials to log in", preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler:nil)
                     alert.addAction(okAction)
                     if parentController != nil {
-                        parentController!.presentViewController(alert, animated: true, completion: nil)
+                        parentController!.present(alert, animated: true, completion: nil)
                     }
                 })
                 }, failure: { (error) -> Void in
@@ -135,9 +135,9 @@ class SignupTableViewController: UITableViewController {
             })
         }
         
-        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+        let cancelAction = UIAlertAction (title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alert.addAction(cancelAction)
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 }

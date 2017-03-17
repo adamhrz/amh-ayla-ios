@@ -12,10 +12,10 @@ import iOS_AylaSDK
 class ScheduleTableViewCell : UITableViewCell {
     
     
-    @IBOutlet private weak var mainLabel: UILabel!
-    @IBOutlet private weak var infoLabelTop: UILabel!
-    @IBOutlet private weak var infoLabelBottom: UILabel!
-    @IBOutlet private weak var actionActiveLabel: UILabel!
+    @IBOutlet fileprivate weak var mainLabel: UILabel!
+    @IBOutlet fileprivate weak var infoLabelTop: UILabel!
+    @IBOutlet fileprivate weak var infoLabelBottom: UILabel!
+    @IBOutlet fileprivate weak var actionActiveLabel: UILabel!
     
 
     required init?(coder aDecoder: NSCoder) {
@@ -23,7 +23,7 @@ class ScheduleTableViewCell : UITableViewCell {
     }
 
     
-    func configure(schedule: AylaSchedule) {
+    func configure(_ schedule: AylaSchedule) {
         self.mainLabel.text = "\(schedule.displayName ?? "") (\(schedule.name))"
         
         let startTimeEachDay = "\(schedule.startTimeEachDay ?? "")"
@@ -31,14 +31,14 @@ class ScheduleTableViewCell : UITableViewCell {
         
         let startDate = "\(schedule.startDate ?? "Immediately")"
         let endDate = "\(schedule.endDate ?? "indefinite")"
-        let utc = "\(schedule.utc ? "UTC" : "Non-UTC (Local)")"
+        let utc = "\(schedule.isUsingUTC ? "UTC" : "Non-UTC (Local)")"
         
         
         self.infoLabelTop?.text = "Start \(startDate) - \(startTimeEachDay), \(utc)"
         
         self.infoLabelBottom?.text = "End \(endDate) - \(endTimeEachDay), \(utc)"
 
-        if schedule.active {
+        if schedule.isActive {
             actionActiveLabel.text = "Active"
             actionActiveLabel.textColor = UIColor.auraLeafGreenColor()
         } else {
