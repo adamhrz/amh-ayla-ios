@@ -60,6 +60,7 @@
 		5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */; };
 		9DF37BF81D779BC4003D5929 /* AuraSessionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF37BF71D779BC4003D5929 /* AuraSessionListener.swift */; };
 		A139827A1D473F9200F823A3 /* AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13982791D473F9200F823A3 /* AuraConfig.swift */; };
+		A14CF78A1E70EFE600CB51B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A14CF7891E70EFE600CB51B4 /* GoogleService-Info.plist */; };
 		A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */; };
 		A1D0914A1CCF0879003A4816 /* DeveloperOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
@@ -172,6 +173,8 @@
 		829134737FAF3C8B555560EB /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
 		9DF37BF71D779BC4003D5929 /* AuraSessionListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuraSessionListener.swift; sourceTree = "<group>"; };
 		A13982791D473F9200F823A3 /* AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConfig.swift; path = Utils/AuraConfig.swift; sourceTree = "<group>"; };
+		A14CF7891E70EFE600CB51B4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A1630A261E681A890061EBDD /* Aura-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Aura-Bridging-Header.h"; sourceTree = "<group>"; };
 		A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LANOTAViewController.swift; path = Device/Presentation/LANOTAViewController.swift; sourceTree = "<group>"; };
 		A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
@@ -471,6 +474,8 @@
 				A5712EC11E157206000675E0 /* LEDSimulator.ttf */,
 				A7351C991C753C370073C73A /* Info.plist */,
 				A7104ADD1C7AD04A007B1AB3 /* Constants.swift */,
+				A14CF7891E70EFE600CB51B4 /* GoogleService-Info.plist */,
+				A1630A261E681A890061EBDD /* Aura-Bridging-Header.h */,
 			);
 			path = iOS_Aura;
 			sourceTree = "<group>";
@@ -667,6 +672,7 @@
 				0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */,
 				A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */,
 				5F3CFE3C1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib in Resources */,
+				A14CF78A1E70EFE600CB51B4 /* GoogleService-Info.plist in Resources */,
 				A562DBF31E147DEA007C7570 /* DeviceViews.storyboard in Resources */,
 				A78080181CBC271A00C779B5 /* Me.storyboard in Resources */,
 				A5712EC21E158501000675E0 /* LEDSimulator.ttf in Resources */,
@@ -1105,6 +1111,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "iOS_Aura/Aura-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -1123,6 +1130,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "iOS_Aura/Aura-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

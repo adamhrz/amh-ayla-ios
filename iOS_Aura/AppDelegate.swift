@@ -57,7 +57,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().tintColor = UIColor.auraTintColor()
         UINavigationBar.appearance().tintColor = UIColor.auraTintColor()
         
+        setupGoogleSignIn()
+        
         return true
+    }
+    
+    /// Initialize Google sign-in
+    func setupGoogleSignIn() {
+        var configureError: NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") {
+            let dict = NSDictionary(contentsOfFile: path)
+            GIDSignIn.sharedInstance().serverClientID = dict!["SERVER_CLIENT_ID"] as! String
+        }
     }
     
     // Instantiate and display a UIAlertViewController as needed
@@ -98,6 +111,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             openConfigAtURL(filePath)
             
+            return true
+        }
+        
+        // Google Sign In
+        if GIDSignIn.sharedInstance().handle(url,
+                                             sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                             annotation: options[UIApplicationOpenURLOptionsKey.annotation]) {
             return true
         }
         
@@ -173,6 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                         okayHandler:nil,
                                         cancelHandler:nil)
         }
+        
         return true
     }
     

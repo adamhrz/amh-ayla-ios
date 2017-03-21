@@ -66,6 +66,11 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                     }
             })
         }
+        
+        // If we use Google Sign In, we also need sign out from SDK
+        if (sessionManager?.authProvider.isKind(of: AylaGoogleOAuthProvider.self))! {
+            GIDSignIn.sharedInstance().signOut()
+        }
     }
     
     fileprivate func getDeviceModel () -> String? {

@@ -61,6 +61,8 @@ class LoginViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
+        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance().delegate = self
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -79,7 +81,13 @@ class LoginViewController: UIViewController {
         super.viewDidAppear(animated)
         self.autoLogin()
     }
-  
+    
+    @IBAction func googleLoginPressed(sender: AnyObject) {
+//        presentLoading("Sign in with Google...")
+        GIDSignIn.sharedInstance().signOut()
+        GIDSignIn.sharedInstance().signIn()
+    }
+    
     /**
      Login
      */
@@ -291,5 +299,48 @@ class LoginViewController: UIViewController {
             default: break
             }
         }
+    }
+}
+
+extension LoginViewController: GIDSignInUIDelegate {
+    // Present a view that prompts the user to sign in with Google
+    func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
+        self.present(viewController, animated: true, completion: nil)
+    }
+    
+    // Dismiss the "Sign in with Google" view
+    func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
+        self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension LoginViewController: GIDSignInDelegate {
+    public func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if (error == nil) {
+            // Perform any operations on signed in user here.
+            let serverAuthCode = user.serverAuthCode
+            
+            print("Google auth code:\(serverAuthCode)")
+            self.startOAuth(with: serverAuthCode ?? "")
+        } else {
+            print("\(error.localizedDescription)")
+        }
+    }
+    
+    func startOAuth(with authCode: String) {
+        let auth = AylaGoogleOAuthProvider(authCode: authCode)
+        
+        let loginManager = AylaNetworks.shared().loginManager
+        loginManager.login(with: auth, sessionName: AuraSessionOneName, success: { (_, sessionManager) -> Void in
+                self.performSegue(withIdentifier: self.segueIdToMain, sender: sessionManager)
+            
+            }, failure: { (error) -> Void in
+                self.presentError(error)
+        })
+    }
+    
+    public func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
+        // Perform any operations when the user disconnects from app here.
+        // ...
     }
 }
