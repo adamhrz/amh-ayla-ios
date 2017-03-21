@@ -47,6 +47,7 @@ else
     repo_type="internal"
 end
 conditional_assign "ayla_sdk_repo", "https://github.com/AylaNetworks/iOS_AylaSDK#{@ayla_public}.git"
+conditional_assign "ayla_local_sdk_repo", "https://github.com/AylaNetworks/iOS_LocalDevice_SDK#{@ayla_public}.git"
 # hard-coded to be imported by Aura code. Both public and internal repo have to use this name
 sdk_pod="iOS_AylaSDK"
 
