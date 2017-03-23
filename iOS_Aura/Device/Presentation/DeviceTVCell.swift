@@ -8,7 +8,6 @@
 
 import UIKit
 import iOS_AylaSDK
-import Ayla_LocalDevice_SDK
 
 class DeviceTVCell : UITableViewCell {
 

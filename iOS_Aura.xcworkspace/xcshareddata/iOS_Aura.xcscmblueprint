@@ -7,7 +7,7 @@
     "856C97837B816B8F9A5CD69FDD4A7467BFF5776C" : 9223372036854775807,
     "1EFDC46C6BE988318597C4B3240DACA28FB4A9CF" : 9223372036854775807
   },
-  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B7B5D937-B9EE-416E-B9A8-1E9D829A6F2D",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "A7D31613-412A-4DEC-98A7-A148FB7972EC",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "856C97837B816B8F9A5CD69FDD4A7467BFF5776C" : "iOS_Aura\/",
     "1EFDC46C6BE988318597C4B3240DACA28FB4A9CF" : "iOS_AylaSDK\/"
@@ -17,7 +17,7 @@
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iOS_Aura.xcworkspace",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github-ayla:AylaNetworks\/iOS_AylaSDK.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AylaNetworks\/iOS_AylaSDK.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1EFDC46C6BE988318597C4B3240DACA28FB4A9CF"
     },

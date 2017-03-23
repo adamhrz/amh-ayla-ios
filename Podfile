@@ -36,7 +36,6 @@ cur_branch=branch_string.split(' ')[-1]
 # default all branches to the current branch if they are still not set or empty
 conditional_assign("ayla_build_branch", cur_branch)
 conditional_assign("ayla_sdk_branch", cur_branch)
-conditional_assign("ayla_local_sdk_branch", "develop")
 
 cur_path=File.expand_path('.')
 public_repo_path_pattern=/.*_Public$/
@@ -69,10 +68,6 @@ target :iOS_Aura do
     pod sdk_pod,
     :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
     #:path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
-
-    pod 'Ayla_LocalDevice_SDK',
-    :git => "#{@ayla_local_sdk_repo}", :branch => "#{@ayla_local_sdk_branch}"
-    #:path => '../Ayla_LocalDevice_SDK', :branch => "#{@ayla_local_sdk_branch}"
 
     pod 'SAMKeychain'
     pod 'PDKeychainBindingsController'

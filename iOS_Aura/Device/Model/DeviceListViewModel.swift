@@ -8,7 +8,6 @@
 
 import Foundation
 import iOS_AylaSDK
-import Ayla_LocalDevice_SDK
 
 protocol DeviceListViewModelDelegate: class {
     func deviceListViewModel(_ viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)

@@ -7,8 +7,10 @@
 //
 
 import UIKit
-import Ayla_LocalDevice_SDK
+import iOS_AylaSDK
 
+
+/// GrillRight off the shelff device doesn't implement an Ayla GATT Service, therefore all characteristics in service must be hardcoded, for the hardwareAddress, returning the local UUID
 class GrillRightCandidate: AylaBLECandidate {
     override var productName: String? {
         return GrillRightDevice.GRILL_RIGHT_DEFAULT_NAME

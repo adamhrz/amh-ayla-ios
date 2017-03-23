@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreBluetooth
-import Ayla_LocalDevice_SDK
+import iOS_AylaSDK
 
 class AuraLocalDeviceManager: AylaBLEDeviceManager {
     override init() {
@@ -19,10 +19,13 @@ class AuraLocalDeviceManager: AylaBLEDeviceManager {
         case emptyServiceArray
     }
     static let SERVICE_GRILL_RIGHT = CBUUID(string: GrillRightDevice.SERVICE_GRILL_RIGHT)
+    static let SERVICE_GENERIC_THERMOSTAT = CBUUID(string: SERVICE_AYLA_BLE)
     
     override func deviceClass(forModel model: String, oemModel: String, uniqueId: String) -> AnyClass? {
         if model.compare(GrillRightDevice.GRILL_RIGHT_MODEL) == .orderedSame {
             return GrillRightDevice.self
+        } else if model.compare(AylaGenericThermostatDevice.BLE_TSTAT_MODEL) == .orderedSame {
+            return AylaGenericThermostatDevice.self
         }
         return super.deviceClass(forModel: model, oemModel: oemModel, uniqueId: uniqueId)
     }
@@ -32,6 +35,9 @@ class AuraLocalDeviceManager: AylaBLEDeviceManager {
         for service in serviceUUIDs {
             if service.isEqual(AuraLocalDeviceManager.SERVICE_GRILL_RIGHT) {
                 let device = GrillRightCandidate(peripheral: peripheral,advertisementData: advertisementData,rssi: rssi,bleDeviceManager: self)
+                return device
+            } else if service.isEqual(AuraLocalDeviceManager.SERVICE_GENERIC_THERMOSTAT) {
+                let device = AylaGenericThermostatCandidate(peripheral: peripheral,advertisementData: advertisementData,rssi: rssi,bleDeviceManager: self)
                 return device
             }
         }

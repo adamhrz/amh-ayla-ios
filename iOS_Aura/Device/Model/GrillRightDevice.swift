@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Ayla_LocalDevice_SDK
+import iOS_AylaSDK
 
 class GrillRightDevice: AylaBLEDevice {
     private let logTag = "GrillRightDevice"
@@ -359,7 +359,7 @@ class GrillRightDevice: AylaBLEDevice {
             newDatapoint.createdAt = Date()
             newDatapoint.updatedAt = newDatapoint.createdAt
             let property = device.getProperty(propertyName) as? AylaLocalProperty
-            property?.originalProperty.datapoint = newDatapoint
+            
             let change = property?.update(from: newDatapoint)
             AylaLogD(tag: logTag, flag: 0, message:"Updated property \(property?.name) with value:\(value), updated value \(property?.value), original property value: \(property?.originalProperty.value)")
             if let property = property {
@@ -640,7 +640,7 @@ class GrillRightDevice: AylaBLEDevice {
         }
     }
     
-    override func characteristicsToFetch() -> [CBUUID]? {
+    override func vendorCharacteristicsToFetch(for service: CBService) -> [CBUUID]? {
         return nil
     }
     
@@ -691,61 +691,49 @@ class GrillRightDevice: AylaBLEDevice {
         }
         switch property.name {
         case GrillRightDevice.PROP_SENSOR1_TEMP:
-            return sensor1.currentTemp as AnyObject?? ?? 0 as AnyObject?
+            return sensor1.currentTemp
         case GrillRightDevice.PROP_SENSOR1_MEAT:
-            return sensor1.meatType.rawValue as AnyObject?
+            return sensor1.meatType.rawValue
         case GrillRightDevice.PROP_SENSOR1_DONENESS:
-            return sensor1.doneness.rawValue as AnyObject?
+            return sensor1.doneness.rawValue
         case GrillRightDevice.PROP_SENSOR1_TARGET_TEMP:
-            return sensor1.targetTemp as AnyObject?? ?? 0 as AnyObject?
+            return sensor1.targetTemp
         case GrillRightDevice.PROP_SENSOR1_PCT_DONE:
-            return sensor1.pctDone as AnyObject?
+            return sensor1.pctDone
         case GrillRightDevice.PROP_SENSOR1_COOKING:
-            return sensor1.cooking as AnyObject?? ?? false as AnyObject?
+            return sensor1.cooking == nil ? nil : sensor1.cooking! == 1
         case GrillRightDevice.PROP_SENSOR1_TARGET_TIME:
-            return sensor1.targetTime as AnyObject?
+            return sensor1.targetTime
         case GrillRightDevice.PROP_SENSOR1_TIME:
-            return sensor1.currentTime as AnyObject?
+            return sensor1.currentTime
         case GrillRightDevice.PROP_SENSOR1_CONTROL_MODE:
-            return sensor1.controlMode.rawValue as AnyObject?
+            return sensor1.controlMode.rawValue
         case GrillRightDevice.PROP_SENSOR1_ALARM:
-            return sensor1.alarmState.rawValue as AnyObject?
+            return sensor1.alarmState.rawValue
         case GrillRightDevice.PROP_SENSOR2_TEMP:
-            return sensor2.currentTemp as AnyObject?? ?? 0 as AnyObject?
+            return sensor2.currentTemp
         case GrillRightDevice.PROP_SENSOR2_MEAT:
-            return sensor2.meatType.rawValue as AnyObject?
+            return sensor2.meatType.rawValue
         case GrillRightDevice.PROP_SENSOR2_DONENESS:
-            return sensor2.doneness.rawValue as AnyObject?
+            return sensor2.doneness.rawValue
         case GrillRightDevice.PROP_SENSOR2_TARGET_TEMP:
-            return sensor2.targetTemp as AnyObject?? ?? 0 as AnyObject?
+            return sensor2.targetTemp
         case GrillRightDevice.PROP_SENSOR2_PCT_DONE:
-            return sensor2.pctDone as AnyObject?
+            return sensor2.pctDone
         case GrillRightDevice.PROP_SENSOR2_COOKING:
-            return sensor2.cooking as AnyObject?? ?? false as AnyObject?
+            return sensor2.cooking == nil ? nil : sensor2.cooking! == 1
         case GrillRightDevice.PROP_SENSOR2_TARGET_TIME:
-            return sensor2.targetTime as AnyObject?
+            return sensor2.targetTime
         case GrillRightDevice.PROP_SENSOR2_TIME:
-            return sensor2.currentTime as AnyObject?
+            return sensor2.currentTime
         case GrillRightDevice.PROP_SENSOR2_CONTROL_MODE:
-            return sensor2.controlMode.rawValue as AnyObject?
+            return sensor2.controlMode.rawValue
         case GrillRightDevice.PROP_SENSOR2_ALARM:
-            return sensor2.alarmState.rawValue as AnyObject?
+            return sensor2.alarmState.rawValue
         default:
             return property.baseType.compare("string") == .orderedSame ? "" : 0
         }
     }
-    
-    class WriteCommandDescriptor: NSObject {
-        var update: (() -> ())
-        var success: (() -> ())?
-        var failure: ((Error) -> ())?
-        init(update: @escaping (() ->()), success: (() -> ())?, failure: ((Error) -> ())?) {
-            self.update = update
-            self.success = success
-            self.failure = failure
-        }
-    }
-    fileprivate var writeCharacteristicDescriptors = [WriteCommandDescriptor]()
     
     override func setValue(_ value: Any, for property: AylaLocalProperty, success successBlock: (() -> Void)?, failure failureBlock: ((Error) -> Void)?) -> AylaGenericTask? {
         guard let controlCharacteristic = controlCharacteristic else {
@@ -833,29 +821,14 @@ class GrillRightDevice: AylaBLEDevice {
             command = Command.setFields(sensorCopy)
         }
         
-        writeCharacteristicDescriptors.append(WriteCommandDescriptor(update: update!, success: successBlock, failure: failureBlock))
-        let writeTask = AylaGenericTask(task: { () -> Bool in
-            self.peripheral.writeValue(command as Data, for: controlCharacteristic, type: CBCharacteristicWriteType.withResponse)
-            return true
-            }, cancel: nil)
-        self.serialQueue.async {
-            writeTask?.start()
-        }
-        return writeTask
-    }
-    override func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        guard let writeCharacteristicDescriptor = self.writeCharacteristicDescriptors.first else {
-            return
-        }
-        self.writeCharacteristicDescriptors.removeFirst()
-        if let error = error {
-            if let failure = writeCharacteristicDescriptor.failure {
-                failure(error)
+        
+        return self.write(command as Data, to: controlCharacteristic, type: CBCharacteristicWriteType.withResponse, success: {
+            if let update = update {
+                update()
             }
-            return;
-        }
-        writeCharacteristicDescriptor.update()
-        guard let success = writeCharacteristicDescriptor.success else { return }
-        success();
+            if let successBlock = successBlock {
+                successBlock()
+            }
+        }, failure: failureBlock)
     }
 }

@@ -8,7 +8,6 @@
 
 import UIKit
 import iOS_AylaSDK
-import Ayla_LocalDevice_SDK
 import ActionSheetPicker_3_0
 
 class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate, AylaDeviceManagerListener {
@@ -91,6 +90,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     func deviceListViewModel(_ viewModel: DeviceListViewModel, didSelectDevice device: AylaDevice) {
         if device.isKind(of: AylaBLEDevice.self) {
             let localDevice = device as! AylaBLEDevice
+            let detailsSegue = localDevice.model == GrillRightDevice.GRILL_RIGHT_MODEL ? self.segueIdToGrillRight : self.segueIdToDevice
             if localDevice.requiresLocalConfiguration {
                 let alert = UIAlertController(title: "Configure Local Connection", message: "This device requires additional setup to allow your mobile device to reach it. Would you like to configure this device now?", preferredStyle: .alert)
                 
@@ -101,8 +101,7 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
                             let connectToCandidate: (AylaBLECandidate) -> Void = { candidate in
                                 localDevice.map(toIdentifier: candidate.peripheral.identifier)
                                 localDevice.connectLocal(success: {
-                                    
-                                    self.performSegue(withIdentifier: self.segueIdToGrillRight, sender: device)
+                                    self.performSegue(withIdentifier: detailsSegue, sender: device)
                                     }, failure: { (error) in
                                         UIAlertController.alert("Could not connect to device", message: "Error: \(error.description)", buttonTitle: "OK", fromController: self)
                                 })
@@ -132,14 +131,14 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
                 })
                 alert.addAction(configureDeviceAction)
                 alert.addAction(UIAlertAction(title: "No, thanks", style: .cancel, handler: { _ in
-                    self.performSegue(withIdentifier: self.segueIdToGrillRight, sender: device)
+                    self.performSegue(withIdentifier: detailsSegue, sender: device)
                 }))
                 self.present(alert, animated: true, completion: nil)
                 
                 return
             }
             
-            self.performSegue(withIdentifier: segueIdToGrillRight, sender: device)
+            self.performSegue(withIdentifier: detailsSegue, sender: device)
             return
         }
         

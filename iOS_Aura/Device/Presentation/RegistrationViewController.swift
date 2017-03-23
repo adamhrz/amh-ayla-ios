@@ -8,7 +8,7 @@ import Foundation
 import PDKeychainBindingsController
 import iOS_AylaSDK
 import UIKit
-import Ayla_LocalDevice_SDK
+
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
