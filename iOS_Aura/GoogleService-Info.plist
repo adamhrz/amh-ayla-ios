@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>314041001753-b3798e03q6o9t0l2seo12i5vfbt73a8a.apps.googleusercontent.com</string>
+	<string>654054971787-coh52to0m9qta3aoj0sjg224c5t4vg0r.apps.googleusercontent.com</string>
 	<key>SERVER_CLIENT_ID</key>
-	<string>314041001753-fdg9t6bq907tbcgbkmd2eq4aflj221ca.apps.googleusercontent.com</string>
+	<string>654054971787-cnd8j8bk63hu2ovm52hribnovlml86i3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.314041001753-b3798e03q6o9t0l2seo12i5vfbt73a8a</string>
+	<string>com.googleusercontent.apps.654054971787-coh52to0m9qta3aoj0sjg224c5t4vg0r</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>AylaNetworks.iOS-Aura</string>
 	<key>PROJECT_ID</key>
-	<string>aura-160404</string>
+	<string>aura-88d7b</string>
 	<key>IS_ADS_ENABLED</key>
 	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
