@@ -45,6 +45,10 @@ class GrillRightCandidate: AylaBLECandidate {
         }
     }
     
+    func oem() -> String {
+        return "0dfc7900"
+    }
+    
     override var swVersion: String! {
         get {
             return "1.0"

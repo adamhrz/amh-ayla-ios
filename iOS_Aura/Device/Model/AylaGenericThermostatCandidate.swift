@@ -10,6 +10,10 @@ import UIKit
 import iOS_AylaSDK
 
 class AylaGenericThermostatCandidate: AylaBLECandidate {
+    func oem() -> String {
+        return "0dfc7900"
+    }
+    
     override var model: String? {
         get {
             return AylaGenericThermostatDevice.BLE_TSTAT_MODEL
