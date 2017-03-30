@@ -43,6 +43,13 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
     
     let RegistrationCellId :String = "CandidateCellId"
     
+    var fetchNodesBool : Bool = false {
+        didSet {
+            if self.tableView != nil {
+                self.tableView.reloadSections(IndexSet(integersIn: NSMakeRange(Section.nodes.rawValue, 1).toRange() ?? 0..<0), with: .automatic)
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,8 +77,8 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
         self.logTextView.backgroundColor = UIColor.white
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         refresh()
     }
     
@@ -95,10 +102,13 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
         if let reg = sessionManager?.deviceManager.registration {
             updatePrompt("Registering Node...")
             reg.register(candidate, success: { (AylaDevice) in
-                self.updatePrompt("Successfully Registered Device.")
-                
                 // Un-comment to cause app to back out after single node registration.
                 //self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                
+                //  Comment this out if uncommenting above
+                self.updatePrompt("Successfully Registered Device.")
+                self.addLog("Refreshing list.")
+                self.refresh()
                 }, failure: { (error) in
                     self.updatePrompt("Registration Failed")
                     self.addLog(error.description)
@@ -110,13 +120,14 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
     }
     
     func refresh() {
+        fetchNodesBool = true
         _ = targetGateway?.fetchCandidates(success: { (nodes) in
             self.candidateNodeList = nodes
-            self.tableView.reloadData()
+            self.fetchNodesBool = false
             }, failure: { (error) in
                 self.candidateNodeList = []
-                self.addLog("No node candidates found")
-                self.addLog(error.localizedDescription)
+                self.fetchNodesBool = false
+                self.addLog("Service: " + error.aylaServiceDescription)
         })
     }
     
@@ -148,6 +159,136 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
     // MARK - Table view delegate / data source
     func numberOfSections(in tableView: UITableView) -> Int {
         return Section.sectionCount.rawValue
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        let height : CGFloat = 40.0
+        let zeroHeight : CGFloat = 0.0001
+        if tableView.dataSource?.tableView(tableView, numberOfRowsInSection: section) == 0 ||
+            (section == Section.nodes.rawValue && fetchNodesBool == true ) {
+            return height
+        }
+        return zeroHeight
+    }
+    
+    func statusHeaderFooterView(_ labelString:String, withActivityIndicator:Bool) -> UIView {
+        let view = UIView(frame: CGRect.zero)
+        let label = UILabel()
+        label.text = labelString
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 18.0)
+        label.textColor = UIColor.lightGray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(label)
+        
+        if withActivityIndicator {
+            let activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            activityIndicator.isUserInteractionEnabled = false;
+            activityIndicator.startAnimating()
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(activityIndicator)
+            
+            NSLayoutConstraint(
+                item: label,
+                attribute: .trailing,
+                relatedBy: .equal,
+                toItem: activityIndicator,
+                attribute: .leading,
+                multiplier: 1.0,
+                constant: 8.0
+                ).isActive = true
+            
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .height,
+                relatedBy: .equal,
+                toItem: nil,
+                attribute: .notAnAttribute,
+                multiplier: 1.0,
+                constant: 22.0
+                ).isActive = true
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .width,
+                relatedBy: .equal,
+                toItem: nil,
+                attribute: .notAnAttribute,
+                multiplier: 1.0,
+                constant: 22.0
+                ).isActive = true
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .centerY,
+                relatedBy: .equal,
+                toItem: view,
+                attribute: .centerY,
+                multiplier: 1.0,
+                constant: 0.0
+                ).isActive = true
+            NSLayoutConstraint(
+                item: activityIndicator,
+                attribute: .trailing,
+                relatedBy: .equal,
+                toItem: view,
+                attribute: .trailing,
+                multiplier: 1.0,
+                constant: -16.0
+                ).isActive = true
+        } else {
+            NSLayoutConstraint(
+                item: label,
+                attribute: .trailing,
+                relatedBy: .equal,
+                toItem: view,
+                attribute: .trailing,
+                multiplier: 1.0,
+                constant: 8.0
+                ).isActive = true
+            
+        }
+        
+        NSLayoutConstraint(
+            item: label,
+            attribute: .top,
+            relatedBy: .equal,
+            toItem: view,
+            attribute: .top,
+            multiplier: 1.0,
+            constant: 0.0
+            ).isActive = true
+        
+        NSLayoutConstraint(
+            item: label,
+            attribute: .leading,
+            relatedBy: .equal,
+            toItem: view,
+            attribute: .leading,
+            multiplier: 1.0,
+            constant: 36.0
+            ).isActive = true
+        NSLayoutConstraint(
+            item: label,
+            attribute: .bottom,
+            relatedBy: .equal,
+            toItem: view,
+            attribute: .bottom,
+            multiplier: 1.0,
+            constant: 8.0
+            ).isActive = true
+        
+        return view
+    }
+    
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == Section.nodes.rawValue && fetchNodesBool == true {
+            return self.statusHeaderFooterView("Scanning...", withActivityIndicator:true)
+        }
+        if tableView.numberOfRows(inSection: section) == 0 {
+            return self.statusHeaderFooterView("None", withActivityIndicator:false)
+        }
+        return nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -197,7 +338,15 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == Section.targetGateway.rawValue{
-            self.joinWindowAlertForIndexPath(indexPath)
+            if let propertyNames = self.targetGateway?.managedPropertyNames(){
+                if propertyNames.contains("join_enable") {
+                    self.joinWindowAlertForIndexPath(indexPath)
+                } else {
+                    UIAlertController.alert("No Join Window", message: "This gateway does not have the 'join_enable' property required for setting a join window.", buttonTitle: "Ok", fromController: self, okHandler: { (action) in
+                        self.tableView.deselectRow(at: indexPath, animated: true)
+                    })
+                }
+            }
         } else {
             self.registerAlertForIndexPath(indexPath)
         }
@@ -208,7 +357,8 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
         let defaultDuration : UInt = 200
         var durationTextField = UITextField()
 
-        let message = String(format:"Attempt to open a join window for this gateway?\n\nNote: Gateway must have 'join_enable' property for this to succeed.\n\n(Default window duration is %u seconds.)", defaultDuration)
+        let message = String(format:"Attempt to open a join window for this gateway?\n\n(Default window duration is %u seconds.)", defaultDuration)
+        
         let alert = UIAlertController(title: "Open a join window?", message: message, preferredStyle: .alert)
         let joinWindowAction = UIAlertAction(title: "Open", style: .default) { (action) in
             var duration: UInt
