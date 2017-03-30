@@ -133,17 +133,16 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refresh()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.setNeedsUpdateConstraints()
+        refresh()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.updatePrompt(nil)
+        super.viewWillDisappear(animated)
     }
 
     func cancel() {
@@ -306,6 +305,9 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     
     func updatePrompt(_ prompt: String?) {
         self.navigationController?.navigationBar.topItem?.prompt = prompt
+        if prompt == nil {
+            self.navigationController?.navigationBar.setNeedsUpdateConstraints()
+        }
         addLog(prompt ?? "Done.")
     }
     
@@ -756,6 +758,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.updatePrompt(nil)
         if segue.identifier == segueIdToNodeRegistrationView {
             let vc = segue.destination as! NodeRegistrationViewController
             vc.targetGateway = (sender as! AylaDeviceGateway)

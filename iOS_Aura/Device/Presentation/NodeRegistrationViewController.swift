@@ -91,8 +91,8 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.updatePrompt(nil)
+        super.viewWillDisappear(animated)
     }
     
     func getCandidate(_ indexPath:IndexPath) -> AylaRegistrationCandidate? {
@@ -147,6 +147,9 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
     
     func updatePrompt(_ prompt: String?) {
         self.navigationController?.navigationBar.topItem?.prompt = prompt
+        if prompt == nil {
+            self.navigationController?.navigationBar.setNeedsUpdateConstraints()
+        }
         addLog(prompt ?? "done")
     }
     
