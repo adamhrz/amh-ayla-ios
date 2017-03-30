@@ -64,10 +64,10 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        let cancel = UIBarButtonItem(barButtonSystemItem:.cancel, target: self, action: #selector(RegistrationViewController.cancel))
+        let cancel = UIBarButtonItem(barButtonSystemItem:.cancel, target: self, action: #selector(NodeRegistrationViewController.cancel))
         self.navigationItem.leftBarButtonItem = cancel
         
-        let refresh = UIBarButtonItem(barButtonSystemItem:.refresh, target: self, action: #selector(RegistrationViewController.refresh))
+        let refresh = UIBarButtonItem(barButtonSystemItem:.refresh, target: self, action: #selector(NodeRegistrationViewController.refresh))
         self.navigationItem.rightBarButtonItem = refresh
         
         // Add tap recognizer to dismiss keyboard.
@@ -77,13 +77,22 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
         self.logTextView.backgroundColor = UIColor.white
     }
     
+    func cancel(){
+        // Use this line instead to back all the way out of registration
+        //self.navigationController?.dismiss(animated: true, completion: nil)
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.navigationController?.navigationBar.setNeedsUpdateConstraints()
         refresh()
     }
     
-    func cancel() {
-        self.navigationController?.dismiss(animated: true, completion: nil)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.updatePrompt(nil)
     }
     
     func getCandidate(_ indexPath:IndexPath) -> AylaRegistrationCandidate? {
@@ -107,11 +116,10 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
                 
                 //  Comment this out if uncommenting above
                 self.updatePrompt("Successfully Registered Device.")
-                self.addLog("Refreshing list.")
                 self.refresh()
                 }, failure: { (error) in
                     self.updatePrompt("Registration Failed")
-                    self.addLog(error.description)
+                    self.addLog(error.aylaServiceDescription)
             })
         }
         else {
@@ -121,7 +129,9 @@ class NodeRegistrationViewController: UIViewController, UITableViewDataSource, U
     
     func refresh() {
         fetchNodesBool = true
+        self.addLog("Fetching any node candidates")
         _ = targetGateway?.fetchCandidates(success: { (nodes) in
+            self.addLog("Success. Fetched \(nodes.count) node candidates.")
             self.candidateNodeList = nodes
             self.fetchNodesBool = false
             }, failure: { (error) in

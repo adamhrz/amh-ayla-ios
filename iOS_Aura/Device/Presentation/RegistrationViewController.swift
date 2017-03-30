@@ -135,6 +135,16 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
         super.viewWillAppear(animated)
         refresh()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.navigationBar.setNeedsUpdateConstraints()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.updatePrompt(nil)
+    }
 
     func cancel() {
         self.navigationController?.dismiss(animated: true, completion: nil)
@@ -178,7 +188,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                 self.navigationController?.dismiss(animated: true, completion: nil)
                 }, failure: { (error) in
                     self.updatePrompt("Failed to register Local Device")
-                    self.addLog(error.description)
+                    self.addLog(error.aylaServiceDescription)
             })
             return
         }
@@ -193,7 +203,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     self.navigationController?.dismiss(animated: true, completion: nil)
                 }, failure: { (error) in
                     self.updatePrompt("Failed")
-                    self.addLog(error.description)
+                    self.addLog(error.aylaServiceDescription)
             })
         }
         else {
@@ -223,7 +233,7 @@ class RegistrationViewController: UIViewController, UITableViewDataSource, UITab
                     //Skip 404 for now
                     if let httpResp = (error as NSError).userInfo[AylaHTTPErrorHTTPResponseKey] as? HTTPURLResponse {
                         if(httpResp.statusCode != 404) {
-                            self.addLog("Same-LAN - " + error.description)
+                            self.addLog("Same-LAN - " + error.aylaServiceDescription)
                         }
                         else {
                             self.addLog("No Same LAN candidate")
