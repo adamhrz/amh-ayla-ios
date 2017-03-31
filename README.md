@@ -76,6 +76,20 @@ If you would like to contribute your own code change to our project, please subm
 
 # Release Notes
 
+### v5.5.00     2017-03-31
+
+New & Improved App
+- Adds pull to refresh device list
+- Google OAuth2 Support
+  - Replaces Webview OAuth with new AylaGoogleOAuthProvider class implementation
+- Local Device alpha
+
+Bug Fixes & Chores
+- Support for iPhone 7 using iOS 10.3
+- Built using iOS_AylaSDK_Public version 5.5.00
+- Bug Fix: Don't over write property filter from poll updates
+- Includes are previous hot fixes
+
 ### v5.4.02     2017-03-17
 - Support SDK 5.4.02
 
