@@ -31,7 +31,13 @@ extension Error {
                 for errorString in responses {
                     returnString = (returnString != nil ? returnString! + ", " + errorString : errorString)
                 }
-                return returnString?.capitalized
+                return returnString != "" ? returnString?.capitalized : nil
+            } else if let responseBase = responseDict["base"] as? [String] {
+                var returnString : String? = nil
+                for errorString in responseBase {
+                    returnString = (returnString != nil ? returnString! + ", " + errorString : errorString)
+                }
+                return returnString != "" ? returnString : nil
             }
         } else if let originalError = (self as NSError).userInfo[AylaHTTPErrorOrignialErrorKey] as? NSError {
             return originalError.localizedDescription
