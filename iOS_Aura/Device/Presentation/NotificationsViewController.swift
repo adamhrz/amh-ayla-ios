@@ -73,7 +73,7 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
         fetchTriggersGroup.notify(queue: DispatchQueue.main) {
             if !fetchErrors.isEmpty {
                 AylaLogE(tag: self.logTag, flag: 0, message:"Failed to fetch \(fetchErrors.count) Property Triggers: \(fetchErrors)")
-                UIAlertController.alert("Failed to fetch \(fetchErrors.count) Property Triggers", message: "First error: \(fetchErrors.first?.description)", buttonTitle: "OK", fromController: self)
+                UIAlertController.alert("Failed to fetch \(fetchErrors.count) Property Triggers", message: "First error: \(fetchErrors.first?.description ?? "nil")", buttonTitle: "OK", fromController: self)
             }
             
             // Now that all of the fetch requests have completed, update our table with the new data

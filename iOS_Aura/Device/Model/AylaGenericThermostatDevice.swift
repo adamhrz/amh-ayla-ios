@@ -106,10 +106,10 @@ class AylaGenericThermostatDevice: AylaBLEDevice {
         newDatapoint.updatedAt = newDatapoint.createdAt
         
         guard let change = property.update(from: newDatapoint) else {
-            AylaLogD(tag: logTag, flag: 0, message:"No changes in property \(property.name) with new value:\(value), original property value: \(property.originalProperty.value)")
+            AylaLogD(tag: logTag, flag: 0, message:"No changes in property \(property.name) with new value:\(value), original property value: \(property.originalProperty.value ?? "nil")")
             return
         }
-        AylaLogD(tag: logTag, flag: 0, message:"Updated property \(property.name) with value:\(value), updated value \(property.value), original property value: \(property.originalProperty.value)")
+        AylaLogD(tag: logTag, flag: 0, message:"Updated property \(property.name) with value:\(value), updated value \(property.value ?? "nil"), original property value: \(property.originalProperty.value ?? "nil")")
         property.pushUpdateToCloud(success: nil, failure: nil)
 
         notifyChanges(toListeners: [change]);

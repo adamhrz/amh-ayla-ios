@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupGoogleSignIn() {
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        assert(configureError == nil, "Error configuring Google services: \(String(describing: configureError))")
         if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") {
             let dict = NSDictionary(contentsOfFile: path)
             GIDSignIn.sharedInstance().serverClientID = dict!["SERVER_CLIENT_ID"] as! String
@@ -131,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Pull DSN from URL
             let dsnParam = queryitems?.filter({$0.name == "dsn"}).first
             let dsn = dsnParam?.value
-            AylaLogD(tag: logTag, flag: 0, message:"Will Setup Wi-Fi for DSN: \(dsn)")
+            AylaLogD(tag: logTag, flag: 0, message:"Will Setup Wi-Fi for DSN: \(dsn ?? "nil")")
             
             // Instantiate and Push SetupViewController
             let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
@@ -144,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Pull Token from URL
             let tokenParam = queryitems?.filter({$0.name == "token"}).first;
             let token = tokenParam?.value;
-            AylaLogD(tag: logTag, flag: 0, message:"Will Confirm Sign Up with Token: \(token)")
+            AylaLogD(tag: logTag, flag: 0, message:"Will Confirm Sign Up with Token: \(token ?? "nil")")
             
             presentAlertController("Account Confirmation",
                                    message: "Would you like to confirm to this account?",

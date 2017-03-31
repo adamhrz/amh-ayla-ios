@@ -107,7 +107,7 @@ class TestModel : NSObject, TestPanelVCDelegate {
             self.testPanelVC?.errCountLabel.text = "\(errCount+1)"
         }
         
-        addLog(.fail, log: "\(tc.description) err: \(error?.description)")
+        addLog(.fail, log: "\(tc.description) err: \(error?.description ?? "nil")")
         tc.fail()
     }
     

@@ -361,7 +361,7 @@ class GrillRightDevice: AylaBLEDevice {
             let property = device.getProperty(propertyName) as? AylaLocalProperty
             
             let change = property?.update(from: newDatapoint)
-            AylaLogD(tag: logTag, flag: 0, message:"Updated property \(property?.name) with value:\(value), updated value \(property?.value), original property value: \(property?.originalProperty.value)")
+            AylaLogD(tag: logTag, flag: 0, message:"Updated property \(property?.name  ?? "nil") with value:\(value), updated value \(property?.value ?? "nil"), original property value: \(property?.originalProperty.value  ?? "nil")")
             if let property = property {
                 property.pushUpdateToCloud(success: nil, failure: nil)
             }
@@ -386,7 +386,7 @@ class GrillRightDevice: AylaBLEDevice {
                     changes.append(change)
                 }
             }
-            AylaLogD(tag: logTag, flag: 0, message:"Current temperature: \(currentTemp)")
+            AylaLogD(tag: logTag, flag: 0, message:"Current temperature: \(currentTemp != nil ? String(describing:currentTemp!) : "nil")")
             
             //isCooking
             var isCookingByte: Int8 = 0

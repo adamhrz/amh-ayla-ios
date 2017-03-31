@@ -320,7 +320,7 @@ extension LoginViewController: GIDSignInDelegate {
             // Perform any operations on signed in user here.
             let serverAuthCode = user.serverAuthCode
             
-            print("Google auth code:\(serverAuthCode)")
+            print("Google auth code:\(serverAuthCode ?? "nil")")
             self.startOAuth(with: serverAuthCode ?? "")
         } else {
             print("\(error.localizedDescription)")
