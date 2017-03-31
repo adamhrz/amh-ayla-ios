@@ -1,4 +1,4 @@
-#Aura
+# Aura
 
 #### Ayla Networks' iOS Demo Application
 
@@ -14,7 +14,6 @@ The following steps should be run in Terminal.
     $ git clone https://github.com/AylaNetworks/iOS_Aura_Public
     ```
 
-    
 2.  Install [Cocoapods](https://cocoapods.org) if you do not already have it: 
 
      ```bash
@@ -57,32 +56,33 @@ With `appledoc` installed, you may run the 'Documentation' target within the `iO
 ## Dependencies
 
 - AFNetworking ([License](https://github.com/AFNetworking/AFNetworking/blob/master/LICENSE))
+- ActionSheetPicker-3.0 ([License](https://github.com/skywinder/ActionSheetPicker-3.0/blob/master/LICENSE))
 - CocoaAsyncSocket ([License](https://github.com/robbiehanson/CocoaAsyncSocket/wiki/License))
 - CocoaHTTPServer ([License](https://github.com/robbiehanson/CocoaHTTPServer/blob/master/LICENSE.txt))
+- Google/SignIn ([License](https://github.com/googlesamples/google-services/blob/master/LICENSE))
 - SocketRocket ([License](https://github.com/square/SocketRocket/blob/master/LICENSE))
 - SwiftKeychainWrapper ([License](https://github.com/jrendel/SwiftKeychainWrapper/blob/develop/LICENSE))
 - PDKeychainBindingsController ([License](https://github.com/carlbrown/PDKeychainBindingsController/blob/master/LICENSE))
 - SAMKeychain ([License](https://github.com/soffes/SAMKeychain/blob/master/LICENSE))
-- Google/SignIn ([License](https://github.com/googlesamples/google-services/blob/master/LICENSE))
 
 ## Contribute your code
 
 If you would like to contribute your own code change to our project, please submit pull requests against the "incoming" branch on Github. We will review and approve your pull requests if appropriate.
 
 ## Requirements
-Xcode: 8.3
-CocoaPods: 1.1.1
-iOS 9.0 or higher
+- Xcode: 8.3
+- CocoaPods: 1.1.1
+- iOS 9.0 or higher
 
 # Release Notes
 
-## v5.4.02     2017-03-17
+### v5.4.02     2017-03-17
 - Support SDK 5.4.02
 
-## v5.4.01     2017-03-14
+### v5.4.01     2017-03-14
 - Fix pod install bug
 
-## v5.4.00     2017-02-02
+### v5.4.00     2017-02-02
 #### New & Improved App
 - Support for iOS_AylaSDK 5.4.00
 - Improved WiFi Setup status
@@ -94,10 +94,10 @@ iOS 9.0 or higher
 - Built using iOS_AylaSDK_Public version 5.4.00
 - Includes are previous hot fixes
 
-## v5.3.01     2016-11-11
+### v5.3.01     2016-11-11
 - support iOS_AylaSDK 5.3.01
 
-## v5.3.00     2016-10-22
+### v5.3.00     2016-10-22
 #### New & Improved
 - Support for iOS_AylaSDK 5.3.00
 - New iOS 10 support
@@ -111,7 +111,7 @@ iOS 9.0 or higher
 #### Bug Fixes & Chores
 - All 5.2.xx hot-fixes
 
-## v5.2.00    2016-08-22
+### v5.2.00    2016-08-22
 
 #### New & Improved
 - Offline (LAN) sign-in and LAN device connectivity using cached data
@@ -130,7 +130,7 @@ iOS 9.0 or higher
 - UI improvements
 - Built using the latest SDK
 
-## v5.1.00    2016-06-27
+### v5.1.00    2016-06-27
 
 #### New Features:
 - Offline (LAN) sign-in and LAN device connectivity using cached data
@@ -143,11 +143,12 @@ iOS 9.0 or higher
 #### Enhancements and Bug Fixes:
 - Code updates to support 5.1.00 Ayla Mobile SDK
 
-## v5.0.02    2016-06-15
+### v5.0.02    2016-06-15
 - add release notes about CocoaPods version requirement
 
-## v5.0.01    2016-05-24
+### v5.0.01    2016-05-24
 - work with iOS_AylaSDK 5.0.01
 
 ## v5.0.00    2016-04-22
--initial release (requires Ayla SDK v5.0.00)
+- initial release (requires Ayla SDK v5.0.00)
+
