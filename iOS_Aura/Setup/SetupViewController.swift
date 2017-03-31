@@ -122,7 +122,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
      */
     fileprivate func logRegistrationTypeForSetupDevice(_ setupDevice:AylaSetupDevice){
         let registrationType = AylaRegistration.registrationName(from: setupDevice.registrationType)
-        addDescription("Device will use \(registrationType) Registration Type.")
+        addDescription("Device will use \(registrationType ?? "nil") Registration Type.")
 
     }
     
@@ -356,7 +356,7 @@ class SetupViewController: UIViewController, UITableViewDelegate, UITableViewDat
         alertController.addAction(UIAlertAction(title: "Got it", style: .cancel, handler: nil))
         alert = alertController
         self.present(alertController, animated: true, completion: nil)
-        addDescription("Error: \(message ?? "")\n    '\(serviceDescription)'")
+        addDescription("Error: \(message ?? "")\n    '\(serviceDescription ?? "nil")'")
     }
     
     @IBAction fileprivate func cancel(_ sender: AnyObject) {

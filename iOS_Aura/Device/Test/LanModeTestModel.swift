@@ -221,7 +221,7 @@ class LanModeTestModel: TestModel {
             dp.value = NSNumber(value: 1 as Int32)
         }
 
-        addLog(.info, log: "Using property \(property?.name), dp.value \(dp.value as AnyObject)")
+        addLog(.info, log: "Using property \(property?.name ?? "nil"), dp.value \(dp.value as AnyObject)")
         
         let confirm = device?.lanTest_getConfirmingPropertyAndDatapointParamsFor(property!, dpParams: dp)
         createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdValue) -> Bool in
@@ -246,7 +246,7 @@ class LanModeTestModel: TestModel {
         // Create a datapoint
         let dp = AylaDatapointParams()
         dp.value = "TEST_STRING \(Int(arc4random_uniform(9999)))"
-        addLog(.info, log: "Using property \(property?.name), dp.value \(dp.value as AnyObject)")
+        addLog(.info, log: "Using property \(property?.name ?? "nil"), dp.value \(dp.value as AnyObject)")
         
         let confirm = device?.lanTest_getConfirmingPropertyAndDatapointParamsFor(property!, dpParams: dp)
         createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdValue) -> Bool in
@@ -277,7 +277,7 @@ class LanModeTestModel: TestModel {
             dp.value = NSNumber(value: 1 as Int32)
         }
         
-        addLog(.info, log: "Using property \(property?.name), dp.value \(dp.value as AnyObject?)")
+        addLog(.info, log: "Using property \(property?.name ?? "nil"), dp.value \(String(describing: (dp.value as AnyObject?) ?? nil))")
         
         _ = property?.createDatapointLAN(dp, success: { (datapoint) in
             if datapoint.ackStatus == 0 {

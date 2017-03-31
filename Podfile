@@ -78,5 +78,6 @@ end
 post_install do |installer|
   installer.pods_project.build_configurations.each do |config|
     config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << " DD_LEGACY_MACROS=1"
+    config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
   end
 end
