@@ -60,14 +60,25 @@
 		5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEECBAB1D1C8A3700E5AF64 /* ContactNotificationButton.swift */; };
 		9DF37BF81D779BC4003D5929 /* AuraSessionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF37BF71D779BC4003D5929 /* AuraSessionListener.swift */; };
 		A139827A1D473F9200F823A3 /* AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13982791D473F9200F823A3 /* AuraConfig.swift */; };
+		A14CF78A1E70EFE600CB51B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A14CF7891E70EFE600CB51B4 /* GoogleService-Info.plist */; };
 		A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */; };
 		A1D0914A1CCF0879003A4816 /* DeveloperOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */; };
 		A502AEB01CA45698002B9C75 /* SignupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */; };
 		A54B961B1CBD9C97009115AE /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */; };
 		A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */; };
+		A54D9EFD1E786DA600DEA420 /* AylaGenericThermostatCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54D9EFC1E786DA600DEA420 /* AylaGenericThermostatCandidate.swift */; };
+		A54D9EFF1E7871CB00DEA420 /* AylaGenericThermostatDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54D9EFE1E7871CB00DEA420 /* AylaGenericThermostatDevice.swift */; };
+		A54DC07D1E71D5F000F10707 /* LogFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54DC07C1E71D5F000F10707 /* LogFunctions.swift */; };
+		A55E91E51E02147000DD8E7D /* GrillRightDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55E91E41E02147000DD8E7D /* GrillRightDevice.swift */; };
+		A562DBF31E147DEA007C7570 /* DeviceViews.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A562DBF11E147DEA007C7570 /* DeviceViews.storyboard */; };
+		A5712EC21E158501000675E0 /* LEDSimulator.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5712EC11E157206000675E0 /* LEDSimulator.ttf */; };
+		A5712EC41E158656000675E0 /* GrillRightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5712EC31E158656000675E0 /* GrillRightViewController.swift */; };
+		A5712EC61E1586CF000675E0 /* GrillRightSensorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5712EC51E1586CF000675E0 /* GrillRightSensorViewController.swift */; };
 		A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */; };
 		A57EDB821D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */; };
 		A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */; };
+		A5A90A001E0D7A07002C62D0 /* GrillRightCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A909FF1E0D7A07002C62D0 /* GrillRightCandidate.swift */; };
+		A5AF0A261E0B324200399BF4 /* AuraLocalDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AF0A251E0B324200399BF4 /* AuraLocalDeviceManager.swift */; };
 		A5B641211D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */; };
 		A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */; };
 		A5E0DF3F1CE257E800D0E87F /* ScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */; };
@@ -104,7 +115,6 @@
 		A7A8C9081C7B8FEA00612C39 /* PropertyListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */; };
 		A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */; };
 		A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */; };
-		A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,14 +175,26 @@
 		829134737FAF3C8B555560EB /* Pods-iOS_Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.release.xcconfig"; sourceTree = "<group>"; };
 		9DF37BF71D779BC4003D5929 /* AuraSessionListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuraSessionListener.swift; sourceTree = "<group>"; };
 		A13982791D473F9200F823A3 /* AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraConfig.swift; path = Utils/AuraConfig.swift; sourceTree = "<group>"; };
+		A14CF7891E70EFE600CB51B4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A1630A261E681A890061EBDD /* Aura-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Aura-Bridging-Header.h"; sourceTree = "<group>"; };
 		A19D30DB1D0E66DD005BA69A /* LANOTAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LANOTAViewController.swift; path = Device/Presentation/LANOTAViewController.swift; sourceTree = "<group>"; };
 		A1D091491CCF0879003A4816 /* DeveloperOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsViewController.swift; sourceTree = "<group>"; };
 		A502AEAF1CA45698002B9C75 /* SignupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupTableViewController.swift; sourceTree = "<group>"; };
 		A54B961A1CBD9C97009115AE /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileTableViewController.swift; path = Me/ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A54B96221CBF1075009115AE /* PasswordResetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordResetTableViewController.swift; sourceTree = "<group>"; };
+		A54D9EFC1E786DA600DEA420 /* AylaGenericThermostatCandidate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AylaGenericThermostatCandidate.swift; path = Device/Model/AylaGenericThermostatCandidate.swift; sourceTree = "<group>"; };
+		A54D9EFE1E7871CB00DEA420 /* AylaGenericThermostatDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AylaGenericThermostatDevice.swift; path = Device/Model/AylaGenericThermostatDevice.swift; sourceTree = "<group>"; };
+		A54DC07C1E71D5F000F10707 /* LogFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogFunctions.swift; path = Log/LogFunctions.swift; sourceTree = "<group>"; };
+		A55E91E41E02147000DD8E7D /* GrillRightDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightDevice.swift; path = Device/Model/GrillRightDevice.swift; sourceTree = "<group>"; };
+		A562DBF21E147DEA007C7570 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/DeviceViews.storyboard; sourceTree = "<group>"; };
+		A5712EC11E157206000675E0 /* LEDSimulator.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LEDSimulator.ttf; sourceTree = "<group>"; };
+		A5712EC31E158656000675E0 /* GrillRightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightViewController.swift; path = Device/Presentation/GrillRightViewController.swift; sourceTree = "<group>"; };
+		A5712EC51E1586CF000675E0 /* GrillRightSensorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightSensorViewController.swift; path = Device/Presentation/GrillRightSensorViewController.swift; sourceTree = "<group>"; };
 		A57B34381DAC2BC400FE7513 /* NetworkProfilerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkProfilerModel.swift; sourceTree = "<group>"; };
 		A57EDB811D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AylaSystemSettings+AuraConfig.swift"; path = "Utils/AylaSystemSettings+AuraConfig.swift"; sourceTree = "<group>"; };
 		A5941FA41C878DD5005E9EBF /* OAuthLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLoginViewController.swift; sourceTree = "<group>"; };
+		A5A909FF1E0D7A07002C62D0 /* GrillRightCandidate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GrillRightCandidate.swift; path = Device/Model/GrillRightCandidate.swift; sourceTree = "<group>"; };
+		A5AF0A251E0B324200399BF4 /* AuraLocalDeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuraLocalDeviceManager.swift; path = Device/Model/AuraLocalDeviceManager.swift; sourceTree = "<group>"; };
 		A5B641201D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SAMKeychain+AylaUtils.swift"; path = "Utils/SAMKeychain+AylaUtils.swift"; sourceTree = "<group>"; };
 		A5E0DF3C1CE2579000D0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Schedules.storyboard; sourceTree = "<group>"; };
 		A5E0DF3E1CE257E800D0E87F /* ScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScheduleTableViewController.swift; path = Device/Presentation/ScheduleTableViewController.swift; sourceTree = "<group>"; };
@@ -215,7 +237,6 @@
 		A7A8C9071C7B8FEA00612C39 /* PropertyListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyListViewModel.swift; path = Device/Model/PropertyListViewModel.swift; sourceTree = "<group>"; };
 		A7A8C9091C7B999000612C39 /* PropertyTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyTVCell.swift; path = Device/Presentation/PropertyTVCell.swift; sourceTree = "<group>"; };
 		A7A8C90B1C7BA09400612C39 /* DeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceViewController.swift; path = Device/Presentation/DeviceViewController.swift; sourceTree = "<group>"; };
-		A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogHandler.swift; path = Log/LogHandler.swift; sourceTree = "<group>"; };
 		EE257B64FF7ADCB0247EA72C /* Pods-iOS_Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Aura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Aura/Pods-iOS_Aura.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -305,6 +326,7 @@
 				5F4632931CCAE919005580EC /* Signup.storyboard */,
 				A78DC8EB1CB8538F002EE6B0 /* Test.storyboard */,
 				5F7277F21CF4EBEB009D153F /* TimeZonePicker.storyboard */,
+				A562DBF11E147DEA007C7570 /* DeviceViews.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -315,6 +337,18 @@
 				5F6C38391D122108000CC897 /* AylaDevice_extensions.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		A55E91E31E02142100DD8E7D /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				A55E91E41E02147000DD8E7D /* GrillRightDevice.swift */,
+				A5AF0A251E0B324200399BF4 /* AuraLocalDeviceManager.swift */,
+				A5A909FF1E0D7A07002C62D0 /* GrillRightCandidate.swift */,
+				A54D9EFC1E786DA600DEA420 /* AylaGenericThermostatCandidate.swift */,
+				A54D9EFE1E7871CB00DEA420 /* AylaGenericThermostatDevice.swift */,
+			);
+			name = Local;
 			sourceTree = "<group>";
 		};
 		A7104ACB1C757FA7007B1AB3 /* Login */ = {
@@ -352,6 +386,7 @@
 		A7104AD71C7ABBDC007B1AB3 /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				A55E91E31E02142100DD8E7D /* Local */,
 				A78DC8F31CB87213002EE6B0 /* Test */,
 				A7104ADF1C7AD263007B1AB3 /* Model */,
 				A7104AD81C7AC290007B1AB3 /* Presentation */,
@@ -387,6 +422,8 @@
 				0F660F901D35A493000522AA /* ScheduleActionEditorViewController.swift */,
 				0F660F8E1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift */,
 				5F7277F51CF4EC11009D153F /* TimeZonePickerViewController.swift */,
+				A5712EC31E158656000675E0 /* GrillRightViewController.swift */,
+				A5712EC51E1586CF000675E0 /* GrillRightSensorViewController.swift */,
 			);
 			name = Presentation;
 			sourceTree = "<group>";
@@ -440,8 +477,11 @@
 				A7351C8D1C753C370073C73A /* AppDelegate.swift */,
 				5F46328F1CCAE8D1005580EC /* Storyboards */,
 				A7351C941C753C370073C73A /* Assets.xcassets */,
+				A5712EC11E157206000675E0 /* LEDSimulator.ttf */,
 				A7351C991C753C370073C73A /* Info.plist */,
 				A7104ADD1C7AD04A007B1AB3 /* Constants.swift */,
+				A14CF7891E70EFE600CB51B4 /* GoogleService-Info.plist */,
+				A1630A261E681A890061EBDD /* Aura-Bridging-Header.h */,
 			);
 			path = iOS_Aura;
 			sourceTree = "<group>";
@@ -498,7 +538,7 @@
 		A7A8C90D1C7BC7A700612C39 /* Log */ = {
 			isa = PBXGroup;
 			children = (
-				A7A8C90E1C7BC7CE00612C39 /* LogHandler.swift */,
+				A54DC07C1E71D5F000F10707 /* LogFunctions.swift */,
 			);
 			name = Log;
 			sourceTree = "<group>";
@@ -578,7 +618,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Ayla Networks";
 				TargetAttributes = {
 					220D147E1CBD6C77001BC00B = {
@@ -587,16 +627,16 @@
 					A7351C891C753C360073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = 4K93KVU666;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 					};
 					A7351C9D1C753C370073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 						TestTargetID = A7351C891C753C360073C73A;
 					};
 					A7351CA81C753C370073C73A = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 						TestTargetID = A7351C891C753C360073C73A;
 					};
 				};
@@ -638,7 +678,10 @@
 				0F4722201CDD4D600055D6C3 /* CreateShare.storyboard in Resources */,
 				A5E0DF3D1CE2579000D0E87F /* Schedules.storyboard in Resources */,
 				5F3CFE3C1D1C278B00386C5E /* PropertyNotificationDetailsContactTableViewCell.xib in Resources */,
+				A14CF78A1E70EFE600CB51B4 /* GoogleService-Info.plist in Resources */,
+				A562DBF31E147DEA007C7570 /* DeviceViews.storyboard in Resources */,
 				A78080181CBC271A00C779B5 /* Me.storyboard in Resources */,
+				A5712EC21E158501000675E0 /* LEDSimulator.ttf in Resources */,
 				5F6046D61D0B55B6007E1AE6 /* Notifications.storyboard in Resources */,
 				5F4632951CCAE919005580EC /* Signup.storyboard in Resources */,
 				A7351C931C753C370073C73A /* Main.storyboard in Resources */,
@@ -674,7 +717,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# please install ruby gem \"jazzy\" first by #sudo gem install jazzy\ncommand -v jazzy >/dev/null 2>&1 || {\n    echo \"Please install jazzy by: $ sudo gem install jazzy\"\n    exit 1\n}\njazzy\nopen \"${PROJECT_DIR}/docs/index.html\"";
+			shellScript = "export CODE_SIGNING_REQUIRED=NO\nexport PATH=$PATH:$HOME/bin\ncommand -v appledoc >/dev/null 2>&1 || command -v ~/bin/appledoc >/dev/null 2>&1 || {\n    brew install appledoc && command -v appledoc >/dev/null 2>&1\n} || {\n    cwd=$(pwd);\n    echo saved $cwd;\n    rm -rf ~/Desktop/appledoc\n    git clone https://github.com/tomaz/appledoc.git ~/Desktop/appledoc\n    cd ~/Desktop/appledoc\n    mkdir ~/bin\n    ./install-appledoc.sh -b ~/bin\n}\n\nexport MAIN_OUTPUT_DIR=\"${PROJECT_DIR}/doc/AylaSDK\"\nSDK_NAME=\"iOS_AylaSDK\"\nSDK_DIR=\"${PROJECT_DIR}/Pods/${SDK_NAME}\"\nexport SDK_OUTPUT_DIR=\"${MAIN_OUTPUT_DIR}/html/${SDK_NAME}\"\n\nappledoc \\\n--project-name \"${SDK_NAME}\" \\\n--project-company \"AylaNetworks\" \\\n--company-id \"com.AylaNetworks\" \\\n--output \"${MAIN_OUTPUT_DIR}\" \\\n--install-docset \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--merge-categories \\\n--exit-threshold 2 \\\n--docset-platform-family iphoneos \\\n--ignore \"*.m\" \\\n--include \"${SDK_DIR}/${SDK_NAME}/Documentation/Images\" \\\n--ignore \"LoadableCategory.h\" \\\n--ignore 3rdParty \\\n--ignore \"${SDK_DIR}/${SDK_NAME}/Internal\" \\\n--index-desc \"${SDK_DIR}/README.md\" \\\n\"${SDK_DIR}/${SDK_NAME}\"\n\nopen \"${MAIN_OUTPUT_DIR}/html/index.html\"";
 		};
 		25F6372F996D988D3A776A9B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -732,6 +775,7 @@
 				A7104AE11C7AD289007B1AB3 /* DeviceListViewModel.swift in Sources */,
 				0F47221B1CDD39800055D6C3 /* DeviceSharesModel.swift in Sources */,
 				A78DC8F01CB8547F002EE6B0 /* TestPanelViewController.swift in Sources */,
+				A5712EC41E158656000675E0 /* GrillRightViewController.swift in Sources */,
 				A7A8C9061C7B897B00612C39 /* DevicePanelView.swift in Sources */,
 				A78DC8F21CB85702002EE6B0 /* TestModel.swift in Sources */,
 				5F6C383C1D1230A8000CC897 /* PropertyNotificationDetailsViewController.swift in Sources */,
@@ -744,6 +788,7 @@
 				A54B96231CBF1075009115AE /* PasswordResetTableViewController.swift in Sources */,
 				A78DC8F91CBAC7BB002EE6B0 /* TestCase.swift in Sources */,
 				0FDFDF6D1E24416C003ADEAE /* AboutAuraTVController.swift in Sources */,
+				A55E91E51E02147000DD8E7D /* GrillRightDevice.swift in Sources */,
 				9DF37BF81D779BC4003D5929 /* AuraSessionListener.swift in Sources */,
 				A7104ADC1C7AC4FA007B1AB3 /* DeviceListTVController.swift in Sources */,
 				0F660F8F1D3570BA000522AA /* ScheduleEditorActionTableViewCell.swift in Sources */,
@@ -759,11 +804,12 @@
 				A57EDB821D7A240100C9309E /* AylaSystemSettings+AuraConfig.swift in Sources */,
 				A7104ACE1C758140007B1AB3 /* AuraButton.swift in Sources */,
 				A77F3C4C1CA78B6A00461F2B /* DeviceDetailProvider.swift in Sources */,
-				A7A8C90F1C7BC7CE00612C39 /* LogHandler.swift in Sources */,
 				A78FEAD31C7FC6E700B7EA72 /* MeTVController.swift in Sources */,
 				A78DC8EA1CB4CCF2002EE6B0 /* RegistrationTVCell.swift in Sources */,
+				A5AF0A261E0B324200399BF4 /* AuraLocalDeviceManager.swift in Sources */,
 				0FBEB0A41CC07AE600E8EE6F /* UIColor+AuraColors.swift in Sources */,
 				0F660F931D384B97000522AA /* ScheduleTableViewCell.swift in Sources */,
+				A5712EC61E1586CF000675E0 /* GrillRightSensorViewController.swift in Sources */,
 				5F6C383A1D122108000CC897 /* AylaDevice_extensions.swift in Sources */,
 				0FD5AA631CEBBAD6000931D6 /* RegistrationManualTVCell.swift in Sources */,
 				0F6791CD1D4BF84600E83CA0 /* AuraConsoleTextView.swift in Sources */,
@@ -771,6 +817,7 @@
 				5F2429E81D1B6A27003F2D40 /* ContactManager.swift in Sources */,
 				A5B641211D79E78A00E4B4E5 /* SAMKeychain+AylaUtils.swift in Sources */,
 				5FEECBAC1D1C8A3700E5AF64 /* ContactNotificationButton.swift in Sources */,
+				A54D9EFD1E786DA600DEA420 /* AylaGenericThermostatCandidate.swift in Sources */,
 				A78DC8F71CBAC42D002EE6B0 /* TestSequencer.swift in Sources */,
 				A7351C8E1C753C370073C73A /* AppDelegate.swift in Sources */,
 				A73DB5B11C9606DD0024AF5E /* PropertyViewController.swift in Sources */,
@@ -778,6 +825,8 @@
 				A7A8C90A1C7B999000612C39 /* PropertyTVCell.swift in Sources */,
 				A5941FA51C878DD5005E9EBF /* OAuthLoginViewController.swift in Sources */,
 				0F4722191CDD289A0055D6C3 /* DeviceShareTVCell.swift in Sources */,
+				A5A90A001E0D7A07002C62D0 /* GrillRightCandidate.swift in Sources */,
+				A54DC07D1E71D5F000F10707 /* LogFunctions.swift in Sources */,
 				A19D30DC1D0E66DD005BA69A /* LANOTAViewController.swift in Sources */,
 				A7A8C90C1C7BA09400612C39 /* DeviceViewController.swift in Sources */,
 				A57B34391DAC2BC400FE7513 /* NetworkProfilerModel.swift in Sources */,
@@ -787,6 +836,7 @@
 				A7104AD31C759992007B1AB3 /* SetupViewController.swift in Sources */,
 				A7104ADA1C7AC2E8007B1AB3 /* DeviceTVCell.swift in Sources */,
 				A7A8C9041C7B889E00612C39 /* DeviceViewModel.swift in Sources */,
+				A54D9EFF1E7871CB00DEA420 /* AylaGenericThermostatDevice.swift in Sources */,
 				A139827A1D473F9200F823A3 /* AuraConfig.swift in Sources */,
 				A7104ADE1C7AD04A007B1AB3 /* Constants.swift in Sources */,
 				A78DC8F51CB87289002EE6B0 /* LanModeTestModel.swift in Sources */,
@@ -884,6 +934,14 @@
 			name = TimeZonePicker.storyboard;
 			sourceTree = "<group>";
 		};
+		A562DBF11E147DEA007C7570 /* DeviceViews.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A562DBF21E147DEA007C7570 /* Base */,
+			);
+			name = DeviceViews.storyboard;
+			sourceTree = "<group>";
+		};
 		A5E0DF3B1CE2579000D0E87F /* Schedules.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -946,7 +1004,7 @@
 		220D147F1CBD6C77001BC00B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -954,7 +1012,7 @@
 		220D14801CBD6C77001BC00B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -972,8 +1030,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1017,8 +1077,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1037,6 +1099,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1049,14 +1112,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_OBJC_BRIDGING_HEADER = "iOS_Aura/Aura-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1067,14 +1131,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				INFOPLIST_FILE = iOS_Aura/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-Aura";
 				PRODUCT_NAME = Aura;
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_OBJC_BRIDGING_HEADER = "iOS_Aura/Aura-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1082,12 +1147,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				INFOPLIST_FILE = iOS_AuraTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS_Aura.app/iOS_Aura";
 			};
 			name = Debug;
@@ -1096,12 +1161,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				INFOPLIST_FILE = iOS_AuraTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS_Aura.app/iOS_Aura";
 			};
 			name = Release;
@@ -1109,12 +1174,12 @@
 		A7351CB91C753C370073C73A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				INFOPLIST_FILE = iOS_AuraUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = iOS_Aura;
 				USES_XCTRUNNER = YES;
 			};
@@ -1123,12 +1188,12 @@
 		A7351CBA1C753C370073C73A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 37;
 				INFOPLIST_FILE = iOS_AuraUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "AylaNetworks.iOS-AuraUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = iOS_Aura;
 				USES_XCTRUNNER = YES;
 			};

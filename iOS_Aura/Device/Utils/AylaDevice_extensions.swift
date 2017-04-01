@@ -10,7 +10,7 @@ import iOS_AylaSDK
 
 extension AylaDevice {
 
-    func getProperty(name: String) -> AylaProperty? {
+    func getProperty(_ name: String) -> AylaProperty? {
         if let properties = self.properties as? [String: AylaProperty]{
             return properties[name]
         }
@@ -19,7 +19,7 @@ extension AylaDevice {
     
     func managedPropertyNames() -> Array<String>? {
         // Get managed properties from device detail provider
-        let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNamesForDevice(self) as? [String]
+        let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNames(for: self) as? [String]
         return array
     }
 

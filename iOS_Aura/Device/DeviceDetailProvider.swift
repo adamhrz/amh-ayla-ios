@@ -17,15 +17,15 @@ class DeviceDetailProvider: NSObject, AylaDeviceDetailProvider {
     let ledevb_managedProperties = ["Blue_LED", "Green_LED", "Blue_button"]
     let genericGateway_managedProperties = ["join_enable", "join_status", "cmd", "log"]
 
-    func monitoredPropertyNamesForDevice(device: AylaDevice) -> [AnyObject]? {
+    func monitoredPropertyNames(for device: AylaDevice) -> [Any]? {
         if device.oemModel == oemModel_ledevb {
-            return ledevb_managedProperties
+            return ledevb_managedProperties as [AnyObject]?
         }
         else if device.oemModel == oemModel_generic && device.deviceType == deviceType_gateway {
-            return genericGateway_managedProperties
+            return genericGateway_managedProperties as [AnyObject]?
         }
         else if let propertyNames = device.properties?.keys {
-            return Array(propertyNames);
+            return Array(propertyNames) as [AnyObject]?;
         }
         return nil;
     }

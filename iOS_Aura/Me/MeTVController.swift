@@ -12,10 +12,10 @@ import SAMKeychain
 import CoreTelephony
 
 class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate {
-    
+    private let logTag = "MeTVController"
     let sessionManager: AylaSessionManager?
     
-    private enum Selection:Int {
+    fileprivate enum Selection:Int {
         case aboutAura = 0
         case myProfile
         case emaiLogs
@@ -24,41 +24,41 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     }
     
     required init?(coder aDecoder: NSCoder) {
-        sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+        sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
         super.init(coder: aDecoder)
     }
 
-    private func logout() {
+    fileprivate func logout() {
         let settings = AylaNetworks.shared().systemSettings
-        let username = PDKeychainBindings.sharedKeychainBindings().stringForKey(AuraUsernameKeychainKey)
-        SAMKeychain.deletePasswordForService(settings.appId, account: username)
+        let username = PDKeychainBindings.shared().string(forKey: AuraUsernameKeychainKey)
+        SAMKeychain.deletePassword(forService: settings.appId, account: username!)
         if let manager = sessionManager {
-            manager.shutDownWithSuccess({ () -> Void in
+            manager.shutDown(success: { () -> Void in
                 do {
-                    try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                    try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                 } catch _ {
-                    print("Failed to remove cached authorization")
+                    AylaLogE(tag: self.logTag, flag: 0, message:"Failed to remove cached authorization")
                 }
-                self.navigationController?.tabBarController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                self.navigationController?.tabBarController?.dismiss(animated: true, completion: { () -> Void in
                 });
                 }, failure: { (error) -> Void in
-                    print("Log out operation failed: %@", error)
-                    func alertWithLogout (message: String!, buttonTitle: String!){
-                        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                        let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                    AylaLogE(tag: self.logTag, flag: 0, message:"Log out operation failed: \(error)")
+                    func alertWithLogout (_ message: String!, buttonTitle: String!){
+                        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+                        let okAction = UIAlertAction (title: buttonTitle, style: UIAlertActionStyle.default, handler: { (action) -> Void in
                             do {
-                                try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username)
+                                try SAMKeychain.setObject(nil, forService:"LANLoginAuthorization", account: username!)
                             } catch _ {
-                                print("Failed to remove cached authorization")
+                                AylaLogE(tag: self.logTag, flag: 0, message:"Failed to remove cached authorization")
                             }
-                            self.navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                            self.navigationController?.dismiss(animated: true, completion: { () -> Void in
                             });
                         })
                         alert.addAction(okAction)
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        self.present(alert, animated: true, completion: nil)
                     }
-                    switch error.code {
-                    case AylaHTTPErrorCode.LostConnectivity.rawValue:
+                    switch (error as NSError).code {
+                    case AylaHTTPErrorCode.lostConnectivity.rawValue:
                         alertWithLogout("Your connection to the internet appears to be offline.  Could not log out properly.", buttonTitle: "Continue")
                     default:
                         alertWithLogout("An error has occurred.\n" + error.aylaServiceDescription, buttonTitle: "Continue")
@@ -66,36 +66,41 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                     }
             })
         }
+        
+        // If we use Google Sign In, we also need sign out from SDK
+        if (sessionManager?.authProvider.isKind(of: AylaGoogleOAuthProvider.self))! {
+            GIDSignIn.sharedInstance().signOut()
+        }
     }
     
-    private func getDeviceModel () -> String? {
+    fileprivate func getDeviceModel () -> String? {
         var systemInfo = utsname()
         uname(&systemInfo)
-        let modelCode = withUnsafeMutablePointer(&systemInfo.machine) {
-            ptr in String.fromCString(UnsafePointer<CChar>(ptr))
+        let modelCode = withUnsafeMutablePointer(to: &systemInfo.machine) {
+            ptr in String(cString: UnsafeRawPointer(ptr).assumingMemoryBound(to: CChar.self))
         }
         return modelCode
     }
-    private func removeOptionalStrings(inputText :String) -> String {
-        return inputText.stringByReplacingOccurrencesOfString("Optional(\"", withString: "").stringByReplacingOccurrencesOfString("\")", withString: "")
+    fileprivate func removeOptionalStrings(_ inputText :String) -> String {
+        return inputText.replacingOccurrences(of: "Optional(\"", with: "").replacingOccurrences(of: "\")", with: "")
     }
     
-    private func emailLogs() {
+    fileprivate func emailLogs() {
         let mailVC = MFMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
-            if let filePath = AylaLogManager.sharedManager().getLogFilePath() {
-                let data = NSData(contentsOfFile: filePath)
+            if let filePath = AylaLogManager.shared().getLogFilePath() {
+                let data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
                 mailVC.setToRecipients([AylaNetworks.getSupportEmailAddress()])
                 mailVC.setSubject("iOS SDK Log (\(AylaNetworks.getVersion()))")
                 
-                let appVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+                let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
                 let carrier = CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName
                 let deviceModel = self.getDeviceModel()
-                let osVersion = UIDevice.currentDevice().systemVersion
-                let country = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as! String
-                let language = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
+                let osVersion = UIDevice.current.systemVersion
+                let country = (Locale.current as NSLocale).object(forKey: NSLocale.Key.countryCode) as! String
+                let language = (Locale.current as NSLocale).object(forKey: NSLocale.Key.languageCode) as! String
                 
-                var emailMessageBody = "Latest logs from Aura app attached\n\nDevice Model: \(deviceModel)\nOS Version: \(osVersion)\nCountry: \(country)\nLanguage: \(language)\nNetwork Operator: \(carrier)\nAyla SDK version: \(AYLA_SDK_VERSION)\nAura app version: \(appVersion)"
+                var emailMessageBody = "Latest logs from Aura app attached\n\nAura config name:\(AuraConfig.currentConfig().name)\nDevice Model: \(deviceModel ?? "nil")\nOS Version: \(osVersion)\nCountry: \(country)\nLanguage: \(language)\nNetwork Operator: \(carrier ?? "nil")\nAyla SDK version: \(AYLA_SDK_VERSION)\nAura app version: \(appVersion)"
                 emailMessageBody = self.removeOptionalStrings(emailMessageBody)
                 mailVC.setMessageBody(emailMessageBody, isHTML: false)
                 if data != nil {
@@ -103,7 +108,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
                 }
                 mailVC.mailComposeDelegate = self
                 
-                presentViewController(mailVC, animated: true, completion: nil)
+                present(mailVC, animated: true, completion: nil)
             }
             else  {
                 UIAlertController.alert(nil, message: "No log file found.", buttonTitle: "Got it", fromController: self)
@@ -114,18 +119,18 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
-    private func customOEMConfigs() {
+    fileprivate func customOEMConfigs() {
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        let developOptionsVC = storyboard.instantiateViewControllerWithIdentifier("DeveloperOptionsViewController") as! DeveloperOptionsViewController
+        let developOptionsVC = storyboard.instantiateViewController(withIdentifier: "DeveloperOptionsViewController") as! DeveloperOptionsViewController
         //let naviVC = UINavigationController(rootViewController: developOptionsVC)
         developOptionsVC.currentConfig = AuraConfig.currentConfig()
         self.navigationController?.pushViewController(developOptionsVC, animated: true)
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let selection = Selection(rawValue: indexPath.section)
             else {
-                print("Unknown indexPath in `Me`")
+                AylaLogD(tag: logTag, flag: 0, message:"Unknown indexPath in `Me`")
                 return
         }
         switch selection {
@@ -143,7 +148,7 @@ class MeTVController: UITableViewController, MFMailComposeViewControllerDelegate
     }
     
     // MARK - MFMailComposeViewControllerDelegate
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true, completion: nil)
     }
 }

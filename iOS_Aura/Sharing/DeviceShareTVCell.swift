@@ -44,7 +44,7 @@ class DeviceShareTVCell : UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    func configure(share: AylaShare, device: AylaDevice?, expanded:Bool) {
+    func configure(_ share: AylaShare, device: AylaDevice?, expanded:Bool) {
         
         deviceName = device?.productName ?? "unknown"
         deviceNameLabel.text = String(format:"%@", deviceName)
@@ -54,7 +54,7 @@ class DeviceShareTVCell : UITableViewCell {
         dsn = share.resourceId
         dsnLabel.text = dsn
         
-        let targetUser = share.userEmail ?? "none"
+        let targetUser = share.userEmail 
         userEmailLabel.text = String(format:"%@", targetUser)
         
         let roleName = share.roleName ?? "none"
@@ -63,11 +63,11 @@ class DeviceShareTVCell : UITableViewCell {
         var operationLabelText : String
         let operation = share.operation
         switch operation as AylaShareOperation {
-        case .None:
+        case .none:
             operationLabelText = "None"
-        case .ReadOnly:
+        case .readOnly:
             operationLabelText = "Read Only"
-        case .ReadAndWrite:
+        case .readAndWrite:
             operationLabelText = "Read/Write"
         }
             
@@ -76,22 +76,22 @@ class DeviceShareTVCell : UITableViewCell {
         setDateLabelValue(share.startAt, label: startDateLabel)
         setDateLabelValue(share.endAt, label: expiryDateLabel)
 
-        self.detailView.hidden = !expanded
+        self.detailView.isHidden = !expanded
     }
     
-    func setDateLabelValue(date: NSDate?, label: UILabel) {
+    func setDateLabelValue(_ date: Date?, label: UILabel) {
         if let date = date {
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateStyle = .MediumStyle
-            dateFormatter.timeStyle = .ShortStyle
-            label.text = dateFormatter.stringFromDate(date)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .short
+            label.text = dateFormatter.string(from: date)
         }
         else {
             label.text = "none"
         }
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state

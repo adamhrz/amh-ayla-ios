@@ -10,13 +10,13 @@ import Foundation
 import iOS_AylaSDK
 
 protocol DeviceListViewModelDelegate: class {
-    func deviceListViewModel(viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
-    func deviceListViewModel(viewModel:DeviceListViewModel, lanOTAWithDevice device:AylaDevice)
-    func deviceListViewModel(viewModel:DeviceListViewModel, didUnregisterDevice device:AylaDevice)
+    func deviceListViewModel(_ viewModel:DeviceListViewModel, didSelectDevice device:AylaDevice)
+    func deviceListViewModel(_ viewModel:DeviceListViewModel, lanOTAWithDevice device:AylaDevice)
+    func deviceListViewModel(_ viewModel:DeviceListViewModel, didUnregisterDevice device:AylaDevice)
 }
 
 class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, AylaDeviceManagerListener, AylaDeviceListener {
-
+    private let logTag = "DeviceListViewModel"
     /// Device manager where deivce list belongs
     let deviceManager: AylaDeviceManager
     
@@ -31,6 +31,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     weak var delegate: DeviceListViewModelDelegate?
     
     static let DeviceCellId: String = "DeviceCellId"
+    static let LocalDeviceCellId: String = "LocalDeviceCellId";
     
     required init(deviceManager: AylaDeviceManager, tableView: UITableView) {
         
@@ -45,7 +46,7 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         self.sharesModel = DeviceSharesModel(deviceManager: deviceManager)
         
         // Add self as device manager listener
-        deviceManager.addListener(self)
+        deviceManager.add(self)
         
         // Add self as delegate and datasource of input table view.
         tableView.dataSource = self
@@ -64,42 +65,42 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     
     // MARK: Table View Data Source
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.devices.count;
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let device = self.devices[indexPath.row]
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier(DeviceListViewModel.DeviceCellId) as? DeviceTVCell
+        let cellId = device is AylaLocalDevice ? DeviceListViewModel.LocalDeviceCellId : DeviceListViewModel.DeviceCellId
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId) as? DeviceTVCell
         
         if (cell != nil) {
             cell!.configure(device)
         }
         else {
-            assert(false, "\(DeviceListViewModel.DeviceCellId) - reusable cell can't be dequeued'")
+            assert(false, "\(cellId) - reusable cell can't be dequeued'")
         }
         
         return cell!
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
     }
     
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let lanOTAAction = UITableViewRowAction(style: .Default, title: "LAN OTA") { (action, indexPath) in
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let lanOTAAction = UITableViewRowAction(style: .default, title: "LAN OTA") { (action, indexPath) in
             let device = self.devices[indexPath.row]
             self.delegate?.deviceListViewModel(self, lanOTAWithDevice: device)
         }
         lanOTAAction.backgroundColor = UIColor.auraLeafGreenColor();
         
-        let unregisterAction = UITableViewRowAction(style: .Default, title: "Unregister") { (action, indexPath) in
+        let unregisterAction = UITableViewRowAction(style: .default, title: "Unregister") { (action, indexPath) in
             let device = self.devices[indexPath.row]
             self.delegate?.deviceListViewModel(self, didUnregisterDevice: device)
         }
@@ -109,26 +110,26 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
     
     // MARK: Table View Delegate
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let device = self.devices[indexPath.row]
         self.delegate?.deviceListViewModel(self, didSelectDevice: device)
     }
     
     // MARK - device manager listener
-    func deviceManager(deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : NSError]) {
-        print("Init complete")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
+        AylaLogI(tag: logTag, flag: 0, message:"Init complete")
         self.updateDeviceListFromDeviceManager()
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, didInitFailure error: NSError) {
-        print("Failed to init: \(error)")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
+        AylaLogE(tag: logTag, flag: 0, message:"Failed to init: \(error)")
     }
 
-    func deviceManager(deviceManager: AylaDeviceManager, didObserveDeviceListChange change: AylaDeviceListChange) {
-        print("Observe device list change")
+    func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
+        AylaLogI(tag: logTag, flag: 0, message:"Observe device list change")
         if change.addedItems.count > 0 {
             for device:AylaDevice in change.addedItems {
-                device.addListener(self)
+                device.add(self)
             }
         }
         else {
@@ -138,18 +139,18 @@ class DeviceListViewModel:NSObject, UITableViewDataSource, UITableViewDelegate, 
         self.updateDeviceListFromDeviceManager()
     }
     
-    func deviceManager(deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
-        print("Change in deviceManager state: new state \(newState), was \(oldState)")
+    func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
+        AylaLogI(tag: logTag, flag: 0, message:"Change in deviceManager state: new state \(newState), was \(oldState)")
     }
     
-    func device(device: AylaDevice, didObserveChange change: AylaChange) {
-        if change.isKindOfClass(AylaDeviceChange) {
+    func device(_ device: AylaDevice, didObserve change: AylaChange) {
+        if change.isKind(of: AylaDeviceChange.self) {
             // Not a good udpate strategy
             self.updateDeviceListFromDeviceManager()
         }
     }
     
-    func device(device: AylaDevice, didFail error: NSError) {
+    func device(_ device: AylaDevice, didFail error: Error) {
         // Device errors are not handled here.
     }
 }

@@ -34,6 +34,10 @@ struct AuraOptions {
     // Developer Site: https://staging-developer.ayladev.com
     static let AppIdStaging     = "aura_0dfc7900-dev-id"
     static let AppSecretStaging = "aura_0dfc7900-dev-Dc3OtN_li7Xdepo_7SmXbcjCXxM"
+    
+    // Use same as Staging
+    static let AppIdDemo     = "aura_0dfc7900-dev-id"
+    static let AppSecretDemo = "aura_0dfc7900-dev-Dc3OtN_li7Xdepo_7SmXbcjCXxM"
 
     // OEM Dashboard:  https://dashboardInternal.aylanetworks.com
     // Developer Site: https://developer.aylanetworks.com

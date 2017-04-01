@@ -9,21 +9,21 @@ import iOS_AylaSDK
 import UIKit
 
 class NotificationsViewController: UIViewController, PropertyNotificationDetailsViewControllerDelegate {
-
+    private let logTag = "NotificationViewController"
     var device: AylaDevice!
     
     var propertyTriggers = [AylaPropertyTrigger]()
 
-    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet fileprivate weak var tableView: UITableView!
     
-    private enum NotificationsViewControllerSection: Int {
-        case NotificationsViewControllerSectionPropertyNotifications = 0, NotificationsViewControllerSectionCount
+    fileprivate enum NotificationsViewControllerSection: Int {
+        case notificationsViewControllerSectionPropertyNotifications = 0, notificationsViewControllerSectionCount
     }
 
-    private let propertyNotificationCellReuseIdentifier = "PropertyNotificationCell"
+    fileprivate let propertyNotificationCellReuseIdentifier = "PropertyNotificationCell"
 
     /// Segue id to property notification details view
-    private let segueIdToPropertyNotificationDetails: String = "toPropertyNotificationDetails"
+    fileprivate let segueIdToPropertyNotificationDetails: String = "toPropertyNotificationDetails"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,9 +31,9 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
         self.reloadTriggers()
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdToPropertyNotificationDetails {
-            let nvc = segue.destinationViewController as! UINavigationController
+            let nvc = segue.destination as! UINavigationController
             let vc = nvc.viewControllers[0] as! PropertyNotificationDetailsViewController
             vc.device = device
             vc.propertyTrigger = sender as? AylaPropertyTrigger
@@ -43,37 +43,37 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
 
     // MARK: - Actions
     
-    @IBAction private func addNotification(sender: AnyObject) {
-        self.performSegueWithIdentifier(segueIdToPropertyNotificationDetails, sender: nil)
+    @IBAction fileprivate func addNotification(_ sender: AnyObject) {
+        self.performSegue(withIdentifier: segueIdToPropertyNotificationDetails, sender: nil)
     }
 
     // MARK: - Utilities
     
     func reloadTriggers() {
-        let fetchTriggersGroup = dispatch_group_create()
+        let fetchTriggersGroup = DispatchGroup()
         var fetchedPropertyTriggers = [AylaPropertyTrigger]()
-        var fetchErrors = [NSError]()
+        var fetchErrors = [Error]()
         
         // Rebuild the array by getting the properties we care about and fetching all triggers attached to them
         if let properties = device.managedPropertyNames() {
             for propertyName in properties {
                 if let property = device.getProperty(propertyName) {
-                    dispatch_group_enter(fetchTriggersGroup)
-                    property.fetchTriggersWithSuccess({ (triggers) in
+                    fetchTriggersGroup.enter()
+                    property.fetchTriggers(success: { (triggers) in
                         fetchedPropertyTriggers += triggers
-                        dispatch_group_leave(fetchTriggersGroup)
+                        fetchTriggersGroup.leave()
                     }) { (error) in
                         fetchErrors.append(error)
-                        dispatch_group_leave(fetchTriggersGroup)
+                        fetchTriggersGroup.leave()
                     }
                 }
             }
         }
         
-        dispatch_group_notify(fetchTriggersGroup, dispatch_get_main_queue()) {
+        fetchTriggersGroup.notify(queue: DispatchQueue.main) {
             if !fetchErrors.isEmpty {
-                print("Failed to fetch \(fetchErrors.count) Property Triggers: \(fetchErrors)")
-                UIAlertController.alert("Failed to fetch \(fetchErrors.count) Property Triggers", message: "First error: \(fetchErrors.first?.description)", buttonTitle: "OK", fromController: self)
+                AylaLogE(tag: self.logTag, flag: 0, message:"Failed to fetch \(fetchErrors.count) Property Triggers: \(fetchErrors)")
+                UIAlertController.alert("Failed to fetch \(fetchErrors.count) Property Triggers", message: "First error: \(fetchErrors.first?.description ?? "nil")", buttonTitle: "OK", fromController: self)
             }
             
             // Now that all of the fetch requests have completed, update our table with the new data
@@ -84,16 +84,16 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
 
     // MARK: - UITableViewDataSource
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return NotificationsViewControllerSection.NotificationsViewControllerSectionCount.rawValue
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
+        return NotificationsViewControllerSection.notificationsViewControllerSectionCount.rawValue
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numRows:Int = 0
         
         if let notificationsSection = NotificationsViewControllerSection(rawValue: section) {
             switch notificationsSection {
-            case .NotificationsViewControllerSectionPropertyNotifications:
+            case .notificationsViewControllerSectionPropertyNotifications:
                 numRows = self.propertyTriggers.count
             default:
                 assert(false, "Unexpected section!")
@@ -103,14 +103,14 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
         return numRows
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         
         if let notificationsSection = NotificationsViewControllerSection(rawValue: indexPath.section) {
             switch notificationsSection {
-            case .NotificationsViewControllerSectionPropertyNotifications:
-                cell = tableView.dequeueReusableCellWithIdentifier(propertyNotificationCellReuseIdentifier, forIndexPath: indexPath) as UITableViewCell
-                cell.accessoryType = .DisclosureIndicator
+            case .notificationsViewControllerSectionPropertyNotifications:
+                cell = tableView.dequeueReusableCell(withIdentifier: propertyNotificationCellReuseIdentifier, for: indexPath) as UITableViewCell
+                cell.accessoryType = .disclosureIndicator
                 
                 let trigger = propertyTriggers[indexPath.row]
                 
@@ -118,18 +118,18 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
                 
                 var triggerDescription = ""
                 switch trigger.triggerType {
-                case .Always:
+                case .always:
                     triggerDescription = "trigger on a new datapoint"
-                case .CompareAbsolute:
-                    let compareTypeName = AylaPropertyTrigger.comparisonNameFromType(trigger.compareType)
+                case .compareAbsolute:
+                    let compareTypeName = AylaPropertyTrigger.comparisonName(fromType: trigger.compareType)
                     triggerDescription = "when value \(compareTypeName) \(trigger.value)"
-                case .OnChange:
+                case .onChange:
                     triggerDescription = "when a different value is set"
-                case .Unknown:
+                case .unknown:
                     triggerDescription = "unknown trigger type"
                 }
 
-                let triggerTypeName = AylaPropertyTrigger.triggerTypeNameFromType(trigger.triggerType)
+                let triggerTypeName = AylaPropertyTrigger.triggerTypeName(from: trigger.triggerType)
                 cell.detailTextLabel?.text = "\(trigger.propertyNickname) \(triggerTypeName) \(triggerDescription)"
 
             default:
@@ -142,36 +142,36 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
     
     // MARK: - UITableViewDelegate
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
         if let notificationsSection = NotificationsViewControllerSection(rawValue: indexPath.section) {
             switch notificationsSection {
-            case .NotificationsViewControllerSectionPropertyNotifications:
-                self.performSegueWithIdentifier(segueIdToPropertyNotificationDetails, sender: propertyTriggers[indexPath.row])
+            case .notificationsViewControllerSectionPropertyNotifications:
+                self.performSegue(withIdentifier: segueIdToPropertyNotificationDetails, sender: propertyTriggers[indexPath.row])
             default:
                 assert(false, "Unexpected section!")
             }
         }
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    func tableView(_ tableView: UITableView, editActionsForRowAtIndexPath indexPath: IndexPath) -> [UITableViewRowAction]? {
         var actions: [UITableViewRowAction] = []
         
         if let notificationsSection = NotificationsViewControllerSection(rawValue: indexPath.section) {
             switch notificationsSection {
-            case .NotificationsViewControllerSectionPropertyNotifications:
-                let deleteAction = UITableViewRowAction(style: .Destructive, title: "Delete") { (rowAction, indexPath) in
+            case .notificationsViewControllerSectionPropertyNotifications:
+                let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (rowAction, indexPath) in
                     let trigger = self.propertyTriggers[indexPath.row]
                     
-                    trigger.property?.deleteTrigger(trigger, success: {
-                        if let index = self.propertyTriggers.indexOf(trigger) {
-                            self.propertyTriggers.removeAtIndex(index)
+                    let _ = trigger.property?.delete(trigger, success: {
+                        if let index = self.propertyTriggers.index(of: trigger) {
+                            self.propertyTriggers.remove(at: index)
                         } else {
                             assert(false, "failed to get the index of the trigger that was just deleted which should never happen!")
                         }
                         
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                        tableView.deleteRows(at: [indexPath], with: .automatic)
                         }, failure: { (error) in
                             UIAlertController.alert("Failed to delete trigger", message: error.description, buttonTitle: "OK", fromController: self)
                     })
@@ -188,12 +188,12 @@ class NotificationsViewController: UIViewController, PropertyNotificationDetails
     
     // MARK: - PropertyNotificationDetailsViewControllerDelegate
     
-    func propertyNotificationDetailsDidCancel(controller: PropertyNotificationDetailsViewController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func propertyNotificationDetailsDidCancel(_ controller: PropertyNotificationDetailsViewController) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func propertyNotificationDetailsDidSave(controller: PropertyNotificationDetailsViewController){
+    func propertyNotificationDetailsDidSave(_ controller: PropertyNotificationDetailsViewController){
         reloadTriggers()
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }

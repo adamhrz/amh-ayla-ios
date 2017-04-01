@@ -17,7 +17,7 @@ require_relative './Podhelper'
 
 #Configuration Section: you can change the following variables to configure your build
 conditional_assign("ayla_build_branch", "") #"develop"
-conditional_assign("ayla_sdk_branch", "release/5.4.02") #or @ayla_build_branch)
+conditional_assign("ayla_sdk_branch", "release/5.5.00") #or @ayla_build_branch)
 conditional_assign("ayla_sdk_repo", "") #"https://github.com/AylaNetworks/iOS_AylaSDK(_Public).git"
 conditional_assign("ayla_public", "")
 conditional_assign("ayla_remote", "origin")
@@ -46,6 +46,7 @@ else
     repo_type="internal"
 end
 conditional_assign "ayla_sdk_repo", "https://github.com/AylaNetworks/iOS_AylaSDK#{@ayla_public}.git"
+conditional_assign "ayla_local_sdk_repo", "https://github.com/AylaNetworks/iOS_LocalDevice_SDK#{@ayla_public}.git"
 # hard-coded to be imported by Aura code. Both public and internal repo have to use this name
 sdk_pod="iOS_AylaSDK"
 
@@ -63,15 +64,20 @@ platform :ios, '8.4'
 use_frameworks!
 
 target :iOS_Aura do
+
     pod sdk_pod,
     :git => "#{@ayla_sdk_repo}", :branch => "#{@ayla_sdk_branch}"
-#    :path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
+    #:path => '../iOS_AylaSDK', :branch => "#{@ayla_sdk_branch}"
+
     pod 'SAMKeychain'
     pod 'PDKeychainBindingsController'
+    pod 'ActionSheetPicker-3.0'
+    pod 'Google/SignIn'
 end
 
 post_install do |installer|
   installer.pods_project.build_configurations.each do |config|
     config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << " DD_LEGACY_MACROS=1"
+    config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
   end
 end

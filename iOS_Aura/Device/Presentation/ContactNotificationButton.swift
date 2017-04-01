@@ -13,19 +13,19 @@ class ContactNotificationButton: UIButton {
         super.init(coder: aDecoder)
         
         if  let originalImage = self.currentImage {
-            self.setImage(colorizeImage(originalImage, color:UIColor.aylaBombayColor()), forState: .Normal)
-            self.setImage(colorizeImage(originalImage, color:UIColor.auraTintColor()), forState: .Selected)
+            self.setImage(colorizeImage(originalImage, color:UIColor.aylaBombayColor()), for: UIControlState())
+            self.setImage(colorizeImage(originalImage, color:UIColor.auraTintColor()), for: .selected)
         }
     }
 
-    private func colorizeImage (image: UIImage, color: UIColor) -> UIImage {
-        var newImage = image.imageWithRenderingMode(.AlwaysTemplate)
+    fileprivate func colorizeImage (_ image: UIImage, color: UIColor) -> UIImage {
+        var newImage = image.withRenderingMode(.alwaysTemplate)
         
         UIGraphicsBeginImageContextWithOptions(newImage.size, false, newImage.scale)
         
         color.set()
         
-        newImage.drawInRect(CGRect(x: 0.0, y: 0.0, width: newImage.size.width, height: newImage.size.height))
+        newImage.draw(in: CGRect(x: 0.0, y: 0.0, width: newImage.size.width, height: newImage.size.height))
         
         newImage = UIGraphicsGetImageFromCurrentImageContext()!
         

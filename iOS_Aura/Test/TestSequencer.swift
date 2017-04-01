@@ -8,8 +8,8 @@
 
 import Foundation
 
-typealias CompleteBlock = TestSequencer -> Void
-typealias ProgressBlock = (testSequencer :TestSequencer, completedTestCaseInCurretnIteration:[TestCase], totalInterations:UInt, completedIterations: UInt) -> Bool
+typealias CompleteBlock = (TestSequencer) -> Void
+typealias ProgressBlock = (_ testSequencer :TestSequencer, _ completedTestCaseInCurretnIteration:[TestCase], _ totalInterations:UInt, _ completedIterations: UInt) -> Bool
 
 /*
  A TestSequencer manages a list of TestCases, it counts error when going through all error cases and call completeBlock when all test cases have been finished.
@@ -26,32 +26,32 @@ class TestSequencer : NSObject {
     
     // MARK - Attributes
     
-    private(set) var nextTestIndex :Int = 0
-    private(set) var testSuite :Array<TestCase> = []
+    fileprivate(set) var nextTestIndex :Int = 0
+    fileprivate(set) var testSuite :Array<TestCase> = []
     
-    private(set) var errCount :Int = 0
+    fileprivate(set) var errCount :Int = 0
     
-    private(set) var STARTED :Bool = false
-    private(set) var FINISHED :Bool = false
-    private(set) var STOPPED :Bool = false
+    fileprivate(set) var STARTED :Bool = false
+    fileprivate(set) var FINISHED :Bool = false
+    fileprivate(set) var STOPPED :Bool = false
 
     var completeBlock :CompleteBlock?
     var progressBlock :ProgressBlock?
     
-    func addTest(description :String, testBlock :TestBlock) -> TestSequencer {
+    func addTest(_ description :String, testBlock :@escaping TestBlock) -> TestSequencer {
         let test = TestCase(description: description, testBlock: testBlock)
         test.sequencer = self
         testSuite.append(test)
         return self
     }
     
-    func addTestCase(testCase :TestCase) -> TestSequencer {
+    func addTestCase(_ testCase :TestCase) -> TestSequencer {
         testCase.sequencer = self
         testSuite.append(testCase)
         return self
     }
     
-    func start(iterations: UInt) {
+    func start(_ iterations: UInt) {
         STARTED = true
         self.totalIterations = iterations
         if testSuite.count > 0 {
@@ -78,7 +78,7 @@ class TestSequencer : NSObject {
         }
     }
     
-    func finishedTestCase(testCase :TestCase) {
+    func finishedTestCase(_ testCase :TestCase) {
         if testCase.FAILED {
             errCount += 1
         }
@@ -96,9 +96,9 @@ class TestSequencer : NSObject {
                 else {
                     completedIterations += 1;
                     if let progressBlock = progressBlock {
-                        progressBlock(testSequencer: self, completedTestCaseInCurretnIteration: self.testSuite,
-                                      totalInterations: totalIterations,
-                                      completedIterations: completedIterations)
+                        let _ = progressBlock(self, self.testSuite,
+                                      totalIterations,
+                                      completedIterations)
                     }
                     
                     if totalIterations == completedIterations {

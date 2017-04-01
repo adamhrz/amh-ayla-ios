@@ -8,9 +8,14 @@
 
 import UIKit
 import iOS_AylaSDK
+import ActionSheetPicker_3_0
 
-class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate {
-
+class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate, AylaDeviceManagerListener {
+    private let logTag = "DeviceListTVController"
+    
+    /// Id of a segue which is linked to GrillRight device page.
+    let segueIdToGrillRight = "GrillRightDeviceSegue"
+    
     /// Id of a segue which is linked to device page.
     let segueIdToDevice :String = "toDevicePage"
     
@@ -32,46 +37,47 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName)
+        sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName)
+        sessionManager?.deviceManager.add(self)
         
         if let sessionManager = sessionManager {
             viewModel = DeviceListViewModel(deviceManager: sessionManager.deviceManager, tableView: tableView)
             viewModel?.delegate = self
-            if sessionManager.cachedSession {
+            if sessionManager.isCachedSession {
                 UIAlertController.alert("Offline Mode", message: "Logged in LAN Mode, some features might not be available", buttonTitle: "OK", fromController: self)
             }
         }
         else {
-            print(" - WARNING - device list with a nil session manager")
+            AylaLogW(tag: logTag, flag: 0, message:"device list with a nil session manager")
             // TODO: present a warning and give fresh option
         }
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(initDeviceManager), for: UIControlEvents.valueChanged)
     }
 
-    @IBAction func rightBarButtonTapped(sender: AnyObject) {
-        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Register a Device", style: .Default, handler: { (action) -> Void in
-            self.performSegueWithIdentifier(self.segueIdToRegisterView, sender: nil)
+    func initDeviceManager() {
+        self.sessionManager?.resume()
+    }
+    @IBAction func rightBarButtonTapped(_ sender: AnyObject) {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Register a Device", style: .default, handler: { (action) -> Void in
+            self.performSegue(withIdentifier: self.segueIdToRegisterView, sender: nil)
         }))
-        actionSheet.addAction(UIAlertAction(title: "Wi-Fi Setup", style: .Default, handler: { (action) -> Void in
+        actionSheet.addAction(UIAlertAction(title: "Wi-Fi Setup", style: .default, handler: { (action) -> Void in
             let setupStoryboard: UIStoryboard = UIStoryboard(name: "Setup", bundle: nil)
             let setupVC = setupStoryboard.instantiateInitialViewController()
-            self.navigationController?.presentViewController(setupVC!, animated: true, completion:nil)
+            self.navigationController?.present(setupVC!, animated: true, completion:nil)
         }))
-        actionSheet.addAction(UIAlertAction(title: "View Device Shares", style: .Default, handler: { (action) -> Void in
-            self.performSegueWithIdentifier(self.segueIdToSharesView, sender: nil)
+        actionSheet.addAction(UIAlertAction(title: "View Device Shares", style: .default, handler: { (action) -> Void in
+            self.performSegue(withIdentifier: self.segueIdToSharesView, sender: nil)
         }))
-        let lanOTA = UIAlertAction(title: "LAN OTA", style: .Default) { (action) in
-            self.performSegueWithIdentifier(self.segueIdToLANOTA, sender: nil)
+        let lanOTA = UIAlertAction(title: "LAN OTA", style: .default) { (action) in
+            self.performSegue(withIdentifier: self.segueIdToLANOTA, sender: nil)
         }
         actionSheet.addAction(lanOTA)
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        self.presentViewController(actionSheet, animated: true, completion: nil)
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(actionSheet, animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -81,17 +87,70 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
 
     // MARK: - Device list view delegate
 
-    func deviceListViewModel(viewModel: DeviceListViewModel, didSelectDevice device: AylaDevice) {
-        // Swith to device page
-        self.performSegueWithIdentifier(segueIdToDevice, sender: device)
+    func deviceListViewModel(_ viewModel: DeviceListViewModel, didSelectDevice device: AylaDevice) {
+        if device.isKind(of: AylaBLEDevice.self) {
+            let localDevice = device as! AylaBLEDevice
+            let detailsSegue = localDevice.model == GrillRightDevice.GRILL_RIGHT_MODEL ? self.segueIdToGrillRight : self.segueIdToDevice
+            if localDevice.requiresLocalConfiguration {
+                let alert = UIAlertController(title: "Configure Local Connection", message: "This device requires additional setup to allow your mobile device to reach it. Would you like to configure this device now?", preferredStyle: .alert)
+                
+                let configureDeviceAction = UIAlertAction(title: "Yes", style: .default, handler: { (alert) in
+                    if let localDeviceManager = AylaNetworks.shared().getPluginWithId(PLUGIN_ID_LOCAL_DEVICE) as? AylaLocalDeviceManager {
+                        localDeviceManager.findLocalDevices(withHint: nil, timeout: 5000, success: { (candidates) in
+                            
+                            let connectToCandidate: (AylaBLECandidate) -> Void = { candidate in
+                                localDevice.map(toIdentifier: candidate.peripheral.identifier)
+                                localDevice.connectLocal(success: {
+                                    self.performSegue(withIdentifier: detailsSegue, sender: device)
+                                    }, failure: { (error) in
+                                        UIAlertController.alert("Could not connect to device", message: "Error: \(error.description)", buttonTitle: "OK", fromController: self)
+                                })
+                            }
+                            
+                            if candidates.count == 0 {
+                                UIAlertController.alert(nil, message: "Unable to find this device. Please make sure the device is turned on and you are nearby.", buttonTitle: "OK", fromController: self)
+                            } else if candidates.count == 1 {
+                                let candidate = candidates.first! as! AylaBLECandidate
+                                connectToCandidate(candidate)
+                                
+                            } else {
+                                let strings = candidates.map({ (candidate) -> String in
+                                    let candidate = candidate as! AylaBLECandidate
+                                    
+                                    return "\(candidate.oemModel ?? "Candidate"): \(candidate.peripheral.identifier.uuidString)"
+                                })
+                                ActionSheetStringPicker.show(withTitle: "Select the device", rows: strings, initialSelection: 0, doneBlock: { (picker, index, uuidString) in
+                                    let candidate = candidates[index]
+                                    connectToCandidate(candidate as! AylaBLECandidate)
+                                    }, cancel: { _ in }, origin: self.view)
+                            }
+                            }, failure: { (error) in
+                                UIAlertController.alert(nil, message: "Unable to find devices: \(error.localizedDescription).", buttonTitle: "OK", fromController: self)
+                        })
+                    }
+                })
+                alert.addAction(configureDeviceAction)
+                alert.addAction(UIAlertAction(title: "No, thanks", style: .cancel, handler: { _ in
+                    self.performSegue(withIdentifier: detailsSegue, sender: device)
+                }))
+                self.present(alert, animated: true, completion: nil)
+                
+                return
+            }
+            
+            self.performSegue(withIdentifier: detailsSegue, sender: device)
+            return
+        }
+        
+        self.performSegue(withIdentifier: segueIdToDevice, sender: device)
     }
     
-    func deviceListViewModel(viewModel: DeviceListViewModel, lanOTAWithDevice device: AylaDevice) {
+    func deviceListViewModel(_ viewModel: DeviceListViewModel, lanOTAWithDevice device: AylaDevice) {
         // Swith to LAN OTA page
-        self.performSegueWithIdentifier(segueIdToLANOTA, sender: device)
+        self.performSegue(withIdentifier: segueIdToLANOTA, sender: device)
     }
     
-    func deviceListViewModel(viewModel: DeviceListViewModel, didUnregisterDevice device: AylaDevice){
+    func deviceListViewModel(_ viewModel: DeviceListViewModel, didUnregisterDevice device: AylaDevice){
         let deviceViewModel = DeviceViewModel(device: device, panel: nil, propertyListTableView: nil, sharesModel: self.viewModel!.sharesModel)
         deviceViewModel.unregisterDeviceWithConfirmation(self, successHandler: {
             self.tableView.reloadData()
@@ -101,22 +160,53 @@ class DeviceListTVController: UITableViewController, DeviceListViewModelDelegate
     }
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdToDevice { // To device page
             if let device = sender as? AylaDevice {
-                let vc = segue.destinationViewController as! DeviceViewController
+                let vc = segue.destination as! DeviceViewController
+                vc.device = device
+                vc.sharesModel = self.viewModel?.sharesModel
+            }
+        } else if segue.identifier == segueIdToGrillRight {
+            if let device = sender as? GrillRightDevice {
+                let vc = segue.destination as! GrillRightViewController
                 vc.device = device
                 vc.sharesModel = self.viewModel?.sharesModel
             }
         } else if segue.identifier == segueIdToRegisterView { // To registration page
         }
         else if segue.identifier == segueIdToLANOTA {
-            if let device = sender as? AylaDevice, sessionManager = AylaNetworks.shared().getSessionManagerWithName(AuraSessionOneName) {
-                let otaDevice = AylaLANOTADevice(sessionManager: sessionManager, DSN: device.dsn!, lanIP: device.lanIp!)
-                let vc = segue.destinationViewController as! LANOTAViewController
+            if let device = sender as? AylaDevice, let sessionManager = AylaNetworks.shared().getSessionManager(withName: AuraSessionOneName) {
+                let otaDevice = AylaLANOTADevice(sessionManager: sessionManager, dsn: device.dsn!, lanIP: device.lanIp!)
+                let vc = segue.destination as! LANOTAViewController
                 vc.device = otaDevice
             }
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        endRefreshing()
+    }
+    
+    func endRefreshing() {
+        guard let isRefreshing = self.refreshControl?.isRefreshing, isRefreshing else {
+            return
+        }
+        self.refreshControl?.endRefreshing()
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitFailure error: Error) {
+        endRefreshing()
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, didInitComplete deviceFailures: [String : Error]) {
+        endRefreshing()
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, deviceManagerStateChanged oldState: AylaDeviceManagerState, newState: AylaDeviceManagerState) {
+    }
+    
+    func deviceManager(_ deviceManager: AylaDeviceManager, didObserve change: AylaDeviceListChange) {
+    }
 }

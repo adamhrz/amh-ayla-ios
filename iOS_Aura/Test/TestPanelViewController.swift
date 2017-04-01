@@ -10,15 +10,15 @@ import Foundation
 import UIKit
 
 protocol TestPanelVCDelegate {
-    func testPanelVC(viewController: TestPanelViewController, didTapOnStartButton startButton: UIButton) -> Bool
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnStartButton startButton: UIButton) -> Bool
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnStopButton stopButton: UIButton) -> Bool
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnStopButton stopButton: UIButton) -> Bool
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnButton1 button1: UIButton) -> Bool
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnButton1 button1: UIButton) -> Bool
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnButton2 button2: UIButton) -> Bool
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnButton2 button2: UIButton) -> Bool
     
-    func testPanelVC(viewController: TestPanelViewController, didTapOnButton3 button3: UIButton) -> Bool
+    func testPanelVC(_ viewController: TestPanelViewController, didTapOnButton3 button3: UIButton) -> Bool
 }
 
 /**
@@ -62,10 +62,10 @@ class TestPanelViewController: UIViewController {
     override func viewDidLoad() {
         initDefaultUIState()
         
-        let leftBarButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(cancel))
+        let leftBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         self.navigationItem.leftBarButtonItem = leftBarButton
 
-        startButton.addTarget(self, action: #selector(startButtonTapped), forControlEvents: .TouchUpInside)
+        startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         
         assert(testModel != nil, "Test model can't be nil");
         
@@ -75,60 +75,61 @@ class TestPanelViewController: UIViewController {
         testModel?.testPanelIsReady()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
 
     func cancel() {
         testModel?.testPanelIsDismissed()
-        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.dismiss(animated: true, completion: nil)
     }
     
     func resetStartButton() {
-        startButton.setTitle("Start", forState: .Normal)
+        startButton.setTitle("Start", for: UIControlState())
     }
 
-    private func initDefaultUIState() {
-        consoleView.backgroundColor = UIColor.whiteColor()
+    fileprivate func initDefaultUIState() {
+        consoleView.backgroundColor = UIColor.white
 
-        tf1.hidden = true
-        tf1Label.hidden = true
-        btn1.hidden = true
+        tf1.isHidden = true
+        tf1Label.isHidden = true
+        btn1.isHidden = true
 
-        tf2.hidden = true
-        tf2Label.hidden = true
-        btn2.hidden = true
+        tf2.isHidden = true
+        tf2Label.isHidden = true
+        btn2.isHidden = true
 
-        tf3.hidden = true
-        tf3Label.hidden = true
-        btn3.hidden = true
+        tf3.isHidden = true
+        tf3Label.isHidden = true
+        btn3.isHidden = true
     }
     
-    @objc private func startButtonTapped() {
+    @objc fileprivate func startButtonTapped() {
         if let model = testModel {
-            if(startButton.currentTitle?.lowercaseString == "start") {
+            if(startButton.currentTitle?.lowercased() == "start") {
                 let start = model.testPanelVC(self, didTapOnStartButton:startButton)
                 if start {
                     statusTF.text = TestModelTestState.Working.rawValue
-                    startButton.setTitle("Stop", forState: .Normal)
+                    startButton.setTitle("Stop", for: UIControlState())
                 }
             }
             else {
                 let stop = model.testPanelVC(self, didTapOnStopButton :startButton)
                 if stop {
                     statusTF.text = TestModelTestState.Empty.rawValue
-                    startButton.setTitle("Start", forState: .Normal)
+                    startButton.setTitle("Start", for: UIControlState())
                 }
             }
         } else {
-            log("No test model found for this test panel.", isWarning: false)
+            
+            AylaLogD(tag: logTag, flag: 0, message: "No test model found for this test panel.")
         }
     }
     
     /**
      Use this method to append a string on text view.
     */
-    func outputLogText(text :String) {
+    func outputLogText(_ text :String) {
         consoleView.addLogLine(text)
     }
     
@@ -141,8 +142,9 @@ class TestPanelViewController: UIViewController {
     /**
      Use this method to append an attributed string on text view.
      */
-    func outputAttributedLogText(attributedText :NSAttributedString) {
+    func outputAttributedLogText(_ attributedText :NSAttributedString) {
         consoleView.addAttributedLogline(attributedText)
     }
     
+    private let logTag = "PropertyListViewModel"
 }

@@ -9,38 +9,39 @@ import Foundation
 import UIKit
 
 class AuraConsoleTextView : UITextView {
+    private let logTag = "AuraConsoleTextView"
     
     enum ConsoleLoggingLevel {
-        case Pass, Fail, Warning, Error, Info, Debug
+        case pass, fail, warning, error, info, debug
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.textColor = UIColor.darkTextColor()
+        self.textColor = UIColor.darkText
         
         // Default background is light gray to contrast to default white vc background.
-        self.backgroundColor = UIColor.groupTableViewBackgroundColor()
+        self.backgroundColor = UIColor.groupTableViewBackground
     }
     
-    private func tagFromLoggingLevel(level: ConsoleLoggingLevel) -> String {
+    fileprivate func tagFromLoggingLevel(_ level: ConsoleLoggingLevel) -> String {
         var tag :String
         switch level {
-        case .Pass:
+        case .pass:
             tag = "P"
             break
-        case .Fail:
+        case .fail:
             tag = "F"
             break
-        case .Error:
+        case .error:
             tag = "E"
             break
-        case .Warning:
+        case .warning:
             tag = "W"
             break
-        case .Info:
+        case .info:
             tag = "I"
             break
-        case .Debug:
+        case .debug:
             tag = "D"
             break
         }
@@ -48,38 +49,38 @@ class AuraConsoleTextView : UITextView {
         return tag
     }
     
-    private func attributedStringFromLoggingLevel(level: ConsoleLoggingLevel, logText: String) -> NSAttributedString? {
+    fileprivate func attributedStringFromLoggingLevel(_ level: ConsoleLoggingLevel, logText: String) -> NSAttributedString? {
         
         var htmlString :String = "\(tagFromLoggingLevel(level)), \(logText)"
         let fontSettings = "face=\"-apple-system\",\"HelveticaNeue\""
         switch level {
-        case .Pass:
+        case .pass:
             htmlString = "<font \(fontSettings) color=\"LimeGreen\">\(htmlString)</font>"
             break
-        case .Fail:
+        case .fail:
             htmlString = "<font \(fontSettings) color=\"Red\">\(htmlString)</font>"
             break
-        case .Error:
+        case .error:
             htmlString = "<font \(fontSettings) color=\"DarkBlue\">\(htmlString)</font>"
             break
-        case .Warning:
+        case .warning:
             htmlString = "<font \(fontSettings) color=\"Blue\">\(htmlString)</font>"
             break
-        case .Info:
+        case .info:
             htmlString = "<font \(fontSettings)>\(htmlString)</font>"
             break
-        case .Debug:
+        case .debug:
             htmlString = "<font \(fontSettings)>\(htmlString)</font>"
             break
         }
         
-        let data = htmlString.dataUsingEncoding(NSUTF8StringEncoding)!
+        let data = htmlString.data(using: String.Encoding.utf8)!
         let attributedOptions = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType]
         var string :NSAttributedString?
         do {
             string = try NSAttributedString(data: data, options: attributedOptions, documentAttributes: nil)
         } catch _ {
-            print("Cannot create attributed String")
+            AylaLogD(tag: logTag, flag: 0, message:"Cannot create attributed String")
         }
         
         return string
@@ -91,7 +92,7 @@ class AuraConsoleTextView : UITextView {
      - parameter level: Logging level of this message.
      - parameter log:   Log text.
      */
-    func addLogLine(level: ConsoleLoggingLevel, log: String) {
+    func addLogLine(_ level: ConsoleLoggingLevel, log: String) {
         if let attributedLogText = attributedStringFromLoggingLevel(level, logText: log) {
             self.addAttributedLogline(attributedLogText)
         }
@@ -103,17 +104,17 @@ class AuraConsoleTextView : UITextView {
     /**
      Use this method to add a new line to the console. Scrolls to bottom when done.
      */
-    func addLogLine(untaggedLog: String) {
+    func addLogLine(_ untaggedLog: String) {
         self.addAttributedLogline(NSAttributedString(string: untaggedLog))
     }
     
     /**
      Use this method to append an attributed string on text view.
      */
-    func addAttributedLogline(attributedText :NSAttributedString) {
+    func addAttributedLogline(_ attributedText :NSAttributedString) {
         let wholeText =  self.attributedText.mutableCopy() as! NSMutableAttributedString
-        wholeText.appendAttributedString(NSAttributedString(string: "\n"))
-        wholeText.appendAttributedString(attributedText)
+        wholeText.append(NSAttributedString(string: "\n"))
+        wholeText.append(attributedText)
         self.attributedText = wholeText
         // This scrolls the view to the bottom when the text extends beyond the edges
         let count = self.text.characters.count

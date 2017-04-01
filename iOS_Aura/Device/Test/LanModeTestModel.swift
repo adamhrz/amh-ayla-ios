@@ -20,16 +20,16 @@ extension AylaDevice {
     }
 
     func lanTest_getPropertyNamesForFetchRequest() -> [String]? {
-        if self.isKindOfClass(AylaDeviceNode) && model == "GenericNode" {
+        if self.isKind(of: AylaDeviceNode.self) && model == "GenericNode" {
             return [ "01:0006_S:0000" ]
         }
     
         // Get managed properties from device detail provider
-        let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNamesForDevice(self) as? [String]
+        let array = AylaNetworks.shared().systemSettings.deviceDetailProvider.monitoredPropertyNames(for: self) as? [String]
         return array
     }
     
-    func lanTest_getProperty(name: String) -> AylaProperty? {
+    func lanTest_getProperty(_ name: String) -> AylaProperty? {
         if let properties = self.properties as? [String: AylaProperty]{
             return properties[name]
         }
@@ -41,11 +41,11 @@ extension AylaDevice {
             // Use green led
             return lanTest_getProperty("Green_LED")
         }
-        else if self.isKindOfClass(AylaDeviceGateway) && oemModel == "generic" {
+        else if self.isKind(of: AylaDeviceGateway.self) && oemModel == "generic" {
             // No boolean property could be used for datapoint creation test on a generic gateway
             return nil
         }
-        else if self.isKindOfClass(AylaDeviceNode) && model == "GenericNode" {
+        else if self.isKind(of: AylaDeviceNode.self) && model == "GenericNode" {
             return lanTest_getProperty("01:0006_S:00")
         }
         
@@ -53,7 +53,7 @@ extension AylaDevice {
         var property: AylaProperty?
         if let properties = self.properties {
             let filtered = properties.filter({ (key, property) -> Bool in
-                if property.baseType == AylaPropertyBaseTypeBoolean && property.direction == "input" {
+                if (property as AnyObject).baseType == AylaPropertyBaseTypeBoolean && (property as AnyObject).direction == "input" {
                     return true
                 }
                 return false
@@ -71,10 +71,10 @@ extension AylaDevice {
             // Use green led
             return lanTest_getProperty("cmd")
         }
-        else if self.isKindOfClass(AylaDeviceGateway) && oemModel == "generic" {
+        else if self.isKind(of: AylaDeviceGateway.self) && oemModel == "generic" {
             return lanTest_getProperty("cmd")
         }
-        else if self.isKindOfClass(AylaDeviceNode) && model == "GenericNode" {
+        else if self.isKind(of: AylaDeviceNode.self) && model == "GenericNode" {
             // No strinng property could be used for datapoint creation test on a generic node
             return nil
         }
@@ -83,7 +83,7 @@ extension AylaDevice {
         var property: AylaProperty?
         if let properties = self.properties {
             let filtered = properties.filter({ (key, property) -> Bool in
-                if property.baseType == AylaPropertyBaseTypeString && property.direction == "input" {
+                if (property as AnyObject).baseType == AylaPropertyBaseTypeString && (property as AnyObject).direction == "input" {
                     return true
                 }
                 return false
@@ -97,13 +97,13 @@ extension AylaDevice {
     }
     
     func lanTest_getAckEnableBooleanProperty() -> AylaProperty? {
-        if self.isKindOfClass(AylaDeviceNode) && oemModel == "generic" {
+        if self.isKind(of: AylaDeviceNode.self) && oemModel == "generic" {
             return lanTest_getProperty("01:0006_S:01")
         }
         return nil
     }
     
-    func lanTest_getConfirmingPropertyAndDatapointParamsFor(property: AylaProperty, dpParams:AylaDatapointParams) -> (AylaProperty?, AylaDatapointParams?) {
+    func lanTest_getConfirmingPropertyAndDatapointParamsFor(_ property: AylaProperty, dpParams:AylaDatapointParams) -> (AylaProperty?, AylaDatapointParams?) {
         if property.name == "cmd" {
             return (lanTest_getProperty("log"), dpParams)
         }
@@ -136,10 +136,10 @@ class LanModeTestModel: TestModel {
     
     override func testPanelIsReady() {
         testPanelVC?.title = "LAN Test"
-        testPanelVC?.tf1.hidden = false
-        testPanelVC?.tf1Label.hidden = false
+        testPanelVC?.tf1.isHidden = false
+        testPanelVC?.tf1Label.isHidden = false
         testPanelVC?.tf1Label.text = "Iters"
-        testPanelVC?.tf1.keyboardType = .NumberPad
+        testPanelVC?.tf1.keyboardType = .numberPad
     }
     
     override func start() -> Bool {
@@ -183,62 +183,62 @@ class LanModeTestModel: TestModel {
     
     // MARK Test in sequence
 
-    func testFetchProperties(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
-        device?.fetchProperties(device?.lanTest_getPropertyNamesForFetchRequest(), success: { (properties) in
+    func testFetchProperties(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
+        _ = device?.fetchProperties(device?.lanTest_getPropertyNamesForFetchRequest(), success: { (properties) in
             self.passTestCase(tc)
             }, failure: { (error) in
             self.failTestCase(tc, error: error)
         })
     }
     
-    func testFetchPropertiesLAN(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
-        device?.fetchPropertiesLAN(device?.lanTest_getPropertyNamesForFetchRequest() ?? [], success: { (properties) in
+    func testFetchPropertiesLAN(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
+        _ = device?.fetchPropertiesLAN(device?.lanTest_getPropertyNamesForFetchRequest() ?? [], success: { (properties) in
             self.passTestCase(tc)
             }, failure: { (error) in
                 self.failTestCase(tc, error: error)
         })
     }
     
-    func testCreateBooleanDatapointLAN(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
+    func testCreateBooleanDatapointLAN(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
         let device = self.device
         let property: AylaProperty? = device?.lanTest_getBooleanProperty()
         
         if property == nil {
-            addLog(.Warning, log: "Unable to find boolean property")
+            addLog(.warning, log: "Unable to find boolean property")
             passTestCase(tc)
             return
         }
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        if let curVal = property!.value.intValue {
-            dp.value = NSNumber(int: 1 - curVal)
+        if let curVal = (property!.value as AnyObject).int32Value {
+            dp.value = NSNumber(value: 1 - curVal as Int32)
         }
         else {
-            dp.value = NSNumber(int: 1)
+            dp.value = NSNumber(value: 1 as Int32)
         }
 
-        addLog(.Info, log: "Using property \(property?.name), dp.value \(dp.value)")
+        addLog(.info, log: "Using property \(property?.name ?? "nil"), dp.value \(dp.value as AnyObject)")
         
         let confirm = device?.lanTest_getConfirmingPropertyAndDatapointParamsFor(property!, dpParams: dp)
         createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdValue) -> Bool in
             if let expectedParams = confirm?.1 {
-                return createdValue.boolValue == expectedParams.value.boolValue
+                return createdValue.boolValue == (expectedParams.value as AnyObject).boolValue
             }
             return false
         }
     }
     
-    func testCreateStringDatapointLAN(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
+    func testCreateStringDatapointLAN(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
         let device = self.device
         let property = device?.lanTest_getStringProperty()
         
         if property == nil {
-            addLog(.Warning, log: "Unable to find string property")
+            addLog(.warning, log: "Unable to find string property")
             passTestCase(tc)
             return
         }
@@ -246,7 +246,7 @@ class LanModeTestModel: TestModel {
         // Create a datapoint
         let dp = AylaDatapointParams()
         dp.value = "TEST_STRING \(Int(arc4random_uniform(9999)))"
-        addLog(.Info, log: "Using property \(property?.name), dp.value \(dp.value)")
+        addLog(.info, log: "Using property \(property?.name ?? "nil"), dp.value \(dp.value as AnyObject)")
         
         let confirm = device?.lanTest_getConfirmingPropertyAndDatapointParamsFor(property!, dpParams: dp)
         createAndConfirmDatapoint(tc, property: property!, datapoint: dp, confirmProperty: confirm!.0) { (createdValue) -> Bool in
@@ -257,35 +257,35 @@ class LanModeTestModel: TestModel {
         }
     }
 
-    func testDatapointAckWithBooleanPropertyLAN(tc: TestCase)  {
-        addLog(.Info, log: "Start \(#function)")
+    func testDatapointAckWithBooleanPropertyLAN(_ tc: TestCase)  {
+        addLog(.info, log: "Start \(#function)")
         let device = self.device
         let property = device?.lanTest_getAckEnableBooleanProperty()
         
         if property == nil {
-            addLog(.Warning, log: "Unable to find ACK enable boolean property, skip.")
+            addLog(.warning, log: "Unable to find ACK enable boolean property, skip.")
             passTestCase(tc)
             return
         }
         
         // Create a datapoint
         let dp = AylaDatapointParams()
-        if let curVal = property!.value.intValue {
-            dp.value = NSNumber(int: 1 - curVal)
+        if let curVal = (property!.value as AnyObject).int32Value {
+            dp.value = NSNumber(value: 1 - curVal as Int32)
         }
         else {
-            dp.value = NSNumber(int: 1)
+            dp.value = NSNumber(value: 1 as Int32)
         }
         
-        addLog(.Info, log: "Using property \(property?.name), dp.value \(dp.value)")
+        addLog(.info, log: "Using property \(property?.name ?? "nil"), dp.value \(String(describing: (dp.value as AnyObject?) ?? nil))")
         
-        property?.createDatapointLAN(dp, success: { (datapoint) in
+        _ = property?.createDatapointLAN(dp, success: { (datapoint) in
             if datapoint.ackStatus == 0 {
-                self.addLog(.Error, log: "Ack status = 0")
+                self.addLog(.error, log: "Ack status = 0")
                 self.failTestCase(tc, error: nil)
             }
-            else if datapoint.value.boolValue != dp.value.boolValue {
-                self.addLog(.Error, log: "DP value mismatched.")
+            else if (datapoint.value as AnyObject).boolValue != (dp.value as AnyObject).boolValue {
+                self.addLog(.error, log: "DP value mismatched.")
                 self.failTestCase(tc, error: nil)
             }
             else {
@@ -297,7 +297,7 @@ class LanModeTestModel: TestModel {
 
     }
 
-    func createAndConfirmDatapoint(tc:TestCase, property: AylaProperty, datapoint: AylaDatapointParams , confirmProperty: AylaProperty?, checkBlock: (AnyObject) -> Bool)  {
+    func createAndConfirmDatapoint(_ tc:TestCase, property: AylaProperty, datapoint: AylaDatapointParams , confirmProperty: AylaProperty?, checkBlock: @escaping (AnyObject) -> Bool)  {
 
         let device = self.device
         // Create a datapoint
@@ -306,20 +306,20 @@ class LanModeTestModel: TestModel {
             // Fetch from device to guarantee the created datapoint
             if confirmProperty != nil {
                 // Delay 1s before fetching property to confirm
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-                    self.addLog(.Info, log: "Fetching property \"\(confirmProperty!.name)\" to confirm datapoint.")
-                    device?.fetchPropertiesLAN([ confirmProperty!.name ], success: { (properties) in
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double((Int64)(1 * NSEC_PER_SEC)) / Double(NSEC_PER_SEC), execute: {
+                    self.addLog(.info, log: "Fetching property \"\(confirmProperty!.name)\" to confirm datapoint.")
+                    _ = device?.fetchPropertiesLAN([ confirmProperty!.name ], success: { (properties) in
                             if let createdValue = properties.first?.value {
-                                if checkBlock(createdValue) {
+                                if checkBlock(createdValue as AnyObject) {
                                     self.passTestCase(tc)
                                 }
                                 else {
-                                    self.addLog(.Error, log: "DP value mismatched.")
+                                    self.addLog(.error, log: "DP value mismatched.")
                                     self.failTestCase(tc, error: nil)
                                 }
                             }
                             else {
-                                self.addLog(.Error, log: "DP is missing.")
+                                self.addLog(.error, log: "DP is missing.")
                                 self.failTestCase(tc, error: nil)
                             }
                         }, failure: { (error) in
@@ -327,7 +327,7 @@ class LanModeTestModel: TestModel {
                     })
                 })
             } else {
-                self.addLog(.Warning, log: "No confirm property given for property \(property.name)")
+                self.addLog(.warning, log: "No confirm property given for property \(property.name)")
                 self.failTestCase(tc, error: nil)
             }
             }, failure: { (error) in
